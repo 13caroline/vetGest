@@ -1,0 +1,230 @@
+<template>
+  <div id="page">
+    <Header />
+
+    <v-row>
+      <v-col cols="6" sm="4" offset-sm="1">
+        <v-container fluid>
+          <h3 class="font-weight-regular text-uppercase mb-4 mt-10">
+            Os meus animais
+          </h3>
+          <v-item-group>
+            <v-row>
+              <v-col
+                class="d-flex child-flex"
+                cols="4"
+                v-for="a in animal"
+                :key="a.nome"
+              >
+                <v-card flat tile color="#fafafa">
+                  <v-item v-slot:default="{ toggle }">
+                    <v-img
+                      src="@/assets/animais/Rubi.jpg"
+                      aspect-ratio="1"
+                      class="grey lighten-2"
+                      @click="toggle"
+                    >
+                      <template v-slot:placeholder>
+                        <v-row
+                          class="fill-height ma-0"
+                          align="center"
+                          justify="center"
+                        >
+                          <v-progress-circular
+                            indeterminate
+                            color="grey lighten-5"
+                          ></v-progress-circular>
+                        </v-row>
+                      </template>
+                    </v-img>
+                  </v-item>
+
+                  <v-row justify="center">
+                    <v-btn text large id="no-background-hover" to="/cliente/animal"> {{ a.nome }} </v-btn>
+                  </v-row>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-item-group>
+        </v-container>
+      </v-col>
+
+      <v-col cols="6" sm="5" offset-sm="1">
+        <v-container fluid>
+          <h3 class="font-weight-regular text-uppercase mb-4 mt-10">
+            Consultas Agendadas
+          </h3>
+
+          <!--<v-layout row class="mb-3">
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-btn class="ma-2" text v-on="on">
+                  <v-icon left small>fas fa-paw</v-icon>
+                  <span class="caption text-lowercase">Por animal</span>
+                </v-btn>
+              </template>
+              <span>Ordenar consultas por nome de animal</span>
+            </v-tooltip>
+
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-btn class="ma-2" text v-on="on">
+                  <v-icon left small>fas fa-user-md</v-icon>
+                  <span class="caption text-lowercase"
+                    >Por médico veterinário</span
+                  >
+                </v-btn>
+              </template>
+              <span>Ordenar consultas por médico veterinário</span>
+            </v-tooltip>
+          </v-layout>
+
+          <v-card
+            class="mx-auto"
+            height="80"
+            width="2000"
+            flat
+            color="brown lighten-5"
+            v-if="this.consultas.length === 0"
+          >
+            <v-card-title class="display-1 text-center justify-center">
+              Não existem consultas agendadas
+            </v-card-title>
+          </v-card>
+          <v-card
+            v-else
+            flat
+            v-for="consulta in consultas"
+            :key="consulta.data"
+          >
+            <v-layout row wrap :class="`pa-6 consulta ${consulta.estado}`">
+              <v-flex xs6 md2>
+                <div class="caption grey--text">Nome</div>
+                <div class="body-2">{{ consulta.paciente }}</div>
+              </v-flex>
+              <v-flex xs6 sm4 md5>
+                <div class="caption grey--text">Médico Veterinário</div>
+                <div class="body-2">{{ consulta.medico }}</div>
+              </v-flex>
+              <v-flex xs6 sm4 md3>
+                <div class="caption grey--text">Data</div>
+                <div class="body-2">{{ consulta.data }}</div>
+              </v-flex>
+              <v-flex xs2 sm4 md2>
+                <v-chip
+                  :color="estadopedido(consulta.estado)"
+                  class="black--text caption mt-4"
+                  small
+                  >{{ consulta.estado }}</v-chip
+                >
+              </v-flex>
+            </v-layout>
+            <v-divider></v-divider>
+          </v-card>
+        </v-container>-->
+          <v-data-table
+            :headers="headers"
+            :items="consultas"
+            class="elevation-1"
+            hide-default-footer
+          >
+            <template v-slot:[`item.estado`]="{ item }">
+              <v-chip :color="estadopedido(item.estado)" small>
+                {{ item.estado }}
+              </v-chip>
+            </template>
+          </v-data-table>
+        </v-container>
+      </v-col>
+    </v-row>
+    <v-row justify="end">
+      <v-col cols="6">
+        <v-btn color="#2596be" dark class="ml-3" outlined>Agendar Consulta</v-btn>
+        <v-btn color="#2596be" dark class="ml-3" outlined>Registar Animal</v-btn>
+      </v-col>
+    </v-row>
+
+    <Footer />
+  </div>
+</template>
+
+<script>
+import Header from "@/components/Headers/ClientHeader.vue";
+import Footer from "@/components/Footer.vue";
+
+export default {
+  data() {
+    return {
+      animal: [
+        { scr: "Rubi.jpg", nome: "Gorbi" },
+        { scr: "Rubi.jpg", nome: "Nikita" },
+      ],
+      headers: [
+        {
+          text: "Nome",
+          align: "start",
+          sortable: true,
+          value: "paciente",
+        },
+        {
+          text: "Médico Veterinário",
+          value: "medico",
+          sortable: true,
+          align: "start",
+        },
+        { text: "Data de Marcação", value: "data", sortable: true, align: "start" },
+        { text: "Estado", value: "estado", sortable: true, align: "start" },
+      ],
+      consultas: [
+        {
+          paciente: "Runa",
+          medico: "Drª Joana Ferreira",
+          data: "22/08/2021 10:00",
+          estado: "Agendada",
+        },
+        {
+          paciente: "Puscas",
+          medico: "Drª Joana Ferreira",
+          data: "19/05/2021 16:30",
+          estado: "Pendente",
+        },
+      ],
+    };
+  },
+  components: {
+    Header,
+    Footer,
+  },
+  methods: {
+    estadopedido(estado) {
+      if (estado == "Agendada") return "#C5E1A5";
+      else return "#FFE082";
+    },
+  },
+};
+</script>
+
+<style scoped>
+#page {
+  background: #fafafa;
+  /*background-image: url('../assets/4.jpg'); */
+  height: 100%;
+  background-position: center;
+  background-repeat: repeat;
+  background-size: contain;
+  position: relative;
+}
+
+.consulta.Agendada {
+  border-left: 4px solid #c5e1a5;
+}
+
+.consulta.Pendente {
+  border-left: 4px solid #ffe082;
+}
+
+#no-background-hover::before {
+    background-color: transparent !important; 
+}
+
+</style>

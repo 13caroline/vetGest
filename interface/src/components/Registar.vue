@@ -16,6 +16,7 @@
                 type="email"
                 name="email"
                 required
+                rules="rulesEmail"
                 class="mt-4"
               />
 

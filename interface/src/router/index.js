@@ -9,8 +9,22 @@ const routes = [
     path: '/',
     name: 'Home',
     component: () => import(/* webpackChunkName: "about" */ '../views/Home.vue')
-  }
-  
+  },
+  {
+    path: '/cliente/home',
+    name: 'Página Cliente',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Client/Page.vue')
+  },
+  {
+    path: '/cliente/animal',
+    name: 'Animal Cliente',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Client/Animal.vue')
+  },
+  {
+    path: '/cliente/animal/editar',
+    name: 'Editar Animal',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Client/EditData.vue')
+  },
 ]
 
 const router = new VueRouter({
