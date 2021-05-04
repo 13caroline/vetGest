@@ -41,7 +41,7 @@
           <v-col>
             <v-card color="#fafafa" tile flat class="mt-4">
               <v-row>
-                <v-col>
+                <v-col cols="5">
                   <v-text-field
                     label="Nome"
                     outlined
@@ -52,24 +52,22 @@
                   >
                   </v-text-field>
                 </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="6">
+                <v-col cols="3">
                   <v-text-field
                     disabled
                     label="Espécie"
                     class="font-weight-regular"
                     outlined
                     dense
-                    color="#2596be" 
+                    color="#2596be"
                     :value="cao.especie"
                   >
                   </v-text-field>
                 </v-col>
-                <v-col>
+                <v-col cols="4">
                   <v-text-field
                     disabled
-                    color="#2596be" 
+                    color="#2596be"
                     label="Raça"
                     class="font-weight-regular"
                     outlined
@@ -79,7 +77,6 @@
                   </v-text-field>
                 </v-col>
               </v-row>
-
               <v-row>
                 <v-col>
                   <v-text-field
@@ -87,61 +84,22 @@
                     class="font-weight-regular"
                     outlined
                     dense
-                    color="#2596be" 
+                    color="#2596be"
                     :value="cao.data"
                   >
                   </v-text-field>
                 </v-col>
-                <v-col>
+                <v-col cols="3">
                   <v-text-field
                     label="Altura"
                     class="font-weight-regular"
                     outlined
                     dense
-                    color="#2596be" 
+                    color="#2596be"
                     :value="cao.altura"
                     suffix="cm"
                   >
                   </v-text-field>
-                </v-col>
-                <v-col>
-                  <v-select
-                    label="Cor"
-                    color="#2596be" 
-                    flat
-                    outlined
-                    dense
-                    :value="cao.cor"
-                    :items="itemscor"
-                    multiple
-                  ></v-select>
-                </v-col>
-              </v-row>
-
-              <v-row>
-                <v-col>
-                  <v-select
-                    color="#2596be" 
-                    label="Pelagem"
-                    flat
-                    outlined
-                    dense
-                    :value="cao.pelagem"
-                    :items="itemspelagem"
-                    multiple
-                  ></v-select>
-                </v-col>
-                <v-col>
-                  <v-select
-                    color="#2596be" 
-                    label="Cauda"
-                    flat
-                    outlined
-                    dense
-                    :value="cao.cauda"
-                    :items="itemscauda"
-                    multiple
-                  ></v-select>
                 </v-col>
                 <v-col>
                   <v-text-field
@@ -156,9 +114,72 @@
                   </v-text-field>
                 </v-col>
               </v-row>
+
               <v-row>
-                <v-col cols="2">
-                  <v-radio-group v-model="cao.sexo">
+                <v-col>
+                  <v-select
+                    label="Cor"
+                    color="#2596be"
+                    flat
+                    outlined
+                    dense
+                    :value="cao.cor"
+                    :items="itemscor"
+                    multiple
+                  ></v-select>
+                </v-col>
+
+                <v-col>
+                  <v-select
+                    color="#2596be"
+                    label="Pelagem"
+                    flat
+                    outlined
+                    dense
+                    :value="cao.pelagem"
+                    :items="itemspelagem"
+                    multiple
+                  ></v-select>
+                </v-col>
+                <v-col cols="4">
+                  <v-select
+                    color="#2596be"
+                    label="Cauda"
+                    flat
+                    outlined
+                    dense
+                    :value="cao.cauda"
+                    :items="itemscauda"
+                  ></v-select>
+                </v-col>
+              </v-row>
+              <v-row>
+                  <v-col>
+                  <v-textarea
+                    v-if="cao.observacoes"
+                    outlined
+                    label="Observações"
+                    color="#2596be"
+                    :value="cao.observacoes"
+                    rows="2"
+                    clearable
+                    clear-icon="fas fa-times-circle"
+                    no-resize
+                    ></v-textarea>
+
+                    <v-textarea
+                    v-else
+                    outlined
+                    color="#2596be"
+                    label="Observações"
+                    value="Sem observações"
+                    rows="2"
+                    ></v-textarea>
+                    </v-col>
+              </v-row>
+              <v-row class="mt-n6">
+                <v-col cols="4">
+                  <v-radio-group v-model="cao.sexo" row>
                     <template v-slot:label>
                       <div>Sexo</div>
                     </template>
@@ -174,17 +195,17 @@
                     </v-radio>
                   </v-radio-group>
                 </v-col>
-                <v-col cols="2">
-                  <v-radio-group v-model="cao.castracao">
+                <v-col cols="4">
+                  <v-radio-group v-model="cao.castracao" row>
                     <template v-slot:label>
                       <div>Castração</div>
                     </template>
-                    <v-radio value="Sim" color="#2596be" >
+                    <v-radio value="Sim" color="#2596be">
                       <template v-slot:label>
                         <div>Sim</div>
                       </template>
                     </v-radio>
-                    <v-radio value="Não" color="#2596be" >
+                    <v-radio value="Não" color="#2596be">
                       <template v-slot:label>
                         <div>Não</div>
                       </template>
@@ -215,6 +236,7 @@ export default {
       cauda: "Comprida",
       chip: "AC14ASC7984",
       castracao: "Não",
+      observacoes: "Observações Rubi"
     },
     itemscor: [
       "Amarelo",
