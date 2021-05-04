@@ -68,8 +68,7 @@
         </template>
 
         <v-list dense color = "#FFFFFF">
-          <!--<v-subheader class="ml-1">Bibliotecas</v-subheader>-->
-          <v-list-item @click="toMovies()">
+          <v-list-item @click="toMainPage()">
             <v-list-item-title class="caption"> <v-icon x-small class="mt-n1 mr-1"> fas fa-home </v-icon> Página Inicial</v-list-item-title>
           </v-list-item>
           <v-list-item @click="preferences()">
@@ -95,8 +94,8 @@ export default {
       this.$store.commit("eliminarToken")  
       this.$router.push("/");
     },
-    toMovies: function(){
-      this.$router.push("/movies")
+    toMainPage: function(){
+      this.$router.push("/cliente/home")
     },
     preferences: function(){
         this.$router.push("/preferences");

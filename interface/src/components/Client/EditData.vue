@@ -40,157 +40,178 @@
 
           <v-col>
             <v-card color="#fafafa" tile flat class="mt-4">
-              <v-row>
+              <v-row class="mt-n5">
+                <v-col cols="4">
+                  <div>
+                    <p class="ma-0">Nome</p>
+                    <v-text-field
+                      color="#2596be"
+                      outlined
+                      dense
+                      :value="cao.nome"
+                    ></v-text-field>
+                  </div>
+                </v-col>
+                <v-col cols="3">
+                  <div>
+                    <p class="ma-0">Espécie</p>
+                    <v-text-field
+                      color="#2596be"
+                      class="font-weight-regular"
+                      flat
+                      outlined
+                      dense
+                      disabled
+                      :value="cao.especie"
+                    >
+                    </v-text-field>
+                  </div>
+                </v-col>
                 <v-col cols="5">
-                  <v-text-field
-                    label="Nome"
-                    outlined
-                    disabled
-                    dense
-                    :value="cao.nome"
-                    color="#2596be"
-                  >
-                  </v-text-field>
-                </v-col>
-                <v-col cols="3">
-                  <v-text-field
-                    disabled
-                    label="Espécie"
-                    class="font-weight-regular"
-                    outlined
-                    dense
-                    color="#2596be"
-                    :value="cao.especie"
-                  >
-                  </v-text-field>
-                </v-col>
-                <v-col cols="4">
-                  <v-text-field
-                    disabled
-                    color="#2596be"
-                    label="Raça"
-                    class="font-weight-regular"
-                    outlined
-                    dense
-                    :value="cao.raca"
-                  >
-                  </v-text-field>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col>
-                  <v-text-field
-                    label="Data de Nascimento"
-                    class="font-weight-regular"
-                    outlined
-                    dense
-                    color="#2596be"
-                    :value="cao.data"
-                  >
-                  </v-text-field>
-                </v-col>
-                <v-col cols="3">
-                  <v-text-field
-                    label="Altura"
-                    class="font-weight-regular"
-                    outlined
-                    dense
-                    color="#2596be"
-                    :value="cao.altura"
-                    suffix="cm"
-                  >
-                  </v-text-field>
-                </v-col>
-                <v-col>
-                  <v-text-field
-                    disabled
-                    color="#2596be"
-                    label="Número de Chip"
-                    class="font-weight-regular"
-                    outlined
-                    dense
-                    :value="cao.chip"
-                  >
-                  </v-text-field>
+                  <div>
+                    <p class="ma-0">Raça</p>
+                    <v-text-field
+                      disabled
+                      color="#2596be"
+                      class="font-weight-regular"
+                      outlined
+                      dense
+                      :value="cao.raca"
+                    >
+                    </v-text-field>
+                  </div>
                 </v-col>
               </v-row>
 
-              <v-row>
-                <v-col>
-                  <v-select
-                    label="Cor"
-                    color="#2596be"
-                    flat
-                    outlined
-                    dense
-                    :value="cao.cor"
-                    :items="itemscor"
-                    multiple
-                  ></v-select>
-                </v-col>
-
-                <v-col>
-                  <v-select
-                    color="#2596be"
-                    label="Pelagem"
-                    flat
-                    outlined
-                    dense
-                    :value="cao.pelagem"
-                    :items="itemspelagem"
-                    multiple
-                  ></v-select>
-                </v-col>
+              <v-row class="mt-n5">
                 <v-col cols="4">
-                  <v-select
-                    color="#2596be"
-                    label="Cauda"
-                    flat
-                    outlined
-                    dense
-                    :value="cao.cauda"
-                    :items="itemscauda"
-                  ></v-select>
+                  <div>
+                    <p class="ma-0">Data de Nascimento</p>
+                    <v-text-field
+                      color="#2596be"
+                      outlined
+                      dense
+                      :value="cao.data"
+                      disabled
+                    ></v-text-field>
+                  </div>
+                </v-col>
+                <v-col cols="2">
+                  <div>
+                    <p class="ma-0">Altura</p>
+                    <v-text-field
+                      color="#2596be"
+                      class="font-weight-regular"
+                      flat
+                      outlined
+                      dense
+                      suffix="cm"
+                      :value="cao.altura"
+                    >
+                    </v-text-field>
+                  </div>
+                </v-col>
+                <v-col cols="6">
+                  <div>
+                    <p class="ma-0">Número de Chip</p>
+                    <v-text-field
+                      disabled
+                      color="#2596be"
+                      class="font-weight-regular"
+                      outlined
+                      dense
+                      :value="cao.chip"
+                    >
+                    </v-text-field>
+                  </div>
                 </v-col>
               </v-row>
-              <v-row>
-                  <v-col>
+
+              <v-row class="mt-n5">
+                <v-col cols="5">
+                  <div>
+                    <p class="ma-0">Cor</p>
+                    <v-select
+                      color="#2596be"
+                      flat
+                      outlined
+                      dense
+                      :value="cao.cor"
+                      :items="itemscor"
+                      multiple
+                    ></v-select>
+                  </div>
+                </v-col>
+                <v-col cols="4">
+                  <div>
+                    <p class="ma-0">Pelagem</p>
+
+                    <v-select
+                      color="#2596be"
+                      flat
+                      outlined
+                      dense
+                      :value="cao.pelagem"
+                      :items="itemspelagem"
+                      multiple
+                    ></v-select>
+                  </div>
+                </v-col>
+                <v-col cols="3">
+                  <div>
+                    <p class="ma-0">Cauda</p>
+                    <v-select
+                      color="#2596be"
+                      flat
+                      outlined
+                      dense
+                      :value="cao.cauda"
+                      :items="itemscauda"
+                    ></v-select>
+                  </div>
+                </v-col>
+              </v-row>
+
+              <v-row class="mt-n5">
+                <v-col>
+                  <div>
+                    <p class="ma-0">Observações</p>
                   <v-textarea
                     v-if="cao.observacoes"
                     outlined
-                    label="Observações"
                     color="#2596be"
                     :value="cao.observacoes"
                     rows="2"
                     clearable
                     clear-icon="fas fa-times-circle"
                     no-resize
-                    ></v-textarea>
+                  ></v-textarea>
 
-                    <v-textarea
+                  <v-textarea
                     v-else
                     outlined
                     color="#2596be"
-                    label="Observações"
                     value="Sem observações"
                     rows="2"
-                    ></v-textarea>
-                    </v-col>
+                  ></v-textarea>
+                  </div>
+                </v-col>
               </v-row>
-              <v-row class="mt-n6">
+
+              <v-row class="mt-n10">
                 <v-col cols="4">
                   <v-radio-group v-model="cao.sexo" row>
                     <template v-slot:label>
                       <div>Sexo</div>
                     </template>
-                    <v-radio value="Macho" color="#2596be">
+                    <v-radio value="Macho" color="#2596be" >
                       <template v-slot:label>
-                        <div>Macho</div>
+                        <div class="body-2">Macho</div>
                       </template>
                     </v-radio>
                     <v-radio value="Fêmea" color="#2596be">
                       <template v-slot:label>
-                        <div>Fêmea</div>
+                        <div class="body-2">Fêmea</div>
                       </template>
                     </v-radio>
                   </v-radio-group>
@@ -202,16 +223,29 @@
                     </template>
                     <v-radio value="Sim" color="#2596be">
                       <template v-slot:label>
-                        <div>Sim</div>
+                        <div class="body-2">Sim</div>
                       </template>
                     </v-radio>
                     <v-radio value="Não" color="#2596be">
                       <template v-slot:label>
-                        <div>Não</div>
+                        <div class="body-2">Não</div>
                       </template>
                     </v-radio>
                   </v-radio-group>
                 </v-col>
+              </v-row>
+
+              <v-row align="end" justify="end">
+                <v-btn
+                  color="#BDBDBD"
+                  small
+                  dark
+                  to="/cliente/animal"
+                  >Cancelar</v-btn
+                >
+                <v-btn color="#2596be" small dark class="ml-3"
+                  >Guardar</v-btn
+                >
               </v-row>
             </v-card>
           </v-col>
@@ -236,7 +270,7 @@ export default {
       cauda: "Comprida",
       chip: "AC14ASC7984",
       castracao: "Não",
-      observacoes: "Observações Rubi"
+      observacoes: "Observações Rubi",
     },
     itemscor: [
       "Amarelo",

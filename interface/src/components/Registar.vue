@@ -168,7 +168,6 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
-            tile
             depressed
             large
             width="50%"
@@ -178,7 +177,7 @@
           >
             Não
           </v-btn>
-          <v-btn tile depressed large dark color="#2596be" width="50%"> Sim </v-btn>
+          <v-btn depressed large dark color="#2596be" width="50%"> Sim </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

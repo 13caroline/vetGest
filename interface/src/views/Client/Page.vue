@@ -3,7 +3,7 @@
     <Header />
 
     <v-row>
-      <v-col cols="6" sm="4" offset-sm="1">
+      <v-col cols="3" sm="4" offset-sm="1">
         <v-container fluid>
           <h3 class="font-weight-regular text-uppercase mb-4 mt-10">
             Os meus animais
@@ -12,7 +12,7 @@
             <v-row>
               <v-col
                 class="d-flex child-flex"
-                cols="4"
+                cols="5"
                 v-for="a in animal"
                 :key="a.nome"
               >
@@ -40,7 +40,14 @@
                   </v-item>
 
                   <v-row justify="center">
-                    <v-btn text large id="no-background-hover" to="/cliente/animal"> {{ a.nome }} </v-btn>
+                    <v-btn
+                      text
+                      large
+                      id="no-background-hover"
+                      to="/cliente/animal"
+                    >
+                      {{ a.nome }}
+                    </v-btn>
                   </v-row>
                 </v-card>
               </v-col>
@@ -49,7 +56,7 @@
         </v-container>
       </v-col>
 
-      <v-col cols="6" sm="5" offset-sm="1">
+      <v-col cols="6" sm="6">
         <v-container fluid>
           <h3 class="font-weight-regular text-uppercase mb-4 mt-10">
             Consultas Agendadas
@@ -133,14 +140,32 @@
                 {{ item.estado }}
               </v-chip>
             </template>
+
+            <template v-slot:[`item.detalhes`]="{ item }">
+              <v-tooltip right>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon
+                    v-if="item.estado == 'Agendada'"
+                    v-bind="attrs"
+                    v-on="on"
+                    small
+                  >
+                    fas fa-calendar-times
+                  </v-icon>
+                </template>
+                <span class="caption">Cancelar marcação</span>
+              </v-tooltip>
+            </template>
           </v-data-table>
+          <v-row>
+            <v-btn color="#2596be" small dark class="ml-3 mt-5" to="/cliente/agendar/consulta" 
+              >Agendar Consulta</v-btn
+            >
+            <v-btn color="#2596be" small dark class="ml-3 mt-5" to="/cliente/registar/animal"
+              >Registar Animal</v-btn
+            >
+          </v-row>
         </v-container>
-      </v-col>
-    </v-row>
-    <v-row justify="end">
-      <v-col cols="6">
-        <v-btn color="#2596be" dark class="ml-3" outlined>Agendar Consulta</v-btn>
-        <v-btn color="#2596be" dark class="ml-3" outlined>Registar Animal</v-btn>
       </v-col>
     </v-row>
 
@@ -156,7 +181,7 @@ export default {
   data() {
     return {
       animal: [
-        { scr: "Rubi.jpg", nome: "Gorbi" },
+        { scr: "Rubi.jpg", nome: "Rubi" },
         { scr: "Rubi.jpg", nome: "Nikita" },
       ],
       headers: [
@@ -172,8 +197,19 @@ export default {
           sortable: true,
           align: "start",
         },
-        { text: "Data de Marcação", value: "data", sortable: true, align: "start" },
-        { text: "Estado", value: "estado", sortable: true, align: "start" },
+        {
+          text: "Data de Marcação",
+          value: "data",
+          sortable: true,
+          align: "start",
+        },
+        { text: "Estado", value: "estado", sortable: true, align: "center" },
+        {
+          text: "Mais detalhes",
+          value: "detalhes",
+          sortable: false,
+          align: "center",
+        },
       ],
       consultas: [
         {
@@ -207,7 +243,6 @@ export default {
 <style scoped>
 #page {
   background: #fafafa;
-  /*background-image: url('../assets/4.jpg'); */
   height: 100%;
   background-position: center;
   background-repeat: repeat;
@@ -224,7 +259,6 @@ export default {
 }
 
 #no-background-hover::before {
-    background-color: transparent !important; 
+  background-color: transparent !important;
 }
-
 </style>

@@ -33,112 +33,79 @@
                 </v-img>
               </v-card>
               <v-row>
-                <v-btn class="mt-5 body-2" small color="#2596be" dark to="/cliente/animal/editar"
+                <v-btn
+                  class="mt-5 body-2"
+                  small
+                  color="#2596be"
+                  dark
+                  to="/cliente/animal/editar"
                   >Editar Dados</v-btn
                 >
               </v-row>
               <v-row>
-                <v-btn class="mt-2 body-2" small color="#2596be" dark outlined
-                  >Vacinas e Desparasitações</v-btn
+                <v-btn class="mt-2 body-2" small color="#2596be" dark
+                  >Vacinas/Desparasitações</v-btn
                 >
               </v-row>
             </v-col>
 
-            <v-col cols="4">
-              <v-row>
-                <v-col cols="4">
-                  <p class="font-weight-bold" color="grey">Nome</p>
-                </v-col>
-                <v-col>
-                  <span class="font-weight-regular">{{ cao.nome }}</span>
-                </v-col>
+            <v-col cols="3">
+              <v-row class="mt-1">
+                <p class="font-weight-bold" color="grey">Nome</p>
+                <p class="font-weight-regular ml-5">{{ cao.nome }}</p>
               </v-row>
 
               <v-row>
-                <v-col cols="4">
-                  <p class="font-weight-bold" color="grey">Espécie</p>
-                </v-col>
-                <v-col>
-                  <span class="font-weight-regular">{{ cao.especie }}</span>
-                </v-col>
+                <p class="font-weight-bold" color="grey">Espécie</p>
+                <p class="font-weight-regular ml-5">{{ cao.especie }}</p>
               </v-row>
 
               <v-row>
-                <v-col cols="4">
-                  <p class="font-weight-bold" color="grey">Raça</p>
-                </v-col>
-                <v-col>
-                  <span class="font-weight-regular">{{ cao.raca }}</span>
-                </v-col>
+                <p class="font-weight-bold" color="grey">Raça</p>
+                <p class="font-weight-regular ml-5">{{ cao.raca }}</p>
               </v-row>
 
               <v-row>
-                <v-col cols="4">
-                  <p class="font-weight-bold" color="grey">Sexo</p>
-                </v-col>
-                <v-col>
-                  <span class="font-weight-regular">{{ cao.sexo }}</span>
-                </v-col>
+                <p class="font-weight-bold" color="grey">Sexo</p>
+                <p class="font-weight-regular ml-5">{{ cao.sexo }}</p>
               </v-row>
 
               <v-row>
-                <v-col cols="4">
-                  <p class="font-weight-bold" color="grey">Altura</p>
-                </v-col>
-                <v-col>
-                  <span class="font-weight-regular">{{ cao.altura }} (cm)</span>
-                </v-col>
+                <p class="font-weight-bold" color="grey">Altura</p>
+                <p class="font-weight-regular ml-5">{{ cao.altura }} (cm)</p>
+              </v-row>
+
+              <v-row>
+                <p class="font-weight-bold" color="grey">Data de Nascimento</p>
+                <p class="font-weight-regular ml-5">{{ cao.data }}</p>
               </v-row>
             </v-col>
 
-            <v-col cols="5">
+            <v-col>
               <v-row>
-                <v-col cols="4">
-                  <p class="font-weight-bold" color="grey">
-                    Data de Nascimento
-                  </p>
-                </v-col>
-                <v-col>
-                  <span class="font-weight-regular">{{ cao.data }}</span>
-                </v-col>
+                <p class="font-weight-bold" color="grey">Pelagem</p>
+                <p class="font-weight-regular ml-5">{{ cao.pelagem }}</p>
               </v-row>
+
               <v-row>
-                <v-col cols="4">
-                  <p class="font-weight-bold" color="grey">Pelagem</p>
-                </v-col>
-                <v-col>
-                  <span class="font-weight-regular">{{ cao.pelagem }}</span>
-                </v-col>
+                <p class="font-weight-bold" color="grey">Cauda</p>
+                <p class="font-weight-regular ml-5">{{ cao.cauda }}</p>
               </v-row>
+
               <v-row>
-                <v-col cols="4">
-                  <p class="font-weight-bold" color="grey">Cauda</p>
-                </v-col>
-                <v-col>
-                  <span class="font-weight-regular">{{ cao.cauda }}</span>
-                </v-col>
+                <p class="font-weight-bold" color="grey">Cor</p>
+                <p class="font-weight-regular ml-5">{{ cao.cor }}</p>
               </v-row>
+
               <v-row>
-                <v-col cols="4">
-                  <p class="font-weight-bold" color="grey">Cor</p>
-                </v-col>
-                <v-col>
-                  <span class="font-weight-regular">{{ cao.cor }}</span>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="4">
-                  <p class="font-weight-bold" color="grey">Castração</p>
-                </v-col>
-                <v-col>
-                  <span class="font-weight-regular">{{ cao.castracao }}</span>
-                </v-col>
+                <p class="font-weight-bold" color="grey">Castração</p>
+                <p class="font-weight-regular ml-5">{{ cao.castracao }}</p>
               </v-row>
             </v-col>
           </v-row>
 
           <v-row>
-            <v-card width="85%">
+            <v-card width="85%" class="mt-6">
               <v-data-table
                 :headers="headers"
                 :items="consultas"
@@ -152,7 +119,11 @@
                 </template>
 
                 <template v-slot:[`item.detalhes`]="{ item }">
-                  <v-icon v-if="item.estado == 'Concluída'" @click="more(item)" small>
+                  <v-icon
+                    v-if="item.estado == 'Concluída'"
+                    @click="more(item)"
+                    small
+                  >
                     fas fa-info-circle
                   </v-icon>
                   <v-tooltip right>
@@ -166,7 +137,7 @@
                         fas fa-calendar-times
                       </v-icon>
                     </template>
-                    <span class = "caption">Cancelar marcação</span>
+                    <span class="caption">Cancelar marcação</span>
                   </v-tooltip>
                 </template>
               </v-data-table>

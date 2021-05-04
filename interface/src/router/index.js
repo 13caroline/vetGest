@@ -25,6 +25,16 @@ const routes = [
     name: 'Editar Animal',
     component: () => import(/* webpackChunkName: "about" */ '../views/Client/EditData.vue')
   },
+  {
+    path: '/cliente/agendar/consulta',
+    name: 'Agendar Consulta',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Client/AgendarConsulta.vue')
+  },
+  {
+    path: '/cliente/registar/animal',
+    name: 'Registar Animal',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Client/RegistarAnimal.vue')
+  },
 ]
 
 const router = new VueRouter({
