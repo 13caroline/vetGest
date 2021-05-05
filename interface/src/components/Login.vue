@@ -1,11 +1,11 @@
 <template>
-  <div> 
+  <div id="login"> 
     <v-img src="../assets/login.png" class="img">
 
-    <v-container fluid pa-0 style="height: 100%">
-      <v-row align="center" justify="center">
+    <v-container>
+      <v-row align="center" justify="center" class="login_wrapper">
         
-        <v-card color="white" flat class="loginform">
+        <v-card color="white" flat class="loginform my-12">
           <v-card-text class="justify-center">
             <v-form ref="login" lazy-validation class="form">
               <v-text-field
@@ -87,15 +87,6 @@
 </template>
 
 <style scoped>
-.loginform {
-  margin-top: 7rem;
-  width: 25%;
-}
-
-body {
-  overflow: hidden;
-  height: 100%;
-}
 
 .divider {
   width: 80%;
@@ -117,5 +108,9 @@ body {
 .img {
   height: 30%;
   width:100vw;
+}
+
+.login_wrapper {
+	min-height: 60vh;
 }
 </style>

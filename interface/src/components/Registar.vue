@@ -1,8 +1,8 @@
 <template>
   <div>
     <v-img src="../assets/login.png" class="img">
-      <v-row align="center" justify="center">
-        <v-card color="white" flat class="registerform">
+      <v-row align="center" justify="center" class="my-5">
+        <v-card color="white" flat class="registerform my-12 mx-5">
           <v-card-text class="justify-center mt-4">
             <v-form ref="form" v-model="valid" lazy-validation>
               <span>Dados de Acesso</span>
@@ -90,7 +90,7 @@
 
               <span>Dados de Contacto</span>
               <v-row>
-                <v-col cols="2">
+                <v-col cols="auto dial_code">
                   <v-text-field
                     class="mt-4"
                     outlined
@@ -233,25 +233,15 @@ export default {
 
 
 <style scoped>
-.registerform {
-  margin-top: 4rem;
-  width: 60%;
-  margin-bottom: 4rem;
+.dial_code {
+	width: 90px;
 }
-
-body {
-  overflow: hidden;
-  height: 100vh;
-}
-
 span {
   color: "#2596be";
   font-size: 25px;
-  font-family: "Old Standard TT";
 }
 
 .cancel{
-  font-family: "Old Standard TT";
   font-size: 25px !important;
 }
 </style>

@@ -24,17 +24,3 @@ export default {
  
 };
 </script>
-
-<style scoped>
-#page {
-  background: #fafafa;
-  /*background-image: url('../assets/4.jpg'); */
-  height: 100%;
-  background-position: center;
-  background-repeat: repeat;
-  background-size: contain;
-  position: relative;
-}
-
-
-</style>

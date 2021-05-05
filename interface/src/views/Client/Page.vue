@@ -247,15 +247,6 @@ export default {
 </script>
 
 <style scoped>
-#page {
-  background: #fafafa;
-  height: 100%;
-  background-position: center;
-  background-repeat: repeat;
-  background-size: contain;
-  position: relative;
-}
-
 .consulta.Agendada {
   border-left: 4px solid #c5e1a5;
 }

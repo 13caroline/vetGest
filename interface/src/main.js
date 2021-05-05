@@ -6,8 +6,9 @@ import store from './store';
 //import * as VueGoogleMaps from 'vue2-google-maps'
 //import VueGeolocation from 'vue-browser-geolocation'
 //import 'material-design-icons-iconfont/dist/material-design-icons.css'
-import '@fortawesome/fontawesome-free/css/all.css'
+import '@fortawesome/fontawesome-free/css/all.css';
 
+import('./styles/general.scss');
 
 var moment = require('moment');
 Vue.config.productionTip = false;
