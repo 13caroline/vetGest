@@ -1,13 +1,13 @@
-package com.example.demo.entity;
+package com.example.demo.Cliente;
 
+import com.example.demo.Animal.Animal;
+import com.example.demo.Utilizador.Utilizador;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
@@ -15,8 +15,8 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "Clinica")
-public class Clinica extends Utilizador implements Serializable {
+@Entity(name = "Cliente")
+public class Cliente extends Utilizador implements Serializable{
 
     @Column(
             name = "nome",
@@ -54,9 +54,10 @@ public class Clinica extends Utilizador implements Serializable {
     private long nif;
 
     @OneToMany
-    private List<Cliente> clientes;
+    private List<Animal> animais;
 
-    @OneToMany
-    private List<Veterinario> veterinarios;
 
+    public void setAnimal(Animal animal){
+        this.animais.add(animal);
+    }
 }

@@ -1,7 +1,5 @@
-package com.example.demo.repository;
+package com.example.demo.Animal;
 
-import com.example.demo.entity.Animal;
-import com.example.demo.entity.Cliente;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 

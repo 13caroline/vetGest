@@ -1,7 +1,5 @@
-package com.example.demo.repository;
+package com.example.demo.Veterinario;
 
-import com.example.demo.entity.Veterinario;
-import com.example.demo.service.ClienteService;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface VeterinarioRepository extends JpaRepository<Veterinario,String> {

@@ -1,4 +1,4 @@
-package com.example.demo.entity;
+package com.example.demo.Animal;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +9,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -84,4 +85,11 @@ public class Animal {
     )
     private boolean castracao;
 
+   /*
+    @OneToMany(cascade = {CascadeType.ALL})
+    private List<Intervencao> intervencoes;
+
+    public void setIntervencao(Intervencao intervencao) {
+        this.intervencoes.add(intervencao);
+    }*/
 }

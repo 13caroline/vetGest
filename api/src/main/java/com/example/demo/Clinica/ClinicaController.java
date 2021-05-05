@@ -1,7 +1,5 @@
-package com.example.demo.controller;
+package com.example.demo.Clinica;
 
-import com.example.demo.entity.Clinica;
-import com.example.demo.service.ClinicaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -1,7 +1,5 @@
-package com.example.demo.service;
+package com.example.demo.Veterinario;
 
-import com.example.demo.entity.Veterinario;
-import com.example.demo.repository.VeterinarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

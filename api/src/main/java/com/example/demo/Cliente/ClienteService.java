@@ -1,14 +1,7 @@
-package com.example.demo.service;
+package com.example.demo.Cliente;
 
-import com.example.demo.entity.Animal;
-import com.example.demo.entity.Cliente;
-import com.example.demo.entity.Utilizador;
-import com.example.demo.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class ClienteService {
