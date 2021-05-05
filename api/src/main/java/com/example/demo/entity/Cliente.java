@@ -5,15 +5,16 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "Cliente")
-public class Cliente extends Utilizador{
+public class Cliente extends Utilizador implements Serializable{
 
     @Column(
             name = "nome",
@@ -50,4 +51,11 @@ public class Cliente extends Utilizador{
     )
     private long nif;
 
+    @OneToMany
+    private List<Animal> animais;
+
+
+    public void setAnimal(Animal animal){
+        this.animais.add(animal);
+    }
 }

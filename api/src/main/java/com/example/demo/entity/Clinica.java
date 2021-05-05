@@ -7,13 +7,16 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import java.io.Serializable;
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "Clinica")
-public class Clinica extends Utilizador{
+public class Clinica extends Utilizador implements Serializable {
 
     @Column(
             name = "nome",
@@ -49,5 +52,11 @@ public class Clinica extends Utilizador{
             name = "nif"
     )
     private long nif;
+
+    @OneToMany
+    private List<Cliente> clientes;
+
+    @OneToMany
+    private List<Veterinario> veterinarios;
 
 }

@@ -3,6 +3,8 @@ package com.example.demo.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import static javax.persistence.GenerationType.IDENTITY;
 import static javax.persistence.GenerationType.SEQUENCE;
 
 import javax.persistence.*;
@@ -15,14 +17,8 @@ import java.util.Date;
 @Table(name = "animal")
 public class Animal {
     @Id
-    @SequenceGenerator(
-            name = "animal_sequence",
-            sequenceName = "animal_sequence",
-            allocationSize = 1
-    )
     @GeneratedValue(
-            strategy = SEQUENCE,
-            generator = "animal_sequence"
+            strategy = IDENTITY
     )
     private int id;
 
@@ -39,7 +35,7 @@ public class Animal {
     private String raca;
 
     @Column(
-            name = "dataNascimento",
+            name = "data_nascimento",
             nullable = false
     )
     private Date dataNascimento;
@@ -87,4 +83,5 @@ public class Animal {
             nullable = false
     )
     private boolean castracao;
+
 }
