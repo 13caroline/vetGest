@@ -7,13 +7,14 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import java.io.Serializable;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "Veterinario")
-public class Veterinario extends Utilizador{
+public class Veterinario extends Utilizador implements Serializable {
 
     @Column(
             name = "nome",
@@ -44,5 +45,4 @@ public class Veterinario extends Utilizador{
             nullable = false
     )
     private String contacto;
-
 }

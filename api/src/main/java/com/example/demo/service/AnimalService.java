@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Animal;
+import com.example.demo.entity.Cliente;
 import com.example.demo.repository.AnimalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -8,20 +8,19 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
-import static javax.persistence.GenerationType.SEQUENCE;
+import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "Utilizador")
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Table(
         name = "utilizador",
         uniqueConstraints = {
                 @UniqueConstraint(name = "utilizador_email_unique", columnNames = "email")
         })
 
-public class Utilizador {
+public abstract class Utilizador implements Serializable {
     @Id
     @Column(
             name = "email",
@@ -35,9 +34,4 @@ public class Utilizador {
     )
     private String password;
 
-    @Column(
-            name = "tipo",
-            nullable = false
-    )
-    private int tipo;
 }

@@ -3,15 +3,17 @@ package com.example.demo.controller;
 import com.example.demo.entity.Utilizador;
 import com.example.demo.service.UtilizadorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UtilizadorController {
 
+    @Qualifier("utilizadorService")
     @Autowired
     private UtilizadorService service;
 
-    @PostMapping("/addUtilizador")
+    @PostMapping(path = "/addUtilizador")
     public Utilizador addUtilizador(@RequestBody Utilizador utilizador){
         return service.saveUtilizador(utilizador);
     }
