@@ -126,19 +126,40 @@
                   color="#BDBDBD"
                   small
                   dark
-                  to="/cliente/home"
+                  @click="dialog = true"
                   >Cancelar</v-btn
                 >
                 <v-btn color="#2596be" small dark class="ml-3"
                   >Agendar</v-btn
                 >
               </v-row>
-              
             </v-card>
           </v-col>
         </v-row>
       </v-container>
     </v-row>
+        <v-dialog v-model="dialog" persistent width="30%">
+      <v-card>
+        <v-card-title class="justify-center cancel"> Cancelar Agendamento da Consulta </v-card-title>
+        <v-card-text>
+          Tem a certeza que pretende cancelar o agendamento da consulta?
+          </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            depressed
+            large
+            width="50%"
+            dark
+            color="#BDBDBD"
+            @click="dialog = false"
+          >
+            Não
+          </v-btn>
+          <v-btn depressed large dark color="#2596be" width="50%" to="/cliente/home"> Sim </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -146,6 +167,7 @@
 //import moment from 'moment';
 export default {
   data: () => ({
+    dialog: false,
     dataMarcacao: null,
     horaMarcacao: null,
     date: new Date().toISOString().substr(0, 10),

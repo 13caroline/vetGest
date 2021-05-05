@@ -38,16 +38,22 @@
                       </template>
                     </v-img>
                   </v-item>
-
                   <v-row justify="center">
+                    <div>
+                    <p class = "text-uppercase font-weight-regular mt-3 ml-5">
+                      {{a.nome}}
+                    </p>
                     <v-btn
+                      class="mt-n5 ml-n1"
                       text
-                      large
+                      outlined
+                      small
                       id="no-background-hover"
                       to="/cliente/animal"
                     >
-                      {{ a.nome }}
+                      Ver mais
                     </v-btn>
+                    </div>
                   </v-row>
                 </v-card>
               </v-col>

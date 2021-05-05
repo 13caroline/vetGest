@@ -119,14 +119,21 @@
                 </template>
 
                 <template v-slot:[`item.detalhes`]="{ item }">
-                  <v-icon
-                    v-if="item.estado == 'Concluída'"
-                    @click="more(item)"
-                    small
-                  >
-                    fas fa-info-circle
-                  </v-icon>
-                  <v-tooltip right>
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-icon
+                        v-if="item.estado == 'Concluída'"
+                        @click="more(item)"
+                        small
+                        v-on="on"
+                        v-bind="attrs"
+                      >
+                        fas fa-info-circle
+                      </v-icon>
+                    </template>
+                    <span class="caption">Ver detalhes</span>
+                  </v-tooltip>
+                  <v-tooltip top>
                     <template v-slot:activator="{ on, attrs }">
                       <v-icon
                         v-if="item.estado == 'Agendada'"
