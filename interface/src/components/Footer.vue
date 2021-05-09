@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mt-auto">
     <v-footer
       dark
       padless

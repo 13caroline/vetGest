@@ -106,7 +106,7 @@
 }
 
 .img {
-  height: 30%;
+  height: 70vh;
   width:100vw;
 }
 

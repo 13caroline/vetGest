@@ -1,5 +1,5 @@
 <template>
-  <div class="h-100">
+  <div style="min-height:100vh">
     <v-app-bar absolute color="#FFFFFF" height="180" flat>
       <v-row>
         <v-col class="d-flex justify-space-around">

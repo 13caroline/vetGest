@@ -3,14 +3,14 @@
     <Header />
     <v-container>
       <v-row justify="center">
-        <v-col cols="3" sm="4">
+        <v-col cols="12" lg="4">
           <h3 class="font-weight-regular text-uppercase mb-4 mt-10">
             Os meus animais
           </h3>
           <v-item-group>
             <v-row>
               <v-col
-                class="d-flex child-flex"
+                class="d-flex child-flex animal"
                 cols="5"
                 v-for="a in animal"
                 :key="a.nome"
@@ -60,7 +60,7 @@
           </v-item-group>
         </v-col>
 
-        <v-col cols="6" sm="6">
+        <v-col>
           <h3 class="font-weight-regular text-uppercase mb-4 mt-10">
             Consultas Agendadas
           </h3>
@@ -181,7 +181,7 @@
         </v-col>
       </v-row>
     </v-container>
-    <Footer class="mt-auto" />
+    <Footer />
   </div>
 </template>
 
@@ -263,5 +263,9 @@ export default {
 
 #no-background-hover::before {
   background-color: transparent !important;
+}
+
+.animal {
+  max-width: 250px;
 }
 </style>
