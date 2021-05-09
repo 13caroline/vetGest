@@ -47,8 +47,8 @@
 <script>
 import Sobre from "@/components/Sobre.vue";
 import Login from "@/components/Login.vue";
-import Registar from "@/components/Registar.vue"
-import Footer from "@/components/Footer.vue"
+import Registar from "@/components/Registar.vue";
+import Footer from "@/components/Footer.vue";
 export default {
   name: "mainpage",
   data() {
@@ -59,19 +59,19 @@ export default {
   },
   components: {
     Sobre,
-    Login, 
-    Registar, 
-    Footer
+    Login,
+    Registar,
+    Footer,
   },
 };
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap");
 
 .tab {
-	font-family: 'Old Standard TT', serif;
-	margin: 0 5px;
+  font-family: "Old Standard TT", serif;
+  margin: 0 5px;
   font-size: 20px;
 }
 </style>

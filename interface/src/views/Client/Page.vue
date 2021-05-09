@@ -1,10 +1,9 @@
 <template>
-  <div id="page">
+  <div id="page" class="d-flex flex-column">
     <Header />
-
-    <v-row>
-      <v-col cols="3" sm="4" offset-sm="1">
-        <v-container fluid>
+    <v-container>
+      <v-row justify="center">
+        <v-col cols="3" sm="4">
           <h3 class="font-weight-regular text-uppercase mb-4 mt-10">
             Os meus animais
           </h3>
@@ -40,30 +39,28 @@
                   </v-item>
                   <v-row justify="center">
                     <div>
-                    <p class = "text-uppercase font-weight-regular mt-3 ml-5">
-                      {{a.nome}}
-                    </p>
-                    <v-btn
-                      class="mt-n5 ml-n1"
-                      text
-                      outlined
-                      small
-                      id="no-background-hover"
-                      to="/cliente/animal"
-                    >
-                      Ver mais
-                    </v-btn>
+                      <p class="text-uppercase font-weight-regular mt-3 ml-5">
+                        {{ a.nome }}
+                      </p>
+                      <v-btn
+                        class="mt-n5 ml-n1"
+                        text
+                        outlined
+                        small
+                        id="no-background-hover"
+                        to="/cliente/animal"
+                      >
+                        Ver mais
+                      </v-btn>
                     </div>
                   </v-row>
                 </v-card>
               </v-col>
             </v-row>
           </v-item-group>
-        </v-container>
-      </v-col>
+        </v-col>
 
-      <v-col cols="6" sm="6">
-        <v-container fluid>
+        <v-col cols="6" sm="6">
           <h3 class="font-weight-regular text-uppercase mb-4 mt-10">
             Consultas Agendadas
           </h3>
@@ -164,18 +161,27 @@
             </template>
           </v-data-table>
           <v-row>
-            <v-btn color="#2596be" small dark class="ml-3 mt-5" to="/cliente/agendar/consulta" 
+            <v-btn
+              color="#2596be"
+              small
+              dark
+              class="ml-3 mt-5"
+              to="/cliente/agendar/consulta"
               >Agendar Consulta</v-btn
             >
-            <v-btn color="#2596be" small dark class="ml-3 mt-5" to="/cliente/registar/animal"
+            <v-btn
+              color="#2596be"
+              small
+              dark
+              class="ml-3 mt-5"
+              to="/cliente/registar/animal"
               >Registar Animal</v-btn
             >
           </v-row>
-        </v-container>
-      </v-col>
-    </v-row>
-
-    <Footer />
+        </v-col>
+      </v-row>
+    </v-container>
+    <Footer class="mt-auto" />
   </div>
 </template>
 
