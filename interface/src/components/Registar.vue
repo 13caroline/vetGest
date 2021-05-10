@@ -3,7 +3,7 @@
     <v-img src="../assets/login.png" class="img">
       <v-row align="center" justify="center" class="my-5">
         <v-card color="white" flat class="registerform my-12 mx-5">
-          <v-card-text class="justify-center mt-4">
+          <v-card-text class="justify-center mt-2">
             <v-form ref="form" v-model="valid" lazy-validation>
               <span>Dados de Acesso</span>
               <v-text-field
@@ -13,10 +13,10 @@
                 single-line
                 color="#2596be"
                 placeholder="E-mail"
-                type="email"
                 name="email"
+                v-model="email"
                 required
-                rules="rulesEmail"
+                :rules="emailRules"
                 class="mt-4"
               />
 
@@ -25,10 +25,12 @@
                 flat
                 dense
                 single-line
+                type="password"
                 color="#2596be"
                 name="password"
+                v-model="password"
+                :rules="passwordRules"
                 placeholder="Palavra-Passe"
-                type="password"
                 required
               />
 
@@ -39,9 +41,10 @@
                 flat
                 dense
                 single-line
+                :rules="nameRules"
                 color="#2596be"
                 placeholder="Nome"
-                type="nome"
+                v-model="nome"
                 name="nome"
                 required
               />
@@ -50,11 +53,12 @@
                 outlined
                 flat
                 dense
+                v-model="rua"
                 single-line
+                :rules="ruaRules"
                 color="#2596be"
                 name="rua"
-                placeholder="Rua"
-                type="rua"
+                placeholder="Morada"
                 required
               />
 
@@ -65,10 +69,11 @@
                     flat
                     dense
                     single-line
+                    v-model="freguesia"
+                    :rules="freguesiaRules"
                     color="#2596be"
                     name="freguesia"
                     placeholder="Freguesia"
-                    type="freguesia"
                     required
                   />
                 </v-col>
@@ -80,9 +85,10 @@
                     dense
                     single-line
                     color="#2596be"
+                    :rules="concelhoRules"
                     name="concelho"
                     placeholder="Concelho"
-                    type="concelho"
+                    v-model="concelho"
                     required
                   />
                 </v-col>
@@ -112,12 +118,25 @@
                     single-line
                     color="#2596be"
                     placeholder="Contacto telefónico"
-                    type="number"
                     name="contacto"
+                    v-model="contacto"
+                    maxlength="9"
                     required
                   />
                 </v-col>
               </v-row>
+              <v-text-field
+                outlined
+                flat
+                dense
+                single-line
+                color="#2596be"
+                placeholder="Número de Identificação Fiscal"
+                name="nif"
+                v-model="nif"
+                maxlength="9"
+                required
+              />
             </v-form>
             <v-row justify="end">
               <v-btn
@@ -140,31 +159,24 @@
                 dark
                 color="#2596be"
                 type="submit"
+                @click="registUser()"
               >
                 Registar
               </v-btn>
             </v-row>
           </v-card-text>
-
-          <v-snackbar
-            v-model="snackbar1"
-            :timeout="timeout"
-            :color="color"
-            :top="true"
-            class="headline"
-          >
-            {{ text }}
-          </v-snackbar>
         </v-card>
       </v-row>
     </v-img>
 
     <v-dialog v-model="dialog" persistent width="30%">
       <v-card>
-        <v-card-title class="justify-center cancel"> Cancelar Registo </v-card-title>
+        <v-card-title class="justify-center cancel">
+          Cancelar Registo
+        </v-card-title>
         <v-card-text>
           Tem a certeza que pretende cancelar o seu registo?
-          </v-card-text>
+        </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
@@ -181,15 +193,32 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="timeout"
+      :color="color"
+      :top="true"
+      class="headline"
+    >
+      {{ text }}
+    </v-snackbar>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
       valid: true,
       dialog: false,
+      snackbar: false,
+      color: "",
+      done: false,
+      timeout: 0,
+      text: "",
       email: "",
       password: "",
       nome: "",
@@ -197,6 +226,7 @@ export default {
       freguesia: "",
       concelho: "",
       contacto: "",
+      nif: "",
       emailRules: [
         (value) => !!value || "E-mail inválido",
         (value) => {
@@ -227,6 +257,36 @@ export default {
       this.$refs.form.reset();
       this.dialog = false;
     },
+    registUser: async function () {
+      if (this.$refs.form.validate()) {
+        try {
+          var resposta = await axios.post("http://localhost:7777/addCliente", {
+            email: this.email,
+            password: this.password,
+            concelho: this.concelho,
+            contacto: this.contacto,
+            freguesia: this.freguesia,
+            morada: this.rua,
+            nif: this.nif,
+            nome: this.nome,
+          });
+          console.log(JSON.stringify(resposta.data));
+          this.text = "Utilizador criado com sucesso.";
+          this.color = "success";
+          this.snackbar = true;
+        } catch (e) {
+          console.log("erro: " + e);
+          this.text = "Ocorreu um erro no registo, por favor tente mais tarde!";
+          this.color = "warning";
+          this.snackbar = true;
+        }
+      } else {
+        this.text = "Por favor preencha todos os campos.";
+        this.color = "error";
+        this.snackbar = true;
+        this.done = false;
+      }
+    },
   },
 };
 </script>
@@ -234,14 +294,14 @@ export default {
 
 <style scoped>
 .dial_code {
-	width: 90px;
+  width: 90px;
 }
 span {
   color: "#2596be";
-  font-size: 25px;
+  font-size: 20px;
 }
 
-.cancel{
+.cancel {
   font-size: 25px !important;
 }
 </style>
