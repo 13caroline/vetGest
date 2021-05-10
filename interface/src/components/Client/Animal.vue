@@ -1,21 +1,15 @@
 <template>
   <div>
-    <v-container fluid>
-      <v-card
-        height="60%"
-        class="mx-auto mt-2"
-        width="90%"
-        flat
-        color="#fafafa"
-      >
-        <v-card-text class="ml-10">
+    <v-container>
+      <v-card height="60%" class="mx-auto mt-2" flat color="#fafafa">
+        <v-card-text>
           <v-row>
             <v-col cols="3">
               <v-card height="200" width="200" flat>
                 <v-img
                   src="@/assets/animais/Rubi.jpg"
                   aspect-ratio="1"
-                  class="grey lighten-2 ml-n3"
+                  class="grey lighten-2"
                   cover
                 >
                   <template v-slot:placeholder>
@@ -33,19 +27,21 @@
                 </v-img>
               </v-card>
               <v-row>
-                <v-btn
-                  class="mt-5 body-2"
-                  small
-                  color="#2596be"
-                  dark
-                  to="/cliente/animal/editar"
-                  >Editar Dados</v-btn
-                >
-              </v-row>
-              <v-row>
-                <v-btn class="mt-2 body-2" small color="#2596be" dark
-                  >Vacinas/Desparasitações</v-btn
-                >
+                <v-col>
+                  <v-btn
+                    class="col mt-5 body-2"
+                    small
+                    color="#2596be"
+                    dark
+                    to="/cliente/animal/editar"
+                    >Editar Dados</v-btn
+                  >
+                </v-col>
+                <v-col>
+                  <v-btn class="col body-2" small color="#2596be" dark
+                    >Vacinas/Desparasitações</v-btn
+                  >
+                </v-col>
               </v-row>
             </v-col>
 
@@ -105,7 +101,7 @@
           </v-row>
 
           <v-row>
-            <v-card width="85%" class="mt-6">
+            <v-card class="mt-6">
               <v-data-table
                 :headers="headers"
                 :items="consultas"
