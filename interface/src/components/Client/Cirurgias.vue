@@ -4,25 +4,12 @@
       <v-row>
         <v-col cols="12">
           <h3 class="font-weight-regular text-uppercase mt-10">
-            Histórico de Consultas
+            Histórico de Cirurgias
           </h3>
 
-          <v-row justify="end">
-            <v-col cols="auto">
-              <v-btn
-                class="mb-2 body-2"
-                small
-                color="#2596be"
-                dark
-                to="/cliente/agendar/consulta"
-              >
-                Agendar Consulta
-              </v-btn>
-            </v-col>
-          </v-row>
           <v-data-table
             :headers="headers"
-            :items="consultas"
+            :items="cirurgias"
             class="elevation-1"
             hide-default-footer
           >
@@ -58,7 +45,7 @@
                     fas fa-calendar-times
                   </v-icon>
                 </template>
-                <span class="caption">Cancelar marcação</span>
+                <span class="caption">Cancelar cirurgia</span>
               </v-tooltip>
             </template>
           </v-data-table>
@@ -103,29 +90,29 @@ export default {
         align: "center",
       },
     ],
-    consultas: [
+    cirurgias: [
       {
         data: "05/04/2021 10:15",
         medico: "Drº José Vieira",
-        descricao: "Desparasitação",
+        descricao: "Cirurgia",
         estado: "Concluída",
       },
       {
         data: "19/04/2021 15:30",
         medico: "Drº José Vieira",
-        descricao: "Vacinação",
+        descricao: "Cirurgia",
         estado: "Agendada",
       },
       {
         data: "26/04/2021 14:30",
         medico: "Drº José Vieira",
-        descricao: "Consulta de Rotina",
+        descricao: "Cirurgia",
         estado: "Agendada",
       },
       {
         data: "26/04/2021 15:00",
         medico: "Drº José Vieira",
-        descricao: "Consulta de Rotina",
+        descricao: "Cirurgia",
         estado: "Agendada",
       },
     ],

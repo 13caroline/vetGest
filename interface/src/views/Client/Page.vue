@@ -15,12 +15,12 @@
 								v-for="a in animal"
 								:key="a.nome"
 							>
-								<v-card flat tile color="#fafafa">
+								<v-card flat tile color="#fafafa" class="rounded">
 									<v-item v-slot:default="{ toggle }">
 										<v-img
 											src="@/assets/animais/Rubi.jpg"
 											aspect-ratio="1"
-											class="grey lighten-2"
+											class="grey lighten-2 rounded"
 											@click="toggle"
 										>
 											<template v-slot:placeholder>
@@ -35,18 +35,16 @@
 									</v-item>
 									<v-row justify="center">
 										<div>
-											<p class="text-uppercase font-weight-regular mt-3 ml-5">
-												{{ a.nome }}
-											</p>
+											
 											<v-btn
-												class="mt-n5 ml-n1"
+                        class="mt-4"
 												text
 												outlined
 												small
 												id="no-background-hover"
 												to="/cliente/animal"
 											>
-												Ver mais
+												{{ a.nome }}<span class="grey--text text-lowercase ml-1 caption">(Ver mais)</span>
 											</v-btn>
 										</div>
 									</v-row>
