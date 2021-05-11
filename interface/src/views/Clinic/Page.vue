@@ -5,7 +5,7 @@
       <v-row justify="center">
         <v-col>
           <h3 class="font-weight-regular text-uppercase mb-4 mt-10">
-            Próximas consultas/cirurgias
+            Pacientes
           </h3>
           <!--<v-layout row class="mb-3">
             <v-tooltip top>
@@ -212,4 +212,5 @@ export default {
 #no-background-hover::before {
   background-color: transparent !important;
 }
+
 </style>
