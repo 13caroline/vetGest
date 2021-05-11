@@ -61,73 +61,30 @@
 						Consultas Agendadas
 					</h3>
 
-					<!--<v-layout row class="mb-3">
-            <v-tooltip top>
-              <template v-slot:activator="{ on }">
-                <v-btn class="ma-2" text v-on="on">
-                  <v-icon left small>fas fa-paw</v-icon>
-                  <span class="caption text-lowercase">Por animal</span>
-                </v-btn>
-              </template>
-              <span>Ordenar consultas por nome de animal</span>
-            </v-tooltip>
+					<v-row justify="end">
+            <v-col cols="auto">
+              <v-btn
+                class="mb-2 body-2 mr-2"
+                small
+                color="#2596be"
+                dark
+                to="/cliente/agendar/consulta"
+              >
+                Agendar Consulta
+              </v-btn>
 
-            <v-tooltip top>
-              <template v-slot:activator="{ on }">
-                <v-btn class="ma-2" text v-on="on">
-                  <v-icon left small>fas fa-user-md</v-icon>
-                  <span class="caption text-lowercase"
-                    >Por médico veterinário</span
-                  >
-                </v-btn>
-              </template>
-              <span>Ordenar consultas por médico veterinário</span>
-            </v-tooltip>
-          </v-layout>
-
-          <v-card
-            class="mx-auto"
-            height="80"
-            width="2000"
-            flat
-            color="brown lighten-5"
-            v-if="this.consultas.length === 0"
-          >
-            <v-card-title class="display-1 text-center justify-center">
-              Não existem consultas agendadas
-            </v-card-title>
-          </v-card>
-          <v-card
-            v-else
-            flat
-            v-for="consulta in consultas"
-            :key="consulta.data"
-          >
-            <v-layout row wrap :class="`pa-6 consulta ${consulta.estado}`">
-              <v-flex xs6 md2>
-                <div class="caption grey--text">Nome</div>
-                <div class="body-2">{{ consulta.paciente }}</div>
-              </v-flex>
-              <v-flex xs6 sm4 md5>
-                <div class="caption grey--text">Médico Veterinário</div>
-                <div class="body-2">{{ consulta.medico }}</div>
-              </v-flex>
-              <v-flex xs6 sm4 md3>
-                <div class="caption grey--text">Data</div>
-                <div class="body-2">{{ consulta.data }}</div>
-              </v-flex>
-              <v-flex xs2 sm4 md2>
-                <v-chip
-                  :color="estadopedido(consulta.estado)"
-                  class="black--text caption mt-4"
-                  small
-                  >{{ consulta.estado }}</v-chip
-                >
-              </v-flex>
-            </v-layout>
-            <v-divider></v-divider>
-          </v-card>
-        </v-container>-->
+              <v-btn
+                class="mb-2 body-2"
+                small
+                color="#2596be"
+                dark
+                to="/cliente/registar/animal"
+              >
+                Registar Animal
+              </v-btn>
+            </v-col>
+          </v-row>
+          
 					<v-data-table
 						:headers="headers"
 						:items="consultas"
@@ -156,7 +113,7 @@
 							</v-tooltip>
 						</template>
 					</v-data-table>
-					<v-row class="my-5">
+					<!--<v-row class="my-5">
 						<v-col cols="auto">
 							<v-btn color="#2596be" small dark to="/cliente/agendar/consulta">
 								Agendar Consulta
@@ -167,7 +124,7 @@
 								Registar Animal
 							</v-btn>
 						</v-col>
-					</v-row>
+					</v-row>-->
 				</v-col>
 			</v-row>
 		</v-container>
