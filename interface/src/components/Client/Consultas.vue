@@ -3,14 +3,14 @@
     <v-container class="fill-height">
       <v-row>
         <v-col cols="12">
-            <p class="font-weight-regular text-uppercase mt-10">
+            <h3 class="font-weight-regular text-uppercase mt-10">
               Consultas Agendadas
-            </p>
+            </h3>
 
             
               <v-row justify="end">
-                <v-col>
-                  <v-btn class="col mb-2 body-2" small color="#2596be" dark>
+                <v-col cols="auto">
+                  <v-btn class="mb-2 body-2" small color="#2596be" dark to="/cliente/agendar/consulta">
                     Agendar Consulta
                   </v-btn>
                 </v-col>
@@ -68,26 +68,36 @@
 export default {
   data: () => ({
     headers: [
-      {
-        text: "Data de Marcação",
-        align: "start",
-        sortable: true,
-        value: "data",
-      },
-      {
-        text: "Médico Veterinário",
-        value: "medico",
-        sortable: true,
-        align: "start",
-      },
-      { text: "Descrição", value: "descricao", sortable: true, align: "start" },
-      { text: "Estado", value: "estado", sortable: true, align: "center" },
-      {
-        text: "Mais detalhes",
-        value: "detalhes",
-        sortable: false,
-        align: "center",
-      },
+        {
+            text: "Data de Marcação",
+            align: "start",
+            sortable: true,
+            value: "data",
+        },
+        {
+            text: "Médico Veterinário",
+            value: "medico",
+            sortable: true,
+            align: "start",
+        },
+        { 
+            text: "Descrição", 
+            value: "descricao", 
+            sortable: true, 
+            align: "start" 
+        },
+        { 
+            text: "Estado", 
+            value: "estado", 
+            sortable: true, 
+            align: "center" 
+        },
+        {
+            text: "Mais detalhes",
+            value: "detalhes",
+            sortable: false,
+            align: "center",
+        },
     ],
     consultas: [
       {
