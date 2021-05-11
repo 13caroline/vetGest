@@ -33,7 +33,7 @@
         text
         class = "font-weight-regular"
         id="no-background-hover"
-        to="/my/lists/books"
+        to="/clinica/pacientes"
       >
         Pacientes
       </v-btn>

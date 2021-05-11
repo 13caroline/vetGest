@@ -122,7 +122,6 @@
           </v-row>
         </v-col>
         <v-col>
-          <h3>Olá</h3>
         </v-col>
       </v-row>
     </v-container>
@@ -160,7 +159,11 @@ export default {
           sortable: true,
           align: "start",
         },
-        { text: "Estado", value: "estado", sortable: true, align: "center" },
+        { 
+          text: "Estado",
+          value: "estado",
+          sortable: true,
+          align: "center" },
         {
           text: "Mais detalhes",
           value: "detalhes",

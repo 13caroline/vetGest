@@ -43,6 +43,14 @@ const routes = [
       name: 'Página Clinica',
       component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Page.vue')
     },
+    {
+      path: '/clinica/pacientes',
+      name: 'Pacientes Clinica',
+      component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Pacientes.vue')
+
+    }
+
+
 ]
 
 const router = new VueRouter({
