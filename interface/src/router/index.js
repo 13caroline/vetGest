@@ -41,6 +41,11 @@ const routes = [
     name: 'Consultas Cliente',
     component: () => import(/* webpackChunkName: "about" */ '../views/Client/Consultas.vue')
   },
+  {
+    path: '/cliente/cirurgias',
+    name: 'Cirurgias Cliente',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Client/Cirurgias.vue')
+  },
 
     //------------------------------------- Clinica -------------------------------------
 
