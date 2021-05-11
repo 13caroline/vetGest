@@ -10,13 +10,18 @@
 					<v-item-group>
 						<v-row>
 							<v-col
-								class="d-flex child-flex animal"
-								cols="5"
+								cols="auto"
+								lg="6"
+								class="mx-auto mx-sm-0"
 								v-for="a in animal"
 								:key="a.nome"
 							>
-								<v-card flat tile color="#fafafa" class="rounded">
-									<v-item v-slot:default="{ toggle }">
+								<div class="animal">
+									<img
+										src="@/assets/animais/Rubi.jpg"
+										class="w-100 grey lighten-2 rounded"
+									/>
+									<!-- <v-item v-slot:default="{ toggle }">
 										<v-img
 											src="@/assets/animais/Rubi.jpg"
 											aspect-ratio="1"
@@ -24,7 +29,7 @@
 											@click="toggle"
 										>
 											<template v-slot:placeholder>
-												<v-row class="fill-height ma-0" align="center" justify="center">
+												<v-row align="center" justify="center">
 													<v-progress-circular
 														indeterminate
 														color="grey lighten-5"
@@ -32,23 +37,19 @@
 												</v-row>
 											</template>
 										</v-img>
-									</v-item>
-									<v-row justify="center">
-										<div>
-											
-											<v-btn
-                        class="mt-4"
-												text
-												outlined
-												small
-												id="no-background-hover"
-												to="/cliente/animal"
-											>
-												{{ a.nome }}<span class="grey--text text-lowercase ml-1 caption">(Ver mais)</span>
-											</v-btn>
-										</div>
-									</v-row>
-								</v-card>
+									</v-item> -->
+									<v-btn
+										class="mt-2 w-100"
+										text
+										outlined
+										small
+										id="no-background-hover"
+										to="/cliente/animal"
+									>
+										{{ a.nome }}
+										<span class="grey--text text-lowercase ml-1 caption">(Ver mais)</span>
+									</v-btn>
+								</div>
 							</v-col>
 						</v-row>
 					</v-item-group>
@@ -60,29 +61,29 @@
 					</h3>
 
 					<v-row justify="end">
-            <v-col cols="auto">
-              <v-btn
-                class="mb-2 body-2 mr-2"
-                small
-                color="#2596be"
-                dark
-                to="/cliente/agendar/consulta"
-              >
-                Agendar Consulta
-              </v-btn>
+						<v-col cols="auto">
+							<v-btn
+								class="mb-2 body-2 mr-2"
+								small
+								color="#2596be"
+								dark
+								to="/cliente/agendar/consulta"
+							>
+								Agendar Consulta
+							</v-btn>
 
-              <v-btn
-                class="mb-2 body-2"
-                small
-                color="#2596be"
-                dark
-                to="/cliente/registar/animal"
-              >
-                Registar Animal
-              </v-btn>
-            </v-col>
-          </v-row>
-          
+							<v-btn
+								class="mb-2 body-2"
+								small
+								color="#2596be"
+								dark
+								to="/cliente/registar/animal"
+							>
+								Registar Animal
+							</v-btn>
+						</v-col>
+					</v-row>
+
 					<v-data-table
 						:headers="headers"
 						:items="consultas"
@@ -139,7 +140,7 @@ export default {
 		return {
 			animal: [
 				{ scr: "Rubi.jpg", nome: "Rubi" },
-				{ scr: "Rubi.jpg", nome: "Nikita" },
+				{ scr: "Rubi.jpg", nome: "Felpudo grande" },
 			],
 			headers: [
 				{
@@ -209,8 +210,8 @@ export default {
 #no-background-hover::before {
 	background-color: transparent !important;
 }
-
 .animal {
+	width: 100%;
 	max-width: 250px;
 }
 </style>
