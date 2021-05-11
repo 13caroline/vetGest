@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- /*** atenção  container fluid = bad ***/ -->
     <v-container class="fill-height">
       <v-row justify="center">
         <v-col cols="12" md="4">
@@ -21,13 +20,13 @@
           <v-card class="mt-10" flat color="transparent">
             <div>
               <p class="ma-0">Nome</p>
-              <v-select
-                color="#2596be"
+              <v-autocomplete
                 flat
-                outlined
+                color="#2596be"
                 dense
+                outlined
                 :items="animais"
-              ></v-select>
+              ></v-autocomplete>
             </div>
 
             <div>
@@ -111,17 +110,16 @@
 
             <div>
               <p class="ma-0">Médico Veterinário</p>
-              <v-select
-                color="#2596be"
+              <v-autocomplete
                 flat
-                outlined
+                color="#2596be"
                 dense
+                outlined
                 :items="medico"
                 v-model="medicoVet"
-              ></v-select>
+              ></v-autocomplete>
             </div>
 
-            <!-- /*** atenção  row: margens negativas -> cols! ***/ -->
             <v-row align="end" justify="end">
               <v-col cols="auto">
                 <v-btn color="#BDBDBD" small dark @click="dialog = true"
@@ -180,8 +178,8 @@ export default {
     date: new Date().toISOString().substr(0, 10),
     hora: new Date().getHours() + ":" + new Date().getMinutes(),
     animais: ["Rubi", "Puscas", "Nikita", "Rudi"],
-    medico: ["Drº José Vieira", "Drª Joana Ferreira"],
-    medicoVet: "Sem Preferência",
+    medico: ["Sem Preferência", "Drº José Vieira", "Drª Joana Ferreira"],
+    medicoVet: 'Sem Preferência',
   }),
 };
 </script>

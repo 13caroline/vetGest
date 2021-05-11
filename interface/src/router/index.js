@@ -5,6 +5,7 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 const routes = [
+  //------------------------------------- Cliente -------------------------------------
   {
     path: '/',
     name: 'Home',
@@ -35,6 +36,41 @@ const routes = [
     name: 'Registar Animal',
     component: () => import(/* webpackChunkName: "about" */ '../views/Client/RegistarAnimal.vue')
   },
+  {
+    path: '/cliente/consultas',
+    name: 'Consultas Cliente',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Client/Consultas.vue')
+  },
+  {
+    path: '/cliente/cirurgias',
+    name: 'Cirurgias Cliente',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Client/Cirurgias.vue')
+  },
+
+    //------------------------------------- Clinica -------------------------------------
+
+      //Página Inicial da Clinica
+    {
+      path: '/clinica/home',
+      name: 'Página Clinica',
+      component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Page.vue')
+    },
+
+    // Lista dos Pacientes de uma clinica
+    {
+      path: '/clinica/pacientes',
+      name: 'Pacientes Clinica',
+      component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Pacientes.vue')
+    },
+
+    // Registar um paciente por parte da clinica
+    {
+      path: '/clinica/registaPaciente',
+      name: 'Pacientes Clinica',
+      component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/RegistarPaciente.vue')
+    },
+
+
 ]
 
 const router = new VueRouter({

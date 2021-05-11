@@ -11,7 +11,7 @@
         text
         class = "font-weight-regular"
         id="no-background-hover"
-        to="/books"
+        to="/cliente/consultas"
       >
         Consultas
       </v-btn>
@@ -22,7 +22,7 @@
         text
         class = "font-weight-regular"
         id="no-background-hover"
-        to="/my/lists/books"
+        to="/cliente/cirurgias"
       >
         Cirurgias
       </v-btn>
@@ -68,7 +68,7 @@
         </template>
 
         <v-list dense color = "#FFFFFF">
-          <v-list-item @click="toMainPage()">
+          <v-list-item @click="home()">
             <v-list-item-title class="caption"> <v-icon x-small class="mt-n1 mr-1"> fas fa-home </v-icon> Página Inicial</v-list-item-title>
           </v-list-item>
           <v-list-item @click="preferences()">
@@ -94,15 +94,12 @@ export default {
       this.$store.commit("eliminarToken")  
       this.$router.push("/");
     },
-    toMainPage: function(){
+    home: function(){
       this.$router.push("/cliente/home")
     },
     preferences: function(){
         this.$router.push("/preferences");
     },
-    home: function(){
-      this.$router.push("/menu");
-    }
   },
 }
 </script>

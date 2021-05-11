@@ -296,6 +296,7 @@ export default {
 .dial_code {
   width: 90px;
 }
+
 span {
   color: "#2596be";
   font-size: 20px;
