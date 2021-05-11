@@ -5,6 +5,7 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 const routes = [
+  // Cliente
   {
     path: '/',
     name: 'Home',
@@ -35,6 +36,13 @@ const routes = [
     name: 'Registar Animal',
     component: () => import(/* webpackChunkName: "about" */ '../views/Client/RegistarAnimal.vue')
   },
+
+    //Clinica
+    {
+      path: '/clinica/home',
+      name: 'Página Clinica',
+      component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Page.vue')
+    },
 ]
 
 const router = new VueRouter({
