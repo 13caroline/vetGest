@@ -11,7 +11,7 @@
         text
         class = "font-weight-regular"
         id="no-background-hover"
-        to="/cliente/consultas"
+        to="/books"
       >
         Consultas
       </v-btn>
@@ -27,15 +27,26 @@
         Cirurgias
       </v-btn>
 
-      <v-btn
+     <v-btn
         tile
         depressed
         text
         class = "font-weight-regular"
         id="no-background-hover"
-        to="/books"
+        to="/clinica/pacientes"
       >
-        Clínica
+        Pacientes
+      </v-btn>
+
+ <v-btn
+        tile
+        depressed
+        text
+        class = "font-weight-regular"
+        id="no-background-hover"
+        to="/my/lists/books"
+      >
+        Clientes
       </v-btn>
 
       <v-btn
