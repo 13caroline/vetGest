@@ -20,4 +20,9 @@ public class UtilizadorController {
     public Utilizador findAnimalByEmail(@PathVariable String email){
         return service.getUtilizadorByEmail(email);
     }
+
+    @GetMapping("/")
+    public String welcome(){
+        return "Welcome to VetGest!!";
+    }
 }
