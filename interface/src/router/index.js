@@ -36,6 +36,11 @@ const routes = [
     name: 'Registar Animal',
     component: () => import(/* webpackChunkName: "about" */ '../views/Client/RegistarAnimal.vue')
   },
+  {
+    path: '/cliente/consultas',
+    name: 'Consultas Cliente',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Client/Consultas.vue')
+  },
 
     //Clinica
     {

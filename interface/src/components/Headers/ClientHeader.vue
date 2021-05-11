@@ -11,7 +11,7 @@
         text
         class = "font-weight-regular"
         id="no-background-hover"
-        to="/books"
+        to="/cliente/consultas"
       >
         Consultas
       </v-btn>
