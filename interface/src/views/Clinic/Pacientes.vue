@@ -8,7 +8,7 @@
             Próximas consultas/cirurgias
           </h3>
         <v-col cols="auto" class="ml-auto">
-          <v-btn elevation="2">
+          <v-btn elevation="2" to=Clinic>
             Registar Paciente
           </v-btn>
         </v-col>
