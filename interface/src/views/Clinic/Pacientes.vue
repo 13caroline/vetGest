@@ -1,31 +1,39 @@
 <template>
-  <div>
+  <div id="page" class="d-flex flex-column">
     <Header />
-    <v-data-table
-      :headers="headers"
-      :items="consultas"
-      class="elevation-1"
-      hide-default-footer
-    >
+    <v-container>
+      <v-row class="w-100">
 
-      <template v-slot:[`item.detalhes`]="{ item }">
-        <v-tooltip right>
-          <template v-slot:activator="{ on, attrs }">
-            <v-icon
-              v-bind="attrs"
-              v-on="on"
-              small
-              @click="more(item)"
-            >
-              fas fa-plus-circle
-            </v-icon>
-          </template>
-          <span class="caption">Mais detalhes</span>
-        </v-tooltip>
-      </template>
-    </v-data-table>
+           <h3 class="font-weight-regular text-uppercase mb-4 mt-10">
+            Próximas consultas/cirurgias
+          </h3>
+        <v-col cols="auto" class="ml-auto">
+          <v-btn elevation="2">
+            Registar Paciente
+          </v-btn>
+        </v-col>
+      </v-row>
+      <v-data-table
+        :headers="headers"
+        :items="consultas"
+        class="elevation-1"
+        
+        hide-default-footer
+      >
+        <template v-slot:[`item.detalhes`]="{ item }">
+          <v-tooltip right>
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon v-bind="attrs" v-on="on" small @click="more(item)">
+                fas fa-plus-circle
+              </v-icon>
+            </template>
+            <span class="caption">Mais detalhes</span>
+          </v-tooltip>
+        </template>
+      </v-data-table>
+    </v-container>
 
-    <Footer />
+    <Footer class="mt-auto" />
   </div>
 </template>
 
@@ -39,7 +47,7 @@ export default {
       headers: [
         {
           text: "Paciente",
-        //  align: "start",
+          align: "center",
           sortable: true,
           value: "paciente",
         },
@@ -47,31 +55,31 @@ export default {
           text: "Idade",
           value: "idade",
           sortable: true,
-        //  align: "start",
+          align: "center",
         },
         {
           text: "Cliente",
           value: "cliente",
           sortable: true,
-        //  align: "start",
+          align: "center",
         },
         {
           text: "Espécie",
           value: "especie",
           sortable: true,
-        //  align: "start",
+          align: "center",
         },
         {
           text: "Raça",
           value: "raca",
           sortable: true,
-         // align: "start",
+          align: "center",
         },
         {
           text: "Mais detalhes",
           value: "detalhes",
           sortable: false,
-         // align: "start",
+          align: "center",
         },
       ],
 
@@ -97,10 +105,16 @@ export default {
     Header,
     Footer,
   },
-  methods:{
-      more(item){
-          console.log(item)
-      }
-  }
+  methods: {
+    more(item) {
+      console.log(item);
+    },
+  },
 };
 </script>
+
+<style>
+#no-background-hover::before {
+  background-color: transparent !important;
+}
+</style>
