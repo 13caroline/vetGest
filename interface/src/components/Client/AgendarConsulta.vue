@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- /*** atenção  container fluid = bad ***/ -->
     <v-container class="fill-height">
       <v-row justify="center">
         <v-col cols="12" md="4">
@@ -121,7 +120,6 @@
               ></v-select>
             </div>
 
-            <!-- /*** atenção  row: margens negativas -> cols! ***/ -->
             <v-row align="end" justify="end">
               <v-col cols="auto">
                 <v-btn color="#BDBDBD" small dark @click="dialog = true"

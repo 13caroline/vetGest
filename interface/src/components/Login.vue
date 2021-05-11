@@ -113,4 +113,9 @@
 .login_wrapper {
 	min-height: 60vh;
 }
+
+.loginform {
+  width: 100%;
+  max-width: 475px;
+}
 </style>
