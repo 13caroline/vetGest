@@ -77,6 +77,14 @@ const routes = [
       component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Paciente.vue')
     },
 
+     // Lista dos Clientes de uma clinica
+     {
+      path: '/clinica/clientes',
+      name: 'Clientes Clinica',
+      component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Clientes.vue')
+    },
+
+
 
 ]
 
