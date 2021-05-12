@@ -65,8 +65,11 @@
                   <v-text-field
                     color="#2596be"
                     flat
+                    readonly
                     outlined
                     dense
+                    v-model="nomeSelected"
+                    
                   ></v-text-field>
                 </div>
               </v-col>
@@ -278,33 +281,26 @@
 <v-dialog
       v-model="dialogDono"
       
-      max-width="290"
+      max-width="700"
     >
       <v-card>
-        <v-card-title class="headline">
-          Use Google's location service?
-        </v-card-title>
-        <v-card-text>Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.</v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="green darken-1"
-            text
-            @click="dialog = false"
-          >
-            Disagree
-          </v-btn>
-          <v-btn
-            color="green darken-1"
-            text
-            @click="dialog = false"
-          >
-            Agree
-          </v-btn>
-        </v-card-actions>
-      </v-card>
+    <v-card-title>
+      <v-text-field
+        v-model="search"
+        append-icon="mdi-magnify"
+        label="Search"
+        single-line
+        hide-details
+      ></v-text-field>
+    </v-card-title>
+    <v-data-table
+    @click:row="handleClick"
+      :headers="headers"
+      :items="items"
+      :search="search"
+    ></v-data-table>
+  </v-card>
     </v-dialog>
-
   </div>
 </template>
 
@@ -312,6 +308,8 @@
 //import moment from 'moment';
 export default {
   data: () => ({
+    emailSelected: "",
+    nomeSelected: "",
     dialog: false,
     dialogDono: false,
     dataMarcacao: null,
@@ -347,6 +345,57 @@ export default {
       "Selvagem",
       "Outro",
     ],
+    search: '',
+     headers: [
+        {
+          text: "Nome",
+          align: "center",
+          sortable: true,
+          value: "nome",
+        },
+        {
+          text: "Email",
+          value: "email",
+          sortable: true,
+          align: "center",
+        },
+        {
+          text: "NIF",
+          value: "nif",
+          sortable: true,
+          align: "center",
+        },
+        {
+          text: "Contacto",
+          value: "contacto",
+          sortable: true,
+          align: "center",
+        },
+      ],
+      items: [
+        {
+          nome:"Joao Mota",
+          email:"joaomota@gmail.com",
+          nif:"256862010",
+          contacto:"935373306",
+        },
+        {
+          nome:"Carolina Cunha",
+          email:"carolinacunha@gmail.com",
+          nif:"182092887",
+          contacto:"919977230",
+        }
+
+      ]
+
   }),
+  methods: {
+handleClick(row) {
+    this.emailSelected=row.email;
+    this.nomeSelected=row.nome;
+    this.dialogDono=false;
+
+},
+  }
 };
-</script>
+</script> 
