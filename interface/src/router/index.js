@@ -65,8 +65,8 @@ const routes = [
 
     // Registar um paciente por parte da clinica
     {
-      path: '/clinica/registaPaciente',
-      name: 'Pacientes Clinica',
+      path: '/clinica/registar/paciente',
+      name: 'Registar Paciente Clinica',
       component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/RegistarPaciente.vue')
     },
 
