@@ -70,6 +70,13 @@ const routes = [
       component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/RegistarPaciente.vue')
     },
 
+    // Ir para a página de um paciente
+    {
+      path: '/clinica/paciente/',
+      name: 'Paciente',
+      component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Paciente.vue')
+    },
+
 
 ]
 

@@ -5,7 +5,7 @@
       <v-row class="w-100">
 
            <h3 class="font-weight-regular text-uppercase mb-4 mt-10">
-            Próximas consultas/cirurgias
+            Pacientes
           </h3>
         <v-col cols="auto" class="ml-auto">
           <v-btn elevation="2" to="/clinica/registar/paciente">
@@ -107,7 +107,8 @@ export default {
   },
   methods: {
     more(item) {
-      console.log(item);
+      this.$router.push("/clinica/paciente/");
+      console.log(item)
     },
   },
 };
