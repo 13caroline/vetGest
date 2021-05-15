@@ -65,7 +65,7 @@
       </v-btn>-->
 
       <v-btn-toggle tile background-color="white" color="grey" group>
-        <v-btn value="consultas"> Consultas </v-btn>
+        <v-btn value="consultas" to="/clinica/consultas"> Consultas </v-btn>
 
         <v-btn value="cirurgias"> Cirurgias </v-btn>
 

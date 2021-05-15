@@ -3,7 +3,8 @@
     <v-container class="fill-height">
       <v-row>
         <v-col cols="12">
-          <h3 class="font-weight-regular text-uppercase mt-10">
+          <h3 class="font-weight-regular text-uppercase mt-10 mb-4">
+            <v-icon small>fas fa-scroll</v-icon>
             Histórico de Cirurgias
           </h3>
 
@@ -24,7 +25,7 @@
                 <template v-slot:activator="{ on, attrs }">
                   <v-icon
                     v-if="item.estado == 'Concluída'"
-                    @click="more(item)"
+                    @click="detalhes=true"
                     small
                     v-on="on"
                     v-bind="attrs"
@@ -51,13 +52,29 @@
           </v-data-table>
         </v-col>
       </v-row>
+      <v-dialog v-model="detalhes" width="50%">
+        <v-card>
+          <v-card-title class="headline mb-6">
+            Notas Médicas
+            <v-spacer></v-spacer>
+            <v-btn icon small @click="dialog = false">
+              <v-icon>fas fa-times</v-icon>
+            </v-btn>
+          </v-card-title>
+          <v-card-text class="black--text">
+            <exemplo></exemplo>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
     </v-container>
   </div>
 </template>
 
 <script>
+import exemplo from "@/components/Client/exemploCirurgia.vue"
 export default {
   data: () => ({
+    detalhes: false,
     headers: [
       {
         text: "Data de Marcação",
@@ -117,6 +134,9 @@ export default {
       },
     ],
   }),
+  components:{
+    exemplo
+  },
   methods: {
     estadopedido(estado) {
       if (estado == "Agendada") return "#C5E1A5";

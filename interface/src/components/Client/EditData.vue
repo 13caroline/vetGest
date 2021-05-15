@@ -2,8 +2,9 @@
   <div>
     <v-container fluid>
       <v-card height="60%" class="mx-auto" width="80%" flat color="#fafafa">
-        <v-card-title class="font-weight-regular text-uppercase">
-          Registar um Novo Animal
+        <v-card-title class="font-weight-bold text-uppercase">
+          <v-icon small class="mr-2">fas fa-paw</v-icon>
+          Editar dados de {{cao.nome}}
         </v-card-title>
         <v-card-text>
           <v-row>
@@ -248,7 +249,7 @@
     <v-dialog v-model="dialog" persistent width="30%">
       <v-card>
         <v-card-title class="justify-center cancel">
-          Cancelar Edição de Dados
+          Cancelar edição de dados
         </v-card-title>
         <v-card-text>
           Tem a certeza que pretende cancelar a edição dos dados?

@@ -6,7 +6,10 @@
           <v-card-title class="font-weight-regular text-uppercase mt-10">
             Registar um Novo Animal
           </v-card-title>
-          <v-card-subtitle>Por favor preencha o seguinte formulário</v-card-subtitle>
+          <v-card-subtitle
+            >
+            <p class="subtitle">Por favor preencha o seguinte formulário</p></v-card-subtitle
+          >
 
           <v-card-text>
             <v-row>
@@ -24,7 +27,12 @@
               <v-col cols="3">
                 <div>
                   <p class="ma-0">Número de Chip</p>
-                  <v-text-field color="#2596be" flat outlined dense></v-text-field>
+                  <v-text-field
+                    color="#2596be"
+                    flat
+                    outlined
+                    dense
+                  ></v-text-field>
                 </div>
               </v-col>
               <v-col cols="4">
@@ -110,7 +118,7 @@
 
               <v-col>
                 <div>
-                    <p class="ma-0">Sexo</p>
+                  <p class="ma-0">Sexo</p>
                   <v-radio-group row class="ma-0">
                     <v-radio value="Macho" color="#2596be">
                       <template v-slot:label>
@@ -128,54 +136,54 @@
             </v-row>
 
             <v-row class="mt-n5">
-                <v-col cols="5">
-                  <div>
-                    <p class="ma-0">Cor</p>
-                    <v-select
-                      color="#2596be"
-                      flat
-                      outlined
-                      dense
-                      label="Por favor selecione"
-                      multiple
-                      :items="itemscor"
-                    ></v-select>
-                  </div>
-                </v-col>
-                <v-col cols="4">
-                  <div>
-                    <p class="ma-0">Pelagem</p>
+              <v-col cols="5">
+                <div>
+                  <p class="ma-0">Cor</p>
+                  <v-select
+                    color="#2596be"
+                    flat
+                    outlined
+                    dense
+                    label="Por favor selecione"
+                    multiple
+                    :items="itemscor"
+                  ></v-select>
+                </div>
+              </v-col>
+              <v-col cols="4">
+                <div>
+                  <p class="ma-0">Pelagem</p>
 
-                    <v-select
-                      color="#2596be"
-                      flat
-                      outlined
-                      dense
-                      label="Por favor selecione"
-                      multiple
-                      :items="itemspelagem"
-                    ></v-select>
-                  </div>
-                </v-col>
-                <v-col cols="3">
-                  <div>
-                    <p class="ma-0">Cauda</p>
-                    <v-select
-                      color="#2596be"
-                      flat
-                      outlined
-                      label="Por favor selecione"
-                      dense
-                      :items="itemscauda"
-                    ></v-select>
-                  </div>
-                </v-col>
-              </v-row>
+                  <v-select
+                    color="#2596be"
+                    flat
+                    outlined
+                    dense
+                    label="Por favor selecione"
+                    multiple
+                    :items="itemspelagem"
+                  ></v-select>
+                </div>
+              </v-col>
+              <v-col cols="3">
+                <div>
+                  <p class="ma-0">Cauda</p>
+                  <v-select
+                    color="#2596be"
+                    flat
+                    outlined
+                    label="Por favor selecione"
+                    dense
+                    :items="itemscauda"
+                  ></v-select>
+                </div>
+              </v-col>
+            </v-row>
 
-              <v-row class="mt-n5">
-                <v-col>
-                  <div>
-                    <p class="ma-0">Observações</p>
+            <v-row class="mt-n5">
+              <v-col>
+                <div>
+                  <p class="ma-0">Observações</p>
                   <v-textarea
                     outlined
                     color="#2596be"
@@ -184,31 +192,27 @@
                     clear-icon="fas fa-times-circle"
                     no-resize
                   ></v-textarea>
-                  </div>
-                </v-col>
-              </v-row>
-              <v-row align="end" justify="end">
-                <v-btn
-                  color="#BDBDBD"
-                  small
-                  dark
-                  @click="dialog = true"
-                  >Cancelar</v-btn
-                >
-                <v-btn color="#2596be" small dark class="ml-3"
-                  >Registar</v-btn
-                >
-              </v-row>
+                </div>
+              </v-col>
+            </v-row>
+            <v-row align="end" justify="end">
+              <v-btn color="#BDBDBD" small dark @click="dialog = true"
+                >Cancelar</v-btn
+              >
+              <v-btn color="#2596be" small dark class="ml-3">Registar</v-btn>
+            </v-row>
           </v-card-text>
         </v-card>
       </v-container>
     </v-row>
     <v-dialog v-model="dialog" persistent width="30%">
       <v-card>
-        <v-card-title class="cancel"> Cancelar Registo de um Novo Animal </v-card-title>
+        <v-card-title class="cancel">
+          Cancelar registo de um novo animal
+        </v-card-title>
         <v-card-text>
           Tem a certeza que pretende cancelar o registo?
-          </v-card-text>
+        </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
@@ -221,7 +225,16 @@
           >
             Não
           </v-btn>
-          <v-btn depressed large dark color="#2596be" width="50%" to="/cliente/animal"> Sim </v-btn>
+          <v-btn
+            depressed
+            large
+            dark
+            color="#2596be"
+            width="50%"
+            to="/cliente/animal"
+          >
+            Sim
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -257,19 +270,21 @@ export default {
       "Encaracolada",
       "Cerdosa",
     ],
-    itemscauda: [
-      "Comprida", 
-      "Curta", 
-      "Amputada"
-    ],
+    itemscauda: ["Comprida", "Curta", "Amputada"],
     itemsespecie: [
+      "Bovino",
       "Canídeo",
-      "Felídeo",
-      "Pecuário",
       "Equino",
-      "Selvagem",
-      "Outro"
-    ]
+      "Felídeo",
+      "Exótico",
+      "Outro",
+    ],
   }),
 };
 </script>
+
+<style scoped>
+  .subtitle {
+    color: #2596be;
+  }
+</style>

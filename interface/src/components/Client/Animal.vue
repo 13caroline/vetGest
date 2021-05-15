@@ -38,7 +38,7 @@
                 </v-btn>
               </v-col>
               <v-col>
-                <v-btn class="col body-2" small color="#2596be" dark>
+                <v-btn class="col body-2" small color="#2596be" dark to="/cliente/vacinas">
                   Vacinas/Desparasitações
                 </v-btn>
               </v-col>
@@ -241,6 +241,19 @@
                   </v-icon>
                 </template>
                 <span class="caption">Cancelar marcação</span>
+              </v-tooltip>
+               <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon
+                    v-bind="attrs"
+                    v-on="on"
+                    small
+                    class="ml-2"
+                  >
+                    fas fa-pen
+                  </v-icon>
+                </template>
+                <span class="caption">Adicionar notas</span>
               </v-tooltip>
             </template>
           </v-data-table>

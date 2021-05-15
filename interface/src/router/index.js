@@ -46,6 +46,11 @@ const routes = [
     name: 'Cirurgias Cliente',
     component: () => import(/* webpackChunkName: "about" */ '../views/Client/Cirurgias.vue')
   },
+  {
+    path: '/cliente/vacinas',
+    name: 'Vacinas e Desparasitações Cliente',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Client/Vacinas.vue')
+  },
 
     //------------------------------------- Clinica -------------------------------------
 
@@ -82,6 +87,11 @@ const routes = [
       path: '/clinica/clientes',
       name: 'Clientes Clinica',
       component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Clientes.vue')
+    },
+    {
+      path: '/clinica/consultas/',
+      name: 'Clinica Consultas',
+      component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Consultas.vue')
     },
 
 
