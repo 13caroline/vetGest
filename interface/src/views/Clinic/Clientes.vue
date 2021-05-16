@@ -4,20 +4,32 @@
     <v-container>
       <v-row class="w-100">
 
-           <h3 class="font-weight-regular text-uppercase mb-4 mt-10">
+           <h3 class="font-weight-regular text-uppercase mb-4 mt-10 ml-3">
+             <v-icon class="mr-2">fas fa-user</v-icon>
             Clientes
           </h3>
         <v-col cols="auto" class="ml-auto">
-          <v-btn elevation="2" to="/clinica/registar/paciente">
-            Registar Paciente
+          <v-btn dark small color="#2596be" to="/clinica/registar/cliente">
+            Registar Cliente
           </v-btn>
         </v-col>
       </v-row>
+
+      <v-text-field
+        v-model="search"
+        append-icon="mdi-magnify"
+        label="Procurar"
+        outlined
+        dense
+        class="my-4"
+        color="#2596be"
+        single-line
+        hide-details
+      ></v-text-field>
       <v-data-table
         :headers="headers"
-        :items="consultas"
+        :items="clientes"
         class="elevation-1"
-        
         hide-default-footer
       >
         <template v-slot:[`item.detalhes`]="{ item }">
@@ -31,6 +43,104 @@
           </v-tooltip>
         </template>
       </v-data-table>
+
+      <v-dialog v-model="dialog" width="30%">
+        <v-card>
+          <v-card-title class="mb-6 grey--text">
+            Identificação pessoal
+             <v-tooltip right>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn icon small class="ml-2">
+                <v-icon v-bind="attrs" v-on="on" small>fas fa-pen</v-icon>
+              </v-btn>
+            </template>
+            <span class="caption">Editar dados</span>
+          </v-tooltip>
+            
+            <v-spacer></v-spacer>
+            <v-btn icon small @click="dialog = false">
+              <v-icon>fas fa-times</v-icon>
+            </v-btn>
+          </v-card-title>
+          <v-card-text class="black--text">
+            <v-row>
+           
+            <v-img
+              max-height="100"
+              max-width="100"
+              src="@/assets/medico.png"
+            >
+            </v-img>
+              <span class="font-weight-bold headline indication">  CAROLINA ALVES DA CUNHA </span>
+            
+            </v-row>
+
+            <v-row>
+              <v-col>
+                  <span class="indication font-weight-bold">Telemóvel:</span>
+              </v-col>
+
+              <v-col>
+                <div class="information font-weight-light">91529375</div>
+              </v-col>
+            </v-row>
+            
+            <v-row>
+              <v-col>
+                  <span class="indication font-weight-bold">Email:</span>
+              </v-col>
+
+              <v-col>
+                <div class="information text-uppercase font-weight-light">f7carolina.cunha@gmail.com</div>
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col>
+                  <span class="indication font-weight-bold">Morada:</span>
+              </v-col>
+
+              <v-col>
+                <div class="information text-uppercase font-weight-light">Rua de Teibães</div>
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col>
+                  <span class="indication font-weight-bold">Localidade:</span>
+              </v-col>
+
+              <v-col>
+                <div class="information text-uppercase font-weight-light">fafe</div>
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col>
+                  <span class="indication font-weight-bold">Número de contribuinte:</span>
+              </v-col>
+
+              <v-col>
+                <div class="information text-uppercase font-weight-light">249705672</div>
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col>
+                  <span class="indication font-weight-bold">Utentes associados:</span>
+              </v-col>
+
+              <v-col>
+                <v-btn class="font-weight-light text-decoration-underline" color="#616161" text depressed to="/clinica/utente">Runa</v-btn>
+                <v-btn class="font-weight-light text-decoration-underline" color="#616161" text depressed to="/clinica/utente">Rubi</v-btn>
+              </v-col>
+
+            </v-row>
+
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+
     </v-container>
 
     <Footer class="mt-auto" />
@@ -44,59 +154,50 @@ import Footer from "@/components/Footer.vue";
 export default {
   data() {
     return {
+      dialog: false, 
+      search: '',
       headers: [
         {
-          text: "Paciente",
-          align: "center",
+          text: "NOME COMPLETO",
+          align: "start",
           sortable: true,
-          value: "paciente",
-        },
-        {
-          text: "Idade",
-          value: "idade",
-          sortable: true,
-          align: "center",
-        },
-        {
-          text: "Cliente",
           value: "cliente",
-          sortable: true,
-          align: "center",
         },
         {
-          text: "Espécie",
-          value: "especie",
+          text: "NÚMERO TELEFONE",
+          value: "telemovel",
           sortable: true,
-          align: "center",
+          align: "start",
         },
         {
-          text: "Raça",
-          value: "raca",
-          sortable: true,
-          align: "center",
+          text: "LOCALIDADE",
+          value: "localidade",
+          sortable: false,
+          align: "start",
         },
         {
-          text: "Mais detalhes",
+          text: "MAIS DETALHES",
           value: "detalhes",
           sortable: false,
-          align: "center",
+          align: "start",
         },
       ],
 
-      consultas: [
+      clientes: [
         {
-          paciente: "Runa",
-          idade: "10",
-          cliente: "Carolina Cunha",
-          especie: "Canídeo",
-          raca: "Labrador",
+          cliente: "Carolina Alves Cunha",
+          telemovel: "915293785",
+          localidade: "Fafe",
         },
         {
-          paciente: "Riscas",
-          idade: "4",
-          cliente: "João Mota",
-          especie: "Felídeo",
-          raca: "Gato Europeu",
+          cliente: "Carolina Alves Cunha",
+          telemovel: "915293785",
+          localidade: "Fafe",
+        },
+        {
+          cliente: "Carolina Alves Cunha",
+          telemovel: "915293785",
+          localidade: "Fafe",
         },
       ],
     };
@@ -107,8 +208,8 @@ export default {
   },
   methods: {
     more(item) {
-      this.$router.push("/clinica/paciente/");
-      console.log(item)
+      this.dialog = true;
+      console.log(item);
     },
   },
 };
@@ -117,5 +218,14 @@ export default {
 <style>
 #no-background-hover::before {
   background-color: transparent !important;
+}
+
+.information{
+  text-align: right;
+  color: #616161;
+}
+
+.indication{
+  color: #424242;
 }
 </style>

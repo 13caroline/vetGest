@@ -3,19 +3,40 @@
     <Header />
     <v-container>
       <v-row class="w-100">
-
-           <h3 class="font-weight-regular text-uppercase mb-4 mt-10">
-            Pacientes
+           <h3 class="font-weight-regular text-uppercase mb-4 mt-10 ml-3">
+             <v-icon class="mr-2">fas fa-paw</v-icon>
+            Utentes
           </h3>
-        <v-col cols="auto" class="ml-auto">
-          <v-btn elevation="2" to="/clinica/registar/paciente">
-            Registar Paciente
-          </v-btn>
-        </v-col>
+           <v-row justify="end">
+            <v-col cols="auto">
+              <v-btn
+                class="mb-2 mt-6 body-2"
+                small
+                color="#2596be"
+                dark
+                to="/clinica/registar/paciente"
+              >
+                Registar Utente
+              </v-btn>
+            </v-col>
+          </v-row>
+        
       </v-row>
+      <v-text-field
+        v-model="search"
+        append-icon="mdi-magnify"
+        label="Procurar"
+        outlined
+        dense
+        class="my-4"
+        color="#2596be"
+        single-line
+        hide-details
+      ></v-text-field>
       <v-data-table
         :headers="headers"
         :items="consultas"
+        :search="search"
         class="elevation-1"
         
         hide-default-footer
@@ -44,42 +65,43 @@ import Footer from "@/components/Footer.vue";
 export default {
   data() {
     return {
+      search: '',
       headers: [
         {
-          text: "Paciente",
+          text: "UTENTE",
           align: "center",
           sortable: true,
           value: "paciente",
         },
         {
-          text: "Idade",
+          text: "IDADE",
           value: "idade",
           sortable: true,
-          align: "center",
+          align: "start",
         },
         {
-          text: "Cliente",
+          text: "CLIENTE",
           value: "cliente",
           sortable: true,
-          align: "center",
+          align: "start",
         },
         {
-          text: "Espécie",
+          text: "ESPÉCIE",
           value: "especie",
           sortable: true,
-          align: "center",
+          align: "start",
         },
         {
-          text: "Raça",
+          text: "RAÇA",
           value: "raca",
           sortable: true,
-          align: "center",
+          align: "start",
         },
         {
-          text: "Mais detalhes",
+          text: "MAIS DETALHES",
           value: "detalhes",
           sortable: false,
-          align: "center",
+          align: "start",
         },
       ],
 
