@@ -77,7 +77,7 @@
           </v-item-group>
         </v-col>
 
-        <v-col>
+        <v-col lg="7" class="ml-auto">
           <h3 class="font-weight-regular text-uppercase mb-4 mt-10">
             Consultas Agendadas
           </h3>
@@ -85,7 +85,7 @@
           <v-row justify="start">
             <v-col cols="auto">
               <v-btn
-                class="mb-2 body-2"
+                class="mb-3 body-2"
                 small
                 color="#2596be"
                 dark
@@ -102,6 +102,7 @@
             :items="consultas"
             class="elevation-1"
             hide-default-footer
+            v-if="consultas.length"
           >
             <template v-slot:[`item.estado`]="{ item }">
               <v-chip :color="estadopedido(item.estado)" small>
@@ -125,6 +126,7 @@
               </v-tooltip>
             </template>
           </v-data-table>
+          <small v-else> <em> sem consultas agendadas </em></small>
           <!--<v-row class="my-5">
 						<v-col cols="auto">
 							<v-btn color="#2596be" small dark to="/cliente/agendar/consulta">
