@@ -1,0 +1,30 @@
+package com.example.demo.Controller;
+
+import com.example.demo.Entity.Utilizador;
+import com.example.demo.Service.UtilizadorService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+public class UtilizadorController {
+
+    @Qualifier("utilizadorService")
+    @Autowired
+    private UtilizadorService service;
+
+    @PostMapping(path = "/addUtilizador")
+    public Utilizador addUtilizador(@RequestBody Utilizador utilizador){
+        return service.saveUtilizador(utilizador);
+    }
+
+    @GetMapping("/utilizador/{email}")
+    public Utilizador findAnimalByEmail(@PathVariable String email){
+        return service.getUtilizadorByEmail(email);
+    }
+
+    @GetMapping("/")
+    public String welcome(){
+        return "Welcome to VetGest!!";
+    }
+}
