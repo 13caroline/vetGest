@@ -92,16 +92,28 @@
 
 					<v-list dense color="#FFFFFF">
 						<v-list-item to="/cliente/consultas">
-							<v-list-item-title class="caption">Consultas</v-list-item-title>
+							<v-list-item-title class="caption">
+								<v-icon x-small class="mt-n1 mr-1">fas fa-scroll</v-icon>
+								Consultas
+							</v-list-item-title>
 						</v-list-item>
 						<v-list-item to="/cliente/cirurgias">
-							<v-list-item-title class="caption">Cirurgias</v-list-item-title>
+							<v-list-item-title class="caption">
+								<v-icon x-small class="mt-n1 mr-1">fas fa-procedures</v-icon>
+								Cirurgias
+							</v-list-item-title>
 						</v-list-item>
 						<v-list-item to="/books">
-							<v-list-item-title class="caption">Clínica</v-list-item-title>
+							<v-list-item-title class="caption">
+								<v-icon x-small class="mt-n1 mr-1">fas fa-clinic-medical</v-icon>
+								Clínica
+							</v-list-item-title>
 						</v-list-item>
 						<v-list-item to="/my/lists/books">
-							<v-list-item-title class="caption">Conselhos Úteis</v-list-item-title>
+							<v-list-item-title class="caption">
+								<v-icon x-small class="mt-n1 mr-1">fas fa-comment-medical</v-icon>
+								Conselhos Úteis
+							</v-list-item-title>
 						</v-list-item>
 						<v-list-item @click="preferences()">
 							<v-list-item-title class="caption">
