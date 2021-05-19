@@ -93,7 +93,11 @@ const routes = [
       name: 'Clinica Consultas',
       component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Consultas.vue')
     },
-
+    {
+      path: '/clinica/medicos/',
+      name: 'Clinica Médicos',
+      component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Medicos.vue')
+    },
 
 
 ]
