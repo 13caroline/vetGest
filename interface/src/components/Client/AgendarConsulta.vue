@@ -286,7 +286,7 @@
                         v-model="horaMarcacao"
                         :close-on-content-click="false"
                         :nudge-right="40"
-                        :return-value.sync="dataFim"
+                        :return-value.sync="horaMarcacao"
                         transition="scale-transition"
                         offset-y
                         max-width="290px"
