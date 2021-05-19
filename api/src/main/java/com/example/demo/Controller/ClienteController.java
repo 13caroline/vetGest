@@ -19,7 +19,7 @@ public class ClienteController {
         return service.saveCliente(cliente);
     }
 
-    @GetMapping("/cliente")
+    @GetMapping("/cliente/{email}")
     public Cliente findClienteByEmail(@RequestBody String email){
         return service.getClienteByEmail(email);
     }

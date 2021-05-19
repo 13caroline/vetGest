@@ -19,39 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @SpringBootApplication
 public class VetgestApplication {
-
-
-	@Autowired
-	private AuthenticationManager authenticationManager;
-
-	@Autowired
-	private MyUserDetailsService userDetailsService;
-
-	@Autowired
-	private JwtUtil jwtTokenUtil;
-
 	public static void main(String[] args) {
 		SpringApplication.run(VetgestApplication.class, args);
-	}
-
-	@RequestMapping(path = "/authenticate", method = RequestMethod.POST)
-	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
-
-		try {
-			System.out.println("\n\nAQUI\n\n");
-			authenticationManager.authenticate(
-					new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getPassword())
-			);
-		}
-		catch (BadCredentialsException e) {
-			throw new Exception("Incorrect email or password", e);
-		}
-
-		final UserDetails userDetails = userDetailsService
-				.loadUserByUsername(authenticationRequest.getEmail());
-
-		final String jwt = jwtTokenUtil.generateToken(userDetails);
-
-		return ResponseEntity.ok(new AuthenticationResponse(jwt));
 	}
 }
