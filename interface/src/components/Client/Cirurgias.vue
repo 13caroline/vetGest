@@ -3,10 +3,14 @@
     <v-container class="fill-height">
       <v-row>
         <v-col cols="12">
-          <h3 class="font-weight-regular text-uppercase mt-10 mb-4">
-            <v-icon small>fas fa-scroll</v-icon>
+					<v-row align="center" class="my-5">
+						<v-col>
+							<h3 class="font-weight-regular text-uppercase">
+								<v-icon small>fas fa-scroll</v-icon>
             Histórico de Cirurgias
-          </h3>
+							</h3>
+						</v-col>
+          </v-row>
 
           <v-data-table
             :headers="headers"
