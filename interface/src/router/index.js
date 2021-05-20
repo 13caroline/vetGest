@@ -12,7 +12,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Home.vue')
   },
   {
-    path: '/cliente/home',
+    path: '/cliente/pagina',
     name: 'Página Cliente',
     component: () => import(/* webpackChunkName: "about" */ '../views/Client/Page.vue')
   },
@@ -56,21 +56,21 @@ const routes = [
 
       //Página Inicial da Clinica
     {
-      path: '/clinica/home',
+      path: '/clinica/pagina',
       name: 'Página Clinica',
       component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Page.vue')
     },
 
     // Lista dos Pacientes de uma clinica
     {
-      path: '/clinica/pacientes',
-      name: 'Pacientes Clinica',
+      path: '/clinica/utentes',
+      name: 'Utentes Clinica',
       component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Pacientes.vue')
     },
 
     // Registar um paciente por parte da clinica
     {
-      path: '/clinica/registar/paciente',
+      path: '/clinica/registar/utente',
       name: 'Registar Paciente Clinica',
       component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/RegistarPaciente.vue')
     },

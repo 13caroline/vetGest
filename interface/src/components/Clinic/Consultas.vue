@@ -162,7 +162,9 @@
                           color="#2596be"
                           flat
                           outlined
+                          readonly
                           dense
+                          @click="dialogUtente = true"
                           v-model="nomeSelected"
                         ></v-text-field>
                       </v-col>

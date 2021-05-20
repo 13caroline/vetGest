@@ -66,8 +66,8 @@ export default {
     drawer: true,
             utilizador: {},
             items: [
-            { title: 'Dashboard', icon: 'fas fa-tachometer-alt', route: "/pagina/utilizador/" },
-            { title: 'Ficha do utente', icon: 'fas fa-paw', route: "/clinica/pacientes" },
+            { title: 'Dashboard', icon: 'fas fa-tachometer-alt', route: "/clinica/pagina/" },
+            { title: 'Ficha do utente', icon: 'fas fa-paw', route: "/clinica/utentes" },
             { title: 'Ficha do cliente', icon: 'fas fa-user', route: "/clinica/clientes" },
             { title: 'Médicos Veterinários', icon: 'fas fa-user-md', route: "/clinica/medicos" },
             { title: 'Marcações de Consultas', icon: 'fas fa-scroll', route: "/clinica/consultas/" },
@@ -81,7 +81,7 @@ export default {
       this.$router.push("/");
     },
     toMainPage: function () {
-      this.$router.push("/cliente/home");
+      this.$router.push("/cliente/pagina");
     },
     preferences: function () {
       this.$router.push("/preferences");

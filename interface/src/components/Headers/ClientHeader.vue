@@ -144,7 +144,7 @@ export default {
 			this.$router.push("/");
 		},
 		home: function () {
-			this.$router.push("/cliente/home");
+			this.$router.push("/cliente/pagina");
 		},
 		preferences: function () {
 			this.$router.push("/preferences");

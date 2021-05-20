@@ -14,7 +14,7 @@
                 small
                 color="#2596be"
                 dark
-                to="/clinica/registar/paciente"
+                to="/clinica/registar/utente"
               >
                 Registar Utente
               </v-btn>

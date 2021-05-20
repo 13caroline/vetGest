@@ -263,7 +263,7 @@
             dark
             color="#2596be"
             width="50%"
-            to="/clinica/pacientes"
+            to="/clinica/utentes"
           >
             Sim
           </v-btn>
