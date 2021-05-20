@@ -23,6 +23,19 @@
             </v-row>
           </v-row>
 
+          <v-select
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Médico Veterinário"
+            outlined
+            dense
+            class="my-4"
+            color="#2596be"
+            :items="medico"
+            hide-details
+          ></v-select>    
+
+
           <v-sheet>
             <v-toolbar flat>
               <v-btn outlined class="mr-4" color="#2596be" @click="setToday">
