@@ -76,7 +76,7 @@
           </v-item-group>
         </v-col>
 
-        <v-col lg="7" class="ml-auto">
+        <v-col lg="7" class="ml-auto mb-5">
           <h3 class="font-weight-regular text-uppercase mb-4 mt-10">
             Consultas Agendadas
           </h3>
@@ -132,6 +132,7 @@
       </v-row>
     </v-container>
     <v-carousel
+      class="mt-auto"
       cycle
       height="200"
       hide-delimiter-background
@@ -139,9 +140,9 @@
       delimiter-icon="mdi-minus"
     >
       <v-carousel-item v-for="(slide, i) in slides" :key="i">
-        <v-sheet :color="colors[i]" height="100%">
+        <v-sheet :color="colors[i]" height="100%" style="margin-top: 12px">
           <v-row class="fill-height" align="center" justify="center">
-            <div class="display-3">{{ slide }} Slide</div>
+            <v-col cols="auto" class="display-3">{{ slide }} Slide</v-col>
           </v-row>
         </v-sheet>
       </v-carousel-item>

@@ -27,45 +27,48 @@
           class="d-flex child-flex"
           cols="3"
         >
-        <div>
-          <v-hover v-slot:default="{ hover }">
-            <v-img
-              src="@/assets/exemplo.png"
-              aspect-ratio="1"
-              @click="openInfo(n)"
-            >
-              <v-expand-transition>
-                <div
-                  v-if="hover"
-                  class="d-flex transition-fast-in-fast-out black v-card--reveal white--text"
-                  style="height: 100%"
-                >
-                  <v-btn
-                    text
-                    dark
-                    depressed
-                    class="text-capitalize"
-                    @click="toBooks()"
-                    >Detalhes</v-btn
+          <div>
+            <v-hover v-slot:default="{ hover }">
+              <v-img
+                src="@/assets/exemplo.png"
+                aspect-ratio="1"
+                @click="openInfo(n)"
+              >
+                <v-expand-transition>
+                  <div
+                    v-bind:class="{ 'hover': hover }"
+                    class="d-flex transition-fast-in-fast-out black v-card--reveal white--text hover-div"
                   >
-                </div>
-              </v-expand-transition>
-              <template v-slot:placeholder>
-                <v-row class="fill-height ma-0" align="center" justify="center">
-                  <v-progress-circular
-                    indeterminate
-                    color="grey lighten-5"
-                  ></v-progress-circular>
-                </v-row>
-              </template>
-            </v-img>
-          </v-hover>
-          <p class="mt-2 w-100">{{n.nome}}</p>
+                    <v-btn
+                      text
+                      dark
+                      depressed
+                      class="text-capitalize"
+                      @click="toBooks()"
+                      >Detalhes</v-btn
+                    >
+                  </div>
+                </v-expand-transition>
+                <template v-slot:placeholder>
+                  <v-row
+                    class="fill-height ma-0"
+                    align="center"
+                    justify="center"
+                  >
+                    <v-progress-circular
+                      indeterminate
+                      color="grey lighten-5"
+                    ></v-progress-circular>
+                  </v-row>
+                </template>
+              </v-img>
+            </v-hover>
+            <p class="mt-2 w-100">{{ n.nome }}</p>
           </div>
         </v-col>
       </v-row>
 
-      <v-dialog v-model="dialog" width="30%">
+      <v-dialog v-model="dialog" width="100%" max-width="460">
         <v-card>
           <v-card-title class="mb-6 grey--text">
             Identificação pessoal
@@ -84,16 +87,20 @@
             </v-btn>
           </v-card-title>
           <v-card-text class="black--text">
-            <v-row>
-              <v-img
-                max-height="100"
-                max-width="100"
-                src="@/assets/exemplo.png"
-              >
-              </v-img>
-              <span class="font-weight-bold headline indication">
-                {{ this.nome }}
-              </span>
+            <v-row align="center">
+              <v-col cols="auto">
+                <v-img
+                  max-height="100"
+                  max-width="100"
+                  src="@/assets/exemplo.png"
+                >
+                </v-img>
+              </v-col>
+              <v-col align="right">
+                <span class="font-weight-bold headline indication">
+                  {{ this.nome }}
+                </span>
+              </v-col>
             </v-row>
 
             <v-row>
@@ -252,11 +259,11 @@ export default {
 </script>
 
 <style scoped>
- .v-card--reveal {
+.v-card--reveal {
   align-items: center;
   bottom: 0;
   justify-content: center;
-  opacity: .5;
+  opacity: 0.5;
   position: absolute;
   width: 100%;
 }
@@ -268,5 +275,15 @@ export default {
 
 .indication {
   color: #424242;
+}
+
+.hover-div {
+    height: 100%;
+    border-radius:100%;
+    opacity: 0;
+}
+
+.hover-div.hover {
+    opacity: 0.7;
 }
 </style>

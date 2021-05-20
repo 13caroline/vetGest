@@ -1,58 +1,69 @@
 <template>
   <div>
     <nav>
-            <v-app-bar flat app color="white">
-                <v-app-bar flat color = "white" class = "text-uppercase black--text">
-                    <span class= "font-weight-light">CVet</span>
-                    <span>Minho</span>
-                </v-app-bar>
-                <v-spacer></v-spacer>
-                <v-btn text  @click="logout">
-                    <span>Terminar Sessão</span>
-                    <v-icon right>fas fa-sign-out-alt</v-icon>
-                </v-btn>
-            </v-app-bar>
-            <v-layout align-center justify-space-between column fill-height>
-            <v-navigation-drawer dark app v-model="drawer" class = "grey darken-3">
-            <v-list-item two-line>
-                <v-list-item-avatar>
-                    <v-img src="@/assets/CVetMinho2.png"></v-img>
-                </v-list-item-avatar>
+      <v-app-bar flat app color="white">
+        <v-app-bar flat color="white" class="text-uppercase black--text">
+          <v-btn
+            icon
+            class="no-background-hover d-lg-none"
+            @click.stop="drawer = !drawer"
+          >
+            <v-icon>fas fa-bars</v-icon>
+          </v-btn>
+          <span class="font-weight-light ml-2 ml-lg-0">CVet</span>
+          <span>Minho</span>
+        </v-app-bar>
+        <v-spacer></v-spacer>
+        <v-btn text @click="logout">
+          <span>Terminar Sessão</span>
+          <v-icon right>fas fa-sign-out-alt</v-icon>
+        </v-btn>
+      </v-app-bar>
+      <v-layout align-center justify-space-between column fill-height>
+        <v-navigation-drawer dark app v-model="drawer" class="grey darken-3">
+          <v-list-item two-line>
+            <v-list-item-avatar>
+              <v-img src="@/assets/CVetMinho2.png"></v-img>
+            </v-list-item-avatar>
 
-                <v-list-item-content>
-                <v-list-item-title class="text-uppercase color">Clínica</v-list-item-title>
-                </v-list-item-content>
-            </v-list-item>
+            <v-list-item-content>
+              <v-list-item-title class="text-uppercase color"
+                >Clínica</v-list-item-title
+              >
+            </v-list-item-content>
+          </v-list-item>
 
-        <v-divider></v-divider>
+          <v-divider></v-divider>
 
-        <v-list nav> 
-            <v-list-item 
-                v-for="item in items"
-                :key="item.title"
-                router :to="item.route"
-                link
+          <v-list nav>
+            <v-list-item
+              v-for="item in items"
+              :key="item.title"
+              router
+              :to="item.route"
+              link
             >
-                <v-list-item-icon>
-                    <v-icon >{{ item.icon }}</v-icon>
-                </v-list-item-icon>
+              <v-list-item-icon>
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-item-icon>
 
-                <v-list-item-content>
-                    <v-list-item-title class="caption">{{ item.title }}</v-list-item-title>
-                </v-list-item-content>
-                <v-card height = "20" flat></v-card>
+              <v-list-item-content>
+                <v-list-item-title class="caption">{{
+                  item.title
+                }}</v-list-item-title>
+              </v-list-item-content>
+              <v-card height="20" flat></v-card>
             </v-list-item>
-        </v-list>
-        <template v-slot:append>
-        <div class="pa-2">
-            <v-btn text class="caption" @click="preferencias()">
+          </v-list>
+          <template v-slot:append>
+            <div class="pa-2">
+              <v-btn text class="caption" @click="preferencias()">
                 <v-icon left>fas fa-cog</v-icon>Preferências
-            </v-btn>
-        </div>
-      </template>
-
+              </v-btn>
+            </div>
+          </template>
         </v-navigation-drawer>
-        </v-layout>
+      </v-layout>
     </nav>
   </div>
 </template>
@@ -64,16 +75,44 @@ export default {
   name: "Navbar",
   data: () => ({
     drawer: true,
-            utilizador: {},
-            items: [
-            { title: 'Dashboard', icon: 'fas fa-tachometer-alt', route: "/clinica/pagina/" },
-            { title: 'Ficha do utente', icon: 'fas fa-paw', route: "/clinica/utentes" },
-            { title: 'Ficha do cliente', icon: 'fas fa-user', route: "/clinica/clientes" },
-            { title: 'Médicos Veterinários', icon: 'fas fa-user-md', route: "/clinica/medicos" },
-            { title: 'Marcações de Consultas', icon: 'fas fa-scroll', route: "/clinica/consultas/" },
-            { title: 'Marcações de Cirurgias', icon: 'fas fa-procedures', route: "/donativos/"},
-            { title: 'Venda de Produtos', icon: 'fas fa-pump-medical', route: "/donativos/"},
-            ],
+    utilizador: {},
+    items: [
+      {
+        title: "Dashboard",
+        icon: "fas fa-tachometer-alt",
+        route: "/clinica/pagina/",
+      },
+      {
+        title: "Ficha do utente",
+        icon: "fas fa-paw",
+        route: "/clinica/utentes",
+      },
+      {
+        title: "Ficha do cliente",
+        icon: "fas fa-user",
+        route: "/clinica/clientes",
+      },
+      {
+        title: "Médicos Veterinários",
+        icon: "fas fa-user-md",
+        route: "/clinica/medicos",
+      },
+      {
+        title: "Marcações de Consultas",
+        icon: "fas fa-scroll",
+        route: "/clinica/consultas/",
+      },
+      {
+        title: "Marcações de Cirurgias",
+        icon: "fas fa-procedures",
+        route: "/donativos/",
+      },
+      {
+        title: "Venda de Produtos",
+        icon: "fas fa-pump-medical",
+        route: "/donativos/",
+      },
+    ],
   }),
   methods: {
     logout: async function () {
@@ -98,7 +137,7 @@ export default {
   background-color: transparent !important;
 }
 
-.color{
+.color {
   color: #2596be;
 }
 </style>

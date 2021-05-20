@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="row pt-3 px-3">
+		<div class="row pt-3 px-3" style="background: white; height: 85px;">
 			<v-col cols="auto">
 				<v-img
 					src="@/assets/CVetMinho2.png"

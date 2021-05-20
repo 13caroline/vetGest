@@ -50,7 +50,7 @@
         </template>
       </v-data-table>
 
-      <v-dialog v-model="dialog" width="30%">
+      <v-dialog v-model="dialog" width="100%" max-width="460">
         <v-card>
           <v-card-title class="mb-6 grey--text">
             Identificação pessoal
@@ -69,12 +69,20 @@
             </v-btn>
           </v-card-title>
           <v-card-text class="black--text">
-            <v-row>
-              <v-img max-height="100" max-width="100" src="@/assets/medico.png">
-              </v-img>
-              <span class="font-weight-bold headline indication">
-                CAROLINA ALVES DA CUNHA
-              </span>
+            <v-row align="center">
+              <v-col cols="auto">
+                <v-img
+                  max-height="100"
+                  max-width="100"
+                  src="@/assets/medico.png"
+                >
+                </v-img>
+              </v-col>
+              <v-col align="right">
+                <span class="font-weight-bold headline indication">
+                  CAROLINA ALVES DA CUNHA
+                </span>
+              </v-col>
             </v-row>
 
             <v-row>
@@ -144,7 +152,7 @@
                 >
               </v-col>
 
-              <v-col>
+              <v-col align="right" class="pr-0">
                 <v-btn
                   class="font-weight-light text-decoration-underline"
                   color="#616161"
@@ -153,6 +161,7 @@
                   to="/clinica/utente"
                   >Runa</v-btn
                 >
+								<br>
                 <v-btn
                   class="font-weight-light text-decoration-underline"
                   color="#616161"

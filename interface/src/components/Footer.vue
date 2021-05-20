@@ -1,6 +1,6 @@
 <template>
 	<div class="mt-auto">
-		<v-footer class="mt-5" dark padless>
+		<v-footer class="pt-5" dark>
 			<v-col class="text-center" cols="12">
 				<p class="caption font-weight-light">
 					Copyright &copy; {{ new Date().getFullYear() }} - Todos os direitos
