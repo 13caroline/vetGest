@@ -16,7 +16,7 @@
           </div>
 
           <v-row class="mt-2">
-            <v-col cols="5">
+            <v-col cols="12" sm="5" class="py-0">
               <div>
                 <p class="ma-0">Nome</p>
                 <v-text-field
@@ -27,7 +27,7 @@
                 ></v-text-field>
               </div>
             </v-col>
-            <v-col cols="3">
+            <v-col cols="12" sm="3" class="py-0">
               <div>
                 <p class="ma-0">Número de Chip</p>
                 <v-text-field
@@ -38,7 +38,7 @@
                 ></v-text-field>
               </div>
             </v-col>
-            <v-col cols="4">
+            <v-col cols="12" sm="4" class="py-0">
               <div>
                 <p class="ma-0">Espécie</p>
                 <v-select
@@ -55,20 +55,18 @@
           </v-row>
 
           <v-row align="center">
-            <v-col cols="11">
-              <div>
-                <p class="ma-0">Dono</p>
-                <v-text-field
-                  color="#2596be"
-                  flat
-                  readonly
-                  outlined
-                  dense
-                  v-model="nomeSelected"
-                ></v-text-field>
-              </div>
+            <v-col class="py-0">
+              <p class="ma-0">Dono</p>
+              <v-text-field
+                color="#2596be"
+                flat
+                readonly
+                outlined
+                dense
+                v-model="nomeSelected"
+              ></v-text-field>
             </v-col>
-            <v-col>
+            <v-col cols="auto" class="py-0">
               <v-btn
                 @click="dialogDono = true"
                 class="ma-0"
@@ -83,155 +81,143 @@
           </v-row>
 
           <v-row>
-            <v-col cols="4">
-              <div>
-                <p class="ma-0">Raça</p>
-                <v-select
-                  color="#2596be"
-                  class="font-weight-regular"
-                  outlined
-                  dense
-                  label="Por favor selecione"
-                >
-                </v-select>
-              </div>
+            <v-col sm="6" md="4" cols="12" class="py-0">
+              <p class="ma-0">Raça</p>
+              <v-select
+                color="#2596be"
+                class="font-weight-regular"
+                outlined
+                dense
+                label="Por favor selecione"
+              >
+              </v-select>
             </v-col>
-            <v-col cols="2">
-              <div>
-                <p class="ma-0">Altura</p>
-                <v-text-field
-                  class="font-weight-regular"
-                  outlined
-                  dense
-                  color="#2596be"
-                  suffix="cm"
-                >
-                </v-text-field>
-              </div>
+            <v-col sm="6" md="2" cols="12" class="py-0">
+              <p class="ma-0">Altura</p>
+              <v-text-field
+                class="font-weight-regular"
+                outlined
+                dense
+                color="#2596be"
+                suffix="cm"
+              >
+              </v-text-field>
             </v-col>
 
-            <v-col>
-              <div>
-                <p class="ma-0">Data de Nascimento</p>
-                <v-menu
-                  ref="dataMarcacao"
-                  v-model="dataMarcacao"
-                  :close-on-content-click="true"
-                  :nudge-right="40"
-                  :return-value.sync="dataMarcacao"
-                  transition="scale-transition"
-                  offset-y
-                  max-width="290px"
-                  min-width="290px"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-text-field
-                      append-icon="fas fa-calendar-day"
-                      outlined
-                      color="#2596be"
-                      v-on="on"
-                      v-bind="attrs"
-                      v-model="date"
-                      dense
-                      readonly
-                    ></v-text-field>
-                  </template>
-                  <v-date-picker
-                    full-width
+            <v-col cols="12" sm="6" md="3" class="py-0">
+              <p class="ma-0">Data de Nascimento</p>
+              <v-menu
+                ref="dataMarcacao"
+                v-model="dataMarcacao"
+                :close-on-content-click="true"
+                :nudge-right="40"
+                :return-value.sync="dataMarcacao"
+                transition="scale-transition"
+                offset-y
+                max-width="290px"
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    append-icon="fas fa-calendar-day"
+                    outlined
                     color="#2596be"
-                    :min="new Date().toISOString().substr(0, 10)"
+                    v-on="on"
+                    v-bind="attrs"
                     v-model="date"
-                    locale="pt-PT"
-                  ></v-date-picker>
-                </v-menu>
-              </div>
+                    dense
+                    readonly
+                  ></v-text-field>
+                </template>
+                <v-date-picker
+                  full-width
+                  color="#2596be"
+                  :min="new Date().toISOString().substr(0, 10)"
+                  v-model="date"
+                  locale="pt-PT"
+                ></v-date-picker>
+              </v-menu>
             </v-col>
 
-            <v-col>
-              <div>
-                <p class="ma-0">Sexo</p>
-                <v-radio-group row class="ma-0">
-                  <v-radio value="Macho" color="#2596be">
-                    <template v-slot:label>
-                      <div class="body-2">Macho</div>
-                    </template>
-                  </v-radio>
-                  <v-radio value="Fêmea" color="#2596be">
-                    <template v-slot:label>
-                      <div class="body-2">Fêmea</div>
-                    </template>
-                  </v-radio>
-                </v-radio-group>
-              </div>
+            <v-col cols="12" sm="6" md="3" class="py-0">
+              <p class="ma-0">Sexo</p>
+              <v-radio-group row class="ma-0">
+                <v-radio value="Macho" color="#2596be">
+                  <template v-slot:label>
+                    <div class="body-2">Macho</div>
+                  </template>
+                </v-radio>
+                <v-radio value="Fêmea" color="#2596be">
+                  <template v-slot:label>
+                    <div class="body-2">Fêmea</div>
+                  </template>
+                </v-radio>
+              </v-radio-group>
             </v-col>
           </v-row>
 
           <v-row>
-            <v-col cols="5">
-              <div>
-                <p class="ma-0">Cor</p>
-                <v-select
-                  color="#2596be"
-                  flat
-                  outlined
-                  dense
-                  label="Por favor selecione"
-                  multiple
-                  :items="itemscor"
-                ></v-select>
-              </div>
+            <v-col cols="12" sm="5" class="py-0">
+              <p class="ma-0">Cor</p>
+              <v-select
+                color="#2596be"
+                flat
+                outlined
+                dense
+                label="Por favor selecione"
+                multiple
+                :items="itemscor"
+              ></v-select>
             </v-col>
-            <v-col cols="4">
-              <div>
-                <p class="ma-0">Pelagem</p>
+            <v-col cols="12" sm="4" class="py-0">
+              <p class="ma-0">Pelagem</p>
 
-                <v-select
-                  color="#2596be"
-                  flat
-                  outlined
-                  dense
-                  label="Por favor selecione"
-                  multiple
-                  :items="itemspelagem"
-                ></v-select>
-              </div>
+              <v-select
+                color="#2596be"
+                flat
+                outlined
+                dense
+                label="Por favor selecione"
+                multiple
+                :items="itemspelagem"
+              ></v-select>
             </v-col>
-            <v-col cols="3">
-              <div>
-                <p class="ma-0">Cauda</p>
-                <v-select
-                  color="#2596be"
-                  flat
-                  outlined
-                  label="Por favor selecione"
-                  dense
-                  :items="itemscauda"
-                ></v-select>
-              </div>
+            <v-col cols="12" sm="3" class="py-0">
+              <p class="ma-0">Cauda</p>
+              <v-select
+                color="#2596be"
+                flat
+                outlined
+                label="Por favor selecione"
+                dense
+                :items="itemscauda"
+              ></v-select>
             </v-col>
           </v-row>
 
           <v-row>
-            <v-col>
-              <div>
-                <p class="ma-0">Observações</p>
-                <v-textarea
-                  outlined
-                  color="#2596be"
-                  rows="2"
-                  clearable
-                  clear-icon="fas fa-times-circle"
-                  no-resize
-                ></v-textarea>
-              </div>
+            <v-col class="py-0">
+              <p class="ma-0">Observações</p>
+              <v-textarea
+                outlined
+                color="#2596be"
+                rows="2"
+                clearable
+                clear-icon="fas fa-times-circle"
+                no-resize
+              ></v-textarea>
             </v-col>
           </v-row>
 
           <v-row align="end" justify="end">
-            <v-btn color="#BDBDBD" small dark @click="dialog = true"
-              >Cancelar</v-btn
-            >
-            <v-btn color="#2596be" small dark class="ml-3">Registar</v-btn>
+            <v-col cols="auto" class="pr-0">
+              <v-btn color="#BDBDBD" small dark @click="dialog = true"
+                >Cancelar</v-btn
+              >
+            </v-col>
+            <v-col cols="auto" class="pl-0">
+              <v-btn color="#2596be" small dark class="ml-3">Registar</v-btn>
+            </v-col>
           </v-row>
         </v-col>
       </v-row>
