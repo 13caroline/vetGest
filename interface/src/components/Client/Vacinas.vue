@@ -38,7 +38,7 @@
           </v-data-table>
         </v-col>
       </v-row>
-      <v-dialog v-model="dialog" width="50%">
+      <v-dialog v-model="dialog" width="100%" max-width="700">
         <v-card>
           <v-card-title class="headline mb-6">
             Confirmar desparasitação
@@ -104,7 +104,7 @@
         </v-card>
       </v-dialog>
 
-      <v-dialog v-model="dialogCancel" persistent width="30%">
+      <v-dialog v-model="dialogCancel" persistent width="100%" max-width="460">
 			<v-card>
 				<v-card-title class="justify-center cancel">
 					Cancelar desparasitação

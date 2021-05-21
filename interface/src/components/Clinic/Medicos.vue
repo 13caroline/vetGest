@@ -25,7 +25,9 @@
           v-for="n in medicos"
           :key="n.nif"
           class="d-flex child-flex"
-          cols="3"
+          cols="6"
+          sm="4"
+          md="3"
         >
           <div>
             <v-hover v-slot:default="{ hover }">
@@ -33,6 +35,7 @@
                 src="@/assets/sobre.png"
                 aspect-ratio="1"
                 @click="openInfo(n)"
+                style="border-radius: 100%"
               >
                 <v-expand-transition>
                   <div
@@ -63,7 +66,7 @@
                 </template>
               </v-img>
             </v-hover>
-            <p class="mt-2 w-100">{{ n.nome }}</p>
+            <p align="center" class="mt-2 w-100">{{ n.nome }}</p>
           </div>
         </v-col>
       </v-row>

@@ -121,11 +121,9 @@
             >
           </v-row>
         </v-col>
-        <v-col>
-        </v-col>
       </v-row>
     </v-container>
-    <Footer class="mt-auto" />
+    <Footer v-bind:has_margin="true" class="mt-auto" />
   </div>
 </template>
 

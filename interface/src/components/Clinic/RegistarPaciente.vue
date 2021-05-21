@@ -223,7 +223,7 @@
       </v-row>
     </v-container>
 
-    <v-dialog v-model="dialog" persistent width="30%">
+    <v-dialog v-model="dialog" persistent width="100%" max-width="460">
       <v-card>
         <v-card-title class="cancel">
           Cancelar registo de novo utente
@@ -257,7 +257,7 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="dialogDono" max-width="700">
+    <v-dialog v-model="dialogDono" width="100%" max-width="700">
       <v-card>
         <v-card-title>
           <v-text-field

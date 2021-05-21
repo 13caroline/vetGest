@@ -70,7 +70,7 @@
 				</v-col>
 			</v-row>
 
-			<v-dialog v-model="dialog" width="50%">
+			<v-dialog v-model="dialog" width="100%" max-width="700">
 				<v-card>
 					<v-card-title class="headline mb-6">
 						Notas Médicas

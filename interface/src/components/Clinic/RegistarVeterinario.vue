@@ -44,8 +44,8 @@
               required
             />
 
-            <v-row>
-              <v-col cols="6">
+            <v-row class="mt-1">
+              <v-col cols="12" sm="6" class="py-0">
                 <p class="ma-0">Morada</p>
                 <v-text-field
                   outlined
@@ -60,7 +60,7 @@
                   required
                 />
               </v-col>
-              <v-col>
+              <v-col class="py-0">
                 <p class="ma-0">Freguesia</p>
                 <v-text-field
                   outlined
@@ -76,7 +76,7 @@
                 />
               </v-col>
 
-              <v-col>
+              <v-col class="py-0">
                 <p class="ma-0">Concelho</p>
                 <v-text-field
                   outlined
@@ -93,8 +93,8 @@
               </v-col>
             </v-row>
 
-            <v-row>
-              <v-col cols="auto dial_code">
+            <v-row align="end" class="mb-1">
+              <v-col cols="auto" class="dial_code py-0">
                 <v-text-field
                   outlined
                   flat
@@ -106,7 +106,7 @@
                   readonly
                 />
               </v-col>
-              <v-col>
+              <v-col class="py-0">
                 <p class="ma-0">Contacto telefónico</p>
                 <v-text-field
                   outlined
@@ -121,7 +121,7 @@
                   required
                 />
               </v-col>
-              <v-col>
+              <v-col cols="12" sm class="py-0">
                 <p class="ma-0">Número de identificação fiscal</p>
                 <v-text-field
                   outlined
@@ -165,7 +165,7 @@
       </v-row>
     </v-container>
 
-    <v-dialog v-model="dialog" persistent width="30%">
+    <v-dialog v-model="dialog" persistent width="100%" max-width="460">
       <v-card>
         <v-card-title class="cancel">
           Cancelar registo de novo médico veterinário
@@ -206,7 +206,6 @@
 export default {
   data: () => ({
     dialog: false,
-    
   }),
 };
 </script> 

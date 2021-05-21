@@ -315,7 +315,7 @@
             </v-card>
           </v-dialog>
 
-          <v-dialog v-model="dialogUtente" max-width="700">
+          <v-dialog v-model="dialogUtente" width="100%" max-width="700">
             <v-card>
               <v-card-title>
                 <v-text-field
@@ -335,7 +335,7 @@
             </v-card>
           </v-dialog>
 
-          <v-dialog v-model="cancelDialog" persistent width="30%">
+          <v-dialog v-model="cancelDialog" persistent width="100%" max-width="460">
             <v-card>
               <v-card-title class="justify-center cancel">
                 Cancelar agendamento da consulta

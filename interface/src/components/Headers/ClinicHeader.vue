@@ -15,7 +15,7 @@
         </v-app-bar>
         <v-spacer></v-spacer>
         <v-btn text @click="logout">
-          <span>Terminar Sessão</span>
+          <span class="d-none d-sm-block">Terminar Sessão</span>
           <v-icon right>fas fa-sign-out-alt</v-icon>
         </v-btn>
       </v-app-bar>

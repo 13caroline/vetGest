@@ -357,7 +357,7 @@
 				</v-col>
 			</v-row>
 		</v-container>
-		<v-dialog v-model="dialog" persistent width="30%">
+		<v-dialog v-model="dialog" persistent width="100%" max-width="460">
 			<v-card>
 				<v-card-title class="justify-center cancel">
 					Cancelar Agendamento da Consulta

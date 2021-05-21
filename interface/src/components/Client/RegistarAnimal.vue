@@ -205,7 +205,7 @@
         </v-card>
       </v-container>
     </v-row>
-    <v-dialog v-model="dialog" persistent width="30%">
+    <v-dialog v-model="dialog" persistent width="100%" max-width="460">
       <v-card>
         <v-card-title class="cancel">
           Cancelar registo de um novo animal
