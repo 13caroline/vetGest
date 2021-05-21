@@ -54,51 +54,61 @@ const routes = [
 
     //------------------------------------- Clinica -------------------------------------
 
-      //Página Inicial da Clinica
+      //Página inicial da clinica
     {
       path: '/clinica/pagina',
       name: 'Página Clinica',
       component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Page.vue')
     },
 
-    // Lista dos Pacientes de uma clinica
+    // Lista dos utentes da clinica
     {
       path: '/clinica/utentes',
       name: 'Utentes Clinica',
       component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Pacientes.vue')
     },
-
-    // Registar um paciente por parte da clinica
-    {
-      path: '/clinica/registar/utente',
-      name: 'Registar Paciente Clinica',
-      component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/RegistarPaciente.vue')
-    },
-
-    // Ir para a página de um paciente
+    // Ir para a página de um utente
     {
       path: '/clinica/utente/',
-      name: 'Paciente',
+      name: 'Utente',
       component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Paciente.vue')
     },
-
-     // Lista dos Clientes de uma clinica
+     // Lista dos clientes da clinica
      {
       path: '/clinica/clientes',
       name: 'Clientes Clinica',
       component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Clientes.vue')
     },
+    // Calendário de consultas da clínica
     {
       path: '/clinica/consultas/',
       name: 'Clinica Consultas',
       component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Consultas.vue')
     },
+    // Calendário de cirurgias da clínica
+    {
+      path: '/clinica/cirurgias/',
+      name: 'Clinica Cirurgias',
+      component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Cirurgias.vue')
+    },
+    // Equipa médica da clínica
     {
       path: '/clinica/medicos/',
       name: 'Clinica Médicos',
       component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Medicos.vue')
     },
-
+     // Registar um utente por parte da clinica
+     {
+      path: '/clinica/registar/utente',
+      name: 'Registar Utente Clinica',
+      component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/RegistarPaciente.vue')
+    },
+    // Registar cliente por clínica
+    {
+      path: '/clinica/registar/cliente',
+      name: 'Clinica Registar Cliente',
+      component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/RegistarCliente.vue')
+    },
 
 ]
 

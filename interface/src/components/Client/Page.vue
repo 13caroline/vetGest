@@ -134,7 +134,7 @@
     <v-carousel
       class="mt-auto"
       cycle
-      height="200"
+      height="100"
       hide-delimiter-background
       :show-arrows="false"
       delimiter-icon="mdi-minus"

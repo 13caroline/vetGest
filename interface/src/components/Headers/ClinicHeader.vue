@@ -105,7 +105,7 @@ export default {
       {
         title: "Marcações de Cirurgias",
         icon: "fas fa-procedures",
-        route: "/donativos/",
+        route: "/clinica/cirurgias",
       },
       {
         title: "Venda de Produtos",

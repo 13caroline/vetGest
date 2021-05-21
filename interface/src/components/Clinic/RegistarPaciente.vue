@@ -226,7 +226,7 @@
     <v-dialog v-model="dialog" persistent width="30%">
       <v-card>
         <v-card-title class="cancel">
-          Cancelar Registo de um Novo Animal
+          Cancelar registo de novo utente
         </v-card-title>
         <v-card-text>
           Tem a certeza que pretende cancelar o registo?

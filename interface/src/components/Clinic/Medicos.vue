@@ -30,13 +30,13 @@
           <div>
             <v-hover v-slot:default="{ hover }">
               <v-img
-                src="@/assets/exemplo.png"
+                src="@/assets/sobre.png"
                 aspect-ratio="1"
                 @click="openInfo(n)"
               >
                 <v-expand-transition>
                   <div
-                    v-bind:class="{ 'hover': hover }"
+                    v-bind:class="{ hover: hover }"
                     class="d-flex transition-fast-in-fast-out black v-card--reveal white--text hover-div"
                   >
                     <v-btn
@@ -96,7 +96,7 @@
                 >
                 </v-img>
               </v-col>
-              <v-col align="right">
+              <v-col>
                 <span class="font-weight-bold headline indication">
                   {{ this.nome }}
                 </span>
@@ -278,12 +278,12 @@ export default {
 }
 
 .hover-div {
-    height: 100%;
-    border-radius:100%;
-    opacity: 0;
+  height: 100%;
+  border-radius: 100%;
+  opacity: 0;
 }
 
 .hover-div.hover {
-    opacity: 0.7;
+  opacity: 0.7;
 }
 </style>

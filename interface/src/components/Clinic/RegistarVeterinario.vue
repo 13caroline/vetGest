@@ -1,0 +1,218 @@
+<template>
+  <div>
+    <v-container class="fill-height">
+      <v-row>
+        <v-col cols="12">
+          <v-row class="w-100">
+            <h3 class="font-weight-regular text-uppercase mb-4 mt-10 ml-3">
+              <v-icon class="mr-2">fas fa-user</v-icon>
+              Registar novo médico veterinário
+            </h3>
+          </v-row>
+          <div class="indication">
+            <span class="body-2"
+              >Por favor preencha o seguinte formulário
+            </span>
+          </div>
+
+          <v-form ref="form" v-model="valid" lazy-validation>
+            <p class="mb-0 mt-4">Nome completo</p>
+            <v-text-field
+              outlined
+              flat
+              dense
+              single-line
+              :rules="nameRules"
+              color="#2596be"
+              placeholder="Nome"
+              v-model="nome"
+              name="nome"
+              required
+            />
+
+            <p class="ma-0">E-mail</p>
+            <v-text-field
+              outlined
+              flat
+              dense
+              v-model="email"
+              single-line
+              :rules="ruaEmail"
+              color="#2596be"
+              name="email"
+              placeholder="E-mail"
+              required
+            />
+
+            <v-row>
+              <v-col cols="6">
+                <p class="ma-0">Morada</p>
+                <v-text-field
+                  outlined
+                  flat
+                  dense
+                  v-model="rua"
+                  single-line
+                  :rules="ruaRules"
+                  color="#2596be"
+                  name="rua"
+                  placeholder="Morada"
+                  required
+                />
+              </v-col>
+              <v-col>
+                <p class="ma-0">Freguesia</p>
+                <v-text-field
+                  outlined
+                  flat
+                  dense
+                  single-line
+                  v-model="freguesia"
+                  :rules="freguesiaRules"
+                  color="#2596be"
+                  name="freguesia"
+                  placeholder="Freguesia"
+                  required
+                />
+              </v-col>
+
+              <v-col>
+                <p class="ma-0">Concelho</p>
+                <v-text-field
+                  outlined
+                  flat
+                  dense
+                  single-line
+                  color="#2596be"
+                  :rules="concelhoRules"
+                  name="concelho"
+                  placeholder="Concelho"
+                  v-model="concelho"
+                  required
+                />
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col cols="auto dial_code">
+                <v-text-field
+                  outlined
+                  flat
+                  background-color="#E0E0E0"
+                  dense
+                  single-line
+                  color="#2596be"
+                  value="+351"
+                  readonly
+                />
+              </v-col>
+              <v-col>
+                <p class="ma-0">Contacto telefónico</p>
+                <v-text-field
+                  outlined
+                  flat
+                  dense
+                  single-line
+                  color="#2596be"
+                  placeholder="Contacto telefónico"
+                  name="contacto"
+                  v-model="contacto"
+                  maxlength="9"
+                  required
+                />
+              </v-col>
+              <v-col>
+                <p class="ma-0">Número de identificação fiscal</p>
+                <v-text-field
+                  outlined
+                  flat
+                  dense
+                  single-line
+                  color="#2596be"
+                  placeholder="Número de Identificação Fiscal"
+                  name="nif"
+                  v-model="nif"
+                  maxlength="9"
+                  required
+                />
+              </v-col>
+            </v-row>
+            <p class="ma-0">IBAN</p>
+            <v-text-field
+              outlined
+              flat
+              dense
+              single-line
+              color="#2596be"
+              placeholder="IBAN"
+              name="iban"
+              v-model="iban"
+              maxlength="21"
+              required
+            />
+          </v-form>
+          <v-row align="end" justify="end">
+            <v-col cols="auto" class="pr-0">
+              <v-btn color="#BDBDBD" small dark @click="dialog = true"
+                >Cancelar</v-btn
+              >
+            </v-col>
+            <v-col cols="auto" class="pl-0">
+              <v-btn color="#2596be" small dark class="ml-3">Registar</v-btn>
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
+    </v-container>
+
+    <v-dialog v-model="dialog" persistent width="30%">
+      <v-card>
+        <v-card-title class="cancel">
+          Cancelar registo de novo médico veterinário
+        </v-card-title>
+        <v-card-text>
+          Tem a certeza que pretende cancelar o registo?
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            depressed
+            large
+            width="50%"
+            dark
+            color="#BDBDBD"
+            @click="dialog = false"
+          >
+            Não
+          </v-btn>
+          <v-btn
+            depressed
+            large
+            dark
+            color="#2596be"
+            width="50%"
+            to="/clinica/medicos"
+          >
+            Sim
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </div>
+</template>
+
+<script>
+//import moment from 'moment';
+export default {
+  data: () => ({
+    dialog: false,
+    
+  }),
+};
+</script> 
+
+<style scoped>
+.dial_code {
+  width: 90px;
+}
+</style>

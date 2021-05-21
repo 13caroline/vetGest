@@ -78,7 +78,7 @@
                 >
                 </v-img>
               </v-col>
-              <v-col align="right">
+              <v-col>
                 <span class="font-weight-bold headline indication">
                   CAROLINA ALVES DA CUNHA
                 </span>

@@ -92,7 +92,7 @@
 
 			<v-dialog v-model="cancelar" persistent width="100%" max-width="460">
 				<v-card>
-					<v-card-title class="justify-center cancel">
+					<v-card-title class="cancel">
 						Cancelar consulta
 					</v-card-title>
 					<v-card-text>

@@ -5,8 +5,8 @@
         <v-col cols="12">
           <v-row class="w-100">
             <h3 class="font-weight-regular text-uppercase mb-4 mt-10 ml-3">
-              <v-icon class="mr-2">fas fa-scroll</v-icon>
-              Marcação de Consultas
+              <v-icon class="mr-2">fas fa-procedures</v-icon>
+              Marcação de Cirurgias
             </h3>
             <v-row justify="end">
               <v-col cols="auto">
@@ -17,7 +17,7 @@
                   dark
                   @click="dialog = true"
                 >
-                  Marcar nova consulta
+                  Marcar nova cirurgia
                 </v-btn>
               </v-col>
             </v-row>
@@ -146,7 +146,7 @@
             <v-card>
               <v-form>
                 <v-card-title class="font-weight-regular text-uppercase">
-                  Marcar uma nova consulta
+                  Marcar uma nova cirurgia
                 </v-card-title>
                 <v-card-subtitle
                   >Por favor preencha o seguinte formulário</v-card-subtitle
@@ -338,10 +338,10 @@
           <v-dialog v-model="cancelDialog" persistent width="30%">
             <v-card>
               <v-card-title class="justify-center cancel">
-                Cancelar agendamento da consulta
+                Cancelar agendamento da cirurgia
               </v-card-title>
               <v-card-text>
-                Tem a certeza que pretende cancelar o agendamento da consulta?
+                Tem a certeza que pretende cancelar o agendamento da cirurgia?
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
