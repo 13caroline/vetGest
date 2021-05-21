@@ -13,7 +13,7 @@
               small
               color="#2596be"
               dark
-              to="/clinica/registar/cliente"
+              to="/clinica/registar/medico"
             >
               Registar Médico Veterinário
             </v-btn>

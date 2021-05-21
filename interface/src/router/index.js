@@ -109,6 +109,12 @@ const routes = [
       name: 'Clinica Registar Cliente',
       component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/RegistarCliente.vue')
     },
+    // Registar médico veterinário por clínica
+    {
+      path: '/clinica/registar/medico',
+      name: 'Clinica Registar Médico',
+      component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/RegistarVeterinario.vue')
+    },
 
 ]
 
