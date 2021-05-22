@@ -2,24 +2,23 @@
   <div id="page" class="d-flex flex-column">
     <Header />
     <Page />
-    <Footer />
+    <Footer v-bind:marginTop="false" />
   </div>
 </template>
 
 <script>
 import Header from "@/components/Headers/ClientHeader.vue";
 import Footer from "@/components/Footer.vue";
-import Page from "@/components/Client/Page.vue"
+import Page from "@/components/Client/Page.vue";
 
 export default {
   data() {
-    return {
-    }
+    return {};
   },
   components: {
     Header,
     Footer,
-    Page
+    Page,
   },
 };
 </script>
