@@ -51,6 +51,11 @@ const routes = [
     name: 'Vacinas e Desparasitações Cliente',
     component: () => import(/* webpackChunkName: "about" */ '../views/Client/Vacinas.vue')
   },
+  {
+    path: '/cliente/clinica/servicos',
+    name: 'Clinica Cliente Serviços',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Client/Servicos.vue')
+  },
 
     //------------------------------------- Clinica -------------------------------------
 
