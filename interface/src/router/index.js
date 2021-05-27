@@ -121,6 +121,24 @@ const routes = [
       component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/RegistarVeterinario.vue')
     },
 
+    //------------------------------------- Médico -------------------------------------
+
+    //Página inicial médico
+    {
+      path: '/medico/pagina',
+      name: 'Página Inicial Médico',
+      component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/Page.vue')
+    },
+
+    // Lista dos utentes do médico
+    {
+      path: '/medico/utentes',
+      name: 'Utentes Médico',
+      component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/Pacientes.vue')
+    },
+
+
+
 ]
 
 const router = new VueRouter({
