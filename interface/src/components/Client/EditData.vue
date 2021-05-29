@@ -353,7 +353,7 @@ export default {
       /*
       if (this.$refs.form.validate()) {
         try {
-          var resposta = await axios.post("http://localhost:7777/editaDadosAnimal", {
+          var resposta = await axios.post("http://localhost:7777//cliente/editaDadosAnimal", {
             nome: this.cao.nome,
             altura: this.cao.altura,
             cor: this.cao.cor,
@@ -380,6 +380,14 @@ export default {
       }
       */
     },
+  },
+  created: {
+    /*
+    let response = await axios.post("http://localhost:7777/cliente/animal/getDados", {
+      email: this.$store.state.user.email,
+      animal
+    });
+    */
   },
 };
 </script>

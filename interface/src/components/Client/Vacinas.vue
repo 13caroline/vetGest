@@ -90,12 +90,27 @@
                 ></v-date-picker>
               </v-menu>
             </div>
+            <div>
+              <p class="ma-0">Tratamento Utilizado</p>
+              <v-text-field
+                outlined
+                color="#2596be"
+                dense
+                v-model="tratamento"
+              ></v-text-field>
+            </div>
             <v-row align="end" justify="end">
               <v-col cols="auto">
                 <v-btn color="#BDBDBD" small dark @click="dialogCancel = true">
                   Cancelar
                 </v-btn>
-                <v-btn color="#2596be" small dark class="ml-3">
+                <v-btn
+                  color="#2596be"
+                  small
+                  dark
+                  class="ml-3"
+                  @click="confirma()"
+                >
                   Confirmar
                 </v-btn>
               </v-col>
@@ -105,43 +120,66 @@
       </v-dialog>
 
       <v-dialog v-model="dialogCancel" persistent width="100%" max-width="460">
-			<v-card>
-				<v-card-title class="justify-center cancel">
-					Cancelar desparasitação
-				</v-card-title>
-				<v-card-text>
-					Tem a certeza que pretende cancelar a confirmação de desparasitação?
-				</v-card-text>
-				<v-card-actions>
-					<v-spacer></v-spacer>
-					<v-btn
-						depressed
-						large
-						width="50%"
-						dark
-						color="#BDBDBD"
-						@click="dialogCancel = false"
-					>
-						Não
-					</v-btn>
-					<v-btn depressed large dark color="#2596be" width="50%" to="/cliente/vacinas">
-						Sim
-					</v-btn>
-				</v-card-actions>
-			</v-card>
-		</v-dialog>
+        <v-card>
+          <v-card-title class="justify-center cancel">
+            Cancelar desparasitação
+          </v-card-title>
+          <v-card-text>
+            Tem a certeza que pretende cancelar a confirmação de desparasitação?
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              depressed
+              large
+              width="50%"
+              dark
+              color="#BDBDBD"
+              @click="dialogCancel = false"
+            >
+              Não
+            </v-btn>
+            <v-btn
+              depressed
+              large
+              dark
+              color="#2596be"
+              width="50%"
+              @click="cancelar()"
+            >
+              Sim
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-container>
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="timeout"
+      :color="color"
+      :top="true"
+      class="headline"
+    >
+      {{ text }}
+    </v-snackbar>
   </div>
 </template>
 
 <script>
+// import axios from 'axios'
 export default {
   data: () => ({
     dialog: false,
     dialogCancel: false,
     dataPrevista: "",
     dataToma: null,
+    tratamento: "", 
     date: new Date().toISOString().substr(0, 10),
+    snackbar: false,
+    color: "",
+    done: false,
+    timeout: 0,
+    text: "",
     headers: [
       {
         text: "Data Prevista",
@@ -230,6 +268,40 @@ export default {
 
       this.dialog = true;
     },
+    cancelar() {
+      this.dialogCancel = false;
+      this.dialog = false;
+    },
+    confirma: async function () {
+      /*
+      try {
+          var resposta = await axios.post("http://localhost:7777/cliente/confirmaDesparasitacao", {
+            dataToma: this.dataToma,
+            tratamento: this.tratamento,
+          });
+          console.log(JSON.stringify(resposta.data));
+          this.dialog = false;
+          this.text = "Desparasitação confirmada com sucesso.";
+          this.color = "success";
+          this.snackbar = true;
+        } catch (e) {
+          console.log("erro: " + e);
+          this.dialog = false;
+          this.text = "Ocorreu um erro, por favor tente mais tarde!";
+          this.color = "warning";
+          this.snackbar = true;
+        }
+      */
+    },
+  },
+  created: {
+    /*
+    let response = await axios.post("http://localhost:7777/cliente/getVacinas", {
+      email: this.$store.state.user.email,
+      animal
+    });
+
+    */
   },
 };
 </script>

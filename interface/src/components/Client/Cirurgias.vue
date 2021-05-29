@@ -3,13 +3,13 @@
     <v-container class="fill-height">
       <v-row>
         <v-col cols="12">
-					<v-row align="center" class="my-5">
-						<v-col>
-							<h3 class="font-weight-regular text-uppercase">
-								<v-icon small>fas fa-scroll</v-icon>
-            Histórico de Cirurgias
-							</h3>
-						</v-col>
+          <v-row align="center" class="my-5">
+            <v-col>
+              <h3 class="font-weight-regular text-uppercase">
+                <v-icon small>fas fa-scroll</v-icon>
+                Histórico de Cirurgias
+              </h3>
+            </v-col>
           </v-row>
 
           <v-data-table
@@ -29,7 +29,7 @@
                 <template v-slot:activator="{ on, attrs }">
                   <v-icon
                     v-if="item.estado == 'Concluída'"
-                    @click="detalhes=true"
+                    @click="detalhes = true"
                     small
                     v-on="on"
                     v-bind="attrs"
@@ -46,6 +46,7 @@
                     v-bind="attrs"
                     v-on="on"
                     small
+                    @click="cancelar = true"
                   >
                     fas fa-calendar-times
                   </v-icon>
@@ -70,15 +71,96 @@
           </v-card-text>
         </v-card>
       </v-dialog>
+      <v-dialog v-model="cancelar" persistent width="100%" max-width="460">
+        <v-card>
+          <v-card-title class="cancel"> Cancelar cirurgia </v-card-title>
+          <v-card-text>
+            <v-row class="mt-2">
+              <v-col class="pb-0" align="right" cols="5">
+                <span class="text-uppercase">Nome do Animal</span>
+              </v-col>
+              <v-col class="pl-0 pb-0" cols="7">
+                <span class="black--text">
+                  <strong>Rubi</strong>
+                  (Serra da Estrela)
+                </span>
+              </v-col>
+
+              <v-col class="pb-0" align="right" cols="5">
+                <span class="text-uppercase">Motivo da Cirurgia</span>
+              </v-col>
+              <v-col class="pl-0 pb-0" cols="7">
+                <span class="black--text">
+                  <strong>Castração</strong>
+                </span>
+              </v-col>
+
+              <v-col class="pb-0" align="right" cols="5">
+                <span class="text-uppercase">Data</span>
+              </v-col>
+              <v-col class="pl-0 pb-0" cols="7">
+                <span class="black--text">
+                  <strong>19/04/2021 15:30</strong>
+                </span>
+              </v-col>
+
+              <v-col class="pb-0" align="right" cols="5">
+                <span class="text-uppercase">Médico</span>
+              </v-col>
+              <v-col class="pl-0 pb-0" cols="7">
+                <span class="black--text">
+                  <strong>Drº José Vieira</strong>
+                </span>
+              </v-col>
+            </v-row>
+
+            <p class="mt-12">Tem a certeza que pretende cancelar a cirurgia?</p>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              depressed
+              large
+              width="50%"
+              dark
+              color="#BDBDBD"
+              @click="cancelar = false"
+            >
+              Não
+            </v-btn>
+            <v-btn
+              depressed
+              large
+              dark
+              color="#2596be"
+              width="50%"
+              @click="cancelar()"
+            >
+              Sim
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-container>
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="timeout"
+      :color="color"
+      :top="true"
+      class="headline"
+    >
+      {{ text }}
+    </v-snackbar>
   </div>
 </template>
 
 <script>
-import exemplo from "@/components/Client/exemploCirurgia.vue"
+// import axios from 'axios'
+import exemplo from "@/components/Client/exemploCirurgia.vue";
 export default {
   data: () => ({
     detalhes: false,
+    cancelar: false, 
     headers: [
       {
         text: "Data de Marcação",
@@ -138,8 +220,8 @@ export default {
       },
     ],
   }),
-  components:{
-    exemplo
+  components: {
+    exemplo,
   },
   methods: {
     estadopedido(estado) {
@@ -149,6 +231,26 @@ export default {
     more(item) {
       console.log(item.data);
     },
+    cancelar: async function(){
+		/*
+		 try {
+          var resposta = await axios.post("http://localhost:7777/cliente/cancelarCirurgia", {
+            estado: "Cancelada"
+          });
+          console.log(JSON.stringify(resposta.data));
+          this.cancelar = false;
+          this.text = "Desparasitação confirmada com sucesso.";
+          this.color = "success";
+          this.snackbar = true;
+        } catch (e) {
+          console.log("erro: " + e);
+          this.cancelar = false;
+          this.text = "Ocorreu um erro, por favor tente mais tarde!";
+          this.color = "warning";
+          this.snackbar = true;
+        }
+		*/
+	}
   },
 };
 </script>

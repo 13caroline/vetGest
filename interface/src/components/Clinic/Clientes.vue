@@ -237,6 +237,14 @@ export default {
       console.log(item);
     },
   },
+  created: {
+    /*
+    let response = await axios.post("http://localhost:7777/clinica/getClientes", {
+      email: this.$store.state.user.email,
+    });
+
+    */
+  },
 };
 </script>
 

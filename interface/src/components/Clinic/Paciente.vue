@@ -324,6 +324,14 @@ export default {
       console.log(item.data);
     },
   },
+  created: {
+    /*
+    let response = await axios.post("http://localhost:7777/clinica/getUtentes", {
+      email: this.$store.state.user.email,
+    });
+
+    */
+  },
 };
 </script>
 

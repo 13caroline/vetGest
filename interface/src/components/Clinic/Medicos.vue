@@ -258,6 +258,14 @@ export default {
       this.dialog = true;
     },
   },
+  created: {
+    /*
+    let response = await axios.post("http://localhost:7777/clinica/getMedicos", {
+      email: this.$store.state.user.email,
+    });
+
+    */
+  },
 };
 </script>
 

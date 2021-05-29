@@ -215,6 +215,18 @@ export default {
       else return "#FFE082";
     },
   },
+  created: {
+    /*
+    let response = await axios.post("http://localhost:7777/cliente/getAnimais", {
+      email: this.$store.state.user.email,
+    });
+
+    let response2 = await axios.post("http://localhost:7777/cliente/getConsultas", {
+      email: this.$store.state.user.email,
+    });
+
+    */
+  }
 };
 </script>
 
