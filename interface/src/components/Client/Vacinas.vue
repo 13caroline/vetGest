@@ -178,7 +178,7 @@ export default {
     snackbar: false,
     color: "",
     done: false,
-    timeout: 0,
+    timeout: -1,
     text: "",
     headers: [
       {
@@ -276,6 +276,7 @@ export default {
       /*
       try {
           var resposta = await axios.post("http://localhost:7777/cliente/confirmaDesparasitacao", {
+            idVacina: this.idVacina @TODO Adicionar idVacina
             dataToma: this.dataToma,
             tratamento: this.tratamento,
           });

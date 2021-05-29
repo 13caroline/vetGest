@@ -217,7 +217,7 @@ export default {
       snackbar: false,
       color: "",
       done: false,
-      timeout: 0,
+      timeout: -1,
       text: "",
       email: "",
       password: "",

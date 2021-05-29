@@ -5,7 +5,7 @@
       <v-row justify="center">
         <v-col>
           <h3 class="font-weight-regular text-uppercase mb-4 mt-10">
-            Pacientes
+            Consultas
           </h3>
           <!--<v-layout row class="mb-3">
             <v-tooltip top>
@@ -108,7 +108,7 @@
               small
               dark
               class="ml-3 mt-5"
-              to="/cliente/agendar/consulta"
+              to="/clinica/consultas/"
               >Agendar Consulta</v-btn
             >
             <v-btn
@@ -116,7 +116,7 @@
               small
               dark
               class="ml-3 mt-5"
-              to="/cliente/registar/animal"
+              to="/clinica/utentes/registar"
               >Registar Animal</v-btn
             >
           </v-row>

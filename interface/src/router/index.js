@@ -12,7 +12,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Home.vue')
   },
   {
-    path: '/cliente/pagina',
+    path: '/cliente/inicio',
     name: 'Página Cliente',
     component: () => import(/* webpackChunkName: "about" */ '../views/Client/Page.vue')
   },
@@ -27,7 +27,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Client/EditData.vue')
   },
   {
-    path: '/cliente/agendar/consulta',
+    path: '/cliente/consultas/agendar',
     name: 'Agendar Consulta',
     component: () => import(/* webpackChunkName: "about" */ '../views/Client/AgendarConsulta.vue')
   },
@@ -52,16 +52,16 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Client/Vacinas.vue')
   },
   {
-    path: '/cliente/clinica/servicos',
-    name: 'Clinica Cliente Serviços',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Client/Servicos.vue')
+    path: '/cliente/clinica',
+    name: 'Clínica',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Client/Clinica.vue')
   },
 
     //------------------------------------- Clinica -------------------------------------
 
       //Página inicial da clinica
     {
-      path: '/clinica/pagina',
+      path: '/clinica/inicio',
       name: 'Página Clinica',
       component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Page.vue')
     },
@@ -104,19 +104,19 @@ const routes = [
     },
      // Registar um utente por parte da clinica
      {
-      path: '/clinica/registar/utente',
+      path: '/clinica/utentes/registar',
       name: 'Registar Utente Clinica',
       component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/RegistarPaciente.vue')
     },
     // Registar cliente por clínica
     {
-      path: '/clinica/registar/cliente',
+      path: '/clinica/clientes/registar',
       name: 'Clinica Registar Cliente',
       component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/RegistarCliente.vue')
     },
     // Registar médico veterinário por clínica
     {
-      path: '/clinica/registar/medico',
+      path: '/clinica/medicos/registar',
       name: 'Clinica Registar Médico',
       component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/RegistarVeterinario.vue')
     },
@@ -125,7 +125,7 @@ const routes = [
 
     //Página inicial médico
     {
-      path: '/medico/pagina',
+      path: '/medico/inicio',
       name: 'Página Inicial Médico',
       component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/Page.vue')
     },

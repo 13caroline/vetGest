@@ -1,8 +1,8 @@
 <template>
   <div>
     <v-container>
-      <v-row justify="space-around" class="mt-2">
-        <v-col cols="auto" class="mx-auto mx-md-0">
+      <v-row justify="space-around" class="mt-4">
+        <v-col cols="auto">
           <div class="foto">
             <v-card flat>
               <v-img
@@ -206,8 +206,8 @@
         </v-col>
       </v-row>
 
-      <v-row>
-        <v-card class="mt-6">
+      <v-row class="mt-6" justify="center">
+        <v-col cols="12" xl="10">
           <v-data-table
             :headers="headers"
             :items="consultas"
@@ -251,7 +251,7 @@
               </v-tooltip>
             </template>
           </v-data-table>
-        </v-card>
+        </v-col>
       </v-row>
       <v-dialog v-model="cancelar" persistent width="100%" max-width="460">
         <v-card>
@@ -345,7 +345,7 @@ export default {
     snackbar: false,
     color: "",
     done: false,
-    timeout: 0,
+    timeout: -1,
     text: "",
     cao: {
       nome: "Rubi",

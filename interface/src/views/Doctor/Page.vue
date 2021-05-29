@@ -108,7 +108,7 @@
               small
               dark
               class="ml-3 mt-5"
-              to="/cliente/agendar/consulta"
+              to="/cliente/consultas/agendar"
               >Agendar Consulta</v-btn
             >
             <v-btn

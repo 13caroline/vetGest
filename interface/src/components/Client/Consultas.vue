@@ -16,10 +16,10 @@
                 small
                 color="#2596be"
                 dark
-                to="/cliente/agendar/consulta"
+                to="/cliente/consultas/agendar"
               >
                 Agendar Consulta
-                <v-icon class="calendar">far fa-calendar-check</v-icon>
+                <v-icon class="calendar ml-4">far fa-calendar-check</v-icon>
               </v-btn>
             </v-col>
           </v-row>
@@ -183,7 +183,7 @@ export default {
 	snackbar: false,
     color: "",
     done: false,
-    timeout: 0,
+    timeout: -1,
     text: "",
     headers: [
       {
