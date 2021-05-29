@@ -268,6 +268,7 @@
                       </v-menu>
                     </v-col>
 
+                   <!-- Não se põe certo? 
                     <v-col cols="12" class="py-0">
                       <p class="ma-0">Médico Veterinário</p>
                     </v-col>
@@ -280,7 +281,7 @@
                         :items="medico"
                         v-model="medico"
                       ></v-autocomplete>
-                    </v-col>
+                    </v-col> -->
                   </v-row>
 
                   <v-row align="end" justify="end">

@@ -129,7 +129,7 @@ export default {
   },
   methods: {
     more(item) {
-      this.$router.push("/clinica/paciente/");
+      this.$router.push("/medico/animal/");
       console.log(item)
     },
   },

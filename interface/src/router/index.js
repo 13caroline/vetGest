@@ -143,12 +143,44 @@ const routes = [
       name: 'Médico Consultas',
       component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/Consultas.vue')
     },
+
     // Calendário de cirurgias de um médico
     {
       path: '/medico/cirurgias/',
       name: 'Médico Cirurgias',
       component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/Cirurgias.vue')
     },
+
+    // Animal Médico
+    {
+      path: '/medico/animal/',
+      name: 'Animal Médico',
+      component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/Animal.vue')
+    },
+
+    //Vácinas Animal
+    {
+      path: '/medico/vacinas/',
+      name: 'Vacinas e Desparasitações Médico',
+      component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/Vacinas.vue')
+    },
+
+    // Adicionar Vacinação
+    {
+      path: '/medico/adicionar/vacinacao/',
+      name: 'Vacinas Médico',
+      component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/addVacina.vue')
+    },
+
+     // Adicionar Desparasitação
+     {
+      path: '/medico/adicionar/desparasitacao/',
+      name: 'Desparasitações Médico',
+      component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/addDesparasitacao.vue')
+    },
+
+
+    
 
 
 
