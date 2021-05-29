@@ -100,7 +100,7 @@ export default {
        {
         title: "Conselhos Úteis",
         icon: "fas fa-procedures",
-        route: "/medico/cirurgias",
+        route: "/medico/conselhos",
       },
     ],
   }),

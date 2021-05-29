@@ -137,6 +137,19 @@ const routes = [
       component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/Pacientes.vue')
     },
 
+     // Calendário de consultas de um médico
+     {
+      path: '/medico/consultas/',
+      name: 'Médico Consultas',
+      component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/Consultas.vue')
+    },
+    // Calendário de cirurgias de um médico
+    {
+      path: '/medico/cirurgias/',
+      name: 'Médico Cirurgias',
+      component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/Cirurgias.vue')
+    },
+
 
 
 ]
