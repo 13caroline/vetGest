@@ -28,7 +28,7 @@
 
             <v-list-item-content>
               <v-list-item-title class="text-uppercase color"
-                >Clínica</v-list-item-title
+                >Médico Veterinário</v-list-item-title
               >
             </v-list-item-content>
           </v-list-item>
@@ -100,7 +100,7 @@ export default {
        {
         title: "Conselhos Úteis",
         icon: "fas fa-procedures",
-        route: "/medico/cirurgias",
+        route: "/medico/conselhos",
       },
     ],
   }),
