@@ -46,9 +46,13 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable()
-                .authorizeRequests().antMatchers("/authenticate","/","/addCliente").permitAll()
+                .authorizeRequests().antMatchers("/authenticate","/cliente/registar").permitAll()
                 .antMatchers("/addDica/{emailVet}").hasAnyRole("Veterinario")
-                .antMatchers("/addVet").hasAnyRole("Clinica").
+                .antMatchers("/addVet").hasAnyRole("Clinica")
+                .antMatchers("/","/cliente").hasAnyRole("Cliente") //Daqui para baixo ainda não tem as rotas certas atribuidas
+                .antMatchers("/").hasAnyRole("Clinica","Veterinario")
+                .antMatchers("/").hasAnyRole("Clinica","Cliente")
+                .antMatchers("/").hasAnyRole("Veterinario","Cliente").
                 anyRequest().authenticated().and().
                 exceptionHandling().and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
