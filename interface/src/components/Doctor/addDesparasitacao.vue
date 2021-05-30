@@ -152,7 +152,7 @@
             dark
             color="#2596be"
             width="50%"
-            to="/clinica/utentes"
+            to="/medico/utentes"
           >
             Sim
           </v-btn>
@@ -292,7 +292,7 @@ export default {
       /*
       if (this.$refs.form.validate()) {
         try {
-          var resposta = await axios.post("http://localhost:7777/clinica/registarUtente", {
+          var resposta = await axios.post("http://localhost:7777/medico/registarUtente", {
             nome: this.nome,
             chip: this.chip,
             especie: this.especie,

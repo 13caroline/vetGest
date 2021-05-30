@@ -17,7 +17,7 @@
           <v-form ref="form" v-model="valid" lazy-validation>
             <v-row class="mt-2">
               <v-col sm="6" md="4" cols="12" class="py-0" >
-                <p class="ma-0">Estado</p>
+                <p class="ma-0">Vacina Contra</p>
                 <v-select
                   color="#2596be"
                   class="font-weight-regular"
@@ -29,7 +29,21 @@
                 </v-select>
               </v-col>
 
-              <v-col sm="6" md="4" cols="auto" class="py-0">
+          <v-col>
+             <v-textarea
+                  outlined
+                  color="#2596be"
+                  rows="1"
+                  clearable
+                  clear-icon="fas fa-times-circle"
+                  no-resize
+                  v-model="contraOutro"
+                ></v-textarea>
+          </v-col>
+            </v-row>
+
+<v-row>
+      <v-col sm="6" md="4" cols="auto" class="py-0">
                 <p class="ma-0">Tipo</p>
                 <v-select
                   color="#2596be"
@@ -41,9 +55,7 @@
                 >
                 </v-select>
               </v-col>
-            </v-row>
-
-
+</v-row>
 
             <v-row>
             
@@ -152,7 +164,7 @@
             dark
             color="#2596be"
             width="50%"
-            to="/clinica/utentes"
+            to="/medico/utentes"
           >
             Sim
           </v-btn>
@@ -193,12 +205,8 @@ export default {
     especie: "",
     estado: "",
     tipo: "",
-    altura: "",
+    contraOutro: "",
     data: null,
-    sexo: "",
-    cor: "",
-    pelagem: "",
-    cauda: "",
     observacoes: "",
     valid: true,
     snackbar: false,
@@ -292,7 +300,7 @@ export default {
       /*
       if (this.$refs.form.validate()) {
         try {
-          var resposta = await axios.post("http://localhost:7777/clinica/registarUtente", {
+          var resposta = await axios.post("http://localhost:7777/medico/registarUtente", {
             nome: this.nome,
             chip: this.chip,
             especie: this.especie,

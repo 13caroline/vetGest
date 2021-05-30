@@ -179,6 +179,22 @@ const routes = [
       component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/addDesparasitacao.vue')
     },
 
+       // Adicionar Desparasitação
+       {
+        path:  '/medico/utentes/registar',
+        name: 'Registar Utentes Médico',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/addDesparasitacao.vue')
+      },
+
+      // Médico edita animal
+      {
+        path: '/medico/animal/editar',
+        name: 'Editar Animal',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/EditData.vue')
+      },
+
+  
+
 
     
 

@@ -351,7 +351,7 @@
                   dark
                   color="#2596be"
                   width="50%"
-                  to="/clinica/consultas"
+                  to="/medico/consultas"
                 >
                   Sim
                 </v-btn>

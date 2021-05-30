@@ -8,17 +8,7 @@
             Utentes
           </h3>
            <v-row justify="end">
-            <v-col cols="auto">
-              <v-btn
-                class="mb-2 mt-6 body-2"
-                small
-                color="#2596be"
-                dark
-                to="/clinica/utentes/registar"
-              >
-                Registar Utente
-              </v-btn>
-            </v-col>
+            
           </v-row>
         
       </v-row>
