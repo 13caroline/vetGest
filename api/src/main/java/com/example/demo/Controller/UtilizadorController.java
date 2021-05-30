@@ -7,6 +7,7 @@ import com.example.demo.Security.AuthenticationResponse;
 import com.example.demo.Security.JwtUtil;
 import com.example.demo.Security.MyUserDetailsService;
 import com.example.demo.Service.UtilizadorService;
+import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -50,6 +51,7 @@ public class UtilizadorController {
 
     @GetMapping("/")
     public String welcome(){
+
         return "Welcome to VetGest!!";
     }
 
@@ -66,16 +68,12 @@ public class UtilizadorController {
 
                 final String jwt = jwtTokenUtil.generateToken(userDetails);
 
-                return ResponseEntity.ok(new AuthenticationResponse(jwt));
+                return ResponseEntity.accepted().body(new AuthenticationResponse(jwt));
             }
         }
         catch (BadCredentialsException e) {
-            throw new Exception("Incorrect email or password", e);
+            throw new Exception("Email ou password estão errados", e);
         }
-
-        return ResponseEntity.ok("Erro");
-
+        return ResponseEntity.badRequest().body("Email ou password estão errados");
     }
-
-
 }

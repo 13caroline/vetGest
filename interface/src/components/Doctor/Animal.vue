@@ -32,7 +32,7 @@
                   small
                   color="#2596be"
                   dark
-                  to="/cliente/animal/editar"
+                  to="/medico/animal/editar"
                 >
                   Editar Dados
                 </v-btn>

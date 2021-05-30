@@ -344,12 +344,12 @@
                   Não
                 </v-btn>
                 <v-btn
+                @click="cancela()"
                   depressed
                   large
                   dark
                   color="#2596be"
                   width="50%"
-                  to="/clinica/consultas"
                 >
                   Sim
                 </v-btn>
@@ -586,6 +586,10 @@ export default {
     rnd(a, b) {
       return Math.floor((b - a + 1) * Math.random()) + a;
     },
+    cancela(){
+      this.cancelDialog=false;
+      this.dialog=false;
+    }
   },
   computed: {
     filteredData() {
