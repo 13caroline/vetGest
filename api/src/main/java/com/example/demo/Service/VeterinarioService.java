@@ -17,4 +17,8 @@ public class VeterinarioService {
     public Veterinario getVetByEmail(String email){
         return repository.findByEmail(email);
     }
+
+    public Veterinario getVetById(int id) {
+        return repository.findById(id);
+    }
 }

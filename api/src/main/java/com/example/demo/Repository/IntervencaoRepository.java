@@ -7,4 +7,7 @@ import java.util.List;
 
 public interface IntervencaoRepository extends JpaRepository<Intervencao,Integer>{
     List<Intervencao> findAllByAnimalId(int animal_id);
+
+    Intervencao findById(int id);
+
 }
