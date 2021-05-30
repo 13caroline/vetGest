@@ -30,11 +30,6 @@
                   </template>
                 </v-img>
               </v-card>
-              <v-row>
-                <v-btn class="mt-5 body-2" small color="#2596be" dark
-                  >Alterar Fotografia</v-btn
-                >
-              </v-row>
             </v-col>
 
             <v-col cols="12" md class="mt-10 mt-md-0">
@@ -268,7 +263,7 @@
             dark
             color="#2596be"
             width="50%"
-            to="/cliente/animal"
+            to="/clinica/utente/"
           >
             Sim
           </v-btn>

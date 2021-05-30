@@ -110,7 +110,7 @@ export default {
       {
         title: "Relatórios",
         icon: "far fa-chart-bar",
-        route: "/relatorios/",
+        route: "/clinica/relatorios",
       },
     ],
   }),

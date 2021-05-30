@@ -3,10 +3,11 @@ import App from './App.vue'
 import router from './router'
 import vuetify from './plugins/vuetify';
 import store from './store';
+import '@fortawesome/fontawesome-free/css/all.css';
 //import * as VueGoogleMaps from 'vue2-google-maps'
 //import VueGeolocation from 'vue-browser-geolocation'
 //import 'material-design-icons-iconfont/dist/material-design-icons.css'
-import '@fortawesome/fontawesome-free/css/all.css';
+
 
 import('./styles/general.scss');
 

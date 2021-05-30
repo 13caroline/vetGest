@@ -6,10 +6,7 @@
           <span class="subtitle-1 head">Rubi</span>
         </v-col>
         <v-col cols="auto" class="ml-auto">
-          <v-btn icon depressed>
-            <v-icon color="#2596be">fas fa-user</v-icon>
-          </v-btn>
-          <v-btn icon depressed>
+          <v-btn icon depressed to="/clinica/editar/utente">
             <v-icon color="#2596be">fas fa-pen</v-icon>
           </v-btn>
         </v-col>

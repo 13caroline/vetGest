@@ -120,6 +120,18 @@ const routes = [
       name: 'Clinica Registar Médico',
       component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/RegistarVeterinario.vue')
     },
+     // Editar dados de utente
+     {
+      path: '/clinica/editar/utente',
+      name: 'Clinica Editar Dados Utente',
+      component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/EditData.vue')
+    },
+    // Relatórios da Clínica
+    {
+      path: '/clinica/relatorios',
+      name: 'Relatórios Clínica',
+      component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Relatorios.vue')
+    },
 
     //------------------------------------- Médico -------------------------------------
 
