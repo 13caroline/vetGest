@@ -322,7 +322,7 @@ export default {
       */
     },
   },
-  created: {
+  created() {
     /*
     let response = await axios.post("http://localhost:7777/cliente/getVacinas", {
       email: this.$store.state.user.email,

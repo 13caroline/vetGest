@@ -215,7 +215,7 @@ export default {
       else return "#FFE082";
     },
   },
-  created: {
+  created() {
     /*
     let response = await axios.post("http://localhost:7777/cliente/getAnimais", {
       email: this.$store.state.user.email,

@@ -108,9 +108,9 @@ export default {
         route: "/clinica/cirurgias",
       },
       {
-        title: "Venda de Produtos",
-        icon: "fas fa-pump-medical",
-        route: "/donativos/",
+        title: "Relatórios",
+        icon: "far fa-chart-bar",
+        route: "/relatorios/",
       },
     ],
   }),

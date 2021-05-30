@@ -199,6 +199,12 @@ export default {
           align: "start",
         },
         {
+          text: "EMAIL",
+          value: "email",
+          sortable: true,
+          align: "start",
+        },
+        {
           text: "LOCALIDADE",
           value: "localidade",
           sortable: false,
@@ -208,7 +214,7 @@ export default {
           text: "MAIS DETALHES",
           value: "detalhes",
           sortable: false,
-          align: "start",
+          align: "center",
         },
       ],
 
@@ -216,16 +222,19 @@ export default {
         {
           cliente: "Carolina Alves Cunha",
           telemovel: "915293785",
+          email: "f7carolina.cunha@gmail.com",
           localidade: "Fafe",
         },
         {
           cliente: "Carolina Alves Cunha",
           telemovel: "915293785",
+          email: "f7carolina.cunha@gmail.com",
           localidade: "Fafe",
         },
         {
           cliente: "Carolina Alves Cunha",
           telemovel: "915293785",
+          email: "f7carolina.cunha@gmail.com",
           localidade: "Fafe",
         },
       ],
@@ -237,7 +246,7 @@ export default {
       console.log(item);
     },
   },
-  created: {
+  created() {
     /*
     let response = await axios.post("http://localhost:7777/clinica/getClientes", {
       email: this.$store.state.user.email,

@@ -381,7 +381,7 @@ export default {
       */
     },
   },
-  created() {
+  created: {
     /*
     let response = await axios.post("http://localhost:7777/cliente/animal/getDados", {
       email: this.$store.state.user.email,

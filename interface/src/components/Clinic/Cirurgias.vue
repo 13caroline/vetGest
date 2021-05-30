@@ -17,7 +17,7 @@
                   dark
                   @click="dialog = true"
                 >
-                  Marcar nova cirurgia
+                  Marcar cirurgia
                 </v-btn>
               </v-col>
             </v-row>

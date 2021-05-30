@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <v-container class="fill-height">
-      <v-row>
+    <div>
+        <v-card flat color="#fafafa">
+            <v-row>
         <v-col cols="12">
           <h3 class="font-weight-regular text-uppercase mt-10 mb-4">
             <v-icon small>fas fa-syringe</v-icon>
@@ -152,17 +152,8 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-    </v-container>
-    <v-snackbar
-      v-model="snackbar"
-      :timeout="timeout"
-      :color="color"
-      :top="true"
-      class="headline"
-    >
-      {{ text }}
-    </v-snackbar>
-  </div>
+        </v-card>
+    </div>
 </template>
 
 <script>

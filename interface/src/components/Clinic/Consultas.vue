@@ -17,7 +17,7 @@
                   dark
                   @click="dialog = true"
                 >
-                  Marcar nova consulta
+                  Marcar consulta
                 </v-btn>
               </v-col>
             </v-row>
