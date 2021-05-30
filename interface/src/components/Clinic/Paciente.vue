@@ -32,7 +32,7 @@
                   small
                   color="#2596be"
                   dark
-                  to="/cliente/animal/editar"
+                  to="/clinica/utente/editar"
                 >
                   Editar Dados
                 </v-btn>
@@ -200,8 +200,8 @@
         </v-col>
       </v-row>
 
-      <v-row>
-        <v-card class="mt-6">
+      <v-row class="mt-6" justify="center">
+        <v-col cols="12" xl="10">
           <v-data-table
             :headers="headers"
             :items="consultas"
@@ -244,7 +244,7 @@
               </v-tooltip>
             </template>
           </v-data-table>
-        </v-card>
+        </v-col>
       </v-row>
     </v-container>
   </div>

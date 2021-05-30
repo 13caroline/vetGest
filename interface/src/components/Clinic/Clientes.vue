@@ -13,7 +13,7 @@
               small
               color="#2596be"
               dark
-              to="/clinica/registar/cliente"
+              to="/clinica/clientes/registar"
             >
               Registar Cliente
             </v-btn>

@@ -377,7 +377,7 @@
 					>
 						Não
 					</v-btn>
-					<v-btn depressed large dark color="#2596be" width="50%" to="/cliente/pagina">
+					<v-btn depressed large dark color="#2596be" width="50%" to="/cliente/inicio">
 						Sim
 					</v-btn>
 				</v-card-actions>

@@ -13,7 +13,7 @@
               small
               color="#2596be"
               dark
-              to="/clinica/registar/medico"
+              to="/clinica/medicos/registar"
             >
               Registar Médico Veterinário
             </v-btn>
@@ -28,6 +28,7 @@
           cols="6"
           sm="4"
           md="3"
+          xl="2"
         >
           <div>
             <v-hover v-slot:default="{ hover }">

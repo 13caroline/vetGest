@@ -80,7 +80,7 @@ export default {
       {
         title: "Dashboard",
         icon: "fas fa-tachometer-alt",
-        route: "/medico/pagina/",
+        route: "/medico/inicio/",
       },
       {
         title: "Ficha do utente",
@@ -110,10 +110,10 @@ export default {
       this.$router.push("/");
     },
     toMainPage: function () {
-      this.$router.push("/medico/pagina");
+      this.$router.push("/medico/inicio");
     },
     preferences: function () {
-      this.$router.push("/preferences");
+      this.$router.push("/preferencias");
     },
     home: function () {
       this.$router.push("/menu");

@@ -31,25 +31,22 @@
           Cirurgias
         </v-btn>
 
-        <v-menu offset-y>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn v-bind="attrs" v-on="on" tile depressed text class="font-weight-regular no-background-hover">
-              Clínica
-            </v-btn>
-          </template>
-          <v-list dense>
-            <v-list-item v-for="(item, index) in clinica" :key="index" router :to="item.route">
-              <v-list-item-title class="caption" >{{ item.title }}</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
+        <v-btn
+          tile
+          depressed
+          text
+          class="font-weight-regular no-background-hover"
+          to="/cliente/clinica"
+        >
+          Clínica
+        </v-btn>
 
         <v-btn
           tile
           depressed
           text
           class="font-weight-regular no-background-hover"
-          to="/my/lists/books"
+          to="/cliente/conselhos"
         >
           Conselhos Úteis
         </v-btn>
@@ -114,7 +111,7 @@
                 Clínica
               </v-list-item-title>
             </v-list-item>
-            <v-list-item to="/my/lists/books">
+            <v-list-item to="/cliente/conselhos">
               <v-list-item-title class="caption">
                 <v-icon x-small class="mt-n1 mr-1"
                   >fas fa-comment-medical</v-icon
@@ -144,23 +141,16 @@
 <script>
 export default {
   name: "Navbar",
-  data: () => ({
-	clinica:[
-		{title:"Serviços", route:"/cliente/clinica/servicos"},
-		{title:"Equipa"},
-		{title:"Contactos"}
-	]
-  }),
   methods: {
     logout: async function () {
       this.$store.commit("eliminarToken");
       this.$router.push("/");
     },
     home: function () {
-      this.$router.push("/cliente/pagina");
+      this.$router.push("/cliente/inicio");
     },
     preferences: function () {
-      this.$router.push("/preferences");
+      this.$router.push("/preferencias");
     },
   },
 };
@@ -177,6 +167,10 @@ export default {
 
 .show_large {
   display: none;
+}
+
+.v-btn--active span{
+    text-decoration: underline;
 }
 
 @media screen and (min-width: 705px) {

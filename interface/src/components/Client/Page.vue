@@ -88,7 +88,7 @@
                 small
                 color="#2596be"
                 dark
-                to="/cliente/agendar/consulta"
+                to="/cliente/consultas/agendar"
               >
                 <v-icon small class="mr-2">far fa-calendar-alt</v-icon>
                 Agendar Consulta

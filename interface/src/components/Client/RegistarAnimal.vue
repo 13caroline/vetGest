@@ -250,7 +250,7 @@
             dark
             color="#2596be"
             width="50%"
-            to="/cliente/pagina"
+            to="/cliente/inicio"
           >
             Sim
           </v-btn>
@@ -322,7 +322,7 @@ export default {
     snackbar: false,
     color: "",
     done: false,
-    timeout: 0,
+    timeout: -1,
     text: "",
   }),
   methods: {

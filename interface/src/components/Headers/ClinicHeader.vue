@@ -80,7 +80,7 @@ export default {
       {
         title: "Dashboard",
         icon: "fas fa-tachometer-alt",
-        route: "/clinica/pagina/",
+        route: "/clinica/inicio/",
       },
       {
         title: "Ficha do utente",
@@ -120,10 +120,10 @@ export default {
       this.$router.push("/");
     },
     toMainPage: function () {
-      this.$router.push("/cliente/pagina");
+      this.$router.push("/cliente/inicio");
     },
     preferences: function () {
-      this.$router.push("/preferences");
+      this.$router.push("/preferencias");
     },
     home: function () {
       this.$router.push("/menu");

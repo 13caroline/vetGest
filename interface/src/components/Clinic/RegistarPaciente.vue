@@ -319,7 +319,7 @@ export default {
     snackbar: false,
     color: "",
     done: false,
-    timeout: 0,
+    timeout: -1,
     text: "",
     dialog: false,
     dialogDono: false,
@@ -419,7 +419,7 @@ export default {
             pelagem: this.pelagem, 
             cauda: this.cauda, 
             observacoes: this.observacoes,
-            emailCliente: this.nomeSelected, 
+            idCliente: this.nomeSelected, 
             email: this.$store.state.user.email,
           });
           console.log(JSON.stringify(resposta.data));
