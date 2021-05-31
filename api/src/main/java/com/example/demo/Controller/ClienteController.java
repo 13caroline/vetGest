@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +29,7 @@ public class ClienteController {
 
     @PostMapping(path = "/cliente/registar")
     public ResponseEntity<String> addCliente(@RequestBody Cliente cliente){
-        Cliente existingclient = new Cliente();
-        existingclient= clienteService.getClienteByEmail(cliente.getEmail());
+        Cliente existingclient = clienteService.getClienteByEmail(cliente.getEmail());
         if(existingclient!=null){
             return ResponseEntity.badRequest().body("Email já se encontra registado");
         }
@@ -226,15 +224,14 @@ public class ClienteController {
 
     @PostMapping("/cliente/preferencias")
     public ResponseEntity<?> editarPreferencias(@RequestBody Cliente _cliente){
-        Cliente cliente = new Cliente();
-        cliente = clienteService.getClienteByEmail(_cliente.getEmail());
+        Cliente cliente = clienteService.getClienteByEmail(_cliente.getEmail());
         cliente.setNome(_cliente.getNome());
         cliente.setMorada(_cliente.getMorada());
         cliente.setConcelho(_cliente.getConcelho());
         cliente.setFreguesia(_cliente.getFreguesia());
         cliente.setContacto(_cliente.getContacto());
         try {
-            clienteService.saveCliente(cliente);
+            clienteService.updateCliente(cliente);
         }
         catch (Exception e){
             return ResponseEntity.badRequest().body("Erro a alterar dados!");

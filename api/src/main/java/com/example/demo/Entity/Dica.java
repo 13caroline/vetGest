@@ -32,7 +32,7 @@ public class Dica {
     )
     private String data;
 
-    @ManyToOne(cascade = {CascadeType.ALL})
+    @OneToOne(cascade = {CascadeType.ALL})
     private Veterinario veterinario;
 
     public Dica(Dica dica) {

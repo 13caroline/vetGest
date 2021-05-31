@@ -1,5 +1,6 @@
 package com.example.demo.Service;
 
+import ch.qos.logback.core.net.server.Client;
 import com.example.demo.Entity.Cliente;
 import com.example.demo.Repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,5 +29,10 @@ public class ClienteService {
     public List<Cliente> getClientes(){
         return repository.findAll();
     }
+
+    public Cliente updateCliente(Cliente cliente){
+        return repository.save(cliente);
+    }
+
 }
 

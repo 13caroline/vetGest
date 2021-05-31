@@ -27,4 +27,8 @@ public class IntervencaoService {
     public Intervencao getIntervencao(int id_intervencao){
         return repository.findById(id_intervencao);
     }
+
+    public List<Intervencao> getAllConsultas() {
+        return repository.findAll();
+    }
 }

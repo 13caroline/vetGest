@@ -46,4 +46,11 @@ public class Veterinario extends Utilizador implements Serializable {
             nullable = false
     )
     private String contacto;
+
+    @Column(
+            name = "iban",
+            nullable = false
+    )
+    private String IBAN;
+
 }
