@@ -4,9 +4,57 @@
       <v-row class="mt-5">
         <v-col cols="12">
           <h3 class="font-weight-regular text-uppercase">
-            <v-icon small>fas fa-scroll</v-icon>
-            Equipa
+            <v-icon small>fas fa-address-card</v-icon>
+            Contactos
           </h3>
+        </v-col>
+      </v-row>
+
+      <v-row class="w-100">
+        <v-col cols="6">
+          <div>
+            <h4 class="font-weight-regular text-uppercase">
+            Informação de contacto
+          </h4>
+          </div>
+          <div class="mt-2">
+            <v-icon > fab fa-pagelines</v-icon>
+            <span class="ml-1 grey--text font-weight-light">Rua da Universidade</span>
+            <p class="ml-5 grey--text font-weight-light">4710-057 Braga</p>
+          </div>
+          <div class="mt-2">
+            <v-icon small> fas fa-phone</v-icon>
+            <span class="ml-1">Telefone:</span><span class="ml-1 grey--text font-weight-light">253 601 100</span>
+          </div>
+          <div class="mt-2">
+            <v-icon small> fas fa-envelope</v-icon>
+            <span class="ml-1" >Email:</span><span class="ml-1 grey--text font-weight-light">clinicaveterinariadominho@gmail.com</span>
+          </div>
+        </v-col>
+
+        <v-col cols="6">
+          <div>
+            <h4 class="font-weight-regular text-uppercase">
+            Horário de Funcionamento
+          </h4>
+          </div>
+          <div class="mt-3">
+            <span class="grey--text font-weight-bold" >Segunda a Sexta</span>
+            <br>
+            <span class="grey--text font-weight-light" >das 10:00h às 13:00h</span>
+            <br>
+            <span class="grey--text font-weight-light" >das 14:30h às 20:00h</span>
+          </div>
+          <div class="mt-3">
+            <span class="grey--text font-weight-bold" >Sábado e Feriados</span>
+            <br>
+            <span class="grey--text font-weight-light" >das 10:00h às 13:00h</span>
+          </div>
+          <div class="mt-3">
+            <span class="grey--text font-weight-bold" >Domingo</span>
+            <br>
+            <span class="grey--text font-weight-light" >Fechado</span>
+          </div>
         </v-col>
       </v-row>
 
@@ -15,12 +63,11 @@
           <v-row align="center" class="my-5">
             <v-col>
               <h3 class="font-weight-regular text-uppercase">
-                <v-icon small>fas fa-scroll</v-icon>
+                <v-icon small>fas fa-first-aid</v-icon>
                 Serviços
               </h3>
               <p>
-                The Woodman set to work at once, and so sharp was his axe that
-                the tree was soon chopped nearly through.
+                Saiba mais sobre os serviços médico-veterinários da Clínica Veterinária do Minho.
               </p>
             </v-col>
           </v-row>
@@ -110,10 +157,18 @@
       </v-row>
 
       <v-row>
-        <h3 class="font-weight-regular text-uppercase">
-          <v-icon small>fas fa-scroll</v-icon>
-          Contactos
-        </h3>
+      <v-col cols="12">
+          <v-row align="center" class="my-5">
+            <v-col>
+              <h3 class="font-weight-regular text-uppercase">
+                <v-icon small>fas fa-user-md</v-icon>
+                Equipa
+              </h3>
+            </v-col>
+          </v-row>
+
+          
+      </v-col>
       </v-row>
 
       <v-dialog v-model="dialog" width="100%" max-width="460">

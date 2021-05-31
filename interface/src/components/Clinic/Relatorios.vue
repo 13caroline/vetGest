@@ -90,14 +90,14 @@
             </div>
         </v-col>
 
-       <!-- <v-col class="auto">
+       <v-col class="auto">
             <div>Espécies</div>
             <div>
                 <v-card max-width="344" outlined>
-                    <especie class="my-4"></especie>
+                    <especie class="my-4" :height="230"></especie>
                 </v-card>
             </div>
-        </v-col>-->
+        </v-col>
       </v-row>
 
      <!-- <v-row class="w-100">
@@ -118,7 +118,7 @@
 <script>
 import consultas from '@/components/Clinic/Relatorios/consultas'
 import cirurgias from '@/components/Clinic/Relatorios/cirurgias'
-//import especie from '@/components/Clinic/Relatorios/especie'
+import especie from '@/components/Clinic/Relatorios/especie'
 //import consultasMes from '@/components/Clinic/Relatorios/consultasMes'
 // import axios from "axios";
 export default {
@@ -128,7 +128,7 @@ export default {
   components:{
       consultas,
       cirurgias,
-      //especie,
+      especie,
       //consultasMes
   }
 }
