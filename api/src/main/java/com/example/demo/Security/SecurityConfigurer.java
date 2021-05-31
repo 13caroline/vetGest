@@ -49,7 +49,9 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().antMatchers("/authenticate","/cliente/registar").permitAll()
                 .antMatchers("/addDica/{emailVet}").hasAnyRole("Veterinario")
                 .antMatchers("/addVet").hasAnyRole("Clinica")
-                .antMatchers("/","/cliente").hasAnyRole("Cliente") //Daqui para baixo ainda não tem as rotas certas atribuidas
+                .antMatchers("/","/cliente","/cliente/animal/registar","/cliente/animal/{id_animal}",
+                        "/cliente/animal/cancelar/{id_intervencao}","/cliente/animal/{id_animal}","/cliente/animal/{id_animal}/vacinas",
+                        "/cliente/consulta","/cliente/consultas","/cliente/cirurgias","/cliente/preferencias").hasAnyRole("Cliente") //Daqui para baixo ainda não tem as rotas certas atribuidas
                 .antMatchers("/").hasAnyRole("Clinica","Veterinario")
                 .antMatchers("/").hasAnyRole("Clinica","Cliente")
                 .antMatchers("/").hasAnyRole("Veterinario","Cliente").

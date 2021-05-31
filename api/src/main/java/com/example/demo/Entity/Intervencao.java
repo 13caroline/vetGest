@@ -57,7 +57,7 @@ public class Intervencao {
     @ManyToOne(cascade = {CascadeType.ALL})
     private Animal animal;
 
-    @OneToOne(cascade = {CascadeType.ALL})
+    @ManyToOne(cascade = {CascadeType.ALL})
     private Veterinario veterinario;
 
     public Intervencao(Intervencao intervencao) {
