@@ -5,6 +5,7 @@ import com.example.demo.Service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hibernate.type.StringNVarcharType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +38,7 @@ public class ClienteController {
         return  ResponseEntity.accepted().body("Cliente Registado com sucesso");
     }
 
+    //ACABAR de testar
     @GetMapping("/cliente")
     public ResponseEntity<?> findClienteByEmail(@RequestBody Cliente email){
         Cliente cliente = clienteService.getClienteByEmail(email.getEmail());
@@ -44,8 +46,8 @@ public class ClienteController {
             return ResponseEntity.badRequest().body("Utilizador não existe!");
         }
         List<Intervencao> intervencoes = new ArrayList<>();
-        List<Animal> animais = new ArrayList<>();
-        animais= cliente.getAnimais();
+        List<Animal> animais = cliente.getAnimais();
+        System.out.println(animais);
         animais.forEach(animal -> {
             List<Intervencao> intervencoes_temp = new ArrayList<>();
             intervencoes_temp= intervencaoService.getIntervencoesAnimal(animal.getId());
@@ -80,23 +82,28 @@ public class ClienteController {
         return ResponseEntity.accepted().body("Animal registado com sucesso");
     }
 
+    //ACABAR de testar parte das intervençoes
+
     @GetMapping("/cliente/animal/{id_animal}")
-    public ResponseEntity<?> getAnimal(@PathVariable int id_animal){
+    public ResponseEntity<?> getAnimal(@PathVariable int id_animal, @RequestBody Cliente emailCliente){
+        Cliente cliente = clienteService.getClienteByEmail(emailCliente.getEmail());
+        List<Animal> animais = cliente.getAnimais();
         Animal animal = animalService.getAnimalById(id_animal);
-        if(animal==null){
+
+        if(animal==null || !animais.contains(animal)){
             return ResponseEntity.badRequest().body("Erro a obter animal!");
         }
         List<Intervencao> intervencoes = intervencaoService.getIntervencoesAnimal(id_animal);
         if(intervencoes==null){
             return ResponseEntity.badRequest().body("Erro a obter animal!");
         }
-
         AnimalIntervencoes animalIntervencoes = new AnimalIntervencoes();
         animalIntervencoes.setAnimal(animal);
         animalIntervencoes.setIntervencoes(intervencoes);
         return ResponseEntity.accepted().body(animalIntervencoes);
     }
 
+    //ACABAR de testar
     @PutMapping("/cliente/animal/cancelar/{id_intervencao}")
     public ResponseEntity<?> cancelarIntervencao(@PathVariable int id_intervencao){
         Intervencao intervencao = intervencaoService.getIntervencao(id_intervencao);
@@ -112,24 +119,49 @@ public class ClienteController {
     public ResponseEntity<?> editarAnimal(@PathVariable int id_animal,@RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);
-        Cliente cliente = mapper.convertValue(node.get("cliente"),Cliente.class);
-        Animal animal = mapper.convertValue(node.get("animal"),Animal.class);
-        animal.setId(id_animal);
-        animalService.saveAnimal(animal);
-        clienteService.getClienteByEmail(cliente.getEmail()).setAnimal(animal);
-        if(animal==null || cliente==null){
+        String clienteEmail = node.get("cliente").get("email").asText();
+        Cliente cliente = clienteService.getClienteByEmail(clienteEmail);
+
+        List<Animal> animais = cliente.getAnimais();
+        Animal animal = animalService.getAnimalById(id_animal);
+        if(animal==null || !animais.contains(animal)){
+            return ResponseEntity.badRequest().body("Erro a obter animal!");
+        }
+        Animal animalNew = mapper.convertValue(node.get("animal"),Animal.class);
+
+        if(animalNew == null){
             return ResponseEntity.badRequest().body("Erro a editar animal, por favor verifique os campos!");
         }
+        animal.setNome(animalNew.getNome());
+        animal.setRaca(animalNew.getRaca());
+        animal.setDataNascimento(animalNew.getDataNascimento());
+        animal.setSexo(animalNew.getSexo());
+        animal.setEspecie(animalNew.getEspecie());
+        animal.setCor(animalNew.getCor());
+        animal.setCauda(animalNew.getCauda());
+        animal.setPelagem(animalNew.getPelagem());
+        animal.setAltura(animalNew.getAltura());
+        animal.setChip(animalNew.getChip());
+        animal.setCastracao(animalNew.isCastracao());
+
+        animalService.updateAnimal(animal);
+        cliente.setAnimal(animal);
+
         return ResponseEntity.accepted().body("Animal editado com sucesso");
     }
 
     @GetMapping("/cliente/animal/{id_animal}/vacinas")
-    public ResponseEntity<?> getVacinas(@PathVariable int id_animal){
-        List<Imunizacao> imunizacoes = new ArrayList<>();
-        imunizacoes = imunizacaoService.getImunizacoes(id_animal);
-        if(imunizacoes==null){
-            return ResponseEntity.badRequest().body("Animal não tem nenhuma imunização realizada ou pendente!");
+    public ResponseEntity<?> getVacinas(@PathVariable int id_animal, @RequestBody Cliente emailCliente){
+        Cliente cliente = clienteService.getClienteByEmail(emailCliente.getEmail());
+        List<Animal> animais = cliente.getAnimais();
+        Animal animal = animalService.getAnimalById(id_animal);
+
+        if(animal==null || !animais.contains(animal)){
+            return ResponseEntity.badRequest().body("Erro a obter animal!");
         }
+
+        List<Imunizacao> imunizacoes = imunizacaoService.getImunizacoes(id_animal);
+        //System.out.println(imunizacoes);
         return ResponseEntity.accepted().body(imunizacoes);
     }
 
@@ -137,21 +169,41 @@ public class ClienteController {
     public ResponseEntity<?> adicionarVacina(@PathVariable int id_animal,@RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);
-        Imunizacao imunizacao = mapper.convertValue(node.get("vacina"),Imunizacao.class);
-        Animal animal= new Animal();
-        animal=animalService.getAnimalById(id_animal);
-        imunizacao.setAnimal(animal);
-        int vet_id = mapper.convertValue(node.get("veterinario_id"),Integer.class);
-        Veterinario veterinario= new Veterinario();
-        veterinario = veterinarioService.getVetById(vet_id);
-        imunizacao.setVeterinario(veterinario);
-        imunizacao.setEstado("Pendente");
-        System.out.println("\n\nAQUI:"+imunizacao);
-        if(imunizacao==null || animal==null|| veterinario==null){
+        String clienteEmail = node.get("email").asText();
+        Cliente cliente = clienteService.getClienteByEmail(clienteEmail);
+
+        if(cliente ==null){
+            return ResponseEntity.badRequest().body("Erro a obter cliente!");
+        }
+
+        List<Animal> animais = cliente.getAnimais();
+        Animal animal = animalService.getAnimalById(id_animal);
+
+        if(animal==null || !animais.contains(animal)){
+            return ResponseEntity.badRequest().body("Erro a obter animal!");
+        }
+
+        Imunizacao imunizacao = mapper.convertValue(node.get("imunizacao"),Imunizacao.class);
+        System.out.println(imunizacao);
+
+        if(imunizacao==null){
             return ResponseEntity.badRequest().body("Erro no agendamento de Imunização!");
         }
+
+        imunizacao.setAnimal(animal);
+        String vetEmail = node.get("veterinario").asText();
+        Veterinario veterinario = veterinarioService.getVetByEmail(vetEmail);
+
+        if(veterinario==null){
+            return ResponseEntity.badRequest().body("Erro a obter Vet!");
+        }
+
+        imunizacao.setVeterinario(veterinario);
+        imunizacao.setEstado("Pendente");
+       // System.out.println("\n\nAQUI:"+imunizacao);
         imunizacaoService.saveImunizacao(imunizacao);
         return ResponseEntity.accepted().body("Imunização agendada!");
+
     }
 
    @PostMapping("/cliente/consulta")

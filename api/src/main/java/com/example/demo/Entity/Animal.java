@@ -39,7 +39,7 @@ public class Animal {
             name = "data_nascimento",
             nullable = false
     )
-    private Date dataNascimento;
+    private String dataNascimento;
 
     @Column(
             name = "sexo",

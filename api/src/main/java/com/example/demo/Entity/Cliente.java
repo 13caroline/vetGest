@@ -54,7 +54,6 @@ public class Cliente extends Utilizador implements Serializable{
     @OneToMany
     private List<Animal> animais;
 
-
     public void setAnimal(Animal animal){
         this.animais.add(animal);
     }

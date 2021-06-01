@@ -32,4 +32,8 @@ public class AnimalService {
     public Animal getAnimalByNome(String nome){
         return repository.findByNome(nome);
     }
+
+    public Animal updateAnimal(Animal animal){
+        return repository.save(animal);
+    }
 }
