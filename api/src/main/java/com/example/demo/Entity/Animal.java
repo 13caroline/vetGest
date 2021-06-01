@@ -85,6 +85,8 @@ public class Animal {
     )
     private boolean castracao;
 
+
+
    /*
     @OneToMany(cascade = {CascadeType.ALL})
     private List<Intervencao> intervencoes;

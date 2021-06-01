@@ -39,8 +39,7 @@ public class ClienteController {
 
     @GetMapping("/cliente")
     public ResponseEntity<?> findClienteByEmail(@RequestBody Cliente email){
-        Cliente cliente = new Cliente();
-        cliente= clienteService.getClienteByEmail(email.getEmail());
+        Cliente cliente = clienteService.getClienteByEmail(email.getEmail());
         if(cliente==null){
             return ResponseEntity.badRequest().body("Utilizador não existe!");
         }
@@ -64,10 +63,17 @@ public class ClienteController {
     public ResponseEntity<?> registarAnimal(@RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);
-        Cliente cliente = mapper.convertValue(node.get("cliente"),Cliente.class);
+        //System.out.println(node);
+        String cliente = node.get("cliente").get("email").asText();
+        //System.out.println(cliente);
         Animal animal = mapper.convertValue(node.get("animal"),Animal.class);
+        //System.out.println(animal);
         animalService.saveAnimal(animal);
-        clienteService.getClienteByEmail(cliente.getEmail()).setAnimal(animal);
+        Cliente c = clienteService.getClienteByEmail(cliente);
+        //System.out.println(c);
+        c.setAnimal(animal);
+        //System.out.println(c);
+        clienteService.updateCliente(c);
         if(animal==null || cliente==null){
             return ResponseEntity.badRequest().body("Erro a registar animal, por favor verifique os campos!");
         }
@@ -155,11 +161,9 @@ public class ClienteController {
        Intervencao intervencao = mapper.convertValue(node.get("intervencao"),Intervencao.class);
        int animal_id =mapper.convertValue(node.get("animal"),Integer.class);
        int vet_id = mapper.convertValue(node.get("veterinario"),Integer.class);
-       Animal animal= new Animal();
-       animal=animalService.getAnimalById(animal_id);
+       Animal animal = animalService.getAnimalById(animal_id);
        intervencao.setAnimal(animal);
-       Veterinario veterinario= new Veterinario();
-       veterinario = veterinarioService.getVetById(vet_id);
+       Veterinario veterinario = veterinarioService.getVetById(vet_id);
        intervencao.setVeterinario(veterinario);
        intervencao.setEstado("Pendente");
        intervencao.setTipo("Consulta");
@@ -214,8 +218,7 @@ public class ClienteController {
 
     @GetMapping("/cliente/preferencias")
     public ResponseEntity<?> getPreferencias(@RequestBody Cliente email){
-        Cliente cliente = new Cliente();
-        cliente= clienteService.getClienteByEmail(email.getEmail());
+        Cliente cliente = clienteService.getClienteByEmail(email.getEmail());
         if(cliente==null){
             return ResponseEntity.badRequest().body("Utilizador não existe!");
         }
