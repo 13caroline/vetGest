@@ -27,7 +27,7 @@ public class ClienteController {
     @Autowired
     private VeterinarioService veterinarioService;
 
-
+    //Check
     @PostMapping(path = "/cliente/registar")
     public ResponseEntity<String> addCliente(@RequestBody Cliente cliente){
         Cliente existingclient = clienteService.getClienteByEmail(cliente.getEmail());
@@ -38,7 +38,7 @@ public class ClienteController {
         return  ResponseEntity.accepted().body("Cliente Registado com sucesso");
     }
 
-    //ACABAR de testar
+    //ACABAR de testar se for para mandar as imunizaçoes tb
     @GetMapping("/cliente")
     public ResponseEntity<?> findClienteByEmail(@RequestBody Cliente email){
         Cliente cliente = clienteService.getClienteByEmail(email.getEmail());
@@ -61,6 +61,7 @@ public class ClienteController {
         return ResponseEntity.accepted().body(clienteIntervencoes);
     }
 
+    //Check
     @PostMapping("/cliente/animal/registar")
     public ResponseEntity<?> registarAnimal(@RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
@@ -82,8 +83,7 @@ public class ClienteController {
         return ResponseEntity.accepted().body("Animal registado com sucesso");
     }
 
-    //ACABAR de testar parte das intervençoes
-
+    //Check
     @GetMapping("/cliente/animal/{id_animal}")
     public ResponseEntity<?> getAnimal(@PathVariable int id_animal, @RequestBody Cliente emailCliente){
         Cliente cliente = clienteService.getClienteByEmail(emailCliente.getEmail());
@@ -103,18 +103,7 @@ public class ClienteController {
         return ResponseEntity.accepted().body(animalIntervencoes);
     }
 
-    //ACABAR de testar
-    @PutMapping("/cliente/animal/cancelar/{id_intervencao}")
-    public ResponseEntity<?> cancelarIntervencao(@PathVariable int id_intervencao){
-        Intervencao intervencao = intervencaoService.getIntervencao(id_intervencao);
-        if(intervencao==null){
-            return ResponseEntity.badRequest().body("Erro a cancelar intervenção!");
-        }
-        intervencao.setEstado("Cancelado");
-        intervencaoService.saveIntervencao(intervencao);
-        return ResponseEntity.accepted().body("Intervenção cancelada!");
-    }
-
+    //Check
     @PutMapping("/cliente/animal/{id_animal}")
     public ResponseEntity<?> editarAnimal(@PathVariable int id_animal,@RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
@@ -150,6 +139,7 @@ public class ClienteController {
         return ResponseEntity.accepted().body("Animal editado com sucesso");
     }
 
+    //Check
     @GetMapping("/cliente/animal/{id_animal}/vacinas")
     public ResponseEntity<?> getVacinas(@PathVariable int id_animal, @RequestBody Cliente emailCliente){
         Cliente cliente = clienteService.getClienteByEmail(emailCliente.getEmail());
@@ -165,6 +155,7 @@ public class ClienteController {
         return ResponseEntity.accepted().body(imunizacoes);
     }
 
+    //Check
     @PostMapping("/cliente/animal/{id_animal}/vacinas")
     public ResponseEntity<?> adicionarVacina(@PathVariable int id_animal,@RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
@@ -206,54 +197,95 @@ public class ClienteController {
 
     }
 
-   @PostMapping("/cliente/consulta")
+    //Check
+    @PostMapping("/cliente/consulta")
     public ResponseEntity<?> adicionarConsulta(@RequestBody String body) throws JsonProcessingException {
        ObjectMapper mapper = new ObjectMapper();
        JsonNode node = mapper.readTree(body);
        Intervencao intervencao = mapper.convertValue(node.get("intervencao"),Intervencao.class);
+       System.out.println(intervencao);
        int animal_id =mapper.convertValue(node.get("animal"),Integer.class);
-       int vet_id = mapper.convertValue(node.get("veterinario"),Integer.class);
        Animal animal = animalService.getAnimalById(animal_id);
+       String vetEmail = node.get("veterinario").asText();
+       Veterinario vet = veterinarioService.getVetByEmail(vetEmail);
+       String clienteEmail = node.get("cliente").asText();
+       Cliente cliente = clienteService.getClienteByEmail(clienteEmail);
+
+       if(intervencao==null || animal==null|| vet==null || cliente==null){
+           return ResponseEntity.badRequest().body("Erro no agendamento de Consulta! Alguma das entidades nao existe!");
+       }
+
+       List<Animal> animais = cliente.getAnimais();
+
+       if(!animais.contains(animal)){
+           return ResponseEntity.badRequest().body("Erro a obter animal!");
+       }
+
        intervencao.setAnimal(animal);
-       Veterinario veterinario = veterinarioService.getVetById(vet_id);
-       intervencao.setVeterinario(veterinario);
+       intervencao.setVeterinario(vet);
        intervencao.setEstado("Pendente");
        intervencao.setTipo("Consulta");
-       if(intervencao==null || animal==null|| veterinario==null){
-           return ResponseEntity.badRequest().body("Erro no agendamento de Consulta!");
-       }
+       //System.out.println("\n\nAQUI:"+intervencao);
        intervencaoService.saveIntervencao(intervencao);
        return ResponseEntity.accepted().body("Consulta agendada!");
     }
 
+    //Check
     @GetMapping("/cliente/consultas")
     public ResponseEntity<?> getConsultas(@RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);
-        Animal animal = new Animal();
-        animal.setId(mapper.convertValue(node.get("animal"),Integer.class));
-        System.out.println("\n\nAqui: "+animal);
+        int animal_id =mapper.convertValue(node.get("animal"),Integer.class);
+        Animal animal = animalService.getAnimalById(animal_id);
+        System.out.println(animal);
+        String clienteEmail = node.get("cliente").asText();
+        Cliente cliente = clienteService.getClienteByEmail(clienteEmail);
+
+        if(animal==null || cliente==null){
+            return ResponseEntity.badRequest().body("Erro! Alguma das entidades nao existe!");
+        }
+        List<Animal> animais = cliente.getAnimais();
+
+        if(!animais.contains(animal)){
+            return ResponseEntity.badRequest().body("Erro a obter animal!");
+        }
+
         List<Intervencao> consultas_temp = new ArrayList<>();
         List<Intervencao> consultas= new ArrayList<>();
         consultas_temp = intervencaoService.getIntervencoesAnimal(animal.getId());
+        System.out.println(consultas_temp);
         consultas_temp.forEach(intervencao -> {
             if(intervencao.getTipo().equals("Consulta")){
                 consultas.add(intervencao);
             }
         });
+        System.out.println(consultas);
         if(consultas.size()==0){
-            return ResponseEntity.badRequest().body("Não tem consultas agendadas!");
+            return ResponseEntity.accepted().body("Não tem consultas agendadas!");
         }
         return ResponseEntity.accepted().body(consultas);
     }
 
+    //Check
     @GetMapping("/cliente/cirurgias")
     public ResponseEntity<?> getCirurgias(@RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);
-        Animal animal = new Animal();
-        animal.setId(mapper.convertValue(node.get("animal"),Integer.class));
-        System.out.println("\n\nAqui: "+animal);
+        int animal_id =mapper.convertValue(node.get("animal"),Integer.class);
+        Animal animal = animalService.getAnimalById(animal_id);
+        System.out.println(animal);
+        String clienteEmail = node.get("cliente").asText();
+        Cliente cliente = clienteService.getClienteByEmail(clienteEmail);
+
+        if(animal==null || cliente==null){
+            return ResponseEntity.badRequest().body("Erro! Alguma das entidades nao existe!");
+        }
+        List<Animal> animais = cliente.getAnimais();
+
+        if(!animais.contains(animal)){
+            return ResponseEntity.badRequest().body("Erro a obter animal!");
+        }
+
         List<Intervencao> cirurgias_temp = new ArrayList<>();
         List<Intervencao> cirurgias= new ArrayList<>();
         cirurgias_temp = intervencaoService.getIntervencoesAnimal(animal.getId());
@@ -263,11 +295,43 @@ public class ClienteController {
             }
         });
         if(cirurgias.size()==0){
-            return ResponseEntity.badRequest().body("Não tem cirurgias agendadas!");
+            return ResponseEntity.accepted().body("Não tem cirurgias agendadas!");
         }
         return ResponseEntity.accepted().body(cirurgias);
     }
 
+    //Check
+    @PutMapping("/cliente/animal/cancelar/{id_intervencao}")
+    public ResponseEntity<?> cancelarIntervencao(@PathVariable int id_intervencao, @RequestBody String body) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+        String clienteEmail = node.get("email").asText();
+        int id_animal = node.get("animal").asInt();
+        Cliente cliente = clienteService.getClienteByEmail(clienteEmail);
+
+        if(cliente ==null) {
+            return ResponseEntity.badRequest().body("Erro a obter cliente!");
+        }
+        List<Animal> animais = cliente.getAnimais();
+        Animal animal = animalService.getAnimalById(id_animal);
+
+        if(animal==null || !animais.contains(animal)){
+            return ResponseEntity.badRequest().body("Erro a obter animal!");
+        }
+
+        List<Intervencao> consultas = intervencaoService.getIntervencoesAnimal(id_animal);
+        Intervencao intervencao = intervencaoService.getIntervencao(id_intervencao);
+        //System.out.println(intervencao);
+        if(intervencao==null || !consultas.contains(intervencao) || intervencao.getEstado().equals("Cancelado")){
+            return ResponseEntity.badRequest().body("Erro a cancelar intervenção!");
+        }
+        intervencao.setEstado("Cancelado");
+        intervencaoService.saveIntervencao(intervencao);
+        //System.out.println(intervencao);
+        return ResponseEntity.accepted().body("Intervenção cancelada!");
+    }
+
+    //Check
     @GetMapping("/cliente/preferencias")
     public ResponseEntity<?> getPreferencias(@RequestBody Cliente email){
         Cliente cliente = clienteService.getClienteByEmail(email.getEmail());
@@ -277,9 +341,13 @@ public class ClienteController {
         return ResponseEntity.accepted().body(cliente);
     }
 
+    //Check
     @PostMapping("/cliente/preferencias")
     public ResponseEntity<?> editarPreferencias(@RequestBody Cliente _cliente){
         Cliente cliente = clienteService.getClienteByEmail(_cliente.getEmail());
+        if(cliente==null){
+            return ResponseEntity.badRequest().body("Utilizador não existe!");
+        }
         cliente.setNome(_cliente.getNome());
         cliente.setMorada(_cliente.getMorada());
         cliente.setConcelho(_cliente.getConcelho());
