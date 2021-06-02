@@ -69,7 +69,7 @@ public class ClienteController {
         if(cliente==null){
             return ResponseEntity.badRequest().body("Utilizador não existe!");
         }
-        return ResponseEntity.accepted().body(cliente.getAnimais());
+        return ResponseEntity.accepted().body(cliente);
     }
 
     //Check
