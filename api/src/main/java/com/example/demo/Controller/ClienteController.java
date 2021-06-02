@@ -69,7 +69,7 @@ public class ClienteController {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);
         //System.out.println(node);
-        String cliente = node.get("email").asText();
+        String cliente = node.get("cliente").get("email").asText();
         //System.out.println(cliente);
         Animal animal = mapper.convertValue(node.get("animal"),Animal.class);
         //System.out.println(animal);
