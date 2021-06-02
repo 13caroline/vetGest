@@ -8,6 +8,7 @@ import com.example.demo.Security.JwtUtil;
 import com.example.demo.Security.MyUserDetailsService;
 import com.example.demo.Service.UtilizadorService;
 import io.jsonwebtoken.Jwts;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -71,8 +72,10 @@ public class UtilizadorController {
                         .loadUserByUsername(authenticationRequest.getUsername());
 
                 final String jwt = jwtTokenUtil.generateToken(userDetails);
-
-                return ResponseEntity.accepted().body(new AuthenticationResponse(jwt));
+                JSONObject jo = new JSONObject();
+                jo.put("dtype", user.getClass().getSimpleName());
+                jo.put("jwt", jwt);
+                return ResponseEntity.accepted().body(jo.toString());
             }
         }
         catch (BadCredentialsException e) {
