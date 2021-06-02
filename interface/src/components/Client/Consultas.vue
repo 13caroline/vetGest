@@ -287,6 +287,13 @@ export default {
 		*/
 	}
   },
+ /* getConsultas: async function(){
+    try{
+      var resposta = await axios.get("http://localhost:7777/client/consultas"),{
+
+      }
+    }
+  }*/
 };
 </script>
 
