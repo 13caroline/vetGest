@@ -40,7 +40,7 @@ public class ClienteController {
 
     //ACABAR de testar se for para mandar as imunizaçoes tb
     @CrossOrigin
-    @GetMapping("/cliente")
+    @PostMapping("/cliente")
     public ResponseEntity<?> findClienteByEmail(@RequestBody Cliente email){
         Cliente cliente = clienteService.getClienteByEmail(email.getEmail());
         if(cliente==null){
@@ -87,7 +87,7 @@ public class ClienteController {
 
     //Check
     @CrossOrigin
-    @GetMapping("/cliente/animal/{id_animal}")
+    @PostMapping("/cliente/animal/{id_animal}")
     public ResponseEntity<?> getAnimal(@PathVariable int id_animal, @RequestBody Cliente emailCliente){
         Cliente cliente = clienteService.getClienteByEmail(emailCliente.getEmail());
         List<Animal> animais = cliente.getAnimais();
@@ -146,7 +146,7 @@ public class ClienteController {
 
     //Check
     @CrossOrigin
-    @GetMapping("/cliente/animal/{id_animal}/vacinas")
+    @PostMapping("/cliente/animal/{id_animal}/getvacinas")
     public ResponseEntity<?> getVacinas(@PathVariable int id_animal, @RequestBody Cliente emailCliente){
         Cliente cliente = clienteService.getClienteByEmail(emailCliente.getEmail());
         List<Animal> animais = cliente.getAnimais();
@@ -240,7 +240,7 @@ public class ClienteController {
 
     //Check
     @CrossOrigin
-    @GetMapping("/cliente/consultas")
+    @PostMapping("/cliente/consultas")
     public ResponseEntity<?> getConsultas(@RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);
@@ -267,7 +267,7 @@ public class ClienteController {
 
     //Check
     @CrossOrigin
-    @GetMapping("/cliente/cirurgias")
+    @PostMapping("/cliente/cirurgias")
     public ResponseEntity<?> getCirurgias(@RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);
@@ -326,7 +326,7 @@ public class ClienteController {
 
     //Check
     @CrossOrigin
-    @GetMapping("/cliente/preferencias")
+    @PostMapping("/cliente/getpreferencias")
     public ResponseEntity<?> getPreferencias(@RequestBody Cliente email){
         Cliente cliente = clienteService.getClienteByEmail(email.getEmail());
         if(cliente==null){
