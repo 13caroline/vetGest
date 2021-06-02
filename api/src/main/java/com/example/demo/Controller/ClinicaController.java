@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "https://localhost:7777")
 public class ClinicaController {
     @Autowired
     private ClinicaService clinicaService;
@@ -25,6 +24,7 @@ public class ClinicaController {
     @Autowired
     private VeterinarioService veterinarioService;
 
+    @CrossOrigin
     @PostMapping(path = "/clinica/adicionarClinica")
     public ResponseEntity<?> addClinica(@RequestBody Clinica clinica){
         Clinica existingClinica = clinicaService.getClinicaByEmail(clinica.getEmail());
@@ -35,6 +35,7 @@ public class ClinicaController {
         return  ResponseEntity.accepted().body("Utilizador Clínica Registado com sucesso");
     }
 
+    @CrossOrigin
     @GetMapping("/clinica/consultas")
     public ResponseEntity<?> getConsultas(){
         List<Intervencao> intervencoes = intervencaoService.getAllConsultas();
@@ -44,6 +45,7 @@ public class ClinicaController {
         return  ResponseEntity.accepted().body(intervencoes);
     }
 
+    @CrossOrigin
     @GetMapping("/clinica/clientes")
     public ResponseEntity<?> getUtentes(){
         List<Cliente> clientes = clienteService.getClientes();
@@ -53,6 +55,7 @@ public class ClinicaController {
         return  ResponseEntity.accepted().body(clientes);
     }
 
+    @CrossOrigin
     @PostMapping("/clinica/utentes/registar")
     public ResponseEntity<?> registarAnimal(@RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
@@ -67,6 +70,7 @@ public class ClinicaController {
         return ResponseEntity.accepted().body("Animal registado com sucesso");
     }
 
+    @CrossOrigin
     @PostMapping(path = "/clinica/clientes/registar")
     public ResponseEntity<String> addCliente(@RequestBody Cliente cliente){
         Cliente existingclient = clienteService.getClienteByEmail(cliente.getEmail());
@@ -77,6 +81,7 @@ public class ClinicaController {
         return  ResponseEntity.accepted().body("Cliente Registado com sucesso");
     }
 
+    @CrossOrigin
     @GetMapping("/clinica/medicos")
     public ResponseEntity<?> getMedicos(){
         List<Veterinario> veterinarios = veterinarioService.getAllVeterinarios();
@@ -86,6 +91,7 @@ public class ClinicaController {
         return  ResponseEntity.accepted().body(veterinarios);
     }
 
+    @CrossOrigin
     @PostMapping(path = "/clinica/medicos/registar")
     public ResponseEntity<String> addVeterinario(@RequestBody Veterinario veterinario){
         Veterinario existingVeterinario = veterinarioService.getVetByEmail(veterinario.getEmail());

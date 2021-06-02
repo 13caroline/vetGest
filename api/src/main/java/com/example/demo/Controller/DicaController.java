@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(origins = "https://localhost:7777")
 public class
 DicaController {
 
@@ -17,6 +16,7 @@ DicaController {
     @Autowired
     private VeterinarioService veterinarioService;
 
+    @CrossOrigin
     @PostMapping("/addDica/{emailVet}")
     public Dica addDica(@PathVariable String emailVet, @RequestBody Dica dica){
         Veterinario vet = veterinarioService.getVetByEmail(emailVet);

@@ -19,7 +19,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(origins = "https://localhost:7777")
 public class UtilizadorController {
     @Autowired
     UtilizadorRepository utilizadorRepository;
@@ -40,22 +39,26 @@ public class UtilizadorController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @CrossOrigin
     @PostMapping(path = "/addUtilizador")
     public Utilizador addUtilizador(@RequestBody Utilizador utilizador){
         return service.saveUtilizador(utilizador);
     }
 
+    @CrossOrigin
     @GetMapping("/utilizador/{email}")
     public Utilizador findAnimalByEmail(@PathVariable String email){
         return service.getUtilizadorByEmail(email);
     }
 
+    @CrossOrigin
     @GetMapping("/")
     public String welcome(){
 
         return "Welcome to VetGest!!";
     }
 
+    @CrossOrigin
     @RequestMapping(path = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
         try {

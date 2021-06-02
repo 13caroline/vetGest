@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@CrossOrigin(origins = "https://localhost:7777",maxAge = 3600)
 @RestController
 public class ClienteController {
     @Autowired
@@ -28,6 +27,7 @@ public class ClienteController {
     private VeterinarioService veterinarioService;
 
     //Check
+    @CrossOrigin
     @PostMapping(path = "/cliente/registar")
     public ResponseEntity<String> addCliente(@RequestBody Cliente cliente){
         Cliente existingclient = clienteService.getClienteByEmail(cliente.getEmail());
@@ -39,6 +39,7 @@ public class ClienteController {
     }
 
     //ACABAR de testar se for para mandar as imunizaçoes tb
+    @CrossOrigin
     @GetMapping("/cliente")
     public ResponseEntity<?> findClienteByEmail(@RequestBody Cliente email){
         Cliente cliente = clienteService.getClienteByEmail(email.getEmail());
@@ -62,6 +63,7 @@ public class ClienteController {
     }
 
     //Check
+    @CrossOrigin
     @PostMapping("/cliente/animal/registar")
     public ResponseEntity<?> registarAnimal(@RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
@@ -84,6 +86,7 @@ public class ClienteController {
     }
 
     //Check
+    @CrossOrigin
     @GetMapping("/cliente/animal/{id_animal}")
     public ResponseEntity<?> getAnimal(@PathVariable int id_animal, @RequestBody Cliente emailCliente){
         Cliente cliente = clienteService.getClienteByEmail(emailCliente.getEmail());
@@ -104,6 +107,7 @@ public class ClienteController {
     }
 
     //Check
+    @CrossOrigin
     @PutMapping("/cliente/animal/{id_animal}")
     public ResponseEntity<?> editarAnimal(@PathVariable int id_animal,@RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
@@ -140,6 +144,7 @@ public class ClienteController {
     }
 
     //Check
+    @CrossOrigin
     @GetMapping("/cliente/animal/{id_animal}/vacinas")
     public ResponseEntity<?> getVacinas(@PathVariable int id_animal, @RequestBody Cliente emailCliente){
         Cliente cliente = clienteService.getClienteByEmail(emailCliente.getEmail());
@@ -156,6 +161,7 @@ public class ClienteController {
     }
 
     //Check
+    @CrossOrigin
     @PostMapping("/cliente/animal/{id_animal}/vacinas")
     public ResponseEntity<?> adicionarVacina(@PathVariable int id_animal,@RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
@@ -198,6 +204,7 @@ public class ClienteController {
     }
 
     //Check
+    @CrossOrigin
     @PostMapping("/cliente/consulta")
     public ResponseEntity<?> adicionarConsulta(@RequestBody String body) throws JsonProcessingException {
        ObjectMapper mapper = new ObjectMapper();
@@ -231,6 +238,7 @@ public class ClienteController {
     }
 
     //Check
+    @CrossOrigin
     @GetMapping("/cliente/consultas")
     public ResponseEntity<?> getConsultas(@RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
@@ -267,6 +275,7 @@ public class ClienteController {
     }
 
     //Check
+    @CrossOrigin
     @GetMapping("/cliente/cirurgias")
     public ResponseEntity<?> getCirurgias(@RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
@@ -301,6 +310,7 @@ public class ClienteController {
     }
 
     //Check
+    @CrossOrigin
     @PutMapping("/cliente/animal/cancelar/{id_intervencao}")
     public ResponseEntity<?> cancelarIntervencao(@PathVariable int id_intervencao, @RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
@@ -332,6 +342,7 @@ public class ClienteController {
     }
 
     //Check
+    @CrossOrigin
     @GetMapping("/cliente/preferencias")
     public ResponseEntity<?> getPreferencias(@RequestBody Cliente email){
         Cliente cliente = clienteService.getClienteByEmail(email.getEmail());
@@ -342,6 +353,7 @@ public class ClienteController {
     }
 
     //Check
+    @CrossOrigin
     @PostMapping("/cliente/preferencias")
     public ResponseEntity<?> editarPreferencias(@RequestBody Cliente _cliente){
         Cliente cliente = clienteService.getClienteByEmail(_cliente.getEmail());

@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "https://localhost:7777")
 public class HomeController {
     @Autowired
     private VeterinarioService veterinarioService;
     @Autowired
     private DicaService dicaService;
 
+    @CrossOrigin
     @GetMapping("/sobre-nos")
     public ResponseEntity<?> getInfo(){
         List<Veterinario> veterinario = veterinarioService.getAllVeterinarios();
@@ -29,6 +29,7 @@ public class HomeController {
         return  ResponseEntity.accepted().body(veterinario);
     }
 
+    @CrossOrigin
     @GetMapping("/dicas")
     public ResponseEntity<?> getDicas(){
         List<Dica> dicas = dicaService.getAllDicas();
