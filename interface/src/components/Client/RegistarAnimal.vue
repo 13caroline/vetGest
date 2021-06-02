@@ -67,6 +67,7 @@
                       dense
                       label="Por favor selecione"
                       v-model="raca"
+                      :items="itemsraca"
                     >
                     </v-select>
                   </div>
@@ -215,7 +216,7 @@
                   small
                   dark
                   class="ml-3"
-                  @click="registarAnimal()"
+                  @click="registaAnimal()"
                   >Registar</v-btn
                 >
               </v-row>
@@ -271,7 +272,7 @@
 
 <script>
 //import moment from 'moment';
-//import axios from "axios";
+import axios from "axios";
 export default {
   data: () => ({
     dialog: false,
@@ -298,6 +299,9 @@ export default {
       "Encaracolada",
       "Cerdosa",
     ],
+    itemsraca: [
+      "podengo"
+    ],
     itemscauda: ["Comprida", "Curta", "Amputada"],
     itemsespecie: [
       "Bovino",
@@ -310,11 +314,11 @@ export default {
     nome: "",
     chip: "",
     especie: "",
-    raca: "",
     altura: "",
     data: null,
     sexo: "",
     cor: "",
+    raca: "",
     pelagem: "",
     cauda: "",
     observacoes: "",
@@ -324,13 +328,13 @@ export default {
     done: false,
     timeout: -1,
     text: "",
+    
   }),
   methods: {
     registaAnimal: async function () {
-      /*
       if (this.$refs.form.validate()) {
         try {
-          var resposta = await axios.post("http://localhost:7777/registaAnimal", {
+          var resposta = await axios.post("http://localhost:7777/cliente/animal/registar", {
             nome: this.nome,
             chip: this.chip,
             especie: this.especie,
@@ -341,7 +345,13 @@ export default {
             cor: this.cor,
             pelagem: this.pelagem, 
             cauda: this.cauda, 
-            observacoes: this.observacoes
+            observacoes: this.observacoes,
+            castracao:1
+          },
+          {
+          headers: {
+            token: `${this.$store.state.jwt}`
+          }
           });
           console.log(JSON.stringify(resposta.data));
           this.text = "Animal registado com sucesso.";
@@ -359,7 +369,6 @@ export default {
         this.snackbar = true;
         this.done = false;
       }
-      */
     },
   },
 };

@@ -108,10 +108,12 @@ export default {
           })
           if(res.data.jwt != undefined){
             this.$store.commit("guardaTokenUtilizador",res.data.jwt);
+            //if(res.data.tipo==)
+            this.$router.push("/cliente/inicio")
           }
         }
-        catch{
-          console.log("catchy")
+        catch(e){
+          console.log(e)
         }
       }
     }
