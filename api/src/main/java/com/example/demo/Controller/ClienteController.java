@@ -13,9 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
+@CrossOrigin(origins = "https://localhost:7777",maxAge = 3600)
 @RestController
-@CrossOrigin(origins = "https://localhost:7777")
 public class ClienteController {
     @Autowired
     private ClienteService clienteService;
