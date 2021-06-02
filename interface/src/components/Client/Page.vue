@@ -63,7 +63,7 @@
                         v-on="on"
                         small
                         id="no-background-hover"
-                        to="/cliente/animal"
+                        @click="toAnimal(a.id)"
                       >
                         {{ a.nome }}
                       </v-btn>
@@ -201,6 +201,9 @@ export default {
       if (estado == "Agendada") return "#C5E1A5";
       else return "#FFE082";
     },
+    toAnimal(id){
+      this.$router.push("/cliente/animal/"+id)
+    }
   },
   created: async function() {
     let response = await axios.post("http://localhost:7777/cliente", {
@@ -211,10 +214,20 @@ export default {
             "Authorization": 'Bearer ' +store.getters.token.toString()
        }   
        
+       })
+         let response2 = await axios.post("http://localhost:7777/cliente/intervencoes", {
+      cliente: this.$store.state.email,
+    },
+    {
+      headers: {
+            "Authorization": 'Bearer ' +store.getters.token.toString()
+       }   
+       
        });
        console.log(response.data)
+        console.log(response2.data)
     this.animals=response.data.cliente.animais;
-    this.consultas=response.data.cliente.intervencoes;
+    //this.consultas=response.data.cliente.intervencoes;
        
 /*
     let response2 = await axios.post("http://localhost:7777/cliente/getConsultas", {

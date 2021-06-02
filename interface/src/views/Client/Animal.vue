@@ -1,7 +1,7 @@
 <template>
   <div id="page">
     <Header />
-    <Animal />
+    <Animal :id="$route.params.id"/>
     <Footer />
   </div>
 </template>

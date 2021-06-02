@@ -10,7 +10,7 @@
                     Nome
                   </div>
                   <div class="font-weight-regular mx-2 mb-2">
-                    {{ cao.nome }}
+                    {{ animal.nome }}
                   </div>
                 </div>
 
@@ -19,7 +19,7 @@
                     Sexo
                   </div>
                   <div class="font-weight-regular mx-2 mb-2">
-                    {{ cao.sexo }}
+                    {{ animal.sexo }}
                   </div>
                 </div>
 
@@ -28,7 +28,7 @@
                     Chip
                   </div>
                   <div class="font-weight-regular mx-2 mb-2">
-                    {{ cao.chip }}
+                    {{ animal.chip }}
                   </div>
                 </div>
               </v-col>
@@ -39,7 +39,7 @@
                     Espécie
                   </div>
                   <div class="font-weight-regular mx-2 mb-2">
-                    {{ cao.especie }}
+                    {{ animal.especie }}
                   </div>
                 </div>
 
@@ -48,7 +48,7 @@
                     Raça
                   </div>
                   <div class="font-weight-regular mx-2 mb-2">
-                    {{ cao.raca }}
+                    {{ animal.raca }}
                   </div>
                 </div>
 
@@ -57,7 +57,7 @@
                     Data de Nascimento
                   </div>
                   <div class="font-weight-regular mx-2 mb-2">
-                    {{ cao.data }}
+                    {{ animal.dataNascimento }}
                   </div>
                 </div>
               </v-col>
@@ -65,19 +65,13 @@
               <v-col>
                 <div>
                   <div class="font-weight-bold mx-2 mt-2" color="grey">
-                    Dono
-                  </div>
-                  <div class="font-weight-regular mx-2 mb-2">
-                    {{ cao.dono }}
-                  </div>
-                </div>
-
-                <div>
-                  <div class="font-weight-bold mx-2 mt-2" color="grey">
                     Esterilizado
                   </div>
-                  <div class="font-weight-regular mx-2 mb-2">
-                    {{ cao.castracao }}
+                  <div v-if="animal.castracao == true" class="font-weight-regular mx-2 mb-2">
+                    Sim
+                  </div>
+                  <div v-else class="font-weight-regular mx-2 mb-2">
+                    Não
                   </div>
                 </div>
               </v-col>
@@ -121,7 +115,7 @@
                     Altura
                   </div>
                   <div class="font-weight-regular mx-2 mb-2">
-                    {{ cao.altura }} (cm)
+                    {{ animal.altura }} (cm)
                   </div>
                 </div>
               </v-col>
@@ -132,7 +126,7 @@
                     Pelagem
                   </div>
                   <div class="font-weight-regular mx-2 mb-2">
-                    {{ cao.pelagem }}
+                    {{ animal.pelagem }}
                   </div>
                 </div>
               </v-col>
@@ -141,7 +135,7 @@
                 <div>
                   <div class="font-weight-bold mx-2 mt-2" color="grey">Cor</div>
                   <div class="font-weight-regular mx-2 mb-2">
-                    {{ cao.cor }}
+                    {{ animal.cor }}
                   </div>
                 </div>
               </v-col>
@@ -152,7 +146,7 @@
                     Cauda
                   </div>
                   <div class="font-weight-regular mx-2 mb-2">
-                    {{ cao.cauda }}
+                    {{ animal.cauda }}
                   </div>
                 </div>
               </v-col>
@@ -163,30 +157,8 @@
 
 <script>
 export default {
-  data: () => ({
-    cao: {
-      nome: "Rubi",
-      especie: "Canídeo",
-      raca: "Serra da Estrela",
-      sexo: "Macho",
-      cor: "Castanho",
-      data: "02/01/2014",
-      altura: 70,
-      pelagem: "Média, Lisa",
-      cauda: "Comprida",
-      chip: "AC14ASC7984",
-      castracao: "Sim",
-      dono: "Carolina Cunha",
-    },
-  }),
-  created() {
-    /*
-    let response = await axios.post("http://localhost:7777/clinica/getUtentes", {
-      email: this.$store.state.user.email,
-    });
-
-    */
-  },
+  props:["animal"],
+  data: () => ({}),
 };
 </script>
 
