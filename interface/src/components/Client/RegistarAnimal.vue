@@ -273,6 +273,7 @@
 <script>
 //import moment from 'moment';
 import axios from "axios";
+import store from "@/store.js"
 export default {
   data: () => ({
     dialog: false,
@@ -334,23 +335,29 @@ export default {
     registaAnimal: async function () {
       if (this.$refs.form.validate()) {
         try {
+          console.log(store.getters.token)
           var resposta = await axios.post("http://localhost:7777/cliente/animal/registar", {
+            "cliente":{
+                 email: this.$store.email,
+            },
+            "animal":{
             nome: this.nome,
+            raca: this.raca,
             chip: this.chip,
             especie: this.especie,
-            raca: this.raca,
             altura: this.altura,
-            data: this.data,
+            dataNascimento: this.data,
             sexo: this.sexo,
             cor: this.cor,
             pelagem: this.pelagem, 
             cauda: this.cauda, 
-            observacoes: this.observacoes,
-            castracao:1
+            castracao:1,
+            observacoes: this.observacoes
+            },
           },
           {
           headers: {
-            token: `${this.$store.state.jwt}`
+            "Authorization": 'Bearer ' +`store.getters.token`
           }
           });
           console.log(JSON.stringify(resposta.data));

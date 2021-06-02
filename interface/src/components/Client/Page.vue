@@ -151,6 +151,7 @@
 </template>
 
 <script>
+//import axios from "axios";
 export default {
   data() {
     return {
@@ -216,11 +217,18 @@ export default {
     },
   },
   created() {
-    /*
-    let response = await axios.post("http://localhost:7777/cliente/getAnimais", {
-      email: this.$store.state.user.email,
-    });
+    
+    /*let response = await axios.get("http://localhost:7777/cliente", {
+      email: this.$store.state.email,
+    },
+    {
+      headers: {
+            "Authorization": 'Bearer ' +`${this.$store.state.jwt}`
+       }   });
 
+       console.log(response)
+       */
+/*
     let response2 = await axios.post("http://localhost:7777/cliente/getConsultas", {
       email: this.$store.state.user.email,
     });

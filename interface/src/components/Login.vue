@@ -106,10 +106,15 @@ export default {
             username: this.email,
             password: this.password
           })
+          console.log(res)
           if(res.data.jwt != undefined){
             this.$store.commit("guardaTokenUtilizador",res.data.jwt);
-            //if(res.data.tipo==)
+            this.$store.commit("guardaTipoUtilizador",res.data.dtype)
+            this.$store.commit("guardaEmailUtilizador",this.email)
+            if(res.data.dtype=="Cliente"){
             this.$router.push("/cliente/inicio")
+            }
+            
           }
         }
         catch(e){
