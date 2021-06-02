@@ -243,31 +243,21 @@ public class ClienteController {
     public ResponseEntity<?> getConsultas(@RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);
-        int animal_id =mapper.convertValue(node.get("animal"),Integer.class);
-        Animal animal = animalService.getAnimalById(animal_id);
-        System.out.println(animal);
         String clienteEmail = node.get("cliente").asText();
         Cliente cliente = clienteService.getClienteByEmail(clienteEmail);
 
-        if(animal==null || cliente==null){
-            return ResponseEntity.badRequest().body("Erro! Alguma das entidades nao existe!");
-        }
         List<Animal> animais = cliente.getAnimais();
-
-        if(!animais.contains(animal)){
-            return ResponseEntity.badRequest().body("Erro a obter animal!");
-        }
-
-        List<Intervencao> consultas_temp = new ArrayList<>();
         List<Intervencao> consultas= new ArrayList<>();
-        consultas_temp = intervencaoService.getIntervencoesAnimal(animal.getId());
-        System.out.println(consultas_temp);
-        consultas_temp.forEach(intervencao -> {
-            if(intervencao.getTipo().equals("Consulta")){
-                consultas.add(intervencao);
-            }
+        animais.forEach(animal -> {
+            List<Intervencao> consultas_temp = new ArrayList<>();
+            consultas_temp = intervencaoService.getIntervencoesAnimal(animal.getId());
+            //System.out.println(consultas_temp);
+            consultas_temp.forEach(intervencao -> {
+                if(intervencao.getTipo().equals("Consulta")){
+                    consultas.add(intervencao);
+                }
+            });
         });
-        System.out.println(consultas);
         if(consultas.size()==0){
             return ResponseEntity.accepted().body("Não tem consultas agendadas!");
         }
@@ -280,28 +270,20 @@ public class ClienteController {
     public ResponseEntity<?> getCirurgias(@RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);
-        int animal_id =mapper.convertValue(node.get("animal"),Integer.class);
-        Animal animal = animalService.getAnimalById(animal_id);
-        System.out.println(animal);
         String clienteEmail = node.get("cliente").asText();
         Cliente cliente = clienteService.getClienteByEmail(clienteEmail);
 
-        if(animal==null || cliente==null){
-            return ResponseEntity.badRequest().body("Erro! Alguma das entidades nao existe!");
-        }
         List<Animal> animais = cliente.getAnimais();
-
-        if(!animais.contains(animal)){
-            return ResponseEntity.badRequest().body("Erro a obter animal!");
-        }
-
-        List<Intervencao> cirurgias_temp = new ArrayList<>();
         List<Intervencao> cirurgias= new ArrayList<>();
-        cirurgias_temp = intervencaoService.getIntervencoesAnimal(animal.getId());
-        cirurgias_temp.forEach(intervencao -> {
-            if(intervencao.getTipo().equals("Cirurgia")){
-                cirurgias.add(intervencao);
-            }
+        animais.forEach(animal -> {
+            List<Intervencao> cirurgias_temp = new ArrayList<>();
+            cirurgias_temp = intervencaoService.getIntervencoesAnimal(animal.getId());
+            ///System.out.println(cirurgias_temp);
+            cirurgias_temp.forEach(intervencao -> {
+                if(intervencao.getTipo().equals("Cirurgia")){
+                    cirurgias.add(intervencao);
+                }
+            });
         });
         if(cirurgias.size()==0){
             return ResponseEntity.accepted().body("Não tem cirurgias agendadas!");
