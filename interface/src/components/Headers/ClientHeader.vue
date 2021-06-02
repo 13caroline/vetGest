@@ -66,6 +66,12 @@
           </template>
 
           <v-list dense color="#FFFFFF">
+            <v-list-item @click="home()">
+              <v-list-item-title class="caption">
+                <v-icon x-small class="mt-n1 mr-1">fas fa-home</v-icon>
+                Página Inicial
+              </v-list-item-title>
+            </v-list-item>
             <v-list-item @click="preferences()">
               <v-list-item-title class="caption">
                 <v-icon x-small class="mt-n1 mr-1">fas fa-user-cog</v-icon>
