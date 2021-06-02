@@ -90,7 +90,6 @@ public class UtilizadorController {
         if(jwTokenController.removeToken(jwt)){
             return ResponseEntity.accepted().body("Sessão terminada com sucesso!");
         }
-
         return ResponseEntity.badRequest().body("Erro a terminar sessão!");
     }
 }

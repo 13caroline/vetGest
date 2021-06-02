@@ -31,7 +31,7 @@ public class JWTokenService {
     }
 
     public boolean removeToken(String token) {
-        jwTokenRepository.deleteByToken(token);
+        jwTokenRepository.delete(jwTokenRepository.findByToken(token));
         return true;
     }
 
