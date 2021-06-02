@@ -62,6 +62,16 @@ public class ClienteController {
         return ResponseEntity.accepted().body(clienteIntervencoes);
     }
 
+    @CrossOrigin
+    @PostMapping("/cliente/animais")
+    public ResponseEntity<?> getClienteAnimais(@RequestBody Cliente email){
+        Cliente cliente = clienteService.getClienteByEmail(email.getEmail());
+        if(cliente==null){
+            return ResponseEntity.badRequest().body("Utilizador não existe!");
+        }
+        return ResponseEntity.accepted().body(cliente);
+    }
+
     //Check
     @CrossOrigin
     @PostMapping("/cliente/animal/registar")
@@ -105,6 +115,7 @@ public class ClienteController {
         animalIntervencoes.setIntervencoes(intervencoes);
         return ResponseEntity.accepted().body(animalIntervencoes);
     }
+
 
     //Check
     @CrossOrigin
