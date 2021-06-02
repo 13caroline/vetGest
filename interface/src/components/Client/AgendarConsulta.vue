@@ -387,6 +387,8 @@
 </template>
 
 <script>
+import axios from "axios";
+import store from "@/store.js";
 //import moment from 'moment';
 export default {
 	data: () => ({
@@ -394,9 +396,10 @@ export default {
 		dialog: false,
 		dataMarcacao: null,
 		horaMarcacao: null,
+		selectedItem: "",
 		date: new Date().toISOString().substr(0, 10),
 		hora: new Date().getHours() + ":" + new Date().getMinutes(),
-		animais: ["Rubi", "Puscas", "Nikita", "Rudi"],
+		animais: [],
 		medico: ["Sem Preferência", "Drº José Vieira", "Drª Joana Ferreira"],
 		medicoVet: "Sem Preferência",
 		items: [
@@ -420,7 +423,29 @@ export default {
 			{ text: "Outros" },
 		],
 	}),
-};
+	created: async function(){
+
+			try{
+				let response = await axios.post("http://localhost:7777/cliente/animais", {
+					email: this.$store.state.email,
+				},
+				{
+					headers: {
+						"Authorization": 'Bearer ' +store.getters.token.toString()
+					}   
+				})
+				let lista = response.data.animais
+				for(var i=0;i<lista.length;i++){
+					this.animais.push(lista[i].nome)
+				}
+			}
+			catch(e){
+				console.log(e);
+			}
+
+		},
+	}	
+
 </script>
 
 <style scoped>

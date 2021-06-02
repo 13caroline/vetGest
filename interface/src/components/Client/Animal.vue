@@ -3,7 +3,7 @@
     <v-container>
       <v-row justify="space-around" class="mt-2">
         <v-col cols="auto">
-          <span class="subtitle-1 head">Rubi</span>
+          <span class="subtitle-1 head">{{animal.nome}}</span>
         </v-col>
         <v-col cols="auto" class="ml-auto">
           <v-btn icon depressed to="/cliente/animal/editar">
@@ -21,7 +21,7 @@
 
       <v-tabs-items v-model="tab">
         <v-tab-item>
-          <Dados></Dados>
+          <Dados :animal="animal"></Dados>
         </v-tab-item>
 
         <v-tab-item>
@@ -45,8 +45,12 @@ import PacienteVacinas from "@/components/Client/Animal/Vacinas.vue"
 import Consultas from "@/components/Client/Animal/Consultas.vue"
 import Cirurgia from "@/components/Client/Animal/Cirurgias.vue"
 import Dados from "@/components/Client/Animal/Dados.vue"
+import axios from "axios"
+import store from "@/store.js"
+
 
 export default {
+  props:["id"],
   data: () => ({
     tab: null,    
     items: [
@@ -56,6 +60,7 @@ export default {
       { tab: "Cirurgias" },
       { tab: "Histórico Clínico" },
     ],
+    animal:{}
   }),
   methods: {
     estadopedido(estado) {
@@ -72,13 +77,20 @@ export default {
     Cirurgia,
     Dados
   },
-  created() {
-    /*
-    let response = await axios.post("http://localhost:7777/", {
-      email: this.$store.state.user.email,
-    });
+  created: async function() {
+    
+    let response = await axios.post("http://localhost:7777/cliente/animal/"+this.id, {
+      email: this.$store.state.email,
+    },
+     {
+      headers: {
+            "Authorization": 'Bearer ' +store.getters.token.toString()
+       }   
+       
+       });
+    console.log(response)
+    this.animal=response.data.animal;
 
-    */
   },
 };
 </script>

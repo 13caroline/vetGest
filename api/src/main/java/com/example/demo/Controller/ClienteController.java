@@ -302,6 +302,31 @@ public class ClienteController {
         return ResponseEntity.accepted().body(cirurgias);
     }
 
+    @CrossOrigin
+    @PostMapping("/cliente/intervencoes")
+    public ResponseEntity<?> getIntervencoes(@RequestBody String body) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+        String clienteEmail = node.get("cliente").asText();
+        Cliente cliente = clienteService.getClienteByEmail(clienteEmail);
+
+        List<Animal> animais = cliente.getAnimais();
+        List<Intervencao> intervencoes= new ArrayList<>();
+        animais.forEach(animal -> {
+            List<Intervencao> intervencoes_temp = new ArrayList<>();
+            intervencoes_temp = intervencaoService.getIntervencoesAnimal(animal.getId());
+            ///System.out.println(cirurgias_temp);
+            intervencoes_temp.forEach(intervencao -> {
+                if(intervencao.getTipo().equals("Cirurgia") || intervencao.getTipo().equals("Consulta")){
+                    intervencoes.add(intervencao);
+                }
+            });
+        });
+        if(intervencoes.size()==0){
+            return ResponseEntity.accepted().body("Não tem intervencoes agendadas!");
+        }
+        return ResponseEntity.accepted().body(intervencoes);
+    }
     //Check
     @CrossOrigin
     @PutMapping("/cliente/animal/cancelar/{id_intervencao}")
