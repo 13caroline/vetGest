@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin(origins = "https://localhost:7777")
 public class UtilizadorController {
     @Autowired
     UtilizadorRepository utilizadorRepository;

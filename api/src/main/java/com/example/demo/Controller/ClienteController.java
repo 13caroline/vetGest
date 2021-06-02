@@ -15,6 +15,7 @@ import java.util.List;
 
 
 @RestController
+@CrossOrigin(origins = "https://localhost:7777")
 public class ClienteController {
     @Autowired
     private ClienteService clienteService;

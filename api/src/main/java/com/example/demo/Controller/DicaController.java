@@ -5,12 +5,10 @@ import com.example.demo.Entity.Dica;
 import com.example.demo.Entity.Veterinario;
 import com.example.demo.Service.VeterinarioService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin(origins = "https://localhost:7777")
 public class
 DicaController {
 

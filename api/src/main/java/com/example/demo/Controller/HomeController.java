@@ -7,11 +7,13 @@ import com.example.demo.Service.DicaService;
 import com.example.demo.Service.VeterinarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "https://localhost:7777")
 public class HomeController {
     @Autowired
     private VeterinarioService veterinarioService;
