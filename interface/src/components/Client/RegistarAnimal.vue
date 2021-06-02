@@ -91,34 +91,29 @@
                   <div>
                     <p class="ma-0">Data de Nascimento *</p>
                     <v-menu
-                      ref="data"
-                      v-model="data"
-                      :close-on-content-click="true"
+                      v-model="menu2"
+                      :close-on-content-click="false"
                       :nudge-right="40"
-                      :return-value.sync="data"
                       transition="scale-transition"
                       offset-y
-                      max-width="290px"
-                      min-width="290px"
+                      min-width="auto"
                     >
                       <template v-slot:activator="{ on, attrs }">
                         <v-text-field
-                          append-icon="fas fa-calendar-day"
-                          outlined
-                          color="#2596be"
-                          v-on="on"
-                          v-bind="attrs"
                           v-model="date"
-                          dense
+                          append-icon="fas fa-calendar-alt"
                           readonly
+                          dense
+                          outlined
+                          v-bind="attrs"
+                          v-on="on"
                         ></v-text-field>
                       </template>
                       <v-date-picker
-                        full-width
-                        color="#2596be"
-                        :min="new Date().toISOString().substr(0, 10)"
                         v-model="date"
-                        locale="pt-PT"
+                        @input="menu2 = false"
+                        locale="pt PT"
+                        :max='new Date().toISOString().substr(0, 10)'
                       ></v-date-picker>
                     </v-menu>
                   </div>
@@ -136,6 +131,24 @@
                       <v-radio value="Fêmea" color="#2596be">
                         <template v-slot:label>
                           <div class="body-2">Fêmea</div>
+                        </template>
+                      </v-radio>
+                    </v-radio-group>
+                  </div>
+                </v-col>
+
+                <v-col>
+                  <div>
+                    <p class="ma-0">Castração *</p>
+                    <v-radio-group row class="ma-0" v-model="sexo">
+                      <v-radio value="1" color="#2596be">
+                        <template v-slot:label>
+                          <div class="body-2">Sim</div>
+                        </template>
+                      </v-radio>
+                      <v-radio value="0" color="#2596be">
+                        <template v-slot:label>
+                          <div class="body-2">Não</div>
                         </template>
                       </v-radio>
                     </v-radio-group>
@@ -161,7 +174,7 @@
                 </v-col>
                 <v-col cols="4">
                   <div>
-                    <p class="ma-0">Pelagem</p>
+                    <p class="ma-0">Pelagem *</p>
                     <v-select
                       color="#2596be"
                       flat
@@ -176,7 +189,7 @@
                 </v-col>
                 <v-col cols="3">
                   <div>
-                    <p class="ma-0">Cauda</p>
+                    <p class="ma-0">Cauda *</p>
                     <v-select
                       color="#2596be"
                       flat
@@ -273,11 +286,12 @@
 <script>
 //import moment from 'moment';
 import axios from "axios";
-import store from "@/store.js"
+import store from "@/store.js";
 export default {
   data: () => ({
     dialog: false,
     date: new Date().toISOString().substr(0, 10),
+    menu2: false,
     itemscor: [
       "Amarelo",
       "Azul",
@@ -300,9 +314,7 @@ export default {
       "Encaracolada",
       "Cerdosa",
     ],
-    itemsraca: [
-      "podengo"
-    ],
+    itemsraca: ["podengo"],
     itemscauda: ["Comprida", "Curta", "Amputada"],
     itemsespecie: [
       "Bovino",
@@ -329,39 +341,41 @@ export default {
     done: false,
     timeout: -1,
     text: "",
-    
   }),
   methods: {
     registaAnimal: async function () {
       if (this.$refs.form.validate()) {
         try {
-          console.log(store.getters.token)
-          var resposta = await axios.post("http://localhost:7777/cliente/animal/registar", {
-            "cliente":{
-                 email: this.$store.state.email,
+          console.log(store.getters.token);
+          var resposta = await axios.post(
+            "http://localhost:7777/cliente/animal/registar",
+            {
+              cliente: {
+                email: this.$store.state.email,
+              },
+              animal: {
+                nome: this.nome,
+                raca: this.raca,
+                chip: this.chip,
+                especie: this.especie,
+                altura: this.altura,
+                dataNascimento: this.data,
+                sexo: this.sexo,
+                cor: this.cor.toString(),
+                pelagem: this.pelagem.toString(),
+                cauda: this.cauda,
+                castracao: 1,
+                observacoes: this.observacoes,
+              },
             },
-            "animal":{
-            nome: this.nome,
-            raca: this.raca,
-            chip: this.chip,
-            especie: this.especie,
-            altura: this.altura,
-            dataNascimento: this.data,
-            sexo: this.sexo,
-            cor: this.cor.toString(),
-            pelagem: this.pelagem.toString(), 
-            cauda: this.cauda, 
-            castracao:1,
-            observacoes: this.observacoes
-            },
-          },
-          {
-          headers: {
-            "Authorization": 'Bearer ' + store.getters.token.toString()
-          }
-          });
+            {
+              headers: {
+                Authorization: "Bearer " + store.getters.token.toString(),
+              },
+            }
+          );
           console.log(JSON.stringify(resposta.data));
-          this.$router.push("/cliente/inicio")
+          this.$router.push("/cliente/inicio");
           this.text = "Animal registado com sucesso.";
           this.color = "success";
           this.snackbar = true;
