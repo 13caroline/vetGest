@@ -6,28 +6,24 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-      nome: "",
-      token: "",
-      liToken: "", 
+      email: "",
+      token: "", 
       tipo: "",
     },
     plugins: [createPersistedState()],
     mutations: {
-      guardaToken(state, token) {
-        state.liToken = token;
-      },
       guardaTokenUtilizador(state, token) {
         state.token = token;
       },
-      guardaNomeUtilizador(state, nome) {
-        state.nome = nome;
+      guardaEmailUtilizador(state, email) {
+        state.email = email;
       },
       guardaTipoUtilizador(state, tipo) {
         state.tipo = tipo;
       },
       limpaStore(state){
         state.token = "";
-        state.nome = ""; 
+        state.email = ""; 
         state.tipo = ""; 
         state.liToken = ""; 
       }

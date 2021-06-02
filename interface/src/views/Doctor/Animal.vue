@@ -8,7 +8,7 @@
 
 <script>
 import Header from "@/components/Headers/DoctorHeader.vue";
-import Animal from "@/components/Doctor/Animal.vue"
+import Animal from "@/components/Doctor/Paciente.vue"
 import Footer from "@/components/Footer.vue";
 
 export default {
