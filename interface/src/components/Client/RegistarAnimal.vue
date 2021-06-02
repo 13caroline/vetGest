@@ -336,9 +336,10 @@ export default {
       if (this.$refs.form.validate()) {
         try {
           console.log(store.getters.token)
+          var t = store.getters.token.toString()
           var resposta = await axios.post("http://localhost:7777/cliente/animal/registar", {
             "cliente":{
-                 email: this.$store.email,
+                 email: this.$store.state.email,
             },
             "animal":{
             nome: this.nome,
@@ -348,8 +349,8 @@ export default {
             altura: this.altura,
             dataNascimento: this.data,
             sexo: this.sexo,
-            cor: this.cor,
-            pelagem: this.pelagem, 
+            cor: this.cor.toString(),
+            pelagem: this.pelagem.toString(), 
             cauda: this.cauda, 
             castracao:1,
             observacoes: this.observacoes
@@ -357,7 +358,7 @@ export default {
           },
           {
           headers: {
-            "Authorization": 'Bearer ' +`store.getters.token`
+            "Authorization": 'Bearer ' +t
           }
           });
           console.log(JSON.stringify(resposta.data));

@@ -68,7 +68,7 @@ public class ClienteController {
     public ResponseEntity<?> registarAnimal(@RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);
-        //System.out.println(node);
+        System.out.println(node);
         String cliente = node.get("cliente").get("email").asText();
         //System.out.println(cliente);
         Animal animal = mapper.convertValue(node.get("animal"),Animal.class);
