@@ -336,7 +336,6 @@ export default {
       if (this.$refs.form.validate()) {
         try {
           console.log(store.getters.token)
-          var t = store.getters.token.toString()
           var resposta = await axios.post("http://localhost:7777/cliente/animal/registar", {
             "cliente":{
                  email: this.$store.state.email,
@@ -358,10 +357,11 @@ export default {
           },
           {
           headers: {
-            "Authorization": 'Bearer ' +t
+            "Authorization": 'Bearer ' + store.getters.token.toString()
           }
           });
           console.log(JSON.stringify(resposta.data));
+          this.$router.push("/cliente/inicio")
           this.text = "Animal registado com sucesso.";
           this.color = "success";
           this.snackbar = true;
