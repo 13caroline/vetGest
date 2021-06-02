@@ -28,7 +28,7 @@
                 cols="auto"
                 lg="6"
                 class="mx-auto mx-sm-0"
-                v-for="a in animal"
+                v-for="a in animals"
                 :key="a.nome"
               >
                 <div class="animal">
@@ -78,7 +78,7 @@
 
         <v-col lg="7" class="ml-auto mb-5">
           <h3 class="font-weight-regular text-uppercase mb-4 mt-10">
-            Consultas Agendadas
+            Intervenções Agendadas
           </h3>
 
           <v-row justify="start">
@@ -151,14 +151,13 @@
 </template>
 
 <script>
-//import axios from "axios";
+import axios from "axios";
+import store from "@/store.js"
+
 export default {
   data() {
     return {
-      animal: [
-        { scr: "Rubi.jpg", nome: "Rubi" },
-        { scr: "Rubi.jpg", nome: "Felpudo grande" },
-      ],
+      animals: [],
       headers: [
         {
           text: "Nome",
@@ -186,20 +185,7 @@ export default {
           align: "center",
         },
       ],
-      consultas: [
-        {
-          paciente: "Runa",
-          medico: "Drª Joana Ferreira",
-          data: "22/08/2021 10:00",
-          estado: "Agendada",
-        },
-        {
-          paciente: "Puscas",
-          medico: "Drª Joana Ferreira",
-          data: "19/05/2021 16:30",
-          estado: "Pendente",
-        },
-      ],
+      consultas: [],
       colors: [
         "indigo",
         "warning",
@@ -216,18 +202,20 @@ export default {
       else return "#FFE082";
     },
   },
-  created() {
-    
-    /*let response = await axios.get("http://localhost:7777/cliente", {
+  created: async function() {
+    let response = await axios.post("http://localhost:7777/cliente", {
       email: this.$store.state.email,
     },
     {
       headers: {
-            "Authorization": 'Bearer ' +`${this.$store.state.jwt}`
-       }   });
-
-       console.log(response)
-       */
+            "Authorization": 'Bearer ' +store.getters.token.toString()
+       }   
+       
+       });
+       console.log(response.data)
+    this.animals=response.data.cliente.animais;
+    this.consultas=response.data.cliente.intervencoes;
+       
 /*
     let response2 = await axios.post("http://localhost:7777/cliente/getConsultas", {
       email: this.$store.state.user.email,
