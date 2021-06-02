@@ -136,6 +136,7 @@ public class ClienteController {
         animal.setAltura(animalNew.getAltura());
         animal.setChip(animalNew.getChip());
         animal.setCastracao(animalNew.isCastracao());
+        animal.setObservacoes(animalNew.getObservacoes());
 
         animalService.updateAnimal(animal);
         cliente.setAnimal(animal);
