@@ -85,13 +85,9 @@ public class Animal {
     )
     private boolean castracao;
 
+    @Column(
+            name = "observacoes"
+    )
+    private String observacoes;
 
-
-   /*
-    @OneToMany(cascade = {CascadeType.ALL})
-    private List<Intervencao> intervencoes;
-
-    public void setIntervencao(Intervencao intervencao) {
-        this.intervencoes.add(intervencao);
-    }*/
 }

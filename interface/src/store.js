@@ -7,7 +7,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
       email: "",
-      token: "", 
+      token: "",
       tipo: "",
     },
     plugins: [createPersistedState()],
@@ -25,7 +25,6 @@ export default new Vuex.Store({
         state.token = "";
         state.email = ""; 
         state.tipo = ""; 
-        state.liToken = ""; 
       }
     },
     getters: {

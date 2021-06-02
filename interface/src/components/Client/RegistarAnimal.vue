@@ -67,6 +67,7 @@
                       dense
                       label="Por favor selecione"
                       v-model="raca"
+                      :items="itemsraca"
                     >
                     </v-select>
                   </div>
@@ -215,7 +216,7 @@
                   small
                   dark
                   class="ml-3"
-                  @click="registarAnimal()"
+                  @click="registaAnimal()"
                   >Registar</v-btn
                 >
               </v-row>
@@ -271,7 +272,8 @@
 
 <script>
 //import moment from 'moment';
-//import axios from "axios";
+import axios from "axios";
+import store from "@/store.js"
 export default {
   data: () => ({
     dialog: false,
@@ -298,6 +300,9 @@ export default {
       "Encaracolada",
       "Cerdosa",
     ],
+    itemsraca: [
+      "podengo"
+    ],
     itemscauda: ["Comprida", "Curta", "Amputada"],
     itemsespecie: [
       "Bovino",
@@ -310,11 +315,11 @@ export default {
     nome: "",
     chip: "",
     especie: "",
-    raca: "",
     altura: "",
     data: null,
     sexo: "",
     cor: "",
+    raca: "",
     pelagem: "",
     cauda: "",
     observacoes: "",
@@ -324,26 +329,39 @@ export default {
     done: false,
     timeout: -1,
     text: "",
+    
   }),
   methods: {
     registaAnimal: async function () {
-      /*
       if (this.$refs.form.validate()) {
         try {
-          var resposta = await axios.post("http://localhost:7777/registaAnimal", {
+          console.log(store.getters.token)
+          var resposta = await axios.post("http://localhost:7777/cliente/animal/registar", {
+            "cliente":{
+                 email: this.$store.state.email,
+            },
+            "animal":{
             nome: this.nome,
+            raca: this.raca,
             chip: this.chip,
             especie: this.especie,
-            raca: this.raca,
             altura: this.altura,
-            data: this.data,
+            dataNascimento: this.data,
             sexo: this.sexo,
-            cor: this.cor,
-            pelagem: this.pelagem, 
+            cor: this.cor.toString(),
+            pelagem: this.pelagem.toString(), 
             cauda: this.cauda, 
+            castracao:1,
             observacoes: this.observacoes
+            },
+          },
+          {
+          headers: {
+            "Authorization": 'Bearer ' + store.getters.token.toString()
+          }
           });
           console.log(JSON.stringify(resposta.data));
+          this.$router.push("/cliente/inicio")
           this.text = "Animal registado com sucesso.";
           this.color = "success";
           this.snackbar = true;
@@ -359,7 +377,6 @@ export default {
         this.snackbar = true;
         this.done = false;
       }
-      */
     },
   },
 };

@@ -106,12 +106,19 @@ export default {
             username: this.email,
             password: this.password
           })
+          console.log(res)
           if(res.data.jwt != undefined){
             this.$store.commit("guardaTokenUtilizador",res.data.jwt);
+            this.$store.commit("guardaTipoUtilizador",res.data.dtype)
+            this.$store.commit("guardaEmailUtilizador",this.email)
+            if(res.data.dtype=="Cliente"){
+            this.$router.push("/cliente/inicio")
+            }
+            
           }
         }
-        catch{
-          console.log("catchy")
+        catch(e){
+          console.log(e)
         }
       }
     }
