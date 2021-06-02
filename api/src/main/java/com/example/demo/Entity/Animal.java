@@ -86,8 +86,7 @@ public class Animal {
     private boolean castracao;
 
     @Column(
-            name = "observacoes",
-            nullable = false
+            name = "observacoes"
     )
     private String observacoes;
 
