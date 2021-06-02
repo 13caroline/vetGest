@@ -260,7 +260,7 @@ export default {
     registUser: async function () {
       if (this.$refs.form.validate()) {
         try {
-          var resposta = await axios.post("http://localhost:7777/addCliente", {
+          var resposta = await axios.post("http://localhost:7777/cliente/registar", {
             email: this.email,
             password: this.password,
             concelho: this.concelho,

@@ -7,7 +7,7 @@
         
         <v-card color="white" flat class="loginform my-12">
           <v-card-text class="justify-center">
-            <v-form ref="login" lazy-validation class="form">
+            <v-form ref="form" lazy-validation class="form">
               <v-text-field
                 background-color="transparent"
                 solo
@@ -18,6 +18,7 @@
                 placeholder="E-mail"
                 type="email"
                 name="email"
+                v-model="email"
                 prepend-icon="fas fa-user"
                 required
               />
@@ -36,6 +37,7 @@
                 name="password"
                 placeholder="Palavra-Passe"
                 type="password"
+                v-model="password"
                 required
               />
             </v-form>
@@ -50,7 +52,7 @@
                 block
                 color="#2596be"
                 type="submit"
-                @click="loginF()"
+                @click="loginUtilizador()"
               >
                 Iniciar Sessão
               </v-btn>
@@ -85,6 +87,38 @@
     </v-img>
   </div>
 </template>
+
+<script>
+import axios from "axios"
+export default {
+  name: "mainpage",
+  data() {
+    return {
+      email: "",
+      password: "",
+    };
+  },
+  methods: {
+    async loginUtilizador(){
+      if(this.$refs.form.validate()){
+        try{
+          var res = await axios.post("http://localhost:7777/authenticate", {
+            username: this.email,
+            password: this.password
+          })
+          if(res.data.jwt != undefined){
+            this.$store.commit("guardaTokenUtilizador",res.data.jwt);
+          }
+        }
+        catch{
+          console.log("catchy")
+        }
+      }
+    }
+  }
+};
+</script>
+
 
 <style scoped>
 
