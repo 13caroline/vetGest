@@ -51,6 +51,8 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**").allowedOrigins("http://localhost:8080");
         registry.addMapping("/**").allowedOrigins("http://localhost:7777");
+        registry.addMapping("/**").allowedOrigins("http://localhost:9090");
+
     }
 
     @Bean
