@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container>
-      <v-row justify="space-around" class="mt-2">
+      <v-row justify="space-around" class="mt-2 py-2">
         <v-col cols="auto">
           <span class="subtitle-1 head">Rubi</span>
         </v-col>

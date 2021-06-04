@@ -1,15 +1,14 @@
 <template>
-    <div>
-        <v-container class="fill-height">
-            <v-row>
+  <div>
+    <v-container class="fill-height">
+      <v-row>
+        <v-col cols="12" class="my-4">
+          <h3 class="font-weight-regular text-uppercase">
+            <v-icon class="mr-2">fas fa-procedures</v-icon>
+            Internamento
+          </h3>
+        </v-col>
         <v-col cols="12">
-            <v-row class="w-100">
-            <h3 class="font-weight-regular text-uppercase mb-4 mt-10 ml-3">
-              <v-icon class="mr-2">fas fa-procedures</v-icon>
-              Internamento
-            </h3>
-          </v-row>
-
           <v-data-table
             :headers="headers"
             :items="agendamento"
@@ -52,26 +51,23 @@
               <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
                   <v-icon v-bind="attrs" v-on="on" small @click="more(item)">
-                      fas fa-arrow-right
+                    fas fa-arrow-right
                   </v-icon>
                 </template>
                 <span class="caption">Mais detalhes</span>
               </v-tooltip>
-              
-             
             </template>
 
-                 <template v-slot:[`item.alta`]="{ item }">
-                  <v-btn color="#2596be" depressed dark small @click="alta(item)">
-                      Criar alta
-                  </v-btn>
-                </template>
+            <template v-slot:[`item.alta`]="{ item }">
+              <v-btn color="#2596be" depressed dark small @click="alta(item)">
+                Criar alta
+              </v-btn>
+            </template>
           </v-data-table>
         </v-col>
-            </v-row>
-                
-        </v-container>
-    </div>
+      </v-row>
+    </v-container>
+  </div>
 </template>
 
 
@@ -186,11 +182,11 @@ export default {
   methods: {
     more(item) {
       this.$router.push("/medico/internamento/detalhes");
-      console.log(item)
+      console.log(item);
     },
     alta(item) {
       this.$router.push("/medico/internamento/alta");
-      console.log(item)
+      console.log(item);
     },
     servico(item) {
       if (item == "Consulta") return "#B2DFDB";

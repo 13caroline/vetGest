@@ -71,6 +71,12 @@ public class ClienteController {
         return ResponseEntity.accepted().body(cliente);
     }
 
+    @CrossOrigin
+    @GetMapping("/cliente/medicos")
+    public ResponseEntity<?> getVets(){
+        List<Veterinario> vets = veterinarioService.getAllVeterinarios();
+        return ResponseEntity.accepted().body(vets);
+    }
     //Check
     @CrossOrigin
     @PostMapping("/cliente/animal/registar")

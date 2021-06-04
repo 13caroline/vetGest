@@ -41,7 +41,7 @@
 
       <v-row class="w-100">
         <v-col>
-          <v-card>
+          <v-card class="h-100">
             <v-card-text class="py-0">
               <v-timeline align-top dense>
                 <v-timeline-item color="pink" small>
@@ -164,8 +164,8 @@
         </v-col>
 
         <v-col>
-          <v-card>
-            <v-card-text>
+          <v-card class="h-100">
+            <v-card-text class="pb-0">
               <div>
                 <p class="ma-0">Motivo de internamento</p>
                 <v-textarea outlined rows="1" flat no-resize> </v-textarea>
@@ -191,13 +191,14 @@
                 <v-textarea outlined rows="1" flat no-resize> </v-textarea>
               </div>
             </v-card-text>
-            <v-card-actions
+            <v-card-actions class="pt-0"
               ><v-btn
                 depressed
                 dark
                 color="#2596be"
                 outlined
                 to="/medico/consultas"
+                class="ml-auto"
               >
                 Gravar
               </v-btn>
@@ -206,49 +207,48 @@
                 dark
                 color="#2596be"
                 @click="cancelDialog = true"
+                class="mr-2"
               >
                 Confirmar alta
               </v-btn>
-              
-              </v-card-actions
-            >
+            </v-card-actions>
           </v-card>
         </v-col>
       </v-row>
 
       <v-dialog v-model="cancelDialog" persistent width="100%" max-width="460">
-            <v-card>
-              <v-card-title class="justify-center cancel">
-                Confirmar alta
-              </v-card-title>
-              <v-card-text>
-                Tem a certeza que pretende confirmar a alta de Rubi?
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn
-                  depressed
-                  large
-                  width="50%"
-                  dark
-                  color="#BDBDBD"
-                  @click="cancelDialog = false"
-                >
-                  Não
-                </v-btn>
-                <v-btn
-                @click="cancela()"
-                  depressed
-                  large
-                  dark
-                  color="#2596be"
-                  width="50%"
-                >
-                  Sim
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
+        <v-card>
+          <v-card-title class="justify-center cancel">
+            Confirmar alta
+          </v-card-title>
+          <v-card-text>
+            Tem a certeza que pretende confirmar a alta de Rubi?
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              depressed
+              large
+              width="50%"
+              dark
+              color="#BDBDBD"
+              @click="cancelDialog = false"
+            >
+              Não
+            </v-btn>
+            <v-btn
+              @click="cancela()"
+              depressed
+              large
+              dark
+              color="#2596be"
+              width="50%"
+            >
+              Sim
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-container>
   </div>
 </template>
@@ -256,8 +256,7 @@
 <script>
 export default {
   data: () => ({
-      cancelDialog: false,
-  })
-}
-
+    cancelDialog: false,
+  }),
+};
 </script>

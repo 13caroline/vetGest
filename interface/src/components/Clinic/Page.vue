@@ -1,57 +1,58 @@
 <template>
   <div>
     <v-container class="fill-height">
-      <v-row class="w-100">
-        <h3 class="font-weight-regular text-uppercase mb-4 mt-10 ml-3">
-          <v-icon class="mr-2">fas fa-calendar-alt</v-icon>
-          Agendamento
-        </h3>
-        <v-row justify="end">
-          <v-col cols="auto" class="pl-0">
-            <v-btn
-              class="mb-2 mt-6 body-2"
-              small
-              color="#2596be"
-              dark
-              to="/clinica/clientes/registar"
-            >
-              Registar Cliente
-            </v-btn>
-          </v-col>
-          <v-col cols="auto" class="pl-0">
-            <v-btn
-              class="mb-2 mt-6 body-2"
-              small
-              color="#2596be"
-              dark
-              to="/clinica/utentes/registar"
-            >
-              Registar Utente
-            </v-btn>
-          </v-col>
-          <v-col cols="auto" class="pl-0">
-            <v-btn
-              class="mb-2 mt-6 body-2"
-              small
-              color="#2596be"
-              dark
-              to="/clinica/consultas/"
-            >
-              Marcar consulta
-            </v-btn>
-          </v-col>
-          <v-col cols="auto" class="pl-0">
-            <v-btn
-              class="mb-2 mt-6 body-2"
-              small
-              color="#2596be"
-              dark
-              to="/clinica/cirurgias/"
-            >
-              Marcar Cirurgia
-            </v-btn>
-          </v-col>
-        </v-row>
+      <v-row class="w-100 my-4" align="center">
+        <v-col cols="auto">
+          <h3 class="font-weight-regular text-uppercase">
+            <v-icon class="mr-2">fas fa-calendar-alt</v-icon>
+            Agendamento
+          </h3>
+        </v-col>
+        <div class="w-100 d-sm-none"></div>
+        <v-col cols="auto" class="ml-auto pl-0">
+          <v-btn
+            class="body-2"
+            small
+            color="#2596be"
+            dark
+            to="/clinica/clientes/registar"
+          >
+            <v-icon>fas fa-user</v-icon>
+          </v-btn>
+        </v-col>
+        <v-col cols="auto" class="pl-0">
+          <v-btn
+            class="body-2"
+            small
+            color="#2596be"
+            dark
+            to="/clinica/utentes/registar"
+          >
+            <v-icon>fas fa-paw</v-icon>
+          </v-btn>
+        </v-col>
+        <v-col cols="auto" class="pl-0">
+          <v-btn
+            class="body-2"
+            small
+            color="#2596be"
+            dark
+            to="/clinica/consultas/"
+          >
+            <v-icon>fas fa-scroll</v-icon>
+          </v-btn>
+        </v-col>
+        <v-col cols="auto" class="pl-0">
+          <v-btn
+            class="body-2"
+            small
+            color="#2596be"
+            dark
+            to="/clinica/cirurgias/"
+          >
+            <v-icon>fas fa-procedures</v-icon>
+          </v-btn>
+        </v-col>
       </v-row>
 
       <v-row>
@@ -80,7 +81,7 @@
                 </template>
                 <span class="caption">Dados do utente</span>
               </v-tooltip>
-              <span class="ml-1 blue--text">{{ item.utente }}</span>
+              <span class="ml-2 mr-1 blue--text">{{ item.utente }}</span>
               <span>({{ item.especie }})</span>
             </template>
 
@@ -493,10 +494,10 @@ export default {
       if (item == "Consulta") return "#B2DFDB";
       else return "#FFCCBC";
     },
-    utente(item){
-        this.$router.push("/clinica/utente/");
-        console.log(item)
-    }
+    utente(item) {
+      this.$router.push("/clinica/utente/");
+      console.log(item);
+    },
   },
   created() {
     /*
@@ -528,5 +529,9 @@ export default {
   height: 26px !important;
   min-width: 26px !important;
   font-size: 0.85rem !important;
+}
+
+.body-2 .v-icon.v-icon {
+  font-size: 15px;
 }
 </style>

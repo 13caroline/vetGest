@@ -1,9 +1,9 @@
 <template>
   <div>
     <v-container class="fill-height">
-      <v-row align="center" class="w-100">
-        <v-col class="auto">
-          <v-card class="mx-auto" max-width="344" outlined>
+      <v-row align="stretch" class="w-100">
+        <v-col>
+          <v-card class="mx-auto h-100" max-width="344" outlined>
             <v-list-item three-line>
               <v-list-item-content>
                 <div class="overline mb-4">
@@ -18,8 +18,8 @@
           </v-card>
         </v-col>
 
-        <v-col class="auto">
-          <v-card class="mx-auto" max-width="344" outlined>
+        <v-col>
+          <v-card class="mx-auto h-100" max-width="344" outlined>
             <v-list-item three-line>
               <v-list-item-content>
                 <div class="overline mb-4">
@@ -34,8 +34,8 @@
           </v-card>
         </v-col>
 
-        <v-col class="auto">
-          <v-card class="mx-auto" max-width="344" outlined>
+        <v-col>
+          <v-card class="mx-auto h-100" max-width="344" outlined>
             <v-list-item three-line>
               <v-list-item-content>
                 <div class="overline mb-4">
@@ -50,8 +50,8 @@
           </v-card>
         </v-col>
 
-        <v-col class="auto">
-          <v-card class="mx-auto" max-width="344" outlined>
+        <v-col>
+          <v-card class="mx-auto h-100" max-width="344" outlined>
             <v-list-item three-line>
               <v-list-item-content>
                 <div class="overline mb-4">

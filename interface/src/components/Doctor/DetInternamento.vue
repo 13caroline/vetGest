@@ -41,194 +41,146 @@
 
       <v-row class="w-100">
         <v-col>
-          <v-card> 
-              <v-card-text class="py-0">
-      <v-timeline
-        align-top
-        dense
-      >
-        <v-timeline-item
-          color="pink"
-          small
-        >
-          <v-row class="pt-1">
-            <v-col cols="3">
-              <strong>5pm</strong>
-            </v-col>
-            <v-col>
-              <strong>New Icon</strong>
-              <div class="text-caption">
-                Mobile App
-              </div>
-            </v-col>
-          </v-row>
-        </v-timeline-item>
+          <v-card class="h-100">
+            <v-card-text class="py-0">
+              <v-timeline align-top dense>
+                <v-timeline-item color="pink" small>
+                  <v-row class="pt-1">
+                    <v-col cols="3">
+                      <strong>5pm</strong>
+                    </v-col>
+                    <v-col>
+                      <strong>New Icon</strong>
+                      <div class="text-caption">Mobile App</div>
+                    </v-col>
+                  </v-row>
+                </v-timeline-item>
 
-        <v-timeline-item
-          color="pink"
-          small
-        >
-          <v-row class="pt-1">
-            <v-col cols="3">
-              <strong>12pm</strong>
-            </v-col>
-            <v-col>
-              <strong>Lunch break</strong>
-            </v-col>
-          </v-row>
-        </v-timeline-item>
+                <v-timeline-item color="pink" small>
+                  <v-row class="pt-1">
+                    <v-col cols="3">
+                      <strong>12pm</strong>
+                    </v-col>
+                    <v-col>
+                      <strong>Lunch break</strong>
+                    </v-col>
+                  </v-row>
+                </v-timeline-item>
 
-        <v-timeline-item
-          color="teal lighten-3"
-          small
-        >
-          <v-row class="pt-1">
-            <v-col cols="3">
-              <strong>21/05/2021 9-11am</strong>
-            </v-col>
-            <v-col>
-              <strong>Finish Home Screen</strong>
-              <div class="text-caption">
-                Web App
-              </div>
-            </v-col>
-          </v-row>
-        </v-timeline-item>
-  
-      <v-timeline-item
-          color="pink"
-          small
-        >
-          <v-row class="pt-1">
-            <v-col cols="3">
-              <strong>12pm</strong>
-            </v-col>
-            <v-col>
-              <strong>Lunch break</strong>
-            </v-col>
-          </v-row>
-        </v-timeline-item>
+                <v-timeline-item color="teal lighten-3" small>
+                  <v-row class="pt-1">
+                    <v-col cols="3">
+                      <strong>21/05/2021 9-11am</strong>
+                    </v-col>
+                    <v-col>
+                      <strong>Finish Home Screen</strong>
+                      <div class="text-caption">Web App</div>
+                    </v-col>
+                  </v-row>
+                </v-timeline-item>
 
-        <v-timeline-item
-          color="teal lighten-3"
-          small
-        >
-          <v-row class="pt-1">
-            <v-col cols="3">
-              <strong>21/05/2021 9-11am</strong>
-            </v-col>
-            <v-col>
-              <strong>Finish Home Screen</strong>
-              <div class="text-caption">
-                Web App
-              </div>
-            </v-col>
-          </v-row>
-        </v-timeline-item>
-   
-      <v-timeline-item
-          color="pink"
-          small
-        >
-          <v-row class="pt-1">
-            <v-col cols="3">
-              <strong>12pm</strong>
-            </v-col>
-            <v-col>
-              <strong>Lunch break</strong>
-            </v-col>
-          </v-row>
-        </v-timeline-item>
+                <v-timeline-item color="pink" small>
+                  <v-row class="pt-1">
+                    <v-col cols="3">
+                      <strong>12pm</strong>
+                    </v-col>
+                    <v-col>
+                      <strong>Lunch break</strong>
+                    </v-col>
+                  </v-row>
+                </v-timeline-item>
 
-        <v-timeline-item
-          color="teal lighten-3"
-          small
-        >
-          <v-row class="pt-1">
-            <v-col cols="3">
-              <strong>21/05/2021 9-11am</strong>
-            </v-col>
-            <v-col>
-              <strong>Finish Home Screen</strong>
-              <div class="text-caption">
-                Web App
-              </div>
-            </v-col>
-          </v-row>
-        </v-timeline-item>
+                <v-timeline-item color="teal lighten-3" small>
+                  <v-row class="pt-1">
+                    <v-col cols="3">
+                      <strong>21/05/2021 9-11am</strong>
+                    </v-col>
+                    <v-col>
+                      <strong>Finish Home Screen</strong>
+                      <div class="text-caption">Web App</div>
+                    </v-col>
+                  </v-row>
+                </v-timeline-item>
 
-      <v-timeline-item
-          color="pink"
-          small
-        >
-          <v-row class="pt-1">
-            <v-col cols="3">
-              <strong>12pm</strong>
-            </v-col>
-            <v-col>
-              <strong>Lunch break</strong>
-            </v-col>
-          </v-row>
-        </v-timeline-item>
+                <v-timeline-item color="pink" small>
+                  <v-row class="pt-1">
+                    <v-col cols="3">
+                      <strong>12pm</strong>
+                    </v-col>
+                    <v-col>
+                      <strong>Lunch break</strong>
+                    </v-col>
+                  </v-row>
+                </v-timeline-item>
 
-      <v-timeline-item
-          color="pink"
-          small
-        >
-          <v-row class="pt-1">
-            <v-col cols="3">
-              <strong>12pm</strong>
-            </v-col>
-            <v-col>
-              <strong>Lunch break</strong>
-            </v-col>
-          </v-row>
-        </v-timeline-item>
+                <v-timeline-item color="teal lighten-3" small>
+                  <v-row class="pt-1">
+                    <v-col cols="3">
+                      <strong>21/05/2021 9-11am</strong>
+                    </v-col>
+                    <v-col>
+                      <strong>Finish Home Screen</strong>
+                      <div class="text-caption">Web App</div>
+                    </v-col>
+                  </v-row>
+                </v-timeline-item>
 
-        <v-timeline-item
-          color="teal lighten-3"
-          small
-        >
-          <v-row class="pt-1">
-            <v-col cols="3">
-              <strong>21/05/2021 9-11am</strong>
-            </v-col>
-            <v-col>
-              <strong>Finish Home Screen</strong>
-              <div class="text-caption">
-                Web App
-              </div>
-            </v-col>
-          </v-row>
-        </v-timeline-item>
-      </v-timeline>
-              </v-card-text>
+                <v-timeline-item color="pink" small>
+                  <v-row class="pt-1">
+                    <v-col cols="3">
+                      <strong>12pm</strong>
+                    </v-col>
+                    <v-col>
+                      <strong>Lunch break</strong>
+                    </v-col>
+                  </v-row>
+                </v-timeline-item>
+
+                <v-timeline-item color="pink" small>
+                  <v-row class="pt-1">
+                    <v-col cols="3">
+                      <strong>12pm</strong>
+                    </v-col>
+                    <v-col>
+                      <strong>Lunch break</strong>
+                    </v-col>
+                  </v-row>
+                </v-timeline-item>
+
+                <v-timeline-item color="teal lighten-3" small>
+                  <v-row class="pt-1">
+                    <v-col cols="3">
+                      <strong>21/05/2021 9-11am</strong>
+                    </v-col>
+                    <v-col>
+                      <strong>Finish Home Screen</strong>
+                      <div class="text-caption">Web App</div>
+                    </v-col>
+                  </v-row>
+                </v-timeline-item>
+              </v-timeline>
+            </v-card-text>
           </v-card>
         </v-col>
 
         <v-col>
-          <v-card>
-              <v-card-text>
-            <v-textarea
-                outlined
-                rows="20"
-                flat
-                no-resize
+          <v-card class="h-100">
+            <v-card-text class="pb-0">
+              <v-textarea outlined rows="20" flat no-resize> </v-textarea>
+            </v-card-text>
+            <v-card-actions class="pt-0"
+              ><v-btn
+                depressed
+                large
+                dark
+                color="#2596be"
+                to="/medico/consultas"
+                class="ml-auto mr-2"
+              >
+                Gravar
+              </v-btn></v-card-actions
             >
-                
-            </v-textarea>  
-              </v-card-text>
-              <v-card-actions><v-btn
-                  depressed
-                  large
-                  dark
-                  color="#2596be"
-                  to="/medico/consultas"
-                >
-                  Gravar
-                </v-btn></v-card-actions>
-
-            </v-card>
+          </v-card>
         </v-col>
       </v-row>
     </v-container>
