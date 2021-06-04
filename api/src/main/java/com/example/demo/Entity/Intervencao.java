@@ -54,6 +54,11 @@ public class Intervencao {
     )
     private String tipo;
 
+    @Column(
+            name = "observacoes"
+    )
+    private String observacoes;
+
     @ManyToOne(cascade = {CascadeType.ALL})
     private Animal animal;
 
