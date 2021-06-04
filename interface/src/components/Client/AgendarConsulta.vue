@@ -18,32 +18,35 @@
             </p>
           </v-card-subtitle>
           <v-card-text>
-            <span class="group font-weight-light text-uppercase">Identificação e motivo da consulta</span>
+            <span class="group font-weight-light text-uppercase"
+              >Identificação e motivo da consulta</span
+            >
 
-            <div>
-              <p class="mb-0 mt-5">Escolha o animal</p>
-              <v-autocomplete
-                flat
-                color="#2596be"
-                dense
-                outlined
-                :items="animais"
-                v-model="animal"
-              ></v-autocomplete>
-            </div>
+            <v-row class="mb-0 mt-5">
+              <v-col cols="12" md="6">
+                <p class="ma-0">Escolha o animal</p>
+                <v-autocomplete
+                  flat
+                  color="#2596be"
+                  dense
+                  outlined
+                  :items="animais"
+                  v-model="animal"
+                ></v-autocomplete>
+              </v-col>
 
-            <div>
-              <p class="ma-0">Motivo</p>
-              <v-select
-                flat
-                color="#2596be"
-                dense
-                outlined
-                :items="motivos"
-                v-model="motivo"
-              ></v-select>
-            </div>
-
+              <v-col cols="12" md="6">
+                <p class="ma-0">Motivo</p>
+                <v-select
+                  flat
+                  color="#2596be"
+                  dense
+                  outlined
+                  :items="motivos"
+                  v-model="motivo"
+                ></v-select>
+              </v-col>
+            </v-row>
             <div>
               <p
                 v-if="
@@ -60,7 +63,7 @@
                 color="#2596be"
                 dense
                 outlined
-				v-model="descricao"
+                v-model="descricao"
                 :items="items"
               ></v-select>
 
@@ -70,78 +73,80 @@
                 color="#2596be"
                 dense
                 outlined
-				v-model="descricao"
+                v-model="descricao"
                 :items="tech"
               ></v-select>
             </div>
 
             <v-divider class="mb-5"></v-divider>
 
-            <span class="group font-weight-light text-uppercase">Detalhes da consulta</span>
+            <span class="group font-weight-light text-uppercase"
+              >Detalhes da consulta</span
+            >
 
-            <div>
-              <div>
-                    <p class="ma-0 mt-5">Data *</p>
-                    <v-menu
-                      v-model="menu2"
-                      :close-on-content-click="false"
-                      :nudge-right="40"
-                      transition="scale-transition"
-                      offset-y
-                      min-width="auto"
-                    >
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
-                          v-model="date"
-                          append-icon="fas fa-calendar-alt"
-                          readonly
-                          dense
-                          outlined
-                          v-bind="attrs"
-                          v-on="on"
-                        ></v-text-field>
-                      </template>
-                      <v-date-picker
-                        v-model="date"
-                        @input="menu2 = false"
-                        locale="pt PT"
-                        :min='new Date().toISOString().substr(0, 10)'
-                      ></v-date-picker>
-                    </v-menu>
-                  </div>
-            </div>
+            <v-row class="mt-5">
+              <v-col>
+                <p class="ma-0">Data *</p>
+                <v-menu
+                  v-model="menu2"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="auto"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="date"
+                      append-icon="fas fa-calendar-alt"
+                      readonly
+                      dense
+                      outlined
+                      v-bind="attrs"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    v-model="date"
+                    @input="menu2 = false"
+                    locale="pt PT"
+                    :min="new Date().toISOString().substr(0, 10)"
+                  ></v-date-picker>
+                </v-menu>
+              </v-col>
 
-            <div>
-              <p class="ma-0">Hora</p>
-              <v-menu
-                ref="horaMarcacao"
-                v-model="horaMarcacao"
-                :close-on-content-click="false"
-                :nudge-right="40"
-                :return-value.sync="horaMarcacao"
-                transition="scale-transition"
-                offset-y
-                max-width="290px"
-                min-width="290px"
-              >
-                <template v-slot:activator="{ on }">
-                  <v-text-field
-                    append-icon="fas fa-clock"
-                    color="#2596be"
-                    v-on="on"
-                    outlined
-                    dense
+              <v-col>
+                <p class="ma-0">Hora</p>
+                <v-menu
+                  ref="horaMarcacao"
+                  v-model="horaMarcacao"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  :return-value.sync="horaMarcacao"
+                  transition="scale-transition"
+                  offset-y
+                  max-width="290px"
+                  min-width="290px"
+                >
+                  <template v-slot:activator="{ on }">
+                    <v-text-field
+                      append-icon="fas fa-clock"
+                      color="#2596be"
+                      v-on="on"
+                      outlined
+                      dense
+                      v-model="hora"
+                    ></v-text-field>
+                  </template>
+                  <v-time-picker
+                    format="24hr"
                     v-model="hora"
-                  ></v-text-field>
-                </template>
-                <v-time-picker
-                  format="24hr"
-                  v-model="hora"
-                  full-width
-                  color="#2596be"
-                ></v-time-picker>
-              </v-menu>
-            </div>
+                    full-width
+                    color="#2596be"
+                  ></v-time-picker>
+                </v-menu>
+              </v-col>
+            </v-row>
 
             <div>
               <p class="ma-0">Médico Veterinário</p>
@@ -156,26 +161,15 @@
             </div>
 
             <v-row align="end" justify="end">
-                        <v-col cols="auto">
-                          <v-btn
-                            color="#BDBDBD"
-                            small
-                            dark
-                            @click="dialog = true"
-                          >
-                            Cancelar
-                          </v-btn>
-                          <v-btn
-                            color="#2596be"
-                            small
-                            dark
-                            class="ml-3"
-                            @click="e1 = 3"
-                          >
-                            Confirmar
-                          </v-btn>
-                        </v-col>
-                      </v-row>
+              <v-col cols="auto">
+                <v-btn color="#BDBDBD" small dark @click="dialog = true">
+                  Cancelar
+                </v-btn>
+                <v-btn color="#2596be" small dark class="ml-3" @click="e1 = 3">
+                  Confirmar
+                </v-btn>
+              </v-col>
+            </v-row>
           </v-card-text>
         </v-col>
       </v-row>
@@ -222,7 +216,7 @@ export default {
   data: () => ({
     e1: 1,
     dialog: false,
-    menu2: false, 
+    menu2: false,
     horaMarcacao: null,
     date: new Date().toISOString().substr(0, 10),
     hora: new Date().getHours() + ":" + new Date().getMinutes(),
@@ -274,7 +268,7 @@ span {
   font-size: 20px;
 }
 
-.group{
-	color: #BDBDBD;
+.group {
+  color: #bdbdbd;
 }
 </style>
