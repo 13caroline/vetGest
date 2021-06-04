@@ -515,7 +515,7 @@ export default {
       else return "#FFCCBC";
     },
     utente(item) {
-      this.$router.push("/clinica/utente/");
+      this.$router.push("/medico/utente/");
       console.log(item);
     },
   },

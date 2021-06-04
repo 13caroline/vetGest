@@ -282,20 +282,6 @@
                     ></v-time-picker>
                   </v-menu>
                     </v-col>
-
-                    <v-col cols="12" class="py-0">
-                      <p class="ma-0">Médico Veterinário</p>
-                    </v-col>
-                    <v-col cols="12" class="py-0">
-                      <v-autocomplete
-                        flat
-                        color="#2596be"
-                        dense
-                        outlined
-                        :items="medico"
-                        v-model="medico"
-                      ></v-autocomplete>
-                    </v-col>
                   </v-row>
 
                   <v-row align="end" justify="end">

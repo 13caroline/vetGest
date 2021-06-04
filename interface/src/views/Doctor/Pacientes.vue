@@ -119,7 +119,7 @@ export default {
   },
   methods: {
     more(item) {
-      this.$router.push("/medico/animal/");
+      this.$router.push("/medico/utente/");
       console.log(item)
     },
   },

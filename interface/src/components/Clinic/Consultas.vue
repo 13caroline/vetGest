@@ -19,6 +19,15 @@
                 >
                   Marcar consulta
                 </v-btn>
+                <v-btn
+                  class="mb-2 mt-6 ml-3 body-2"
+                  small
+                  color="#2596be"
+                  dark
+                  @click="dialog = true"
+                >
+                  Pedidos de consulta
+                </v-btn>
               </v-col>
             </v-row>
           </v-row>

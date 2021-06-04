@@ -165,7 +165,7 @@ const routes = [
 
     // Animal Médico
     {
-      path: '/medico/animal/',
+      path: '/medico/utente/',
       name: 'Animal Médico',
       component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/Animal.vue')
     },
@@ -177,24 +177,36 @@ const routes = [
       component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/Vacinas.vue')
     },
 
-       // Adicionar Desparasitação
-       /*{
-        path:  '/medico/utentes/registar',
-        name: 'Registar Utentes Médico',
-        component: () => import('../views/Doctor/addDesparasitacao.vue')
-      },*/
-
       // Médico edita animal
       {
-        path: '/medico/animal/editar',
+        path: '/medico/utente/editar',
         name: 'Editar Animal',
         component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/EditData.vue')
       },
 
-  
+      {
+        path: '/medico/internamento',
+        name: 'Médico Internamento',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/Internamento.vue')
+      },
+      {
+        path: '/medico/internamento/detalhes',
+        name: 'Médico Internamento Detalhes',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/DetInternamento.vue')
+      },
+      {
+        path: '/medico/internamento/alta',
+        name: 'Médico Internamento Alta',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/Alta.vue')
+      },
+      {
+        path: '/clinica/consultas/pedidos',
+        name: 'Clínica pedidos consultas',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/PedidosConsulta.vue')
+      },
 
 
-    
+      
 
 
 

@@ -94,12 +94,18 @@ export default {
       },
       {
         title: "Marcações de Cirurgias",
-        icon: "fas fa-procedures",
+        icon: "fas fa-syringe",
         route: "/medico/cirurgias",
       },
+      {
+        title: "Internamento",
+        icon: "fas fa-procedures",
+        route: "/medico/internamento",
+      },
+      
        {
         title: "Conselhos Úteis",
-        icon: "fas fa-procedures",
+        icon: "fas fa-comment-medical",
         route: "/medico/conselhos",
       },
     ],

@@ -1,14 +1,14 @@
 <template>
   <div id="page">
     <Header />
-    <EditData />
+    <Alta />
     <Footer />
   </div>
 </template>
 
 <script>
 import Header from "@/components/Headers/DoctorHeader.vue";
-import EditData from "@/components/Doctor/Paciente/EditData.vue"
+import Alta from "@/components/Doctor/Alta.vue"
 import Footer from "@/components/Footer.vue";
 
 export default {
@@ -18,7 +18,7 @@ export default {
   },
   components: {
     Header,
-    EditData,
+    Alta,
     Footer,
   },
  
