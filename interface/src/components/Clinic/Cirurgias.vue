@@ -212,34 +212,29 @@
 
                     <v-col cols="12" class="py-0">
                       <v-menu
-                        ref="dataMarcacao"
-                        v-model="dataMarcacao"
-                        :close-on-content-click="true"
+                        v-model="menu2"
+                        :close-on-content-click="false"
                         :nudge-right="40"
-                        :return-value.sync="dataMarcacao"
                         transition="scale-transition"
                         offset-y
-                        max-width="290px"
-                        min-width="290px"
+                        min-width="auto"
                       >
                         <template v-slot:activator="{ on, attrs }">
                           <v-text-field
-                            append-icon="fas fa-calendar-day"
-                            outlined
-                            color="#2596be"
-                            v-on="on"
-                            v-bind="attrs"
                             v-model="date"
-                            dense
+                            append-icon="fas fa-calendar-alt"
                             readonly
+                            dense
+                            outlined
+                            v-bind="attrs"
+                            v-on="on"
                           ></v-text-field>
                         </template>
                         <v-date-picker
-                          full-width
-                          color="#2596be"
-                          :min="new Date().toISOString().substr(0, 10)"
                           v-model="date"
-                          locale="pt-PT"
+                          @input="menu2 = false"
+                          locale="pt PT"
+                          :min="new Date().toISOString().substr(0, 10)"
                         ></v-date-picker>
                       </v-menu>
                     </v-col>
@@ -335,7 +330,12 @@
             </v-card>
           </v-dialog>
 
-          <v-dialog v-model="cancelDialog" persistent width="100%" max-width="460">
+          <v-dialog
+            v-model="cancelDialog"
+            persistent
+            width="100%"
+            max-width="460"
+          >
             <v-card>
               <v-card-title class="justify-center cancel">
                 Cancelar agendamento da cirurgia
@@ -417,12 +417,12 @@ export default {
     dialog: false,
     dialogUtente: false,
     cancelDialog: false,
-    dataMarcacao: null,
     horaMarcacao: null,
     nomeSelected: "",
     descricao: "",
     motivos: "",
     date: new Date().toISOString().substr(0, 10),
+    menu2: false,
     hora: new Date().getHours() + ":" + new Date().getMinutes(),
     medico: ["Drº José Vieira", "Drª Joana Ferreira"],
     motivo: [

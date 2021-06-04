@@ -112,36 +112,31 @@
               <v-col cols="12" sm="6" md="3" class="py-0">
                 <p class="ma-0">Data de Nascimento</p>
                 <v-menu
-                  ref="data"
-                  v-model="data"
-                  :close-on-content-click="true"
-                  :nudge-right="40"
-                  :return-value.sync="data"
-                  transition="scale-transition"
-                  offset-y
-                  max-width="290px"
-                  min-width="290px"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-text-field
-                      append-icon="fas fa-calendar-day"
-                      outlined
-                      color="#2596be"
-                      v-on="on"
-                      v-bind="attrs"
+                    v-model="menu2"
+                    :close-on-content-click="false"
+                    :nudge-right="40"
+                    transition="scale-transition"
+                    offset-y
+                    min-width="auto"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        v-model="date"
+                        append-icon="fas fa-calendar-alt"
+                        readonly
+                        dense
+                        outlined
+                        v-bind="attrs"
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker
                       v-model="date"
-                      dense
-                      readonly
-                    ></v-text-field>
-                  </template>
-                  <v-date-picker
-                    full-width
-                    color="#2596be"
-                    :min="new Date().toISOString().substr(0, 10)"
-                    v-model="date"
-                    locale="pt-PT"
-                  ></v-date-picker>
-                </v-menu>
+                      @input="menu2 = false"
+                      locale="pt PT"
+                      :min="new Date().toISOString().substr(0, 10)"
+                    ></v-date-picker>
+                  </v-menu>
               </v-col>
 
               <v-col cols="12" sm="6" md="3" class="py-0">
@@ -159,6 +154,22 @@
                   </v-radio>
                 </v-radio-group>
               </v-col>
+
+              <v-col cols="12" sm="6" md="3" class="py-0">
+                    <p class="ma-0">Castração *</p>
+                    <v-radio-group row class="ma-0" v-model="sexo">
+                      <v-radio value="1" color="#2596be">
+                        <template v-slot:label>
+                          <div class="body-2">Sim</div>
+                        </template>
+                      </v-radio>
+                      <v-radio value="0" color="#2596be">
+                        <template v-slot:label>
+                          <div class="body-2">Não</div>
+                        </template>
+                      </v-radio>
+                    </v-radio-group>
+                </v-col>
             </v-row>
 
             <v-row>
@@ -314,6 +325,7 @@ export default {
     cor: "",
     pelagem: "",
     cauda: "",
+    castracao: "", 
     observacoes: "",
     valid: true,
     snackbar: false,
@@ -324,6 +336,7 @@ export default {
     dialog: false,
     dialogDono: false,
     date: new Date().toISOString().substr(0, 10),
+    menu2: false,
     itemscor: [
       "Amarelo",
       "Azul",

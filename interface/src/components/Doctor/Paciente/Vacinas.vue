@@ -82,37 +82,32 @@
             </div>
             <div>
               <p class="mb-0">Data de toma</p>
-              <v-menu
-                ref="dataToma"
-                v-model="menu4"
-                :close-on-content-click="true"
-                :nudge-right="40"
-                transition="scale-transition"
-                offset-y
-                max-width="290px"
-                min-width="290px"
-              >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-text-field
-                    append-outer-icon="fas fa-calendar-alt"
-                    outlined
-                    color="#2596be"
-                    v-on="on"
-                    v-bind="attrs"
-                    v-model="dataToma"
-                    dense
-                    readonly
-                  ></v-text-field>
-                </template>
-                <v-date-picker
-                  full-width
-                  color="#2596be"
-                  @input="menu4 = false"
-                  :min="new Date().toISOString().substr(0, 10)"
-                  v-model="dataToma"
-                  locale="pt-PT"
-                ></v-date-picker>
-              </v-menu>
+               <v-menu
+                    v-model="menu4"
+                    :close-on-content-click="false"
+                    :nudge-right="40"
+                    transition="scale-transition"
+                    offset-y
+                    min-width="auto"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        v-model="date1"
+                        append-icon="fas fa-calendar-alt"
+                        readonly
+                        dense
+                        outlined
+                        v-bind="attrs"
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker
+                      v-model="date1"
+                      @input="menu4 = false"
+                      locale="pt PT"
+                      :min="new Date().toISOString().substr(0, 10)"
+                    ></v-date-picker>
+                  </v-menu>
             </div>
             <div>
               <p class="ma-0">Tratamento Utilizado</p>
@@ -185,31 +180,32 @@
           <v-card-text class="black--text">
             <div>
               <p class="mb-0">Data de toma</p>
-              <v-menu
-                v-model="menu2"
-                :close-on-content-click="false"
-                :nudge-right="40"
-                transition="scale-transition"
-                offset-y
-                min-width="auto"
-              >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-text-field
-                    v-model="date"
-                    append-icon="fas fa-calendar-alt"
-                    readonly
-                    dense
-                    outlined
-                    v-bind="attrs"
-                    v-on="on"
-                  ></v-text-field>
-                </template>
-                <v-date-picker
-                  v-model="date"
-                  @input="menu2 = false"
-                  locale="pt PT"
-                ></v-date-picker>
-              </v-menu>
+               <v-menu
+                    v-model="menu1"
+                    :close-on-content-click="false"
+                    :nudge-right="40"
+                    transition="scale-transition"
+                    offset-y
+                    min-width="auto"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        v-model="dateVac"
+                        append-icon="fas fa-calendar-alt"
+                        readonly
+                        dense
+                        outlined
+                        v-bind="attrs"
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker
+                      v-model="dateVac"
+                      @input="menu1 = false"
+                      locale="pt PT"
+                      :min="new Date().toISOString().substr(0, 10)"
+                    ></v-date-picker>
+                  </v-menu>
             </div>
             <div>
               <p class="ma-0">Vacina contra</p>
@@ -276,6 +272,7 @@
                   v-model="dateProx"
                   @input="menu = false"
                   locale="pt PT"
+                  :min="new Date().toISOString().substr(0, 10)"
                 ></v-date-picker>
               </v-menu>
                 </v-col>
@@ -477,28 +474,31 @@ export default {
   data: () => ({
     dialog: false,
     dialogCancel: false,
-    dialogCancelVac: false, 
+    dialogCancelVac: false,
     dialogCancelDes: false,
     vacinacao: false,
-    desparasitacao: false, 
+    desparasitacao: false,
+
     enabled: false,
     vaccontra: "",
     vaccontraOutro: "",
-    date: new Date().toISOString().substr(0, 10),
+    date1: new Date().toISOString().substr(0, 10),
     dateProx: new Date().toISOString().substr(0, 10),
     dateToma: new Date().toISOString().substr(0, 10),
-    dataToma: new Date().toISOString().substr(0, 10),
+    dateVac: new Date().toISOString().substr(0, 10),
+    dataPrevista: "", 
     menu: false,
-    menu2: false, 
-    menu3: false, 
+    menu1: false,
+    menu3: false,
+    menu4: false,
     tratamento: "",
-    observacoes: "", 
+    observacoes: "",
     snackbar: false,
     color: "",
     done: false,
     timeout: -1,
     text: "",
-    
+
     headers: [
       {
         text: "Data Prevista",
@@ -581,10 +581,7 @@ export default {
       "Piroplasmose",
       "Outro",
     ],
-    tomas: [
-      "1 mês",
-      "3 meses"
-    ]
+    tomas: ["1 mês", "3 meses"],
   }),
   methods: {
     estadopedido(estado) {
@@ -604,13 +601,13 @@ export default {
       this.dialogCancel = false;
       this.dialog = false;
     },
-    cancelarVac(){
-      this.dialogCancelVac = false; 
-      this.vacinacao = false; 
+    cancelarVac() {
+      this.dialogCancelVac = false;
+      this.vacinacao = false;
     },
-    cancelarDes(){
-      this.dialogCancelDes = false; 
-      this.desparasitacao = false; 
+    cancelarDes() {
+      this.dialogCancelDes = false;
+      this.desparasitacao = false;
     },
     confirma: async function () {
       /*
@@ -634,13 +631,8 @@ export default {
         }
       */
     },
-    adicionaVacina: async function(){
-
-    },
-    adicionaDesparasita: async function(){
-
-    }
-
+    adicionaVacina: async function () {},
+    adicionaDesparasita: async function () {},
   },
   created() {
     /*
