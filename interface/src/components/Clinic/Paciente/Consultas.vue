@@ -166,197 +166,189 @@
       </v-dialog>
 
       <v-dialog v-model="dialogNova" width="100%" max-width="500">
-            <v-card>
-              <v-form>
-                <v-card-title class="font-weight-regular text-uppercase">
-                  Marcar consulta
-                </v-card-title>
-                <v-card-subtitle
-                  >Por favor preencha o seguinte formulário</v-card-subtitle
-                >
+        <v-card>
+          <v-form>
+            <v-card-title class="font-weight-regular text-uppercase">
+              Marcar consulta
+            </v-card-title>
+            <v-card-subtitle
+              >Por favor preencha o seguinte formulário</v-card-subtitle
+            >
 
-                <v-card-text>
-                  <v-row align="center">
-                    <v-col cols="12" class="pb-0">
-                      <p class="ma-0">Utente</p>
+            <v-card-text>
+              <v-row align="center">
+                <v-col cols="12" class="pb-0">
+                  <p class="ma-0">Utente</p>
+                  <v-text-field
+                    color="#2596be"
+                    flat
+                    v-model="utente"
+                    outlined
+                    readonly
+                    dense
+                    value="Rubi"
+                  ></v-text-field>
+                </v-col>
+
+                <v-col cols="12" class="py-0">
+                  <p class="ma-0">Motivo</p>
+                  <v-select
+                    :items="motivo"
+                    dense
+                    color="#2596be"
+                    flat
+                    outlined
+                    v-model="motivos"
+                  ></v-select>
+                </v-col>
+
+                <v-col cols="12" class="py-0">
+                  <p class="ma-0">Descrição</p>
+                  <v-select
+                    :items="filteredData"
+                    dense
+                    color="#2596be"
+                    flat
+                    outlined
+                    v-model="descricao"
+                    item-text="text"
+                    item-value="text"
+                  ></v-select>
+                </v-col>
+
+                <v-col cols="12" class="py-0">
+                  <p class="ma-0">Data</p>
+                </v-col>
+
+                <v-col cols="12" class="py-0">
+                  <v-menu
+                    v-model="menu2"
+                    :close-on-content-click="false"
+                    :nudge-right="40"
+                    transition="scale-transition"
+                    offset-y
+                    min-width="auto"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
                       <v-text-field
-                        color="#2596be"
-                        flat
-                        outlined
+                        v-model="date"
+                        append-icon="fas fa-calendar-alt"
                         readonly
                         dense
-                        value="Rubi"
+                        outlined
+                        v-bind="attrs"
+                        v-on="on"
                       ></v-text-field>
-                    </v-col>
+                    </template>
+                    <v-date-picker
+                      v-model="date"
+                      @input="menu2 = false"
+                      locale="pt PT"
+                      :min="new Date().toISOString().substr(0, 10)"
+                    ></v-date-picker>
+                  </v-menu>
+                </v-col>
 
-                    <v-col cols="12" class="py-0">
-                      <p class="ma-0">Motivo</p>
-                      <v-select
-                        :items="motivo"
-                        dense
+                <v-col cols="12" class="py-0">
+                  <p class="ma-0">Hora</p>
+                </v-col>
+
+                <v-col cols="12" class="py-0">
+                  <v-menu
+                    ref="horaMarcacao"
+                    v-model="horaMarcacao"
+                    :close-on-content-click="false"
+                    :nudge-right="40"
+                    :return-value.sync="horaMarcacao"
+                    transition="scale-transition"
+                    offset-y
+                    max-width="290px"
+                    min-width="290px"
+                  >
+                    <template v-slot:activator="{ on }">
+                      <v-text-field
+                        append-icon="fas fa-clock"
                         color="#2596be"
-                        flat
+                        v-on="on"
                         outlined
-                        v-model="motivos"
-                      ></v-select>
-                    </v-col>
-
-                    <v-col cols="12" class="py-0">
-                      <p class="ma-0">Descrição</p>
-                      <v-select
-                        :items="filteredData"
                         dense
-                        color="#2596be"
-                        flat
-                        outlined
-                        v-model="descricao"
-                        item-text="text"
-                        item-value="text"
-                      ></v-select>
-                    </v-col>
+                        v-model="hora"
+                      ></v-text-field>
+                    </template>
+                    <v-time-picker
+                      format="24hr"
+                      v-model="hora"
+                      full-width
+                      color="#2596be"
+                    ></v-time-picker>
+                  </v-menu>
+                </v-col>
 
-                    <v-col cols="12" class="py-0">
-                      <p class="ma-0">Data</p>
-                    </v-col>
+                <v-col cols="12" class="py-0">
+                  <p class="ma-0">Médico Veterinário</p>
+                </v-col>
+                <v-col cols="12" class="py-0">
+                  <v-autocomplete
+                    flat
+                    color="#2596be"
+                    dense
+                    outlined
+                    :items="medico"
+                    v-model="medico"
+                  ></v-autocomplete>
+                </v-col>
+              </v-row>
 
-                    <v-col cols="12" class="py-0">
-                      <v-menu
-                        ref="dataMarcacao"
-                        v-model="dataMarcacao"
-                        :close-on-content-click="true"
-                        :nudge-right="40"
-                        :return-value.sync="dataMarcacao"
-                        transition="scale-transition"
-                        offset-y
-                        max-width="290px"
-                        min-width="290px"
-                      >
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-text-field
-                            append-icon="fas fa-calendar-day"
-                            outlined
-                            color="#2596be"
-                            v-on="on"
-                            v-bind="attrs"
-                            v-model="date"
-                            dense
-                            readonly
-                          ></v-text-field>
-                        </template>
-                        <v-date-picker
-                          full-width
-                          color="#2596be"
-                          :min="new Date().toISOString().substr(0, 10)"
-                          v-model="date"
-                          locale="pt-PT"
-                        ></v-date-picker>
-                      </v-menu>
-                    </v-col>
+              <v-row align="end" justify="end">
+                <v-col cols="auto">
+                  <v-btn color="#BDBDBD" small dark @click="cancelDialog = true"
+                    >Cancelar</v-btn
+                  >
+                </v-col>
+                <v-col cols="auto">
+                  <v-btn color="#2596be" small dark class="ml-3"
+                    >Registar</v-btn
+                  >
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-form>
+        </v-card>
+      </v-dialog>
 
-                    <v-col cols="12" class="py-0">
-                      <p class="ma-0">Hora</p>
-                    </v-col>
-
-                    <v-col cols="12" class="py-0">
-                      <v-menu
-                        ref="horaMarcacao"
-                        v-model="horaMarcacao"
-                        :close-on-content-click="false"
-                        :nudge-right="40"
-                        :return-value.sync="horaMarcacao"
-                        transition="scale-transition"
-                        offset-y
-                        max-width="290px"
-                        min-width="290px"
-                      >
-                        <template v-slot:activator="{ on }">
-                          <v-text-field
-                            append-icon="fas fa-clock"
-                            color="#2596be"
-                            v-on="on"
-                            outlined
-                            dense
-                            v-model="hora"
-                          ></v-text-field>
-                        </template>
-                        <v-time-picker
-                          format="24hr"
-                          v-model="hora"
-                          full-width
-                          color="#2596be"
-                        ></v-time-picker>
-                      </v-menu>
-                    </v-col>
-
-                    <v-col cols="12" class="py-0">
-                      <p class="ma-0">Médico Veterinário</p>
-                    </v-col>
-                    <v-col cols="12" class="py-0">
-                      <v-autocomplete
-                        flat
-                        color="#2596be"
-                        dense
-                        outlined
-                        :items="medico"
-                        v-model="medico"
-                      ></v-autocomplete>
-                    </v-col>
-                  </v-row>
-
-                  <v-row align="end" justify="end">
-                    <v-col cols="auto">
-                      <v-btn
-                        color="#BDBDBD"
-                        small
-                        dark
-                        @click="cancelDialog = true"
-                        >Cancelar</v-btn
-                      >
-                    </v-col>
-                    <v-col cols="auto">
-                      <v-btn color="#2596be" small dark class="ml-3"
-                        >Registar</v-btn
-                      >
-                    </v-col>
-                  </v-row>
-                </v-card-text>
-              </v-form>
-            </v-card>
-          </v-dialog>
-
-          <v-dialog v-model="cancelDialog" persistent width="100%" max-width="460">
-            <v-card>
-              <v-card-title class="justify-center cancel">
-                Cancelar agendamento da consulta
-              </v-card-title>
-              <v-card-text>
-                Tem a certeza que pretende cancelar o agendamento da consulta?
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn
-                  depressed
-                  large
-                  width="50%"
-                  dark
-                  color="#BDBDBD"
-                  @click="cancelDialog = false"
-                >
-                  Não
-                </v-btn>
-                <v-btn
-                  depressed
-                  large
-                  dark
-                  color="#2596be"
-                  width="50%"
-                  @click="cancelDialog = false"
-                >
-                  Sim
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
+      <v-dialog v-model="cancelDialog" persistent width="100%" max-width="460">
+        <v-card>
+          <v-card-title class="justify-center cancel">
+            Cancelar agendamento da consulta
+          </v-card-title>
+          <v-card-text>
+            Tem a certeza que pretende cancelar o agendamento da consulta?
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              depressed
+              large
+              width="50%"
+              dark
+              color="#BDBDBD"
+              @click="cancelDialog = false"
+            >
+              Não
+            </v-btn>
+            <v-btn
+              depressed
+              large
+              dark
+              color="#2596be"
+              width="50%"
+              @click="cancelDialog = false"
+            >
+              Sim
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-card>
   </div>
 </template>
@@ -365,13 +357,16 @@
 <script>
 export default {
   data: () => ({
-      dialogNova: false, 
-      cancelDialog: false, 
+    dialogNova: false,
+    cancelDialog: false,
+    dialog: false,
+    cancelar: false,
     snackbar: false,
     color: "",
     done: false,
     timeout: -1,
     text: "",
+
     headers: [
       {
         text: "Data de Marcação",
@@ -434,8 +429,64 @@ export default {
         estado: "Cancelada",
       },
     ],
-    dialog: false,
-    cancelar: false,
+    desc: [
+      { text: "Consulta anual/Vacinação", tipo: "Consulta anual/Vacinação" },
+      {
+        text: "Vómitos/Diarreia/Recusa em comer",
+        tipo: "Consulta extraordinária/Por doença",
+      },
+      {
+        text: "Comportamento letárgico",
+        tipo: "Consulta extraordinária/Por doença",
+      },
+      {
+        text: "Alterações da marcha",
+        tipo: "Consulta extraordinária/Por doença",
+      },
+      {
+        text: "Problema de olhos ou ouvidos",
+        tipo: "Consulta extraordinária/Por doença",
+      },
+      {
+        text: "Problemas de dentes ou boca",
+        tipo: "Consulta extraordinária/Por doença",
+      },
+      {
+        text: "Problemas cutâneos",
+        tipo: "Consulta extraordinária/Por doença",
+      },
+      {
+        text: "Problemas urinários",
+        tipo: "Consulta extraordinária/Por doença",
+      },
+      { text: "Outros", tipo: "Consulta extraordinária/Por doença" },
+      { text: "Consulta de seguimento", tipo: "Consulta de seguimento" },
+      { text: "Cortar unhas", tipo: "Procedimentos específicos" },
+      {
+        text: "Expressão de glândulas anais",
+        tipo: "Procedimentos específicos",
+      },
+      { text: "Análises", tipo: "Procedimentos específicos" },
+      { text: "Limpeza de ouvidos", tipo: "Procedimentos específicos" },
+      { text: "Cortar o pêlo", tipo: "Procedimentos específicos" },
+      { text: "Lavagem", tipo: "Procedimentos específicos" },
+      { text: "Desparasitação", tipo: "Procedimentos específicos" },
+      { text: "Outros", tipo: "Procedimentos específicos" },
+    ],
+    motivo: [
+      "Consulta anual/Vacinação",
+      "Consulta extraordinária/Por doença",
+      "Consulta de seguimento",
+      "Procedimentos específicos",
+    ],
+    hora: new Date().getHours() + ":" + new Date().getMinutes(),
+    date: new Date().toISOString().substr(0, 10),
+    menu2: false,
+    descricao: "",
+    motivos: "",
+    medico: "",
+    utente: "",
+    horaMarcacao: null,
   }),
   methods: {
     estadopedido(estado) {
@@ -466,6 +517,12 @@ export default {
           this.snackbar = true;
         }
 		*/
+    },
+  },
+  computed: {
+    filteredData() {
+      let motivo = this.motivos;
+      return this.desc.filter((item) => item.tipo === motivo);
     },
   },
 };
