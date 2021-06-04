@@ -1,0 +1,106 @@
+version: '3.7'
+
+services:
+
+    lbweb:
+        build:
+          context: ./nginxweb
+          dockerfile: Dockerfile
+        ports:
+          - "3000:3000"
+        depends_on:
+          - frontend1
+          - frontend2
+        restart: always
+        networks:       
+            - default
+            - nginx_network
+       
+    frontend1:
+        build: ./interface
+        volumes:
+            - './interface:/app'
+        ports:
+            - 8081:8080
+        networks:
+            - default
+            - nginx_network
+        
+    frontend2:
+        build: ./interface
+        volumes:
+            - './interface:/app'
+        ports:
+            - 8082:8080
+        networks:
+            - default
+            - nginx_network
+                
+    lb:
+        build:
+          context: ./nginx
+          dockerfile: Dockerfile
+        ports:
+          - "7777:7777"
+        depends_on:
+          - backend1
+          - backend2
+        restart: always
+        networks:       
+            - default
+
+    vetgest_db: 
+        image: mysql:8.0.17
+        environment:
+            MYSQL_DATABASE: vetgest
+            MYSQL_ROOT_PASSWORD: pass
+        ports:
+            - 3308:3306
+        networks:
+            - network_backend
+
+    backend1:
+        build: 
+            context: ./api
+        #command: ["sleep", "1000000"]
+        command: ["rm -rf", "target/"]
+        command: ["./wait-for-it.sh", "vetgest_db:3306", "--", "mvn", "install"]
+        command: ["mvn", "spring-boot:run"]
+         
+        environment:
+            WAIT_HOSTS: mysql:3306
+            SPRING_DATASOURCE_URL: jdbc:mysql://vetgest_db:3306/vetgest?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Europe/Lisbon
+            SPRING_DATASOURCE_USERNAME: root
+            SPRING_DATASOURCE_PASSWORD: pass
+        ports:
+            - 9091:9090
+        networks:
+            - network_backend
+            - default 
+        restart: always
+
+    backend2:
+        build: 
+            context: ./api
+        #command: ["sleep", "1000000"]
+        command: ["rm -rf", "target/"]
+        command: ["./wait-for-it.sh", "vetgest_db:3306", "--", "mvn", "install"]
+        command: ["mvn", "spring-boot:run"]
+         
+        environment:
+            WAIT_HOSTS: mysql:3306
+            SPRING_DATASOURCE_URL: jdbc:mysql://vetgest_db:3306/vetgest?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Europe/Lisbon
+            SPRING_DATASOURCE_USERNAME: root
+            SPRING_DATASOURCE_PASSWORD: pass
+        ports:
+            - 9092:9090
+        networks:
+            - network_backend
+            - default 
+        restart: always
+
+networks:
+    network_backend:
+        driver: "bridge"
+    nginx_network:
+        driver: "bridge"
