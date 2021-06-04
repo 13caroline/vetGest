@@ -169,8 +169,8 @@
                             color="#2596be"
                             small
                             dark
-                            class="ml-3"
-                            @click="e1 = 3"
+                            class="registaConsulta()"
+                            @click="getAnimais()"
                           >
                             Confirmar
                           </v-btn>
@@ -218,6 +218,9 @@
 
 <script>
 //import moment from 'moment';
+import axios from "axios"
+import store from "@/store.js"
+
 export default {
   data: () => ({
     e1: 1,
@@ -226,7 +229,8 @@ export default {
     horaMarcacao: null,
     date: new Date().toISOString().substr(0, 10),
     hora: new Date().getHours() + ":" + new Date().getMinutes(),
-    animais: ["Rubi", "Puscas", "Nikita", "Rudi"],
+    animais: [],
+    /*animais: ["Rubi", "Puscas", "Nikita", "Rudi"], */
     medico: ["Sem Preferência", "Drº José Vieira", "Drª Joana Ferreira"],
     motivo: [],
     animal: "",
@@ -258,7 +262,45 @@ export default {
       "Procedimentos específicos",
     ],
   }),
-};
+  methods:{
+   registaConsulta: async function() {
+           try{
+              var resposta = await axios.post("http://localhost:7777/cliente/consulta", {
+                data: this.data,
+                hora: this.hora,
+                descricao: this.descricao,
+                motivo: this.motivo,
+                animais: this.animais,
+                veterinario: this.veterinario,
+           });
+         } catch(e){
+           console.log("erro: +" + e);
+         }
+         console.log(resposta);
+
+    
+  },
+  }, 
+  created: async function() {
+           try{
+              var response = await axios.post("http://localhost:7777/cliente/animais", {
+              email: this.$store.state.email,
+           },
+           {
+      headers: {
+            "Authorization": 'Bearer ' +store.getters.token.toString()
+       }   
+       
+       });
+         } catch(e){
+           console.log("erro: +" + e);
+         }
+         for(var i=0; i<response.data.animais.length;i++ ){
+         this.animais.push(response.data.animais[i].nome)
+         }
+  
+},
+}
 </script>
 
 <style scoped>
