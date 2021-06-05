@@ -24,19 +24,19 @@
 
             <v-row class="mb-0 mt-5">
               <v-col cols="12" md="6">
-                <p class="ma-0">Escolha o animal</p>
+                <p class="ma-0">Escolha o animal *</p>
                 <v-autocomplete
                   flat
                   color="#2596be"
                   dense
                   outlined
                   :items="animais"
-                  v-model="animal"
+                  item-text="nome"
                 ></v-autocomplete>
               </v-col>
 
               <v-col cols="12" md="6">
-                <p class="ma-0">Motivo</p>
+                <p class="ma-0">Motivo *</p>
                 <v-select
                   flat
                   color="#2596be"
@@ -116,7 +116,7 @@
               </v-col>
 
               <v-col>
-                <p class="ma-0">Hora</p>
+                <p class="ma-0">Hora *</p>
                 <v-menu
                   ref="horaMarcacao"
                   v-model="horaMarcacao"
@@ -143,13 +143,16 @@
                     v-model="hora"
                     full-width
                     color="#2596be"
+                    min="10:00"
+                    max="20:00"
+                    :allowed-minutes="allowedStep"
                   ></v-time-picker>
                 </v-menu>
               </v-col>
             </v-row>
 
             <div>
-              <p class="ma-0">Médico Veterinário</p>
+              <p class="ma-0">Médico Veterinário *</p>
               <v-autocomplete
                 flat
                 color="#2596be"
@@ -159,28 +162,24 @@
                 v-model="medicoVet"
               ></v-autocomplete>
             </div>
+            <span class="ma-0 caption">* Campos obrigatórios</span>
 
             <v-row align="end" justify="end">
-                        <v-col cols="auto">
-                          <v-btn
-                            color="#BDBDBD"
-                            small
-                            dark
-                            @click="dialog = true"
-                          >
-                            Cancelar
-                          </v-btn>
-                          <v-btn
-                            color="#2596be"
-                            small
-                            dark
-                            class="registaConsulta()"
-                            @click="getAnimais()"
-                          >
-                            Confirmar
-                          </v-btn>
-                        </v-col>
-                      </v-row>
+              <v-col cols="auto">
+                <v-btn color="#BDBDBD" small dark @click="dialog = true">
+                  Cancelar
+                </v-btn>
+                <v-btn
+                  color="#2596be"
+                  small
+                  dark
+                  class="registaConsulta()"
+                  @click="getAnimais()"
+                >
+                  Confirmar
+                </v-btn>
+              </v-col>
+            </v-row>
           </v-card-text>
         </v-col>
       </v-row>
@@ -223,8 +222,8 @@
 
 <script>
 //import moment from 'moment';
-import axios from "axios"
-import store from "@/store.js"
+import axios from "axios";
+import store from "@/store.js";
 
 export default {
   data: () => ({
@@ -267,45 +266,70 @@ export default {
       "Procedimentos específicos",
     ],
   }),
-  methods:{
-   registaConsulta: async function() {
-           try{
-              var resposta = await axios.post("http://localhost:7777/cliente/consulta", {
-                data: this.data,
-                hora: this.hora,
-                descricao: this.descricao,
-                motivo: this.motivo,
-                animais: this.animais,
-                veterinario: this.veterinario,
-           });
-         } catch(e){
-           console.log("erro: +" + e);
-         }
-         console.log(resposta);
+  methods: {
+    registaConsulta: async function () {
+      try {
+        var resposta = await axios.post(
+          "http://localhost:7777/cliente/consulta",
+          {
+            data: this.data,
+            hora: this.hora,
+            descricao: this.descricao,
+            motivo: this.motivo,
+            animais: this.animais,
+            veterinario: this.veterinario,
+          }
+        );
+      } catch (e) {
+        console.log("erro: +" + e);
+      }
+      console.log(resposta);
+    },
+    allowedStep: m => m % 15 === 0,
 
-    
   },
-  }, 
-  created: async function() {
-           try{
-              var response = await axios.post("http://localhost:7777/cliente/animais", {
-              email: this.$store.state.email,
-           },
-           {
-      headers: {
-            "Authorization": 'Bearer ' +store.getters.token.toString()
-       }   
-       
-       });
-         } catch(e){
-           console.log("erro: +" + e);
-         }
-         for(var i=0; i<response.data.animais.length;i++ ){
-         this.animais.push(response.data.animais[i].nome)
-         }
-  
-},
-}
+  created: async function () {
+    try {
+      var response = await axios.post(
+        "http://localhost:7777/cliente/animais",
+        {
+          email: this.$store.state.email,
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + store.getters.token.toString(),
+          },
+        }
+      );
+
+var responseMedico = await axios.get(
+        "http://localhost:7777/cliente/medicos",
+        {
+          headers: {
+            Authorization: "Bearer " + store.getters.token.toString(),
+          },
+        }
+      );
+
+    } catch (e) {
+      console.log("erro: +" + e);
+    }
+    for (var i = 0; i < response.data.animais.length; i++) {
+      this.animais.push({
+        nome: response.data.animais[i].nome,
+        id: response.data.animais[i].id,
+      });
+    }
+    console.log(responseMedico)
+    /* for (var i = 0; i < responseMedico.data.medicos.length; i++) {
+      this.animais.push({
+        nome: response.data.animais[i].nome,
+        id: response.data.animais[i].id,
+      });
+    }*/
+    console.log(this.animais);
+  },
+};
 </script>
 
 <style scoped>
