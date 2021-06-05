@@ -23,7 +23,7 @@
             </v-row>
           </v-row>
 
-          <v-sheet>
+          <v-sheet class="mt-4">
             <v-toolbar flat>
               <v-btn outlined class="mr-4" color="#2596be" @click="setToday">
                 Hoje
