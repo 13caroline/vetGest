@@ -59,6 +59,12 @@ public class Intervencao {
     )
     private String observacoes;
 
+    @Column(
+            name = "data_pedido",
+            nullable = false
+    )
+    private String data_pedido;
+
     @ManyToOne(cascade = {CascadeType.ALL})
     private Animal animal;
 
