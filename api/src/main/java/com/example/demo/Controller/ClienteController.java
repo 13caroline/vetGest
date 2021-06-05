@@ -1,12 +1,17 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Entity.*;
+import com.example.demo.Security.JwtUtil;
 import com.example.demo.Service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.tomcat.util.http.parser.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +29,8 @@ public class ClienteController {
     private ImunizacaoService imunizacaoService;
     @Autowired
     private VeterinarioService veterinarioService;
+    @Autowired
+    private  JwtUtil jwtUtil;
 
     //Check
     @CrossOrigin
@@ -63,7 +70,13 @@ public class ClienteController {
 
     @CrossOrigin
     @PostMapping("/cliente/animais")
-    public ResponseEntity<?> getClienteAnimais(@RequestBody Cliente email){
+    public ResponseEntity<?> getClienteAnimais(@RequestBody Cliente email){// @RequestHeader String Authorization){
+        //System.out.println(Authorization.substring(7));
+        //String email1 = jwtUtil.extractUsername(Authorization.substring(7));
+        //System.out.println(email1);
+        //if(email1.equals(email.getEmail())){ ....}
+        //Diria que a verificaçao com o token seria assim, ou entao usamos só o token para ir buscar o user
+        // e nao mandamos o email no body... mas diria que como temos é uma dupla verificaçao e nao perdemos nada em faze-la
         Cliente cliente = clienteService.getClienteByEmail(email.getEmail());
         if(cliente==null){
             return ResponseEntity.badRequest().body("Utilizador não existe!");
