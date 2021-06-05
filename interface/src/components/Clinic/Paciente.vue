@@ -6,9 +6,23 @@
           <span class="subtitle-1 head">Rubi</span>
         </v-col>
         <v-col cols="auto" class="ml-auto">
-          <v-btn icon depressed to="/clinica/editar/utente">
-            <v-icon color="#2596be">fas fa-pen</v-icon>
-          </v-btn>
+          <v-tooltip top>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+               class="body-2 ml-2 mb-2"
+                small
+                color="#2596be"
+                v-bind="attrs"
+                v-on="on"
+                fab
+                dark
+                to="/clinica/editar/utente"
+              >
+                <v-icon small>fas fa-pen</v-icon>
+              </v-btn>
+            </template>
+            <span>Editar dados</span>
+          </v-tooltip>
         </v-col>
       </v-row>
       <v-divider></v-divider>
@@ -41,10 +55,10 @@
 </template>
 
 <script>
-import PacienteVacinas from "@/components/Clinic/Paciente/Vacinas.vue"
-import Consultas from "@/components/Clinic/Paciente/Consultas.vue"
-import Cirurgia from "@/components/Clinic/Paciente/Cirurgias.vue"
-import Dados from "@/components/Clinic/Paciente/Dados.vue"
+import PacienteVacinas from "@/components/Utente/Vacinas.vue"
+import Consultas from "@/components/Utente/Consultas.vue"
+import Cirurgia from "@/components/Utente/Cirurgias.vue"
+import Dados from "@/components/Utente/Dados.vue"
 
 export default {
   data: () => ({

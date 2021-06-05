@@ -57,156 +57,149 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Client/Clinica.vue')
   },
 
-    //------------------------------------- Clinica -------------------------------------
+  //------------------------------------- Clinica -------------------------------------
 
-      //Página inicial da clinica
-    {
-      path: '/clinica/inicio',
-      name: 'Página Clinica',
-      component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Page.vue')
-    },
+  //Página inicial da clinica
+  {
+    path: '/clinica/inicio',
+    name: 'Página Clinica',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Page.vue')
+  },
 
-    // Lista dos utentes da clinica
-    {
-      path: '/clinica/utentes',
-      name: 'Utentes Clinica',
-      component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Pacientes.vue')
-    },
-    // Ir para a página de um utente
-    {
-      path: '/clinica/utente/',
-      name: 'Utente',
-      component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Paciente.vue')
-    },
-     // Lista dos clientes da clinica
-     {
-      path: '/clinica/clientes',
-      name: 'Clientes Clinica',
-      component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Clientes.vue')
-    },
-    // Calendário de consultas da clínica
-    {
-      path: '/clinica/consultas/',
-      name: 'Clinica Consultas',
-      component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Consultas.vue')
-    },
-    // Calendário de cirurgias da clínica
-    {
-      path: '/clinica/cirurgias/',
-      name: 'Clinica Cirurgias',
-      component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Cirurgias.vue')
-    },
-    // Equipa médica da clínica
-    {
-      path: '/clinica/medicos/',
-      name: 'Clinica Médicos',
-      component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Medicos.vue')
-    },
-     // Registar um utente por parte da clinica
-     {
-      path: '/clinica/utentes/registar',
-      name: 'Registar Utente Clinica',
-      component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/RegistarPaciente.vue')
-    },
-    // Registar cliente por clínica
-    {
-      path: '/clinica/clientes/registar',
-      name: 'Clinica Registar Cliente',
-      component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/RegistarCliente.vue')
-    },
-    // Registar médico veterinário por clínica
-    {
-      path: '/clinica/medicos/registar',
-      name: 'Clinica Registar Médico',
-      component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/RegistarVeterinario.vue')
-    },
-     // Editar dados de utente
-     {
-      path: '/clinica/editar/utente',
-      name: 'Clinica Editar Dados Utente',
-      component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/EditData.vue')
-    },
-    // Relatórios da Clínica
-    {
-      path: '/clinica/relatorios',
-      name: 'Relatórios Clínica',
-      component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Relatorios.vue')
-    },
+  // Lista dos utentes da clinica
+  {
+    path: '/clinica/utentes',
+    name: 'Utentes Clinica',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Pacientes.vue')
+  },
+  // Ir para a página de um utente
+  {
+    path: '/clinica/utente/',
+    name: 'Utente',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Paciente.vue')
+  },
+  // Lista dos clientes da clinica
+  {
+    path: '/clinica/clientes',
+    name: 'Clientes Clinica',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Clientes.vue')
+  },
+  // Calendário de consultas da clínica
+  {
+    path: '/clinica/consultas/',
+    name: 'Clinica Consultas',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Consultas.vue')
+  },
+  // Calendário de cirurgias da clínica
+  {
+    path: '/clinica/cirurgias/',
+    name: 'Clinica Cirurgias',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Cirurgias.vue')
+  },
+  // Equipa médica da clínica
+  {
+    path: '/clinica/medicos/',
+    name: 'Clinica Médicos',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Medicos.vue')
+  },
+  // Registar um utente por parte da clinica
+  {
+    path: '/clinica/utentes/registar',
+    name: 'Registar Utente Clinica',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/RegistarPaciente.vue')
+  },
+  // Registar cliente por clínica
+  {
+    path: '/clinica/clientes/registar',
+    name: 'Clinica Registar Cliente',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/RegistarCliente.vue')
+  },
+  // Registar médico veterinário por clínica
+  {
+    path: '/clinica/medicos/registar',
+    name: 'Clinica Registar Médico',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/RegistarVeterinario.vue')
+  },
+  // Editar dados de utente
+  {
+    path: '/clinica/editar/utente',
+    name: 'Clinica Editar Dados Utente',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/EditData.vue')
+  },
+  // Relatórios da Clínica
+  {
+    path: '/clinica/relatorios',
+    name: 'Relatórios Clínica',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Relatorios.vue')
+  },
+  {
+    path: '/clinica/consultas/pedidos',
+    name: 'Clínica pedidos consultas',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/PedidosConsulta.vue')
+  },
+  //------------------------------------- Médico -------------------------------------
 
-    //------------------------------------- Médico -------------------------------------
+  //Página inicial médico
+  {
+    path: '/medico/inicio',
+    name: 'Página Inicial Médico',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/Page.vue')
+  },
 
-    //Página inicial médico
-    {
-      path: '/medico/inicio',
-      name: 'Página Inicial Médico',
-      component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/Page.vue')
-    },
+  // Lista dos utentes do médico
+  {
+    path: '/medico/utentes',
+    name: 'Utentes Médico',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/Pacientes.vue')
+  },
 
-    // Lista dos utentes do médico
-    {
-      path: '/medico/utentes',
-      name: 'Utentes Médico',
-      component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/Pacientes.vue')
-    },
+  // Calendário de consultas de um médico
+  {
+    path: '/medico/consultas/',
+    name: 'Médico Consultas',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/Consultas.vue')
+  },
 
-     // Calendário de consultas de um médico
-     {
-      path: '/medico/consultas/',
-      name: 'Médico Consultas',
-      component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/Consultas.vue')
-    },
+  // Calendário de cirurgias de um médico
+  {
+    path: '/medico/cirurgias/',
+    name: 'Médico Cirurgias',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/Cirurgias.vue')
+  },
 
-    // Calendário de cirurgias de um médico
-    {
-      path: '/medico/cirurgias/',
-      name: 'Médico Cirurgias',
-      component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/Cirurgias.vue')
-    },
+  // Animal Médico
+  {
+    path: '/medico/utente/',
+    name: 'Animal Médico',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/Animal.vue')
+  },
 
-    // Animal Médico
-    {
-      path: '/medico/utente/',
-      name: 'Animal Médico',
-      component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/Animal.vue')
-    },
+  // Médico edita animal
+  {
+    path: '/medico/utente/editar',
+    name: 'Médico Editar Animal',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/EditData.vue')
+  },
 
-    //Vacinas Animal
-    {
-      path: '/medico/vacinas/',
-      name: 'Vacinas e Desparasitações Médico',
-      component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/Vacinas.vue')
-    },
-
-      // Médico edita animal
-      {
-        path: '/medico/utente/editar',
-        name: 'Editar Animal',
-        component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/EditData.vue')
-      },
-
-      {
-        path: '/medico/internamento',
-        name: 'Médico Internamento',
-        component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/Internamento.vue')
-      },
-      {
-        path: '/medico/internamento/detalhes',
-        name: 'Médico Internamento Detalhes',
-        component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/DetInternamento.vue')
-      },
-      {
-        path: '/medico/internamento/alta',
-        name: 'Médico Internamento Alta',
-        component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/Alta.vue')
-      },
-      {
-        path: '/clinica/consultas/pedidos',
-        name: 'Clínica pedidos consultas',
-        component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/PedidosConsulta.vue')
-      },
+  {
+    path: '/medico/internamento',
+    name: 'Médico Internamento',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Internamento/Internamento.vue')
+  },
+  {
+    path: '/medico/internamento/detalhes',
+    name: 'Médico Internamento Detalhes',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Internamento/DetInternamento.vue')
+  },
+  {
+    path: '/medico/internamento/alta',
+    name: 'Médico Internamento Alta',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/Alta.vue')
+  },
+ 
 
 
-      
+
 
 
 
@@ -215,8 +208,8 @@ const routes = [
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes, 
-  scrollBehavior (to, from, savedPosition) {
+  routes,
+  scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
       return savedPosition
     } else {

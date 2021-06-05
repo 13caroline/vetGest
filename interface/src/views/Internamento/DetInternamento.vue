@@ -1,14 +1,14 @@
 <template>
   <div id="page">
     <Header />
-    <Internamento />
+    <DetInternamento />
     <Footer />
   </div>
 </template>
 
 <script>
 import Header from "@/components/Headers/DoctorHeader.vue";
-import Internamento from "@/components/Doctor/Internamento.vue"
+import DetInternamento from "@/components/Internamento/DetInternamento.vue"
 import Footer from "@/components/Footer.vue";
 
 export default {
@@ -18,7 +18,7 @@ export default {
   },
   components: {
     Header,
-    Internamento,
+    DetInternamento,
     Footer,
   },
  

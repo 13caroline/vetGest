@@ -2,38 +2,34 @@
   <div>
     <v-container class="fill-height">
       <v-row class="w-100">
-        <v-card width="100%">
+        <v-card flat height="100" width="190" outlined class="ma-4">
           <v-row>
             <v-col>
-              <v-card flat height="50" width="100">
-                <v-row>
-                  <v-col>
-                    <!--<v-img
-                      src="@/assets/animais/Rubi.jpg"
-                      aspect-ratio="1"
-                      class="grey lighten-2 mx-2"
-                      cover
-                    >
-                      <template v-slot:placeholder>
-                        <v-row
-                          class="fill-height ma-0"
-                          align="center"
-                          justify="center"
-                        >
-                          <v-progress-circular
-                            indeterminate
-                            color="grey lighten-5"
-                          ></v-progress-circular>
-                        </v-row>
-                      </template>
-                    </v-img>-->
-                  </v-col>
-                  <v-col>
-                    <div>RUBI</div>
-                    <div>8 ANOS</div>
-                  </v-col>
-                </v-row>
-              </v-card>
+              <v-img
+                src="@/assets/animais/Rubi.jpg"
+                aspect-ratio="1"
+                class="grey lighten-2 ma-2 rounded"
+                cover
+                min-height="80"
+                min-width="80"
+              >
+                <template v-slot:placeholder>
+                  <v-row
+                    class="fill-height ma-0"
+                    align="center"
+                    justify="center"
+                  >
+                    <v-progress-circular
+                      indeterminate
+                      color="grey lighten-5"
+                    ></v-progress-circular>
+                  </v-row>
+                </template>
+              </v-img>
+            </v-col>
+            <v-col class="details my-auto">
+              <div class="text-uppercase font-weight-bold">Rubi</div>
+              <span class="text-uppercase body-2 text--secondary" >8 ANOS</span>
             </v-col>
           </v-row>
         </v-card>
@@ -186,3 +182,9 @@
     </v-container>
   </div>
 </template>
+
+<style scoped>
+  .details{
+    text-align: left;
+  }
+</style>

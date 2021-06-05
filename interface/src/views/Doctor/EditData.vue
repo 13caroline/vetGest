@@ -8,7 +8,7 @@
 
 <script>
 import Header from "@/components/Headers/DoctorHeader.vue";
-import EditData from "@/components/Doctor/Paciente/EditData.vue"
+import EditData from "@/components/Utente/EditData.vue"
 import Footer from "@/components/Footer.vue";
 
 export default {

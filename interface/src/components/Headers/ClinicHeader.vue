@@ -104,7 +104,7 @@ export default {
       },
       {
         title: "Marcações de Cirurgias",
-        icon: "fas fa-procedures",
+        icon: "fas fa-band-aid",
         route: "/clinica/cirurgias",
       },
       {

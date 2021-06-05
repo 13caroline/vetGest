@@ -94,7 +94,7 @@ export default {
       },
       {
         title: "Marcações de Cirurgias",
-        icon: "fas fa-syringe",
+        icon: "fas fa-band-aid",
         route: "/medico/cirurgias",
       },
       {

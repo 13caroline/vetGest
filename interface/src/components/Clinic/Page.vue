@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container class="fill-height">
-      <v-row class="w-100 my-4" align="center">
+      <v-row class="w-100 mt-4 mb-0" align="center">
         <v-col cols="auto">
           <h3 class="font-weight-regular text-uppercase">
             <v-icon class="mr-2">fas fa-calendar-alt</v-icon>
@@ -10,48 +10,80 @@
         </v-col>
         <div class="w-100 d-sm-none"></div>
         <v-col cols="auto" class="ml-auto pl-0">
-          <v-btn
-            class="body-2"
-            small
-            color="#2596be"
-            dark
-            to="/clinica/clientes/registar"
-          >
-            <v-icon>fas fa-user</v-icon>
-          </v-btn>
+          <v-tooltip top>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                class="body-2"
+                small
+                color="#2596be"
+                v-bind="attrs"
+                v-on="on"
+                fab
+                dark
+                to="/clinica/clientes/registar"
+              >
+                <v-icon small>fas fa-user-plus</v-icon>
+              </v-btn>
+            </template>
+            <span class="caption">Registar cliente</span>
+          </v-tooltip>
         </v-col>
         <v-col cols="auto" class="pl-0">
-          <v-btn
-            class="body-2"
-            small
-            color="#2596be"
-            dark
-            to="/clinica/utentes/registar"
-          >
-            <v-icon>fas fa-paw</v-icon>
-          </v-btn>
+          <v-tooltip top>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                class="body-2"
+                small
+                color="#2596be"
+                v-bind="attrs"
+                v-on="on"
+                fab
+                dark
+                to="/clinica/utentes/registar"
+              >
+                <v-icon small>fas fa-paw</v-icon>
+              </v-btn>
+            </template>
+            <span class="caption">Registar utente</span>
+          </v-tooltip>
         </v-col>
         <v-col cols="auto" class="pl-0">
-          <v-btn
-            class="body-2"
-            small
-            color="#2596be"
-            dark
-            to="/clinica/consultas/"
-          >
-            <v-icon>fas fa-scroll</v-icon>
-          </v-btn>
+          <v-tooltip top>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                class="body-2"
+                small
+                color="#2596be"
+                v-bind="attrs"
+                v-on="on"
+                fab
+                dark
+                to="/clinica/consultas/"
+              >
+                <v-icon small>fas fa-scroll</v-icon>
+              </v-btn>
+            </template>
+            <span class="caption">Marcar consulta</span>
+          </v-tooltip>
         </v-col>
         <v-col cols="auto" class="pl-0">
-          <v-btn
-            class="body-2"
-            small
-            color="#2596be"
-            dark
-            to="/clinica/cirurgias/"
-          >
-            <v-icon>fas fa-procedures</v-icon>
-          </v-btn>
+          <v-tooltip top>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                class="body-2"
+                small
+                color="#2596be"
+                v-bind="attrs"
+                v-on="on"
+                fab
+                dark
+                to="/clinica/cirurgias/"
+              >
+                <v-icon small>fas fa-band-aid</v-icon>
+              </v-btn>
+            </template>
+            <span class="caption">Marcar cirurgia</span>
+          </v-tooltip>
         </v-col>
       </v-row>
 
@@ -101,42 +133,11 @@
               </v-chip>
             </template>
             <template v-slot:[`item.detalhes`]="{ item }">
-              <v-tooltip top>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-icon v-bind="attrs" v-on="on" small @click="more(item)">
-                    mdi-plus-circle
-                  </v-icon>
-                </template>
-                <span class="caption">Mais detalhes</span>
-              </v-tooltip>
-              <v-tooltip top>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-icon
-                    color="#66BB6A"
-                    v-bind="attrs"
-                    v-on="on"
-                    small
-                    @click="admit(item)"
-                  >
-                    mdi-calendar-check
-                  </v-icon>
-                </template>
-                <span class="caption">Admitir utente</span>
-              </v-tooltip>
-              <v-tooltip top>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-icon
-                    color="#E57373"
-                    v-bind="attrs"
-                    v-on="on"
-                    small
-                    @click="cancela(item)"
-                  >
-                    mdi-close-circle
-                  </v-icon>
-                </template>
-                <span class="caption">Cancelar agendamento</span>
-              </v-tooltip>
+              <Detalhes :dados="item"></Detalhes>
+              
+              <Admissao :dados="item"></Admissao>
+              
+              <CancelarConsulta :dados="item"></CancelarConsulta>
             </template>
           </v-data-table>
           <div class="text-center pt-2">
@@ -151,221 +152,22 @@
           </div>
         </v-col>
       </v-row>
-
-      <v-dialog v-model="detalhes" persistent width="100%" max-width="460">
-        <v-card>
-          <v-card-title class="cancel">Consulta agendada</v-card-title>
-          <v-card-text>
-            <v-row class="mt-2">
-              <v-col class="pb-0" align="right" cols="5">
-                <span class="text-uppercase">Nome do Animal</span>
-              </v-col>
-              <v-col class="pl-0 pb-0" cols="7">
-                <span class="black--text">
-                  <strong>Rubi</strong>
-                  (Serra da Estrela)
-                </span>
-              </v-col>
-
-              <v-col class="pb-0" align="right" cols="5">
-                <span class="text-uppercase">Motivo da Consulta</span>
-              </v-col>
-              <v-col class="pl-0 pb-0" cols="7">
-                <span class="black--text">
-                  <strong>Vómito/Diarreia/Recusa a comer</strong>
-                </span>
-                <br />
-                <span>Consulta extraordinária/Por doença</span>
-              </v-col>
-
-              <v-col class="pb-0" align="right" cols="5">
-                <span class="text-uppercase">Data</span>
-              </v-col>
-              <v-col class="pl-0 pb-0" cols="7">
-                <span class="black--text">
-                  <strong>19/04/2021 15:30</strong>
-                </span>
-              </v-col>
-
-              <v-col class="pb-0" align="right" cols="5">
-                <span class="text-uppercase">Médico</span>
-              </v-col>
-              <v-col class="pl-0 pb-0" cols="7">
-                <span class="black--text">
-                  <strong>Dr. José Vieira</strong>
-                </span>
-              </v-col>
-            </v-row>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn
-              depressed
-              small
-              dark
-              color="#2596be"
-              @click="detalhes = false"
-            >
-              Fechar
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-
-      <v-dialog v-model="admissao" persistent width="100%" max-width="460">
-        <v-card>
-          <v-card-title class="cancel">Admitir utente</v-card-title>
-          <v-card-text>
-            <v-row class="mt-2">
-              <v-col class="pb-0" align="right" cols="5">
-                <span class="text-uppercase">Nome do Animal</span>
-              </v-col>
-              <v-col class="pl-0 pb-0" cols="7">
-                <span class="black--text">
-                  <strong>Rubi</strong>
-                  (Serra da Estrela)
-                </span>
-              </v-col>
-
-              <v-col class="pb-0" align="right" cols="5">
-                <span class="text-uppercase">Motivo da Consulta</span>
-              </v-col>
-              <v-col class="pl-0 pb-0" cols="7">
-                <span class="black--text">
-                  <strong>Vómito/Diarreia/Recusa a comer</strong>
-                </span>
-                <br />
-                <span>Consulta extraordinária/Por doença</span>
-              </v-col>
-
-              <v-col class="pb-0" align="right" cols="5">
-                <span class="text-uppercase">Data</span>
-              </v-col>
-              <v-col class="pl-0 pb-0" cols="7">
-                <span class="black--text">
-                  <strong>19/04/2021 15:30</strong>
-                </span>
-              </v-col>
-
-              <v-col class="pb-0" align="right" cols="5">
-                <span class="text-uppercase">Médico</span>
-              </v-col>
-              <v-col class="pl-0 pb-0" cols="7">
-                <span class="black--text">
-                  <strong>Dr. José Vieira</strong>
-                </span>
-              </v-col>
-            </v-row>
-          </v-card-text>
-          <v-card-actions>
-            <v-btn
-              depressed
-              large
-              width="50%"
-              dark
-              color="#BDBDBD"
-              @click="admissao = false"
-            >
-              Cancelar
-            </v-btn>
-            <v-btn
-              depressed
-              large
-              dark
-              color="#2596be"
-              width="50%"
-              @click="admissao = false"
-            >
-              Admitir
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-
-      <v-dialog v-model="cancelar" persistent width="100%" max-width="460">
-        <v-card>
-          <v-card-title class="cancel"> Cancelar consulta </v-card-title>
-          <v-card-text>
-            <v-row class="mt-2">
-              <v-col class="pb-0" align="right" cols="5">
-                <span class="text-uppercase">Nome do Animal</span>
-              </v-col>
-              <v-col class="pl-0 pb-0" cols="7">
-                <span class="black--text">
-                  <strong>Rubi</strong>
-                  (Serra da Estrela)
-                </span>
-              </v-col>
-
-              <v-col class="pb-0" align="right" cols="5">
-                <span class="text-uppercase">Motivo da Consulta</span>
-              </v-col>
-              <v-col class="pl-0 pb-0" cols="7">
-                <span class="black--text">
-                  <strong>Vómito/Diarreia/Recusa a comer</strong>
-                </span>
-                <br />
-                <span>Consulta extraordinária/Por doença</span>
-              </v-col>
-
-              <v-col class="pb-0" align="right" cols="5">
-                <span class="text-uppercase">Data</span>
-              </v-col>
-              <v-col class="pl-0 pb-0" cols="7">
-                <span class="black--text">
-                  <strong>21/05/2021 15:45</strong>
-                </span>
-              </v-col>
-
-              <v-col class="pb-0" align="right" cols="5">
-                <span class="text-uppercase">Médico</span>
-              </v-col>
-              <v-col class="pl-0 pb-0" cols="7">
-                <span class="black--text">
-                  <strong>Sem preferência</strong>
-                </span>
-              </v-col>
-            </v-row>
-
-            <p class="mt-12">Tem a certeza que pretende cancelar a consulta?</p>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn
-              depressed
-              large
-              width="50%"
-              dark
-              color="#BDBDBD"
-              @click="cancelar = false"
-            >
-              Não
-            </v-btn>
-            <v-btn
-              depressed
-              large
-              dark
-              color="#2596be"
-              width="50%"
-              @click="cancelar()"
-            >
-              Sim
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
     </v-container>
   </div>
 </template>
 
 
 <script>
+import Detalhes from '@/components/Dialogs/Detalhes.vue'
+import Admissao from '@/components/Dialogs/Admissao.vue'
+import CancelarConsulta from '@/components/Dialogs/CancelarComDados.vue'
+
 export default {
   data() {
     return {
+      dados:{},
+      
       cancelar: false,
-      detalhes: false,
-      admissao: false,
       page: 1,
       pageCount: 0,
       itemsPerPage: 10,
@@ -414,7 +216,6 @@ export default {
           align: "start",
         },
       ],
-
       agendamento: [
         {
           utente: "Rubi",
@@ -473,19 +274,12 @@ export default {
       ],
     };
   },
+  components: {
+    Detalhes,
+    Admissao,
+    CancelarConsulta
+  },
   methods: {
-    more(item) {
-      this.detalhes = true;
-      console.log(item);
-    },
-    admit(item) {
-      this.admissao = true;
-      console.log(item);
-    },
-    cancela(item) {
-      this.cancelar = true;
-      console.log(item);
-    },
     estado(item) {
       if (item == "Agendada") return "#C5E1A5";
       else return "#FFECB3";

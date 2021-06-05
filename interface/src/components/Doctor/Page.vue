@@ -9,26 +9,42 @@
           </h3>
         </v-col>
         <v-col cols="auto" class="ml-auto pl-0">
-          <v-btn
-            class="body-2"
-            small
-            color="#2596be"
-            dark
-            to="/medico/consultas/"
-          >
-            <v-icon>fas fa-scroll</v-icon>
-          </v-btn>
+          <v-tooltip top>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                class="body-2"
+                small
+                color="#2596be"
+                v-bind="attrs"
+                v-on="on"
+                fab
+                dark
+                to="/medico/consultas/"
+              >
+                <v-icon>fas fa-scroll</v-icon>
+              </v-btn>
+            </template>
+            <span class="caption">Marcar consulta</span>
+          </v-tooltip>
         </v-col>
         <v-col cols="auto" class="pl-0">
-          <v-btn
-            class="body-2"
-            small
-            color="#2596be"
-            dark
-            to="/medico/cirurgias/"
-          >
-            <v-icon>fas fa-procedures</v-icon>
-          </v-btn>
+          <v-tooltip top>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                v-bind="attrs"
+                v-on="on"
+                fab
+                class="body-2"
+                small
+                color="#2596be"
+                dark
+                to="/medico/cirurgias/"
+              >
+                <v-icon>fas fa-syringe</v-icon>
+              </v-btn>
+            </template>
+            <span class="caption">Marcar cirurgia</span>
+          </v-tooltip>
         </v-col>
       </v-row>
 

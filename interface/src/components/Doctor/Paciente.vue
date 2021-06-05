@@ -6,9 +6,41 @@
           <span class="subtitle-1 head">Rubi</span>
         </v-col>
         <v-col cols="auto" class="ml-auto">
-          <v-btn icon depressed to="/medico/utente/editar">
-            <v-icon color="#2596be">fas fa-pen</v-icon>
-          </v-btn>
+          <v-tooltip top>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                class="body-2 mb-2"
+                small
+                color="#2596be"
+                v-bind="attrs"
+                v-on="on"
+                fab
+                dark
+                @click="internamento = true"
+              >
+                <v-icon small>fas fa-procedures</v-icon>
+              </v-btn>
+            </template>
+            <span>Admitir em internamento</span>
+          </v-tooltip>
+
+          <v-tooltip top>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+               class="body-2 ml-2 mb-2"
+                small
+                color="#2596be"
+                v-bind="attrs"
+                v-on="on"
+                fab
+                dark
+                to="/medico/utente/editar"
+              >
+                <v-icon small>fas fa-pen</v-icon>
+              </v-btn>
+            </template>
+            <span>Editar dados</span>
+          </v-tooltip>
         </v-col>
       </v-row>
       <v-divider></v-divider>
@@ -36,19 +68,76 @@
           <Cirurgia></Cirurgia>
         </v-tab-item>
       </v-tabs-items>
+
+      <v-dialog v-model="internamento" width="100%" max-width="500">
+            <v-card>
+              <v-form>
+               <v-card-title class="font-weight-regular text-uppercase">
+                  Admitir em internamento
+                </v-card-title>
+                <v-card-subtitle
+                  >Por favor preencha o seguinte formulário</v-card-subtitle
+                >
+                <v-card-text>
+                  <v-row align="center">
+                    <v-col cols="12" class="pb-0">
+                      <p class="ma-0">Nota de admissão</p>
+                      <v-textarea
+                        color="#2596be"
+                        flat
+                        outlined
+                        rows="5"
+                        no-resize
+                        v-model="nota"
+                      ></v-textarea>
+                    </v-col>
+
+                    <v-col cols="12" class="py-0">
+                      <p class="ma-0">Motivo de internamento</p>
+                      <v-textarea
+                        no-resize
+                        dense
+                        color="#2596be"
+                        flat
+                        outlined
+                        rows="2"
+                        v-model="motivo"
+                      ></v-textarea>
+                    </v-col>
+                  </v-row>
+
+                  <v-row align="end" justify="end">
+                    <v-col cols="auto">
+                      <Cancelar :dialogs="cancelar" @clicked="close()"></Cancelar>
+                    </v-col>
+                    <v-col cols="auto">
+                      <v-btn color="#2596be" small dark
+                        >Admitir</v-btn
+                      >
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-form>
+            </v-card>
+          </v-dialog>
     </v-container>
   </div>
 </template>
 
 <script>
-import PacienteVacinas from "@/components/Doctor/Paciente/Vacinas.vue"
-import Consultas from "@/components/Doctor/Paciente/Consultas.vue"
-import Cirurgia from "@/components/Doctor/Paciente/Cirurgias.vue"
-import Dados from "@/components/Doctor/Paciente/Dados.vue"
+import PacienteVacinas from "@/components/Utente/Vacinas.vue";
+import Consultas from "@/components/Utente/Consultas.vue";
+import Cirurgia from "@/components/Utente/Cirurgias.vue";
+import Dados from "@/components/Utente/Dados.vue";
+import Cancelar from "@/components/Dialogs/Cancel.vue"
 
 export default {
   data: () => ({
-    tab: null,    
+    tab: null,
+    internamento: false,
+    dialogs: {},
+    motivo: "", 
+    nota: "",
     items: [
       { tab: "Informações gerais" },
       { tab: "Vacinas e Desparasitações" },
@@ -56,6 +145,7 @@ export default {
       { tab: "Cirurgias" },
       { tab: "Histórico Clínico" },
     ],
+    cancelar: {title: "edição de dados", text: "a edição dos dados", route: "/medico/utente"}
   }),
   methods: {
     estadopedido(estado) {
@@ -65,12 +155,16 @@ export default {
     more(item) {
       console.log(item.data);
     },
+    close() {
+      this.internamento = false;
+    }
   },
-  components:{
-    PacienteVacinas, 
+  components: {
+    PacienteVacinas,
     Consultas,
     Cirurgia,
-    Dados
+    Dados,
+    Cancelar
   },
   created() {
     /*
@@ -99,9 +193,6 @@ export default {
 .font-weight-bold {
   width: 40%;
   font-size: 15px;
-}
-.font-weight-regular {
-  font-size: 14px;
 }
 
 .font-weight-bold.col-sm-12.col-md-auto.col-auto {

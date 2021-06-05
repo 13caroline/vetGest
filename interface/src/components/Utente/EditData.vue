@@ -30,11 +30,6 @@
                   </template>
                 </v-img>
               </v-card>
-              <v-row>
-                <v-btn class="mt-5 body-2" small color="#2596be" dark
-                  >Alterar Fotografia</v-btn
-                >
-              </v-row>
             </v-col>
 
             <v-col cols="12" md class="mt-10 mt-md-0">
@@ -222,9 +217,7 @@
 
               <v-row align="end" justify="end">
                 <v-col cols="auto" class="pr-0">
-                  <v-btn color="#BDBDBD" small dark @click="dialog = true"
-                    >Cancelar</v-btn
-                  >
+                  <Cancelar :dialogs="cancelar" @clicked="close()"></Cancelar>
                 </v-col>
                 <v-col cols="auto" class="pl-0">
                   <v-btn
@@ -242,39 +235,7 @@
         </v-form>
       </v-card-text>
     </v-container>
-    <v-dialog v-model="dialog" persistent width="100%" max-width="460">
-      <v-card>
-        <v-card-title class="justify-center cancel">
-          Cancelar edição de dados
-        </v-card-title>
-        <v-card-text>
-          Tem a certeza que pretende cancelar a edição dos dados?
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            depressed
-            large
-            width="50%"
-            dark
-            color="#BDBDBD"
-            @click="dialog = false"
-          >
-            Não
-          </v-btn>
-          <v-btn
-            depressed
-            large
-            dark
-            color="#2596be"
-            width="50%"
-            to="/medico/animal"
-          >
-            Sim
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    
     <v-snackbar
       v-model="snackbar"
       :timeout="timeout"
@@ -289,9 +250,13 @@
 
 <script>
 // import axios from "axios";
+import Cancelar from "@/components/Dialogs/Cancel.vue"
+
 export default {
   data: () => ({
     dialog: false,
+    dialogs: {},
+    cancelar: {title: "edição de dados", text: "a edição dos dados"},
     cao: {
       nome: "Rubi",
       especie: "Canídeo",
@@ -348,12 +313,19 @@ export default {
         },
       ],
   }),
+  components: {
+    Cancelar
+  },
   methods: {
+    close(){
+      // if medico 
+      this.$router.push("/medico/utente");
+    },
     editarDados: async function () {
       /*
       if (this.$refs.form.validate()) {
         try {
-          var resposta = await axios.post("http://localhost:7777//medico/editaDadosAnimal", {
+          var resposta = await axios.post("http://localhost:7777//cliente/editaDadosAnimal", {
             nome: this.cao.nome,
             altura: this.cao.altura,
             cor: this.cao.cor,
@@ -383,7 +355,7 @@ export default {
   },
   created: {
     /*
-    let response = await axios.post("http://localhost:7777/medico/animal/getDados", {
+    let response = await axios.post("http://localhost:7777/cliente/animal/getDados", {
       email: this.$store.state.user.email,
       animal
     });

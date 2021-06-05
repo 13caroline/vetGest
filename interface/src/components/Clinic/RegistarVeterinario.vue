@@ -153,9 +153,7 @@
           </v-form>
           <v-row align="end" justify="end">
             <v-col cols="auto" class="pr-0">
-              <v-btn color="#BDBDBD" small dark @click="dialog = true"
-                >Cancelar</v-btn
-              >
+              <Cancelar :dialogs="cancelar" @clicked="close()"></Cancelar>
             </v-col>
             <v-col cols="auto" class="pl-0">
               <v-btn color="#2596be" small dark class="ml-3">Registar</v-btn>
@@ -164,49 +162,20 @@
         </v-col>
       </v-row>
     </v-container>
-
-    <v-dialog v-model="dialog" persistent width="100%" max-width="460">
-      <v-card>
-        <v-card-title class="cancel">
-          Cancelar registo de novo médico veterinário
-        </v-card-title>
-        <v-card-text>
-          Tem a certeza que pretende cancelar o registo?
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            depressed
-            large
-            width="50%"
-            dark
-            color="#BDBDBD"
-            @click="dialog = false"
-          >
-            Não
-          </v-btn>
-          <v-btn
-            depressed
-            large
-            dark
-            color="#2596be"
-            width="50%"
-            to="/clinica/medicos"
-          >
-            Sim
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
   </div>
 </template>
 
 <script>
 //import moment from 'moment';
+import Cancelar from "@/components/Dialogs/Cancel.vue"
 export default {
   data: () => ({
-    dialog: false,
+    dialogs: {},
+    cancelar: {title: "registo de médico veterinário", text: "o registo de um médico veterinário"},
   }),
+  components: {
+    Cancelar
+  }
 };
 </script> 
 

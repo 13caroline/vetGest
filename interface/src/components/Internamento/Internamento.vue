@@ -64,6 +64,16 @@
               </v-btn>
             </template>
           </v-data-table>
+           <div class="text-center pt-2">
+            <v-pagination
+              v-model="page"
+              :length="pageCount"
+              circle
+              :total-visible="4"
+              color="#2596be"
+              class="custom"
+            ></v-pagination>
+          </div>
         </v-col>
       </v-row>
     </v-container>
@@ -122,59 +132,47 @@ export default {
       ],
 
       agendamento: [
-        {
+         {
           utente: "Rubi",
-          cliente: "Carolina Cunha",
+          localizacao: "C15",
           data: "21/05/2021 15:00",
-          motivo: "Consulta Anual/Vacinação",
-          servico: "Consulta",
-          estado: "A decorrer",
-          especie: "Canídeo",
+          motivo: "Castração",
+          especie: 'Canídeo'
         },
         {
           utente: "Runa",
-          cliente: "Carolina Cunha",
           data: "05/05/2021 10:00",
-          servico: "Cirurgia",
+          localizacao: "C1",
+          motivo: "Esterilização",
+          especie: 'Canídeo'
+        },
+        {
+          utente: "Luna",
+          data: "07/05/2021 10:00",
+          localizacao: "B17",
+          motivo: "Remoção tumor",
+          especie: "Felídeo"
+        },
+         {
+          utente: "Rubi",
+          localizacao: "C15",
+          data: "21/05/2021 15:00",
           motivo: "Castração",
-          estado: "Agendada",
-          especie: "Canídeo",
+          especie: 'Canídeo'
         },
         {
-          utente: "Puscas",
-          cliente: "Carolina Cunha",
-          data: "29/04/2021 16:30",
-          servico: "Consulta",
-          motivo: "Consulta de seguimento",
-          estado: "Agendada",
-          especie: "Canídeo",
+          utente: "Runa",
+          data: "05/05/2021 10:00",
+          localizacao: "C1",
+          motivo: "Esterilização",
+          especie: 'Canídeo'
         },
         {
-          utente: "Nikita",
-          cliente: "Carolina Cunha",
-          data: "21/05/2021 15:30",
-          servico: "Consulta",
-          motivo: "Consulta extraordinária/Por doença",
-          estado: "A decorrer",
-          especie: "Canídeo",
-        },
-        {
-          utente: "Zuki",
-          cliente: "Carolina Cunha",
-          data: "07/06/2021 11:00",
-          servico: "Cirurgia",
-          motivo: "Castração",
-          estado: "Agendada",
-          especie: "Canídeo",
-        },
-        {
-          utente: "Rudi",
-          cliente: "Carolina Cunha",
-          data: "15/07/2021 17:30",
-          servico: "Cirurgia",
-          motivo: "Castração",
-          estado: "Agendada",
-          especie: "Canídeo",
+          utente: "Luna",
+          data: "07/05/2021 10:00",
+          localizacao: "B17",
+          motivo: "Remoção tumor",
+          especie: "Felídeo"
         },
       ],
     };
@@ -207,3 +205,28 @@ export default {
   },
 };
 </script>
+
+<style>
+.custom {
+  width: auto;
+  margin-left: auto;
+}
+
+.custom .v-pagination__navigation {
+  height: 26px !important;
+  width: 26px !important;
+}
+
+.custom .v-pagination__navigation .v-icon {
+  font-size: 16px !important;
+}
+
+.custom .v-pagination__item {
+  height: 26px !important;
+  min-width: 26px !important;
+  font-size: 0.85rem !important;
+}
+.body-2 .v-icon.v-icon {
+  font-size: 15px;
+}
+</style>

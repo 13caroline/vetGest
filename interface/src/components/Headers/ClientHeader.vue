@@ -105,7 +105,7 @@
             </v-list-item>
             <v-list-item to="/cliente/cirurgias">
               <v-list-item-title class="caption">
-                <v-icon x-small class="mt-n1 mr-1">fas fa-procedures</v-icon>
+                <v-icon x-small class="mt-n1 mr-1">fas fa-band-aid</v-icon>
                 Cirurgias
               </v-list-item-title>
             </v-list-item>

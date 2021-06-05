@@ -8,15 +8,23 @@
           </h3>
            <v-row justify="end">
             <v-col cols="auto">
-              <v-btn
-                class="mb-2 mt-6 body-2"
-                small
-                color="#2596be"
-                dark
-                to="/clinica/utentes/registar"
-              >
-                Registar Utente
-              </v-btn>
+              <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    class="body-2 mt-8"
+                    small
+                    color="#2596be"
+                    v-bind="attrs"
+                    v-on="on"
+                    fab
+                    dark
+                    to="/clinica/utentes/registar"
+                  >
+                    <v-icon small>fas fa-paw</v-icon>
+                  </v-btn>
+                </template>
+                <span class="caption">Registar utente</span>
+              </v-tooltip>
             </v-col>
           </v-row>
         
