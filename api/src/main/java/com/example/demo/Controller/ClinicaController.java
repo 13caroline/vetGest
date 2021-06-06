@@ -32,7 +32,7 @@ public class ClinicaController {
             return ResponseEntity.badRequest().body("Utilizador Clinica já se encontra registado");
         }
         clinicaService.saveClinica(clinica);
-        return  ResponseEntity.accepted().body("Utilizador Clínica Registado com sucesso");
+        return  ResponseEntity.accepted().body("Utilizador registado com Sucesso");
     }
 
     @CrossOrigin
