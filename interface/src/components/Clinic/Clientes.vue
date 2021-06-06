@@ -8,23 +8,23 @@
         </h3>
         <v-row justify="end">
           <v-col cols="auto">
-           <v-tooltip top>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    class="body-2 mt-8"
-                    small
-                    color="#2596be"
-                    v-bind="attrs"
-                    v-on="on"
-                    fab
-                    dark
-                    to="/clinica/clientes/registar"
-                  >
-                    <v-icon small>fas fa-user-plus</v-icon>
-                  </v-btn>
-                </template>
-                <span class="caption">Registar cliente</span>
-              </v-tooltip>
+            <v-tooltip top>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  class="body-2 mt-8"
+                  small
+                  color="#2596be"
+                  v-bind="attrs"
+                  v-on="on"
+                  fab
+                  dark
+                  to="/clinica/clientes/registar"
+                >
+                  <v-icon small>fas fa-user-plus</v-icon>
+                </v-btn>
+              </template>
+              <span class="caption">Registar cliente</span>
+            </v-tooltip>
           </v-col>
         </v-row>
       </v-row>
@@ -43,6 +43,7 @@
       <v-data-table
         :headers="headers"
         :items="clientes"
+        :search="search"
         class="elevation-1"
         hide-default-footer
       >
@@ -87,8 +88,10 @@
                 </v-img>
               </v-col>
               <v-col>
-                <span class="font-weight-bold headline indication text-uppercase">
-                  {{this.nome}}
+                <span
+                  class="font-weight-bold headline indication text-uppercase"
+                >
+                  {{ this.nome }}
                 </span>
               </v-col>
             </v-row>
@@ -99,7 +102,9 @@
               </v-col>
 
               <v-col>
-                <div class="information font-weight-light">{{this.contacto}}</div>
+                <div class="information font-weight-light">
+                  {{ this.contacto }}
+                </div>
               </v-col>
             </v-row>
 
@@ -110,7 +115,7 @@
 
               <v-col>
                 <div class="information text-uppercase font-weight-light">
-                  {{this.email}}
+                  {{ this.email }}
                 </div>
               </v-col>
             </v-row>
@@ -122,7 +127,7 @@
 
               <v-col>
                 <div class="information text-uppercase font-weight-light">
-                  {{this.morada}}
+                  {{ this.morada }}
                 </div>
               </v-col>
             </v-row>
@@ -134,7 +139,7 @@
 
               <v-col>
                 <div class="information text-uppercase font-weight-light">
-                  {{this.concelho}}
+                  {{ this.concelho }}
                 </div>
               </v-col>
             </v-row>
@@ -148,7 +153,7 @@
 
               <v-col>
                 <div class="information text-uppercase font-weight-light">
-                  {{this.nif}}
+                  {{ this.nif }}
                 </div>
               </v-col>
             </v-row>
@@ -163,13 +168,13 @@
               <v-col align="right" class="pr-0">
                 <div v-for="utente in utentes" :key="utente.nome">
                   <v-btn
-                  class="font-weight-light text-decoration-underline"
-                  color="#616161"
-                  text
-                  depressed
-                  to="/clinica/utente"
-                  >{{utente.nome}}</v-btn
-                >
+                    class="font-weight-light text-decoration-underline"
+                    color="#616161"
+                    text
+                    depressed
+                    to="/clinica/utente"
+                    >{{ utente.nome }}</v-btn
+                  >
                 </div>
               </v-col>
             </v-row>
@@ -222,42 +227,36 @@ export default {
         },
       ],
       clientes: [],
-      nome:"", 
-      contacto: "", 
-      email:"", 
-      morada:"", 
-      concelho:"", 
-      nif:"", 
-      utentes:"", 
+      nome: "",
+      contacto: "",
+      email: "",
+      morada: "",
+      concelho: "",
+      nif: "",
+      utentes: "",
     };
   },
   methods: {
     more(item) {
-      this.nome = item.nome; 
+      this.nome = item.nome;
       this.contacto = item.contacto;
-      this.email = item.email; 
-      this.morada = item.morada; 
-      this.concelho = item.concelho; 
-      this.nif = item.nif; 
-      this.utentes = item.animais;       
+      this.email = item.email;
+      this.morada = item.morada;
+      this.concelho = item.concelho;
+      this.nif = item.nif;
+      this.utentes = item.animais;
       this.dialog = true;
     },
   },
-  created: async function() {
-    try{
-      
-    let response = await axios.get("http://localhost:7777/clinica/clientes",
-    { headers: 
-                { "Authorization": 'Bearer ' + store.getters.token }
-            });
-            this.clientes = response.data;
-            console.log(response.data)
+  created: async function () {
+    try {
+      let response = await axios.get("http://localhost:7777/clinica/clientes", {
+        headers: { Authorization: "Bearer " + store.getters.token },
+      });
+      this.clientes = response.data;
+    } catch (e) {
+      console.log(e);
     }
-    catch(e){
-      console.log(e)
-    }
-
-    
   },
 };
 </script>

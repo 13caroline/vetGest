@@ -18,13 +18,14 @@
             <v-row class="mt-2">
               <v-col cols="12" sm="5" class="py-0">
                 <div>
-                  <p class="ma-0">Nome</p>
+                  <p class="ma-0">Nome *</p>
                   <v-text-field
                     color="#2596be"
                     flat
                     outlined
                     dense
                     v-model="nome"
+                    :rules="nameRules"
                   ></v-text-field>
                 </div>
               </v-col>
@@ -42,7 +43,7 @@
               </v-col>
               <v-col cols="12" sm="4" class="py-0">
                 <div>
-                  <p class="ma-0">Espécie</p>
+                  <p class="ma-0">Espécie *</p>
                   <v-select
                     class="font-weight-regular"
                     outlined
@@ -51,6 +52,7 @@
                     label="Por favor selecione"
                     :items="itemsespecie"
                     v-model="especie"
+                    :rules="nullRule"
                   >
                   </v-select>
                 </div>
@@ -59,7 +61,7 @@
 
             <v-row align="center">
               <v-col class="py-0">
-                <p class="ma-0">Dono</p>
+                <p class="ma-0">Dono *</p>
                 <v-text-field
                   color="#2596be"
                   flat
@@ -67,6 +69,8 @@
                   outlined
                   dense
                   v-model="nomeSelected"
+                  :rules="nullRule"
+                  @click="dialogDono = true"
                 ></v-text-field>
               </v-col>
               <v-col cols="auto" class="py-0">
@@ -85,7 +89,7 @@
 
             <v-row>
               <v-col md="8" cols="12" class="py-0">
-                <p class="ma-0">Raça</p>
+                <p class="ma-0">Raça *</p>
                 <v-select
                   color="#2596be"
                   class="font-weight-regular"
@@ -93,11 +97,13 @@
                   dense
                   label="Por favor selecione"
                   v-model="raca"
+                  :rules="nullRule"
+                  :items="itemsraca"
                 >
                 </v-select>
               </v-col>
               <v-col sm="6" md="4" cols="12" class="py-0">
-                <p class="ma-0">Altura</p>
+                <p class="ma-0">Altura *</p>
                 <v-text-field
                   class="font-weight-regular"
                   outlined
@@ -105,12 +111,13 @@
                   color="#2596be"
                   suffix="cm"
                   v-model="altura"
+                  :rules="alturaRules"
                 >
                 </v-text-field>
               </v-col>
 
               <v-col cols="12" sm="6" md class="py-0">
-                <p class="ma-0">Data de Nascimento</p>
+                <p class="ma-0">Data de Nascimento *</p>
                 <v-menu
                   v-model="menu2"
                   :close-on-content-click="false"
@@ -128,20 +135,25 @@
                       outlined
                       v-bind="attrs"
                       v-on="on"
+                      :rules="nullRule"
                     ></v-text-field>
                   </template>
                   <v-date-picker
                     v-model="date"
                     @input="menu2 = false"
                     locale="pt PT"
-                    :min="new Date().toISOString().substr(0, 10)"
+                    :max="new Date().toISOString().substr(0, 10)"
                   ></v-date-picker>
                 </v-menu>
               </v-col>
 
               <v-col cols="6" md class="py-0">
-                <p class="ma-0">Sexo</p>
-                <v-radio-group row class="ma-0" v-model="sexo">
+                <p class="ma-0">Sexo *</p>
+                <v-radio-group
+                  row
+                  class="ma-0"
+                  v-model="sexo"
+                >
                   <v-radio value="Macho" color="#2596be">
                     <template v-slot:label>
                       <div class="body-2">Macho</div>
@@ -157,15 +169,19 @@
               </v-col>
 
               <v-col cols="6" md class="py-0">
-                <p class="ma-0">Castração</p>
-                <v-radio-group row class="ma-0" v-model="sexo">
-                  <v-radio value="1" color="#2596be">
+                <p class="ma-0">Castração *</p>
+                <v-radio-group
+                  row
+                  class="ma-0"
+                  v-model="castracao"
+                >
+                  <v-radio :value="true" color="#2596be">
                     <template v-slot:label>
                       <div class="body-2">Sim</div>
                     </template>
                   </v-radio>
                   <div class="w-100 d-sm-none"></div>
-                  <v-radio value="0" color="#2596be">
+                  <v-radio :value="false" color="#2596be">
                     <template v-slot:label>
                       <div class="body-2">Não</div>
                     </template>
@@ -176,7 +192,7 @@
 
             <v-row>
               <v-col cols="12" sm="5" class="py-0">
-                <p class="ma-0">Cor</p>
+                <p class="ma-0">Cor *</p>
                 <v-select
                   color="#2596be"
                   flat
@@ -186,10 +202,11 @@
                   multiple
                   :items="itemscor"
                   v-model="cor"
+                  :rules="nullRule"
                 ></v-select>
               </v-col>
               <v-col cols="12" sm="4" class="py-0">
-                <p class="ma-0">Pelagem</p>
+                <p class="ma-0">Pelagem *</p>
 
                 <v-select
                   color="#2596be"
@@ -200,10 +217,11 @@
                   multiple
                   :items="itemspelagem"
                   v-model="pelagem"
+                  :rules="nullRule"
                 ></v-select>
               </v-col>
               <v-col cols="12" sm="3" class="py-0">
-                <p class="ma-0">Cauda</p>
+                <p class="ma-0">Cauda *</p>
                 <v-select
                   color="#2596be"
                   flat
@@ -212,6 +230,7 @@
                   dense
                   :items="itemscauda"
                   v-model="cauda"
+                  :rules="nullRule"
                 ></v-select>
               </v-col>
             </v-row>
@@ -231,12 +250,21 @@
               </v-col>
             </v-row>
 
+            <span class="ma-0 caption">* Campos obrigatórios</span>
+
             <v-row align="end" justify="end">
               <v-col cols="auto" class="pr-0">
-                 <Cancelar :dialogs="cancelar" @clicked="close()"></Cancelar>
+                <Cancelar :dialogs="cancelar" @clicked="close()"></Cancelar>
               </v-col>
               <v-col cols="auto" class="pl-0">
-                <v-btn color="#2596be" small dark class="ml-3">Registar</v-btn>
+                <v-btn
+                  color="#2596be"
+                  small
+                  dark
+                  class="ml-3"
+                  @click="registar()"
+                  >Registar</v-btn
+                >
               </v-col>
             </v-row>
           </v-form>
@@ -252,7 +280,7 @@
         {{ text }}
       </v-snackbar>
     </v-container>
-    
+
     <v-dialog v-model="dialogDono" width="100%" max-width="700">
       <v-card>
         <v-card-title>
@@ -277,7 +305,9 @@
 
 <script>
 //import moment from 'moment';
-import Cancelar from "@/components/Dialogs/Cancel.vue"
+import axios from "axios";
+import store from "@/store.js";
+import Cancelar from "@/components/Dialogs/Cancel.vue";
 export default {
   data: () => ({
     emailSelected: "",
@@ -287,22 +317,21 @@ export default {
     especie: "",
     raca: "",
     altura: "",
-    data: null,
     sexo: "",
     cor: "",
     pelagem: "",
     cauda: "",
-    castracao: "",
+    castracao: false,
     observacoes: "",
+    dialogDono: false,
+    date: new Date().toISOString().substr(0, 10),
+    menu2: false,
     valid: true,
     snackbar: false,
     color: "",
     done: false,
     timeout: -1,
     text: "",
-    dialogDono: false,
-    date: new Date().toISOString().substr(0, 10),
-    menu2: false,
     itemscor: [
       "Amarelo",
       "Azul",
@@ -334,6 +363,7 @@ export default {
       "Selvagem",
       "Outro",
     ],
+    itemsraca: ["Serra da Estrela"],
     search: "",
     headers: [
       {
@@ -361,25 +391,29 @@ export default {
         align: "center",
       },
     ],
-    items: [
-      {
-        nome: "Joao Mota",
-        email: "joaomota@gmail.com",
-        nif: "256862010",
-        contacto: "935373306",
-      },
-      {
-        nome: "Carolina Cunha",
-        email: "carolinacunha@gmail.com",
-        nif: "182092887",
-        contacto: "919977230",
+    items: [],
+    dialogs: {},
+    cancelar: { title: "registo de utente", text: "o registo de um utente" },
+    nameRules: [
+      (v) => !!v || "Insira o nome completo.",
+      (v) => {
+        const pattern = /^[a-zA-Z\sÀ-ÿ]+$/;
+        return (
+          pattern.test(v) ||
+          "Nome inválido. Insira apenas caracteres do alfabeto."
+        );
       },
     ],
-    dialogs: {},
-    cancelar: {title: "registo de utente", text: "o registo de um utente"},
+    nullRule: [(v) => !!v || "Este campo não pode estar vazio."],
+    alturaRules: [
+      (v) => {
+        const pattern = /^[0-9]+$/;
+        return pattern.test(v) || "Altura inválida. Insira apenas dígitos.";
+      },
+    ],
   }),
-  components:{
-    Cancelar
+  components: {
+    Cancelar,
   },
   methods: {
     handleClick(row) {
@@ -387,28 +421,35 @@ export default {
       this.nomeSelected = row.nome;
       this.dialogDono = false;
     },
-    close(){
-      this.$router.push("/clinica/utentes")
+    close() {
+      this.$router.push("/clinica/utentes");
     },
-    registaAnimal: async function () {
-      /*
+    registar: async function () {
       if (this.$refs.form.validate()) {
         try {
-          var resposta = await axios.post("http://localhost:7777/clinica/registarUtente", {
-            nome: this.nome,
-            chip: this.chip,
-            especie: this.especie,
-            raca: this.raca,
-            altura: this.altura,
-            data: this.data,
-            sexo: this.sexo,
-            cor: this.cor,
-            pelagem: this.pelagem, 
-            cauda: this.cauda, 
-            observacoes: this.observacoes,
-            idCliente: this.nomeSelected, 
-            email: this.$store.state.user.email,
-          });
+          var resposta = await axios.post(
+            "http://localhost:7777/clinica/utentes/registar",
+            {
+              cliente: {
+                email: this.emailSelected,
+              },
+              animal: {
+                nome: this.nome,
+                especie: this.especie,
+                chip: this.chip,
+                raca: this.raca,
+                altura: this.altura,
+                dataNascimento: this.date,
+                sexo: this.sexo,
+                cor: this.cor.toString(),
+                pelagem: this.pelagem.toString(),
+                cauda: this.cauda,
+                castracao: this.castracao,
+                observacoes: this.observacoes,
+              },
+            },
+            { headers: { Authorization: "Bearer " + store.getters.token } }
+          );
           console.log(JSON.stringify(resposta.data));
           this.text = "Utente registado com sucesso.";
           this.color = "success";
@@ -425,8 +466,17 @@ export default {
         this.snackbar = true;
         this.done = false;
       }
-      */
     },
+  },
+  created: async function () {
+    try {
+      let response = await axios.get("http://localhost:7777/clinica/clientes", {
+        headers: { Authorization: "Bearer " + store.getters.token },
+      });
+      this.items = response.data;
+    } catch (e) {
+      console.log(e);
+    }
   },
 };
 </script> 
