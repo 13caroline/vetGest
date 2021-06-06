@@ -9,29 +9,29 @@
         <v-row justify="end">
           <v-col cols="auto">
             <v-tooltip top>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    class="body-2 mt-8"
-                    small
-                    color="#2596be"
-                    v-bind="attrs"
-                    v-on="on"
-                    fab
-                    dark
-                    to="/clinica/medicos/registar"
-                  >
-                    <v-icon small>fas fa-user-md</v-icon>
-                  </v-btn>
-                </template>
-                <span class="caption">Registar médico veterinário</span>
-              </v-tooltip>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  class="body-2 mt-8"
+                  small
+                  color="#2596be"
+                  v-bind="attrs"
+                  v-on="on"
+                  fab
+                  dark
+                  to="/clinica/medicos/registar"
+                >
+                  <v-icon small>fas fa-user-md</v-icon>
+                </v-btn>
+              </template>
+              <span class="caption">Registar médico veterinário</span>
+            </v-tooltip>
           </v-col>
         </v-row>
       </v-row>
       <v-row>
         <v-col
           v-for="n in medicos"
-          :key="n.nif"
+          :key="n.id"
           class="d-flex child-flex"
           cols="6"
           sm="4"
@@ -49,7 +49,14 @@
                 <v-expand-transition>
                   <div
                     v-bind:class="{ hover: hover }"
-                    class="d-flex transition-fast-in-fast-out black v-card--reveal white--text hover-div"
+                    class="
+                      d-flex
+                      transition-fast-in-fast-out
+                      black
+                      v-card--reveal
+                      white--text
+                      hover-div
+                    "
                   >
                     <v-btn
                       text
@@ -109,21 +116,9 @@
                 </v-img>
               </v-col>
               <v-col>
-                <span class="font-weight-bold headline indication">
+                <span class="font-weight-bold headline indication text-uppercase">
                   {{ this.nome }}
                 </span>
-              </v-col>
-            </v-row>
-
-            <v-row>
-              <v-col>
-                <span class="indication font-weight-bold"
-                  >Data de nascimento:</span
-                >
-              </v-col>
-
-              <v-col>
-                <div class="information font-weight-light">{{ this.data }}</div>
               </v-col>
             </v-row>
 
@@ -196,68 +191,22 @@
 </template>
 
 <script>
+import axios from "axios";
+import store from "@/store.js";
 export default {
   data: () => ({
     dialog: false,
     nome: "",
-    data: "",
     morada: "",
     nif: "",
     email: "",
     contacto: "",
     iban: "",
-    medicos: [
-      {
-        nome: "Joana Ferreira",
-        data: "15/04/1988",
-        morada: "Rua da Pica, nº 123",
-        nif: "123123123",
-        email: "joanaferreira@gmail.com",
-        contacto: "919191915",
-        iban: "PT50-213125041231405214212",
-      },
-      {
-        nome: "Vitor Alves",
-        data: "25/09/1989",
-        morada: "Rua da Pica, nº 122",
-        nif: "456456456",
-        email: "vitoralves@gmail.com",
-        contacto: "9123456781",
-        iban: "PT50-213125041231405214212",
-      },
-      {
-        nome: "Pedro Moura",
-        data: "01/02/1978",
-        morada: "Rua da Porta, nº 121",
-        nif: "789789789",
-        email: "pedromoura@gmail.com",
-        contacto: "934567841",
-        iban: "PT50-213125041231405214212",
-      },
-      {
-        nome: "Cristina Freitas",
-        data: "16/10/1980",
-        morada: "Rua da Praça, nº 1",
-        nif: "369369369",
-        email: "cristinafreitas@gmail.com",
-        contacto: "969645133",
-        iban: "PT50-213125041231405214212",
-      },
-      {
-        nome: "Cristina Freitas",
-        data: "16/10/1980",
-        morada: "Rua da Praça, nº 1",
-        nif: "369369369",
-        email: "cristinafreitas@gmail.com",
-        contacto: "969645133",
-        iban: "PT50-213125041231405214212",
-      },
-    ],
+    medicos: [],
   }),
   methods: {
     openInfo(n) {
       this.nome = n.nome;
-      this.data = n.data;
       this.morada = n.morada;
       this.nif = n.nif;
       this.email = n.email;
@@ -267,13 +216,15 @@ export default {
       this.dialog = true;
     },
   },
-  created() {
-    /*
-    let response = await axios.post("http://localhost:7777/clinica/getMedicos", {
-      email: this.$store.state.user.email,
-    });
-
-    */
+  created: async function () {
+    try {
+      let response = await axios.get("http://localhost:7777/clinica/medicos", {
+        headers: { Authorization: "Bearer " + store.getters.token },
+      });
+      this.medicos = response.data;
+    } catch (e) {
+      console.log(e);
+    }
   },
 };
 </script>

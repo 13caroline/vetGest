@@ -64,6 +64,8 @@
 </template>
 
 <script>
+import axios from "axios";
+import store from "@/store.js";
 export default {
   data() {
     return {
@@ -106,7 +108,6 @@ export default {
           align: "center",
         },
       ],
-
       consultas: [
         {
           paciente: "Runa",
@@ -123,6 +124,7 @@ export default {
           raca: "Gato Europeu",
         },
       ],
+      utentes: [],
     };
   },
   methods: {
@@ -130,6 +132,23 @@ export default {
       this.$router.push("/clinica/utente/");
       console.log(item)
     },
+  },
+  created: async function () {
+    try {
+      let response = await axios.get("http://localhost:7777/clinica/clientes", {
+        headers: { Authorization: "Bearer " + store.getters.token },
+      });
+      for (var i = 0; i < response.data.length; i++){
+        for (var j = 0; j < response.data[i].animais.length; j++){
+            this.utentes.push({
+              nome: response.data[i].nome, 
+              utente: response.data[i].animais[j]
+            })
+        }
+      }
+    } catch (e) {
+      console.log(e);
+    }
   },
 };
 </script>

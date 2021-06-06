@@ -21,5 +21,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class VetgestApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(VetgestApplication.class, args);
+
 	}
 }

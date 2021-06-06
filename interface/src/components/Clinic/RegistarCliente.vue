@@ -22,7 +22,7 @@
               flat
               dense
               single-line
-              :rules="nameRules"
+              :rules="textRules"
               color="#2596be"
               placeholder="Nome"
               v-model="nome"
@@ -67,7 +67,7 @@
                   dense
                   single-line
                   v-model="freguesia"
-                  :rules="freguesiaRules"
+                  :rules="textRules"
                   color="#2596be"
                   name="freguesia"
                   placeholder="Freguesia"
@@ -83,7 +83,7 @@
                   dense
                   single-line
                   color="#2596be"
-                  :rules="concelhoRules"
+                  :rules="textRules"
                   name="concelho"
                   placeholder="Concelho"
                   v-model="concelho"
@@ -139,6 +139,7 @@
               </v-col>
             </v-row>
           </v-form>
+          <span class="ma-0">* Campos obrigatórios</span>
           <v-row align="end" justify="end">
             <v-col cols="auto" class="pr-0">
               <Cancelar :dialogs="cancelar" @clicked="close()"></Cancelar>
@@ -158,6 +159,7 @@
 <script>
 //import moment from 'moment';
 import axios from 'axios';
+import store from "@/store.js";
 import Cancelar from "@/components/Dialogs/Cancel.vue";
 export default {
   data: () => ({
@@ -172,40 +174,20 @@ export default {
     contacto: "",
     nif: "",
     emailRules: [
-      (value) => !!value || "E-mail inválido",
+      (value) => !!value || "Insira um endereço eletrónico.",
       (value) => {
         const pattern =
           /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return pattern.test(value) || "E-mail inválido";
       },
     ],
-    nameRules: [
-      (v) => !!v || "Insira o nome completo.",
+    textRules: [
+      (v) => !!v || "Este campo não pode estar vazio.",
       (v) => {
-        const pattern = /^[a-zA-Z\s]+$/;
+        const pattern = /^[a-zA-Z\sÀ-ÿ]+$/;
         return (
           pattern.test(v) ||
-          "Nome inválido. Insira apenas caracteres do alfabeto."
-        );
-      },
-    ],
-    freguesiaRules: [
-      (v) => !!v || "Insira uma freguesia.",
-      (v) => {
-        const pattern = /^[a-zA-Z\s]+$/;
-        return (
-          pattern.test(v) ||
-          "Freguesia inválida. Insira apenas caracteres do alfabeto."
-        );
-      },
-    ],
-    concelhoRules: [
-      (v) => !!v || "Insira um concelho.",
-      (v) => {
-        const pattern = /^[a-zA-Z\s]+$/;
-        return (
-          pattern.test(v) ||
-          "Concelho inválido. Insira apenas caracteres do alfabeto."
+          "Campo inválido. Insira apenas caracteres do alfabeto."
         );
       },
     ],
@@ -238,7 +220,7 @@ export default {
     registarCliente: async function () {
       if (this.$refs.form.validate()) {
         try {
-          var resposta = await axios.post("http://localhost:7777/cliente/registar", {
+          await axios.post("http://localhost:7777/clinica/clientes/registar", {
             email: this.email,
             password: "1234",
             concelho: this.concelho,
@@ -247,8 +229,10 @@ export default {
             morada: this.rua,
             nif: this.nif,
             nome: this.nome,
-          });
-          console.log(JSON.stringify(resposta.data));
+          },
+          { headers: 
+                { "Authorization": 'Bearer ' + store.getters.token }
+            });
           this.text = "Utilizador criado com sucesso.";
           this.color = "success";
           this.snackbar = true;

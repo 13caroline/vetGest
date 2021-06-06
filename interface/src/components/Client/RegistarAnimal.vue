@@ -140,13 +140,13 @@
                 <v-col>
                   <div>
                     <p class="ma-0">Castração *</p>
-                    <v-radio-group row class="ma-0" v-model="sexo">
-                      <v-radio value="1" color="#2596be">
+                    <v-radio-group row class="ma-0" v-model="castracao">
+                      <v-radio :value="true" color="#2596be">
                         <template v-slot:label>
                           <div class="body-2">Sim</div>
                         </template>
                       </v-radio>
-                      <v-radio value="0" color="#2596be">
+                      <v-radio :value="false" color="#2596be">
                         <template v-slot:label>
                           <div class="body-2">Não</div>
                         </template>
@@ -333,6 +333,7 @@ export default {
     cor: "",
     raca: "",
     pelagem: "",
+    castracao:false, 
     cauda: "",
     observacoes: "",
     valid: true,
@@ -364,7 +365,7 @@ export default {
                 cor: this.cor.toString(),
                 pelagem: this.pelagem.toString(),
                 cauda: this.cauda,
-                castracao: 1,
+                castracao: this.castracao,
                 observacoes: this.observacoes,
               },
             },
