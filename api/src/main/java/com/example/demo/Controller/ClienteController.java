@@ -244,11 +244,11 @@ public class ClienteController {
        ObjectMapper mapper = new ObjectMapper();
        JsonNode node = mapper.readTree(body);
        Intervencao intervencao = mapper.convertValue(node.get("intervencao"),Intervencao.class);
-       System.out.println(intervencao);
+       //System.out.println(intervencao);
        int animal_id =mapper.convertValue(node.get("animal"),Integer.class);
        Animal animal = animalService.getAnimalById(animal_id);
-       String vetEmail = node.get("veterinario").asText();
-       Veterinario vet = veterinarioService.getVetByEmail(vetEmail);
+       int vetId = node.get("veterinario").asInt();
+       Veterinario vet = veterinarioService.getVetById(vetId);
        String clienteEmail = node.get("cliente").asText();
        Cliente cliente = clienteService.getClienteByEmail(clienteEmail);
 
