@@ -162,12 +162,11 @@
         <v-col>
           <v-card class="h-100">
             <v-card-text class="pb-0">
-              <v-textarea outlined rows="20" flat no-resize> </v-textarea>
+              <v-textarea color="#2596be" outlined rows="20" flat no-resize> </v-textarea>
             </v-card-text>
             <v-card-actions class="pt-0"
               ><v-btn
                 depressed
-                large
                 dark
                 color="#2596be"
                 to="/medico/consultas"

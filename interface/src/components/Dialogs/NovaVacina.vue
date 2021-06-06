@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="dialog" width="100%" max-width="700">
+    <v-dialog v-model="dialog" width="100%" max-width="700" persistent>
      <template v-slot:activator="{ diag, attrs }">
       <v-tooltip top>
         <template v-slot:activator="{ on }">
@@ -13,7 +13,7 @@
             class="mr-0"
             @click="dialog = true"
           >
-            <v-icon> fas fa-syringe</v-icon>
+            <v-icon small> fas fa-syringe</v-icon>
           </v-btn>
         </template>
         <span class="caption">Adicionar vacinação</span>

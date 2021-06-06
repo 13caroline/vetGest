@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="dialog" width="100%" max-width="700">
+    <v-dialog v-model="dialog" width="100%" max-width="700" persistent>
       <template v-slot:activator="{ diag, attrs }">
       <v-tooltip top>
         <template v-slot:activator="{ on }">
@@ -12,7 +12,7 @@
             fab
             @click="dialog = true"
           >
-            <v-icon> fas fa-spider</v-icon>
+            <v-icon small> fas fa-spider</v-icon>
           </v-btn>
         </template>
         <span class="caption">Adicionar desparasitação</span>

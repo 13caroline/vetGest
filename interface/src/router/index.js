@@ -132,10 +132,17 @@ const routes = [
     name: 'Relatórios Clínica',
     component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Relatorios.vue')
   },
+  // Pedidos de consulta
   {
     path: '/clinica/consultas/pedidos',
     name: 'Clínica pedidos consultas',
     component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/PedidosConsulta.vue')
+  },
+  // Internamento Clínica
+  {
+    path: '/clinica/internamento',
+    name: 'Clínica Internamento',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Internamento/Internamento.vue')
   },
   //------------------------------------- Médico -------------------------------------
 
@@ -180,17 +187,19 @@ const routes = [
     name: 'Médico Editar Animal',
     component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/EditData.vue')
   },
-
+  // Internamento Médico
   {
     path: '/medico/internamento',
     name: 'Médico Internamento',
     component: () => import(/* webpackChunkName: "about" */ '../views/Internamento/Internamento.vue')
   },
+  // Detalhes de internamento
   {
     path: '/medico/internamento/detalhes',
     name: 'Médico Internamento Detalhes',
     component: () => import(/* webpackChunkName: "about" */ '../views/Internamento/DetInternamento.vue')
   },
+  // Criação de alta
   {
     path: '/medico/internamento/alta',
     name: 'Médico Internamento Alta',

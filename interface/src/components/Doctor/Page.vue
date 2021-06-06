@@ -40,7 +40,7 @@
                 dark
                 to="/medico/cirurgias/"
               >
-                <v-icon>fas fa-syringe</v-icon>
+                <v-icon>fas fa-band-aid</v-icon>
               </v-btn>
             </template>
             <span class="caption">Marcar cirurgia</span>

@@ -108,6 +108,11 @@ export default {
         route: "/clinica/cirurgias",
       },
       {
+        title: "Internamento",
+        icon: "fas fa-procedures",
+        route: "/clinica/internamento",
+      },
+      {
         title: "Relatórios",
         icon: "far fa-chart-bar",
         route: "/clinica/relatorios",

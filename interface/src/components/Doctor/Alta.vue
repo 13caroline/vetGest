@@ -2,44 +2,40 @@
   <div>
     <v-container class="fill-height">
       <v-row class="w-100">
-        <v-card width="100%">
+        <v-card flat height="100" width="190" outlined class="ma-4">
           <v-row>
             <v-col>
-              <v-card flat height="50" width="100">
-                <v-row>
-                  <v-col>
-                    <!--<v-img
-                      src="@/assets/animais/Rubi.jpg"
-                      aspect-ratio="1"
-                      class="grey lighten-2 mx-2"
-                      cover
-                    >
-                      <template v-slot:placeholder>
-                        <v-row
-                          class="fill-height ma-0"
-                          align="center"
-                          justify="center"
-                        >
-                          <v-progress-circular
-                            indeterminate
-                            color="grey lighten-5"
-                          ></v-progress-circular>
-                        </v-row>
-                      </template>
-                    </v-img>-->
-                  </v-col>
-                  <v-col>
-                    <div>RUBI</div>
-                    <div>8 ANOS</div>
-                  </v-col>
-                </v-row>
-              </v-card>
+              <v-img
+                src="@/assets/animais/Rubi.jpg"
+                aspect-ratio="1"
+                class="grey lighten-2 ma-2 rounded"
+                cover
+                min-height="80"
+                min-width="80"
+              >
+                <template v-slot:placeholder>
+                  <v-row
+                    class="fill-height ma-0"
+                    align="center"
+                    justify="center"
+                  >
+                    <v-progress-circular
+                      indeterminate
+                      color="grey lighten-5"
+                    ></v-progress-circular>
+                  </v-row>
+                </template>
+              </v-img>
+            </v-col>
+            <v-col class="details my-auto">
+              <div class="text-uppercase font-weight-bold">Rubi</div>
+              <span class="text-uppercase body-2 text--secondary" >8 ANOS</span>
             </v-col>
           </v-row>
         </v-card>
       </v-row>
 
-      <v-row class="w-100">
+     <v-row class="w-100">
         <v-col>
           <v-card class="h-100">
             <v-card-text class="py-0">
@@ -168,27 +164,27 @@
             <v-card-text class="pb-0">
               <div>
                 <p class="ma-0">Motivo de internamento</p>
-                <v-textarea outlined rows="1" flat no-resize> </v-textarea>
+                <v-textarea color="#2596be" outlined rows="1" flat no-resize> </v-textarea>
               </div>
 
               <div>
                 <p class="ma-0">História médica prévia</p>
-                <v-textarea outlined rows="3" flat no-resize> </v-textarea>
+                <v-textarea color="#2596be" outlined rows="3" flat no-resize> </v-textarea>
               </div>
 
               <div>
                 <p class="ma-0">Evolução no internamento</p>
-                <v-textarea outlined rows="3" flat no-resize> </v-textarea>
+                <v-textarea color="#2596be" outlined rows="3" flat no-resize> </v-textarea>
               </div>
 
               <div>
                 <p class="ma-0">Proposta terapêutica</p>
-                <v-textarea outlined rows="3" flat no-resize> </v-textarea>
+                <v-textarea color="#2596be" outlined rows="3" flat no-resize> </v-textarea>
               </div>
 
               <div>
                 <p class="ma-0">Orientação</p>
-                <v-textarea outlined rows="1" flat no-resize> </v-textarea>
+                <v-textarea color="#2596be" outlined rows="1" flat no-resize> </v-textarea>
               </div>
             </v-card-text>
             <v-card-actions class="pt-0"

@@ -17,7 +17,7 @@
       </v-tooltip>
     </template>
       <v-card>
-        <v-card-title class="cancel"> Cancelar consulta </v-card-title>
+        <v-card-title class="cancel"> Cancelar {{dialogs.title}} </v-card-title>
         <v-card-text>
           <v-row class="mt-2">
             <v-col class="pb-0" align="right" cols="5">
@@ -31,7 +31,7 @@
             </v-col>
 
             <v-col class="pb-0" align="right" cols="5">
-              <span class="text-uppercase">Motivo da Consulta</span>
+              <span class="text-uppercase">Motivo da {{dialogs.title}}</span>
             </v-col>
             <v-col class="pl-0 pb-0" cols="7">
               <span class="black--text">
@@ -60,7 +60,7 @@
             </v-col>
           </v-row>
 
-          <p class="mt-12">Tem a certeza que pretende cancelar a consulta?</p>
+          <p class="mt-12">Tem a certeza que pretende cancelar a {{dialogs.title}}?</p>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -91,7 +91,7 @@
 
 <script>
 export default {
-    props: ['dados'],
+    props: ['dados', 'dialogs'],
   data: () => ({
     dialog: false,
   }),

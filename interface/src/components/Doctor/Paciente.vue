@@ -69,7 +69,7 @@
         </v-tab-item>
       </v-tabs-items>
 
-      <v-dialog v-model="internamento" width="100%" max-width="500">
+      <v-dialog v-model="internamento" width="100%" max-width="500" persistent>
             <v-card>
               <v-form>
                <v-card-title class="font-weight-regular text-uppercase">
