@@ -53,6 +53,11 @@ public class Clinica extends Utilizador implements Serializable {
     )
     private long nif;
 
+    @Column(
+            name = "iban"
+    )
+    private String iban;
+
     @OneToMany
     private List<Cliente> clientes;
 

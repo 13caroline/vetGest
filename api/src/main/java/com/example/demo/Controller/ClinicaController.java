@@ -60,10 +60,12 @@ public class ClinicaController {
     public ResponseEntity<?> registarAnimal(@RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);
-        Cliente cliente = mapper.convertValue(node.get("cliente"),Cliente.class);
+        String cliente = node.get("cliente").get("email").asText();
         Animal animal = mapper.convertValue(node.get("animal"),Animal.class);
         animalService.saveAnimal(animal);
-        clienteService.getClienteByEmail(cliente.getEmail()).setAnimal(animal);
+        Cliente c = clienteService.getClienteByEmail(cliente);
+        c.setAnimal(animal);
+        clienteService.updateCliente(c);
         if(animal==null || cliente==null){
             return ResponseEntity.badRequest().body("Erro a registar animal, por favor verifique os campos!");
         }
