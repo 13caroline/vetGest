@@ -32,6 +32,8 @@
                   outlined
                   :items="animais"
                   item-text="nome"
+                  item-value="id"
+                  v-model="animal"
                 ></v-autocomplete>
               </v-col>
 
@@ -158,12 +160,16 @@
                 color="#2596be"
                 dense
                 outlined
-                :items="medico"
+                item-value="id"
+                :items="medicos"
+                item-text="nome"
                 v-model="medicoVet"
+
               ></v-autocomplete>
             </div>
             <span class="ma-0 caption">* Campos obrigatórios</span>
-
+            <span>{{this.date}} / {{this.hora}} / {{this.motivo}} / {{this.descricao}} / {{this.animal}} / {{this.medicoVet}}
+            </span>
             <v-row align="end" justify="end">
               <v-col cols="auto">
                 <v-btn color="#BDBDBD" small dark @click="dialog = true">
@@ -173,8 +179,7 @@
                   color="#2596be"
                   small
                   dark
-                  class="registaConsulta()"
-                  @click="getAnimais()"
+                  @click="registaConsulta()"
                 >
                   Confirmar
                 </v-btn>
@@ -229,16 +234,18 @@ export default {
   data: () => ({
     e1: 1,
     dialog: false,
+    descricao:"teste",
     menu2: false,
     horaMarcacao: null,
     date: new Date().toISOString().substr(0, 10),
     hora: new Date().getHours() + ":" + new Date().getMinutes(),
     animais: [],
+    medicos: [],
     /*animais: ["Rubi", "Puscas", "Nikita", "Rudi"], */
-    medico: ["Sem Preferência", "Drº José Vieira", "Drª Joana Ferreira"],
-    motivo: [],
+    // medico: ["Sem Preferência", "Drº José Vieira", "Drª Joana Ferreira"],
+    motivo: "",
     animal: "",
-    medicoVet: "Sem Preferência",
+    medicoVet: "",
     items: [
       "Vómitos/Diarreia/Recusa em comer",
       "Comportamento letárgico",
@@ -269,21 +276,30 @@ export default {
   methods: {
     registaConsulta: async function () {
       try {
-        var resposta = await axios.post(
+        await axios.post(
           "http://localhost:7777/cliente/consulta",
           {
-            data: this.data,
+            "intervencao":{
+            data: this.date,
             hora: this.hora,
             descricao: this.descricao,
             motivo: this.motivo,
-            animais: this.animais,
-            veterinario: this.veterinario,
-          }
+            },
+            animal: this.animal,
+            veterinario: this.medicoVet,
+            cliente: this.$store.state.email,
+
+            
+          },
+           {
+          headers: {
+            Authorization: "Bearer " + store.getters.token.toString(),
+          },
+        }
         );
       } catch (e) {
         console.log("erro: +" + e);
       }
-      console.log(resposta);
     },
     allowedStep: m => m % 15 === 0,
 
@@ -321,14 +337,13 @@ var responseMedico = await axios.get(
       });
     }
     console.log(responseMedico)
-    /* for (var i = 0; i < responseMedico.data.medicos.length; i++) {
-      this.animais.push({
-        nome: response.data.animais[i].nome,
-        id: response.data.animais[i].id,
+    for (var j = 0; j < responseMedico.data.length; j++) {
+      this.medicos.push({
+        nome: responseMedico.data[j].nome,
+        id: responseMedico.data[j].id,
       });
-    }*/
-    console.log(this.animais);
-  },
+    }
+  },  
 };
 </script>
 
