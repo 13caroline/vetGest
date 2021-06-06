@@ -221,7 +221,6 @@
 //import moment from 'moment';
 import axios from "axios";
 import store from "@/store.js";
-
 export default {
   data: () => ({
     e1: 1,
@@ -272,7 +271,6 @@ export default {
           this.descricao = "Consulta anual/Vacinação";
         if (this.motivo == "Consulta de seguimento")
           this.descricao = "Consulta de seguimento";
-
         await axios.post(
           "http://localhost:7777/cliente/consulta",
           {
@@ -312,7 +310,6 @@ export default {
           },
         }
       );
-
       var responseMedico = await axios.get(
         "http://localhost:7777/cliente/medicos",
         {
@@ -330,6 +327,13 @@ export default {
         id: response.data.animais[i].id,
       });
     }
+    console.log(responseMedico);
+    for (var j = 0; j < responseMedico.data.length; j++) {
+      this.medicos.push({
+        nome: responseMedico.data[j].nome,
+        id: responseMedico.data[j].id,
+      });
+    }
   },
 };
 </script>
@@ -338,15 +342,12 @@ export default {
 .subtitle {
   color: #2596be;
 }
-
 .motivo {
   font-size: 13px;
 }
-
 span {
   font-size: 20px;
 }
-
 .group {
   color: #bdbdbd;
 }

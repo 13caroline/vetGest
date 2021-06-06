@@ -64,7 +64,7 @@
         </v-card>
       </v-dialog>
     </v-container>
-    <v-snackbar
+   <!--<v-snackbar
       v-model="snackbar"
       :timeout="timeout"
       :color="color"
@@ -72,7 +72,7 @@
       class="headline"
     >
       {{ text }}
-    </v-snackbar>
+    </v-snackbar> -->
   </div>
 </template>
 
@@ -80,9 +80,12 @@
 // import axios from 'axios'
 import exemplo from "@/components/Client/exemploCirurgia.vue";
 import CancelarComDados from "@/components/Dialogs/CancelarComDados.vue";
+import axios from "axios";
+import store from "@/store.js";
 
 export default {
   data: () => ({
+        timeout: -1,
     dados: {},
     dialogs: {},
     cancelar: {
@@ -95,6 +98,12 @@ export default {
         align: "start",
         sortable: true,
         value: "data",
+      },
+      {
+        text: "Paciente",
+        value: "paciente",
+        sortable: true,
+        align: "start",
       },
       {
         text: "Médico Veterinário",
@@ -122,6 +131,7 @@ export default {
       },
     ],
     cirurgias: [
+      /*
       {
         data: "05/04/2021 10:15",
         medico: "Drº José Vieira",
@@ -145,7 +155,7 @@ export default {
         medico: "Drº José Vieira",
         descricao: "Cirurgia",
         estado: "Agendada",
-      },
+      },*/
     ],
   }),
   components: {
@@ -157,6 +167,34 @@ export default {
       if (estado == "Agendada") return "#C5E1A5";
       else return "#FFE082";
     },
+  },
+   created: async function () {
+    try {
+      var response = await axios.post(
+        "http://localhost:7777/cliente/cirurgias",
+        {
+          cliente: this.$store.state.email,
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + store.getters.token.toString(),
+          },
+        }
+      );
+    } catch (e) {
+      console.log("erro: +" + e);
+    }
+    console.log(response)
+    for (var i = 0; i < response.data.length; i++) {
+      this.cirurgias.push({
+        data: response.data[i].data,
+        paciente: response.data[i].animal.nome,
+        medico: response.data[i].veterinario.nome,
+        descricao: response.data[i].descricao,
+        estado: response.data[i].estado,
+        detalhes: response.data[i].observacoes,
+      })
+    }    
   },
 };
 </script>
