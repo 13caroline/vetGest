@@ -330,12 +330,6 @@ export default {
         id: response.data.animais[i].id,
       });
     }
-    for (var j = 0; j < responseMedico.data.length; j++) {
-      this.medicos.push({
-        nome: responseMedico.data[j].nome,
-        id: responseMedico.data[j].id,
-      });
-    }
   },
 };
 </script>
