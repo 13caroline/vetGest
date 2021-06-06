@@ -164,23 +164,15 @@
                 :items="medicos"
                 item-text="nome"
                 v-model="medicoVet"
-
               ></v-autocomplete>
             </div>
             <span class="ma-0 caption">* Campos obrigatórios</span>
-            <span>{{this.date}} / {{this.hora}} / {{this.motivo}} / {{this.descricao}} / {{this.animal}} / {{this.medicoVet}}
-            </span>
             <v-row align="end" justify="end">
               <v-col cols="auto">
                 <v-btn color="#BDBDBD" small dark @click="dialog = true">
                   Cancelar
                 </v-btn>
-                <v-btn
-                  color="#2596be"
-                  small
-                  dark
-                  @click="registaConsulta()"
-                >
+                <v-btn color="#2596be" small dark @click="registaConsulta()">
                   Confirmar
                 </v-btn>
               </v-col>
@@ -234,7 +226,7 @@ export default {
   data: () => ({
     e1: 1,
     dialog: false,
-    descricao:"teste",
+    descricao: "",
     menu2: false,
     horaMarcacao: null,
     date: new Date().toISOString().substr(0, 10),
@@ -276,33 +268,36 @@ export default {
   methods: {
     registaConsulta: async function () {
       try {
+        if (this.motivo == "Consulta anual/Vacinação")
+          this.descricao = "Consulta anual/Vacinação";
+        if (this.motivo == "Consulta de seguimento")
+          this.descricao = "Consulta de seguimento";
+
         await axios.post(
           "http://localhost:7777/cliente/consulta",
           {
-            "intervencao":{
-            data: this.date,
-            hora: this.hora,
-            descricao: this.descricao,
-            motivo: this.motivo,
+            intervencao: {
+              data: this.date,
+              hora: this.hora,
+              descricao: this.descricao,
+              motivo: this.motivo,
             },
             animal: this.animal,
             veterinario: this.medicoVet,
             cliente: this.$store.state.email,
-
-            
           },
-           {
-          headers: {
-            Authorization: "Bearer " + store.getters.token.toString(),
-          },
-        }
+          {
+            headers: {
+              Authorization: "Bearer " + store.getters.token.toString(),
+            },
+          }
         );
+        this.$router.push("/cliente/consultas");
       } catch (e) {
         console.log("erro: +" + e);
       }
     },
-    allowedStep: m => m % 15 === 0,
-
+    allowedStep: (m) => m % 15 === 0,
   },
   created: async function () {
     try {
@@ -318,7 +313,7 @@ export default {
         }
       );
 
-var responseMedico = await axios.get(
+      var responseMedico = await axios.get(
         "http://localhost:7777/cliente/medicos",
         {
           headers: {
@@ -326,7 +321,6 @@ var responseMedico = await axios.get(
           },
         }
       );
-
     } catch (e) {
       console.log("erro: +" + e);
     }
@@ -336,14 +330,14 @@ var responseMedico = await axios.get(
         id: response.data.animais[i].id,
       });
     }
-    console.log(responseMedico)
+    console.log(responseMedico);
     for (var j = 0; j < responseMedico.data.length; j++) {
       this.medicos.push({
         nome: responseMedico.data[j].nome,
         id: responseMedico.data[j].id,
       });
     }
-  },  
+  },
 };
 </script>
 
