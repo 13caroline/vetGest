@@ -13,7 +13,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -262,6 +266,7 @@ public class ClienteController {
        intervencao.setVeterinario(vet);
        intervencao.setEstado("Pendente");
        intervencao.setTipo("Consulta");
+       intervencao.setData_pedido(LocalDateTime.now().toString());
        //System.out.println("\n\nAQUI:"+intervencao);
        intervencaoService.saveIntervencao(intervencao);
        return ResponseEntity.accepted().body("Consulta agendada!");
