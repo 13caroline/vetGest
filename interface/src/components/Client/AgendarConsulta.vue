@@ -330,7 +330,6 @@ export default {
         id: response.data.animais[i].id,
       });
     }
-    console.log(responseMedico);
     for (var j = 0; j < responseMedico.data.length; j++) {
       this.medicos.push({
         nome: responseMedico.data[j].nome,
