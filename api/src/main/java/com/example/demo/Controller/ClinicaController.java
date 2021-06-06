@@ -5,6 +5,9 @@ import com.example.demo.Service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -47,12 +50,49 @@ public class ClinicaController {
 
     @CrossOrigin
     @GetMapping("/clinica/clientes")
+    public ResponseEntity<?> getClientes(){
+        List<Cliente> clientes = clienteService.getClientes();
+        if(clientes.size()==0){
+            return ResponseEntity.badRequest().body("Não Existem Clientes Registados!");
+        }
+        return  ResponseEntity.accepted().body(clientes);
+    }
+
+    @CrossOrigin
+    @GetMapping("/clinica/utentes")
     public ResponseEntity<?> getUtentes(){
         List<Cliente> clientes = clienteService.getClientes();
         if(clientes.size()==0){
-            return ResponseEntity.badRequest().body("Não Existem Utentes Registados!");
+            return ResponseEntity.badRequest().body("Não Existem Clientes Registados!");
         }
-        return  ResponseEntity.accepted().body(clientes);
+        JSONObject animais = new JSONObject();
+        clientes.forEach(cliente -> {
+            cliente.getAnimais().forEach(animal -> {
+                try {
+                    JSONObject utente= new JSONObject();
+                    utente.put("cliente",cliente.getNome());
+                    JSONObject a= new JSONObject();
+                    a.put("id",animal.getId());
+                    a.put("nome",animal.getNome());
+                    a.put("raca",animal.getRaca());
+                    a.put("dataNascimento",animal.getDataNascimento());
+                    a.put("sexo",animal.getSexo());
+                    a.put("especie",animal.getEspecie());
+                    a.put("cor",animal.getCor());
+                    a.put("cauda",animal.getCauda());
+                    a.put("pelagem",animal.getPelagem());
+                    a.put("altura",animal.getAltura());
+                    a.put("chip",animal.getChip());
+                    a.put("castracao",animal.isCastracao());
+                    a.put("observacoes",animal.getObservacoes());
+                    utente.put("animal",a);
+                    animais.accumulate("utentes",utente);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            });
+        });
+        return  ResponseEntity.accepted().body(animais.toString());
     }
 
     @CrossOrigin
