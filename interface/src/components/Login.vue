@@ -112,7 +112,13 @@ export default {
             this.$store.commit("guardaTipoUtilizador",res.data.dtype)
             this.$store.commit("guardaEmailUtilizador",this.email)
             if(res.data.dtype=="Cliente"){
-            this.$router.push("/cliente/inicio")
+              this.$router.push("/cliente/inicio")
+            }
+            if(res.data.dtype=="Clinica"){
+              this.$router.push("/clinica/inicio")
+            }
+            if(res.data.dtype=="Veterinario"){
+              this.$router.push("/medico/inicio")
             }
             
           }

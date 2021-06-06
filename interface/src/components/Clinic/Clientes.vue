@@ -87,8 +87,8 @@
                 </v-img>
               </v-col>
               <v-col>
-                <span class="font-weight-bold headline indication">
-                  CAROLINA ALVES DA CUNHA
+                <span class="font-weight-bold headline indication text-uppercase">
+                  {{this.nome}}
                 </span>
               </v-col>
             </v-row>
@@ -99,7 +99,7 @@
               </v-col>
 
               <v-col>
-                <div class="information font-weight-light">91529375</div>
+                <div class="information font-weight-light">{{this.contacto}}</div>
               </v-col>
             </v-row>
 
@@ -110,7 +110,7 @@
 
               <v-col>
                 <div class="information text-uppercase font-weight-light">
-                  f7carolina.cunha@gmail.com
+                  {{this.email}}
                 </div>
               </v-col>
             </v-row>
@@ -122,19 +122,19 @@
 
               <v-col>
                 <div class="information text-uppercase font-weight-light">
-                  Rua de Teibães
+                  {{this.morada}}
                 </div>
               </v-col>
             </v-row>
 
             <v-row>
               <v-col>
-                <span class="indication font-weight-bold">Localidade:</span>
+                <span class="indication font-weight-bold">Concelho:</span>
               </v-col>
 
               <v-col>
                 <div class="information text-uppercase font-weight-light">
-                  fafe
+                  {{this.concelho}}
                 </div>
               </v-col>
             </v-row>
@@ -148,7 +148,7 @@
 
               <v-col>
                 <div class="information text-uppercase font-weight-light">
-                  249705672
+                  {{this.nif}}
                 </div>
               </v-col>
             </v-row>
@@ -161,23 +161,16 @@
               </v-col>
 
               <v-col align="right" class="pr-0">
-                <v-btn
+                <div v-for="utente in utentes" :key="utente.nome">
+                  <v-btn
                   class="font-weight-light text-decoration-underline"
                   color="#616161"
                   text
                   depressed
                   to="/clinica/utente"
-                  >Runa</v-btn
+                  >{{utente.nome}}</v-btn
                 >
-								<br>
-                <v-btn
-                  class="font-weight-light text-decoration-underline"
-                  color="#616161"
-                  text
-                  depressed
-                  to="/clinica/utente"
-                  >Rubi</v-btn
-                >
+                </div>
               </v-col>
             </v-row>
           </v-card-text>
@@ -188,6 +181,9 @@
 </template>
 
 <script>
+import axios from "axios";
+import store from "@/store.js";
+
 export default {
   data() {
     return {
@@ -198,11 +194,11 @@ export default {
           text: "NOME COMPLETO",
           align: "start",
           sortable: true,
-          value: "cliente",
+          value: "nome",
         },
         {
           text: "NÚMERO TELEFONE",
-          value: "telemovel",
+          value: "contacto",
           sortable: true,
           align: "start",
         },
@@ -214,7 +210,7 @@ export default {
         },
         {
           text: "LOCALIDADE",
-          value: "localidade",
+          value: "morada",
           sortable: false,
           align: "start",
         },
@@ -225,42 +221,43 @@ export default {
           align: "center",
         },
       ],
-
-      clientes: [
-        {
-          cliente: "Carolina Alves Cunha",
-          telemovel: "915293785",
-          email: "f7carolina.cunha@gmail.com",
-          localidade: "Fafe",
-        },
-        {
-          cliente: "Carolina Alves Cunha",
-          telemovel: "915293785",
-          email: "f7carolina.cunha@gmail.com",
-          localidade: "Fafe",
-        },
-        {
-          cliente: "Carolina Alves Cunha",
-          telemovel: "915293785",
-          email: "f7carolina.cunha@gmail.com",
-          localidade: "Fafe",
-        },
-      ],
+      clientes: [],
+      nome:"", 
+      contacto: "", 
+      email:"", 
+      morada:"", 
+      concelho:"", 
+      nif:"", 
+      utentes:"", 
     };
   },
   methods: {
     more(item) {
+      this.nome = item.nome; 
+      this.contacto = item.contacto;
+      this.email = item.email; 
+      this.morada = item.morada; 
+      this.concelho = item.concelho; 
+      this.nif = item.nif; 
+      this.utentes = item.animais;       
       this.dialog = true;
-      console.log(item);
     },
   },
-  created() {
-    /*
-    let response = await axios.post("http://localhost:7777/clinica/getClientes", {
-      email: this.$store.state.user.email,
-    });
+  created: async function() {
+    try{
+      
+    let response = await axios.get("http://localhost:7777/clinica/clientes",
+    { headers: 
+                { "Authorization": 'Bearer ' + store.getters.token }
+            });
+            this.clientes = response.data;
+            console.log(response.data)
+    }
+    catch(e){
+      console.log(e)
+    }
 
-    */
+    
   },
 };
 </script>

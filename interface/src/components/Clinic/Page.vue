@@ -137,7 +137,7 @@
               
               <Admissao :dados="item"></Admissao>
               
-              <CancelarConsulta :dados="item"></CancelarConsulta>
+              <CancelarConsulta :dialogs="cancelar" :dados="item"></CancelarConsulta>
             </template>
           </v-data-table>
           <div class="text-center pt-2">
@@ -166,8 +166,11 @@ export default {
   data() {
     return {
       dados:{},
-      
-      cancelar: false,
+      dialogs: {},
+      cancelar: {
+        title: "agendamento da consulta",
+        text: "o agendamento da consulta",
+      },
       page: 1,
       pageCount: 0,
       itemsPerPage: 10,

@@ -16,7 +16,7 @@
           </div>
 
           <v-form ref="form" v-model="valid" lazy-validation>
-            <p class="mb-0 mt-4">Nome completo</p>
+            <p class="mb-0 mt-4">Nome completo *</p>
             <v-text-field
               outlined
               flat
@@ -30,14 +30,14 @@
               required
             />
 
-            <p class="ma-0">E-mail</p>
+            <p class="ma-0">E-mail *</p>
             <v-text-field
               outlined
               flat
               dense
               v-model="email"
               single-line
-              :rules="ruaEmail"
+              :rules="emailRules"
               color="#2596be"
               name="email"
               placeholder="E-mail"
@@ -46,14 +46,13 @@
 
             <v-row class="mt-1">
               <v-col cols="12" sm="6" class="py-0">
-                <p class="ma-0">Morada</p>
+                <p class="ma-0">Morada *</p>
                 <v-text-field
                   outlined
                   flat
                   dense
                   v-model="rua"
                   single-line
-                  :rules="ruaRules"
                   color="#2596be"
                   name="rua"
                   placeholder="Morada"
@@ -61,7 +60,7 @@
                 />
               </v-col>
               <v-col class="py-0">
-                <p class="ma-0">Freguesia</p>
+                <p class="ma-0">Freguesia *</p>
                 <v-text-field
                   outlined
                   flat
@@ -77,7 +76,7 @@
               </v-col>
 
               <v-col class="py-0">
-                <p class="ma-0">Concelho</p>
+                <p class="ma-0">Concelho *</p>
                 <v-text-field
                   outlined
                   flat
@@ -107,7 +106,7 @@
                 />
               </v-col>
               <v-col class="py-0">
-                <p class="ma-0">Contacto telefónico</p>
+                <p class="ma-0">Contacto telefónico *</p>
                 <v-text-field
                   outlined
                   flat
@@ -117,6 +116,7 @@
                   placeholder="Contacto telefónico"
                   name="contacto"
                   v-model="contacto"
+                  :rules="contactoRules"
                   maxlength="9"
                   required
                 />
@@ -134,6 +134,7 @@
                   v-model="nif"
                   maxlength="9"
                   required
+                  :rules="nifRules"
                 />
               </v-col>
             </v-row>
@@ -142,8 +143,10 @@
             <v-col cols="auto" class="pr-0">
               <Cancelar :dialogs="cancelar" @clicked="close()"></Cancelar>
             </v-col>
-            <v-col cols="auto" class="pl-0">
-              <v-btn color="#2596be" small dark class="ml-3">Registar</v-btn>
+            <v-col cols="auto">
+              <v-btn color="#2596be" class="white--text" small :disabled="!valid" @click="registarCliente()"
+                >Registar</v-btn
+              >
             </v-col>
           </v-row>
         </v-col>
@@ -154,20 +157,116 @@
 
 <script>
 //import moment from 'moment';
-import Cancelar from "@/components/Dialogs/Cancel.vue"
+import axios from 'axios';
+import Cancelar from "@/components/Dialogs/Cancel.vue";
 export default {
   data: () => ({
-   dialogs: {},
-    cancelar: {title: "registo de cliente", text: "o registo de um cliente"},
+    dialogs: {},
+    valid: false,
+    cancelar: { title: "registo de cliente", text: "o registo de um cliente" },
+    nome: "",
+    email: "",
+    rua: "",
+    freguesia: "",
+    concelho: "",
+    contacto: "",
+    nif: "",
+    emailRules: [
+      (value) => !!value || "E-mail inválido",
+      (value) => {
+        const pattern =
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return pattern.test(value) || "E-mail inválido";
+      },
+    ],
+    nameRules: [
+      (v) => !!v || "Insira o nome completo.",
+      (v) => {
+        const pattern = /^[a-zA-Z\s]+$/;
+        return (
+          pattern.test(v) ||
+          "Nome inválido. Insira apenas caracteres do alfabeto."
+        );
+      },
+    ],
+    freguesiaRules: [
+      (v) => !!v || "Insira uma freguesia.",
+      (v) => {
+        const pattern = /^[a-zA-Z\s]+$/;
+        return (
+          pattern.test(v) ||
+          "Freguesia inválida. Insira apenas caracteres do alfabeto."
+        );
+      },
+    ],
+    concelhoRules: [
+      (v) => !!v || "Insira um concelho.",
+      (v) => {
+        const pattern = /^[a-zA-Z\s]+$/;
+        return (
+          pattern.test(v) ||
+          "Concelho inválido. Insira apenas caracteres do alfabeto."
+        );
+      },
+    ],
+    contactoRules: [
+      (v) => !!v || "Insira um contacto telefónico.",
+      (v) => {
+        const pattern = /^[0-9]{9}$/;
+        return (
+          pattern.test(v) || "Contacto telefónico inválido. Insira 9 dígitos."
+        );
+      },
+    ],
+    nifRules: [
+      (v) => {
+        const pattern = /^[0-9]{9}$/;
+        return (
+          pattern.test(v) ||
+          "Número de identificação fiscal inválido. Insira 9 dígitos."
+        );
+      },
+    ],
   }),
-  components:{
-    Cancelar
+  components: {
+    Cancelar,
   },
   methods: {
-     close(){
-      this.$router.push("/clinica/clientes")
+    close() {
+      this.$router.push("/clinica/clientes");
     },
-  }
+    registarCliente: async function () {
+      if (this.$refs.form.validate()) {
+        try {
+          var resposta = await axios.post("http://localhost:7777/cliente/registar", {
+            email: this.email,
+            password: "1234",
+            concelho: this.concelho,
+            contacto: this.contacto,
+            freguesia: this.freguesia,
+            morada: this.rua,
+            nif: this.nif,
+            nome: this.nome,
+          });
+          console.log(JSON.stringify(resposta.data));
+          this.text = "Utilizador criado com sucesso.";
+          this.color = "success";
+          this.snackbar = true;
+          this.$router.push("/clinica/clientes");
+        } catch (e) {
+          console.log("erro: " + e);
+          this.text = "Ocorreu um erro no registo, por favor tente mais tarde!";
+          this.color = "warning";
+          this.snackbar = true;
+        }
+      } else {
+        this.text = "Por favor preencha todos os campos.";
+        this.color = "error";
+        this.snackbar = true;
+        this.done = false;
+      }
+    },
+  },
 };
 </script> 
 
