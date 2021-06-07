@@ -35,4 +35,8 @@ public class IntervencaoService {
     public List<Intervencao> getIntervencoesVeterinario(int veterinario_id) {
         return repository.findAllByVeterinarioId(veterinario_id);
     }
+
+    public List<Intervencao> findAllByVeterinarioIdAndEstadoEquals(int vet_id, String estado){
+        return repository.findAllByVeterinarioIdAndEstadoEquals(vet_id,estado);
+    }
 }

@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -170,6 +171,21 @@ public class ClinicaController {
 
         if(!animais.contains(animal)){
             return ResponseEntity.badRequest().body("Erro a obter animal!");
+        }
+
+        String data = intervencao.getData();
+        String hora = intervencao.getHora();
+
+        List<Intervencao> intervencoes = intervencaoService.findAllByVeterinarioIdAndEstadoEquals(vetId,"Agendada");
+        List<Intervencao> temp = new ArrayList<>();
+        intervencoes.forEach(intervencao1 -> {
+            if (intervencao1.getData().equals(data) && intervencao1.getHora().equals(hora)) {
+                temp.add(intervencao1);
+            }
+        });
+
+        if(!temp.isEmpty()){
+            return ResponseEntity.badRequest().body("Erro no agendamento de Consulta! Horario Indisponivel!");
         }
 
         intervencao.setAnimal(animal);
