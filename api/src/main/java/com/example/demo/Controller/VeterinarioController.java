@@ -1,14 +1,8 @@
 package com.example.demo.Controller;
 
 
-import com.example.demo.Entity.Animal;
-import com.example.demo.Entity.Cliente;
-import com.example.demo.Entity.Intervencao;
-import com.example.demo.Entity.Veterinario;
-import com.example.demo.Service.AnimalService;
-import com.example.demo.Service.ClienteService;
-import com.example.demo.Service.IntervencaoService;
-import com.example.demo.Service.VeterinarioService;
+import com.example.demo.Entity.*;
+import com.example.demo.Service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,6 +26,8 @@ public class VeterinarioController {
     private AnimalService animalService;
     @Autowired
     private ClienteService clienteService;
+    @Autowired
+    private ImunizacaoService imunizacaoService;
 
     @CrossOrigin
     @PostMapping( "/medico/intervencoes")
@@ -140,6 +136,38 @@ public class VeterinarioController {
         return ResponseEntity.accepted().body(animal);
     }
 
-    
+
+    @CrossOrigin
+    @PostMapping("/medico/animal/adiciona/imunizacao")
+    public ResponseEntity<?> adicionarVacina(@RequestBody String body) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+        Animal animal = animalService.getAnimalById(node.get("animal").asInt());
+        if(animal==null){
+            return ResponseEntity.badRequest().body("Erro a obter animal!");
+        }
+        Imunizacao imunizacao =  mapper.convertValue(node.get("imunizacao"),Imunizacao.class);
+        if(imunizacao==null){
+            return ResponseEntity.badRequest().body("Erro no agendamento de Imunização!");
+        }
+        Veterinario veterinario = veterinarioService.getVetByEmail(node.get("veterinario").asText());
+        if(veterinario==null){
+            return ResponseEntity.badRequest().body("Erro a obter veterinário!");
+        }
+        imunizacao.setAnimal(animal);
+        imunizacao.setVeterinario(veterinario);
+        imunizacao.setEstado("Agendada");
+        Imunizacao proximaImunizacao = new Imunizacao();
+        proximaImunizacao.setData(imunizacao.getProxImunizacao());
+        proximaImunizacao.setEstado("Agendada");
+        proximaImunizacao.setMotivo(imunizacao.getMotivo());
+        proximaImunizacao.setProxImunizacao(null);
+        proximaImunizacao.setTipo(imunizacao.getTipo());
+        proximaImunizacao.setAnimal(imunizacao.getAnimal());
+        proximaImunizacao.setVeterinario(imunizacao.getVeterinario());
+        imunizacaoService.saveImunizacao(imunizacao);
+        imunizacaoService.saveImunizacao(proximaImunizacao);
+        return ResponseEntity.accepted().body("Imunização agendada!");
+    }
 }
 
