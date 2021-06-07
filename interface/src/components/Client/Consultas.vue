@@ -51,16 +51,15 @@
                 </template>
                 <span class="caption">Ver detalhes</span>
               </v-tooltip>
-                  <div
-                    v-if="
-                      item.estado == 'Agendada' || item.estado == 'Pendente'
-                    "
-                  >
-                     <CancelarComDados :dialogs="cancelar" :dados="item"></CancelarComDados>
-                  </div>
-              
+              <div
+                v-if="item.estado == 'Agendada' || item.estado == 'Pendente'"
+              >
+                <CancelarComDados
+                  :dialogs="cancelar"
+                  :dados="item"
+                ></CancelarComDados>
+              </div>
             </template>
-           
           </v-data-table>
         </v-col>
       </v-row>
@@ -84,10 +83,8 @@
           </v-card-text>
         </v-card>
       </v-dialog>
-
-       
     </v-container>
-	<v-snackbar
+    <v-snackbar
       v-model="snackbar"
       :timeout="timeout"
       :color="color"
@@ -99,8 +96,10 @@
   </div>
 </template>
 
-<script> 
-import CancelarComDados from '@/components/Dialogs/CancelarComDados.vue'
+<script>
+import CancelarComDados from "@/components/Dialogs/CancelarComDados.vue";
+import axios from "axios";
+import store from "@/store.js";
 export default {
   data: () => ({
     dados: {},
@@ -108,7 +107,7 @@ export default {
     cancelar: {
       title: "consulta",
     },
-	snackbar: false,
+    snackbar: false,
     color: "",
     done: false,
     timeout: -1,
@@ -152,39 +151,11 @@ export default {
       },
     ],
     consultas: [
-      {
-        data: "05/04/2021 10:15",
-        animal: "Rubi",
-        medico: "Drº José Vieira",
-        descricao: "Desparasitação",
-        estado: "Concluída",
-      },
-      {
-        data: "19/04/2021 15:30",
-        animal: "Puscas",
-        medico: "Drº José Vieira",
-        descricao: "Vacinação",
-        estado: "Agendada",
-      },
-      {
-        data: "26/04/2021 14:30",
-        animal: "Luffy",
-        medico: "Drº José Vieira",
-        descricao: "Consulta de Rotina",
-        estado: "Pendente",
-      },
-      {
-        data: "26/04/2021 15:00",
-        animal: "Rubi",
-        medico: "Drº José Vieira",
-        descricao: "Consulta de Rotina",
-        estado: "Cancelada",
-      },
     ],
     dialog: false,
   }),
   components: {
-    CancelarComDados
+    CancelarComDados,
   },
   methods: {
     estadopedido(estado) {
@@ -194,13 +165,33 @@ export default {
       else return "#9ae5ff";
     },
   },
- /* getConsultas: async function(){
-    try{
-      var resposta = await axios.get("http://localhost:7777/client/consultas"),{
-
-      }
+  created: async function () {
+    try {
+      var response = await axios.post(
+        "http://localhost:7777/cliente/consultas",
+        {
+          cliente: this.$store.state.email,
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + store.getters.token.toString(),
+          },
+        }
+      );
+    } catch (e) {
+      console.log("erro: +" + e);
     }
-  }*/
+    console.log(response)
+    for (var i = 0; i < response.data.length; i++) {
+      this.consultas.push({
+        data: response.data[i].data,
+        animal: response.data[i].animal.nome,
+        medico: response.data[i].veterinario.nome,
+        descricao: response.data[i].descricao,
+        estado: response.data[i].estado,
+      })
+    }    
+  },
 };
 </script>
 
