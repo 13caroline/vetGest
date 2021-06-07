@@ -27,6 +27,8 @@ public class ClinicaController {
     private AnimalService animalService;
     @Autowired
     private VeterinarioService veterinarioService;
+    @Autowired
+    private ImunizacaoService imunizacaoService;
 
     @CrossOrigin
     @PostMapping(path = "/clinica/adicionarClinica")

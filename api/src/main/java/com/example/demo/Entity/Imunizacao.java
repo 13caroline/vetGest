@@ -39,11 +39,6 @@ public class Imunizacao {
     private String estado;
 
     @Column(
-            name = "motivo"
-    )
-    private String motivo;
-
-    @Column(
             name = "tipo",
             nullable = false
     )
@@ -54,17 +49,32 @@ public class Imunizacao {
     )
     private String vacina;
 
+    @Column(
+            name = "observacoes"
+    )
+    private String observacoes;
+
+    @Column(
+            name = "tratamento"
+    )
+    private String tratamento;
+
     @ManyToOne(cascade = {CascadeType.ALL})
     private Animal animal;
 
     @ManyToOne(cascade = {CascadeType.ALL})
     private Veterinario veterinario;
 
+    @ManyToOne(cascade = {CascadeType.ALL})
+    private Imunizacao proxima_imunizacao;
+
     public Imunizacao(Imunizacao imunizacao) {
         this.data = imunizacao.getData();
         this.proxImunizacao = imunizacao.getProxImunizacao();
         this.tipo = imunizacao.getTipo();
         this.estado = imunizacao.getEstado();
-        this.motivo = imunizacao.getMotivo();
+        this.observacoes = imunizacao.getObservacoes();
+        this.tratamento = imunizacao.getTratamento();
+        this.vacina = imunizacao.getVacina();
     }
 }
