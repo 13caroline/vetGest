@@ -2,6 +2,7 @@ package com.example.demo.Controller;
 
 import com.example.demo.Entity.*;
 import com.example.demo.Service.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -49,7 +50,51 @@ public class ClinicaController {
         if(intervencoes.size()==0){
             return ResponseEntity.badRequest().body("Não Existem Intervenções Agendadas!");
         }
-        return  ResponseEntity.accepted().body(intervencoes);
+        JSONObject intervencoesObject = new JSONObject();
+        intervencoes.forEach(intervencao -> {
+            Cliente cliente = clienteService.findClienteByAnimais(intervencao.getAnimal());
+            JSONObject c = new JSONObject();
+            JSONObject a = new JSONObject();
+            JSONObject i = new JSONObject();
+            try {
+                c.put("id",cliente.getId());
+                c.put("nome",cliente.getNome());
+                c.put("concelho",cliente.getConcelho());
+                c.put("contacto",cliente.getContacto());
+                c.put("freguesia",cliente.getFreguesia());
+                c.put("morada",cliente.getMorada());
+                c.put("nif",cliente.getNif());
+                a.put("id",intervencao.getAnimal().getId());
+                a.put("nome",intervencao.getAnimal().getNome());
+                a.put("raca",intervencao.getAnimal().getRaca());
+                a.put("dataNascimento",intervencao.getAnimal().getDataNascimento());
+                a.put("sexo",intervencao.getAnimal().getSexo());
+                a.put("especie",intervencao.getAnimal().getEspecie());
+                a.put("cor",intervencao.getAnimal().getCor());
+                a.put("cauda",intervencao.getAnimal().getCauda());
+                a.put("pelagem",intervencao.getAnimal().getPelagem());
+                a.put("altura",intervencao.getAnimal().getAltura());
+                a.put("chip",intervencao.getAnimal().getChip());
+                a.put("castracao",intervencao.getAnimal().isCastracao());
+                a.put("observacoes",intervencao.getAnimal().getObservacoes());
+                a.put("cliente_nome",cliente.getNome());
+                a.put("cliente_email",cliente.getEmail());
+
+                i.put("id",intervencao.getId());
+                i.put("data",intervencao.getData());
+                i.put("hora",intervencao.getHora());
+                i.put("descricao",intervencao.getDescricao());
+                i.put("estado",intervencao.getEstado());
+                i.put("motivo",intervencao.getMotivo());
+                i.put("tipo",intervencao.getTipo());
+                i.put("cliente",c);
+                i.put("animal",a);
+                intervencoesObject.accumulate("intervencoes",i);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
+        return  ResponseEntity.accepted().body(intervencoesObject.toString());
     }
 
     @CrossOrigin
