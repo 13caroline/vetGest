@@ -30,7 +30,7 @@
 
         <v-card-text>
           <v-row align="center">
-            <v-col cols="10" class="pb-0">
+            <v-col class="pb-0">
               <p class="ma-0">Utente</p>
               <v-text-field
                 color="#2596be"
@@ -43,7 +43,7 @@
               ></v-text-field>
             </v-col>
 
-            <v-col class="pb-0">
+            <v-col cols="auto" class="pb-0">
               <v-btn
                 @click="dialogUtente = true"
                 class="ma-0"

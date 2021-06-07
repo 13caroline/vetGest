@@ -1,5 +1,5 @@
 <template>
-  <div id="page" class="d-flex flex-column">
+  <div id="page" class="d-flex flex-column extra-padding">
     <Header />
     <Page />
     <Footer v-bind:marginTop="false" />

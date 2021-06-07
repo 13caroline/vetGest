@@ -1,5 +1,5 @@
 <template>
-  <div id="page">
+  <div class="extra-padding" id="page">
     <Header />
     <Alta />
     <Footer />

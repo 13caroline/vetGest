@@ -52,7 +52,7 @@
         <v-col cols="12">
           <v-data-table
             :headers="headers"
-            :items="agendamento"
+            :items="agendamentos"
             class="elevation-1"
             hide-default-footer
             :page.sync="page"
@@ -396,6 +396,8 @@
 
 
 <script>
+import axios from "axios";
+import store from "@/store.js";
 export default {
   data() {
     return {
@@ -451,62 +453,7 @@ export default {
         },
       ],
 
-      agendamento: [
-        {
-          utente: "Rubi",
-          cliente: "Carolina Cunha",
-          data: "21/05/2021 15:00",
-          motivo: "Consulta Anual/Vacinação",
-          servico: "Consulta",
-          estado: "A decorrer",
-          especie: "Canídeo",
-        },
-        {
-          utente: "Runa",
-          cliente: "Carolina Cunha",
-          data: "05/05/2021 10:00",
-          servico: "Cirurgia",
-          motivo: "Castração",
-          estado: "Agendada",
-          especie: "Canídeo",
-        },
-        {
-          utente: "Puscas",
-          cliente: "Carolina Cunha",
-          data: "29/04/2021 16:30",
-          servico: "Consulta",
-          motivo: "Consulta de seguimento",
-          estado: "Agendada",
-          especie: "Canídeo",
-        },
-        {
-          utente: "Nikita",
-          cliente: "Carolina Cunha",
-          data: "21/05/2021 15:30",
-          servico: "Consulta",
-          motivo: "Consulta extraordinária/Por doença",
-          estado: "A decorrer",
-          especie: "Canídeo",
-        },
-        {
-          utente: "Zuki",
-          cliente: "Carolina Cunha",
-          data: "07/06/2021 11:00",
-          servico: "Cirurgia",
-          motivo: "Castração",
-          estado: "Agendada",
-          especie: "Canídeo",
-        },
-        {
-          utente: "Rudi",
-          cliente: "Carolina Cunha",
-          data: "15/07/2021 17:30",
-          servico: "Cirurgia",
-          motivo: "Castração",
-          estado: "Agendada",
-          especie: "Canídeo",
-        },
-      ],
+      agendamentos: [],
     };
   },
   methods: {
@@ -535,13 +482,21 @@ export default {
       console.log(item);
     },
   },
-  created() {
-    /*
-    let response = await axios.post("http://localhost:7777/clinica/getClientes", {
-      email: this.$store.state.user.email,
-    });
-
-    */
+  created: async function () {
+    try {
+      let response = await axios.post(
+        "http://localhost:7777/medico/intervencoes",
+        { email: this.$store.state.email },
+        {
+          headers: { Authorization: "Bearer " + store.getters.token },
+        }
+      );
+      console.log(response);
+      if (typeof(response.data) == 'object')
+        this.agendamentos = response.data;
+    } catch (e) {
+      console.log(e);
+    }
   },
 };
 </script>

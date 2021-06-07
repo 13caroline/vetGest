@@ -32,5 +32,14 @@ h2 {
 }
 
 .w-100 {
-    width: 100%
+    width: 100%;
+}
+
+.extra-padding {
+    padding: 0 20px;
+
+    footer {
+        margin-left: -20px;
+        margin-right: -20px;
+    }
 }

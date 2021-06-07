@@ -1,5 +1,5 @@
 <template>
-  <div id="page" class="d-flex flex-column">
+  <div class="d-flex flex-column">
     <v-container>
       <v-row class="w-100">
            <h3 class="font-weight-regular text-uppercase mb-4 mt-10 ml-3">

@@ -34,9 +34,6 @@ public class VeterinarioController {
             return ResponseEntity.badRequest().body("Veterinário não encontrado!");
         }
         List<Intervencao> intervencoes = intervencaoService.getIntervencoesVeterinario(veterinario.getId());
-        if(intervencoes.size()==0){
-            return ResponseEntity.badRequest().body("Veterinário não tem intervencões marcadas!");
-        }
         return  ResponseEntity.accepted().body(intervencoes);
     }
 

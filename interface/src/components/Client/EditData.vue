@@ -9,7 +9,7 @@
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-row>
             <v-col cols="auto" md="3" class="ml-4">
-              <v-card width="200" flat color="transparent">
+              <v-card width="200" class="mx-auto" flat color="transparent">
                 <v-img
                   src="@/assets/animais/Rubi.jpg"
                   aspect-ratio="1"
