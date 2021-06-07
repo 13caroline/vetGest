@@ -145,12 +145,23 @@
 </template>
 
 <script>
+import axios from "axios";
+import store from "@/store.js";
+
 export default {
   name: "Navbar",
   methods: {
     logout: async function () {
-      this.$store.commit("eliminarToken");
-      this.$router.push("/");
+      try {
+        await axios.get(
+          "http://localhost:7777/terminar-sessao",
+          { headers: { Authorization: "Bearer " + store.getters.token } }
+        );
+        this.$store.commit("limpaStore");
+        this.$router.push("/");
+      } catch (e) {
+        console.log(e);
+      }
     },
     home: function () {
       this.$router.push("/cliente/inicio");
@@ -175,8 +186,8 @@ export default {
   display: none;
 }
 
-.v-btn--active span{
-    text-decoration: underline;
+.v-btn--active span {
+  text-decoration: underline;
 }
 
 @media screen and (min-width: 705px) {

@@ -166,7 +166,7 @@ export default {
     estadopedido(estado) {
       if (estado == "Agendada") return "#C5E1A5";
       else if (estado == "Cancelada") return "#EF9A9A";
-      else if (estado == "Pendente") return "#FFE082";
+      else if (estado == "Pendente") return "#fccea2";
       else return "#9ae5ff";
     },
     more(item) {

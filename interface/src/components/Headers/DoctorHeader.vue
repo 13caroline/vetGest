@@ -71,6 +71,9 @@
 
 
 <script>
+import axios from "axios";
+import store from "@/store.js";
+
 export default {
   name: "Navbar",
   data: () => ({
@@ -112,8 +115,16 @@ export default {
   }),
   methods: {
     logout: async function () {
-      this.$store.commit("eliminarToken");
-      this.$router.push("/");
+      try {
+        await axios.get(
+          "http://localhost:7777/terminar-sessao",
+          { headers: { Authorization: "Bearer " + store.getters.token } }
+        );
+        this.$store.commit("limpaStore");
+        this.$router.push("/");
+      } catch (e) {
+        console.log(e);
+      }
     },
     toMainPage: function () {
       this.$router.push("/medico/inicio");

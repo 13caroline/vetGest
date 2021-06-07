@@ -42,7 +42,7 @@
       ></v-text-field>
       <v-data-table
         :headers="headers"
-        :items="consultas"
+        :items="utentes"
         :search="search"
         class="elevation-1"
         
@@ -75,7 +75,7 @@ export default {
           text: "UTENTE",
           align: "start",
           sortable: true,
-          value: "paciente",
+          value: "nome",
         },
         {
           text: "IDADE",
@@ -108,22 +108,6 @@ export default {
           align: "center",
         },
       ],
-      consultas: [
-        {
-          paciente: "Runa",
-          idade: "10",
-          cliente: "Carolina Cunha",
-          especie: "Canídeo",
-          raca: "Labrador",
-        },
-        {
-          paciente: "Riscas",
-          idade: "4",
-          cliente: "João Mota",
-          especie: "Felídeo",
-          raca: "Gato Europeu",
-        },
-      ],
       utentes: [],
     };
   },
@@ -135,17 +119,11 @@ export default {
   },
   created: async function () {
     try {
-      let response = await axios.get("http://localhost:7777/clinica/clientes", {
+      let response = await axios.get("http://localhost:7777/clinica/utentes", {
         headers: { Authorization: "Bearer " + store.getters.token },
       });
-      for (var i = 0; i < response.data.length; i++){
-        for (var j = 0; j < response.data[i].animais.length; j++){
-            this.utentes.push({
-              nome: response.data[i].nome, 
-              utente: response.data[i].animais[j]
-            })
-        }
-      }
+      this.utentes = response.data
+      console.log(this.utentes)
     } catch (e) {
       console.log(e);
     }

@@ -157,6 +157,8 @@
 </template>
 
 <script>
+import axios from "axios";
+import store from "@/store.js";
 import MarcarConsultaLivre from "@/components/Dialogs/MarcarConsultaLivre.vue"
 export default {
   data: () => ({
@@ -170,7 +172,7 @@ export default {
       week: "Semana",
       day: "Dia",
     },
-    medico: ["Drº José Vieira", "Drª Joana Ferreira"],
+    medico: [],
     name: null,
     details: null,
     start: null,
@@ -281,6 +283,17 @@ export default {
   },
   components:{
     MarcarConsultaLivre
-  }
+  },
+  created: async function () {
+    try {
+      let response = await axios.get("http://localhost:7777/clinica/medicos", {
+        headers: { Authorization: "Bearer " + store.getters.token },
+      });
+      for (var i = 0; i < response.data.length; i++)
+        this.medico.push(response.data[i].nome)
+    } catch (e) {
+      console.log(e);
+    }
+  },
 };
 </script>

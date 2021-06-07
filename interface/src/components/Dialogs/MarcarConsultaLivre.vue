@@ -200,6 +200,8 @@
 </template>
 
 <script>
+import axios from "axios";
+import store from "@/store.js";
 import Cancelar from "@/components/Dialogs/Cancel.vue";
 export default {
   data: () => ({
@@ -328,6 +330,17 @@ export default {
       let motivo = this.motivos;
       return this.desc.filter((item) => item.tipo === motivo);
     },
+  },
+  created: async function () {
+    try {
+      let response = await axios.get("http://localhost:7777/clinica/medicos", {
+        headers: { Authorization: "Bearer " + store.getters.token },
+      });
+      for (var i = 0; i < response.data.length; i++)
+        this.medico.push(response.data[i].nome)
+    } catch (e) {
+      console.log(e);
+    }
   },
 };
 </script>
