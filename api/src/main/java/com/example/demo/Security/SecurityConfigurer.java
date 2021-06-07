@@ -66,7 +66,8 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable()
                 .authorizeRequests().antMatchers("/authenticate","/cliente/registar","/clinica/adicionarClinica").permitAll()
-                .antMatchers("/addDica/{emailVet}","/medico/intervencoes","/medico/agendar/intervencao").hasAnyRole("Veterinario")
+                .antMatchers("/addDica/{emailVet}","/medico/intervencoes","/medico/agendar/intervencao","/medico/utentes",
+                        "/medico/cirurgias","/medico/utente").hasAnyRole("Veterinario")
                 //Acessos da Clinica
                 .antMatchers("/addVet","/clinica/consultas","/clinica/clientes",
                         "/clinica/utentes/registar","/clinica/clientes/registar","/clinica/medicos","/clinica/medicos/registar","/clinica/utentes").hasAnyRole("Clinica")
