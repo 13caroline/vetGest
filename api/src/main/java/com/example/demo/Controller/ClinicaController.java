@@ -145,7 +145,6 @@ public class ClinicaController {
         return  ResponseEntity.accepted().body("Veterinário Registado com sucesso");
     }
 
-    //Check
     @CrossOrigin
     @PostMapping("/clinica/intervencao/agendar")
     public ResponseEntity<?> adicionarIntervencao(@RequestBody String body) throws JsonProcessingException {
@@ -177,5 +176,23 @@ public class ClinicaController {
         //System.out.println("\n\nAQUI:"+intervencao);
         intervencaoService.saveIntervencao(intervencao);
         return ResponseEntity.accepted().body("Intervençao agendada!");
+    }
+
+    @CrossOrigin
+    @PutMapping("/clinica/intervencao/cancelar")
+    public ResponseEntity<?> cancelarIntervencao(@RequestBody String body) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+
+        int id_intervencao = node.get("id").asInt();
+        Intervencao intervencao = intervencaoService.getIntervencao(id_intervencao);
+
+        if(intervencao==null){
+            return ResponseEntity.badRequest().body("Erro a cancelar intervenção! Intervençao nao existe!");
+        }
+
+        intervencao.setEstado("Cancelado");
+        intervencaoService.saveIntervencao(intervencao);
+        return ResponseEntity.accepted().body("Intervenção cancelada!");
     }
 }
