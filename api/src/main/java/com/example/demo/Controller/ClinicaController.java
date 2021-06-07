@@ -85,7 +85,8 @@ public class ClinicaController {
                     a.put("chip",animal.getChip());
                     a.put("castracao",animal.isCastracao());
                     a.put("observacoes",animal.getObservacoes());
-                    a.put("cliente",cliente.getNome());
+                    a.put("cliente_nome",cliente.getNome());
+                    a.put("cliente_email",cliente.getEmail());
                     utente.put("animal",a);
                     animais.accumulate("utentes",utente);
                 } catch (JSONException e) {
