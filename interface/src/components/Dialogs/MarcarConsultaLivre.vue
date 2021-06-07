@@ -145,6 +145,9 @@
                   format="24hr"
                   v-model="hora"
                   full-width
+                  min="10:00"
+                  max="20:00"
+                  :allowed-minutes="allowedStep"
                   color="#2596be"
                 ></v-time-picker>
               </v-menu>
@@ -160,17 +163,20 @@
                 dense
                 outlined
                 :items="medicos"
+                item-text="nome"
+                item-value="id"
                 v-model="medico"
               ></v-autocomplete>
             </v-col>
           </v-row>
-
           <v-row align="end" justify="end">
             <v-col cols="auto">
               <Cancelar :dialogs="cancelar" @clicked="close()"></Cancelar>
             </v-col>
             <v-col cols="auto">
-              <v-btn color="#2596be" small dark>Registar</v-btn>
+              <v-btn color="#2596be" small dark @click="registar()"
+                >Registar</v-btn
+              >
             </v-col>
           </v-row>
         </v-card-text>
@@ -196,6 +202,7 @@
         ></v-data-table>
       </v-card>
     </v-dialog>
+ 
   </v-dialog>
 </template>
 
@@ -209,13 +216,15 @@ export default {
     dialogUtente: false,
     horaMarcacao: null,
     nomeSelected: "",
+    id: "",
     descricao: "",
     motivos: "",
     medico: "",
+    dono: "",
     menu2: false,
     date: new Date().toISOString().substr(0, 10),
     hora: new Date().getHours() + ":" + new Date().getMinutes(),
-    medicos: ["Drº José Vieira", "Drª Joana Ferreira"],
+    medicos: [],
     motivo: [
       "Consulta anual/Vacinação",
       "Consulta extraordinária/Por doença",
@@ -276,7 +285,7 @@ export default {
       },
       {
         text: "Cliente",
-        value: "cliente",
+        value: "cliente_nome",
         sortable: true,
         align: "center",
       },
@@ -293,20 +302,7 @@ export default {
         align: "center",
       },
     ],
-    items: [
-      {
-        nome: "Rubi",
-        cliente: "Carolina",
-        raca: "Serra da Estrela",
-        sexo: "Macho",
-      },
-      {
-        nome: "Runa",
-        cliente: "Carolina",
-        raca: "Serra da Estrela",
-        sexo: "Fêmea",
-      },
-    ],
+    items: [],
     dialogs: {},
     cancelar: {
       title: "agendamento de consulta",
@@ -317,12 +313,40 @@ export default {
     Cancelar,
   },
   methods: {
+    allowedStep: (m) => m % 15 === 0,
     handleClick(row) {
       this.nomeSelected = row.nome;
+      this.id = row.id;
+      this.dono = row.cliente_email;
       this.dialogUtente = false;
     },
     close() {
       this.dialog = false;
+    },
+    registar: async function () {
+      try {
+        await axios.post(
+          "http://localhost:7777/clinica/intervencao/agendar",
+          {
+            intervencao: {
+              data: this.date,
+              hora: this.hora,
+              descricao: this.descricao,
+              motivo: this.motivos,
+              tipo: "Consulta",
+            },
+            animal: this.id,
+            veterinario: this.medico,
+            cliente: this.dono,
+          },
+          { headers: { Authorization: "Bearer " + store.getters.token } }
+        );
+        this.$emit('clicked', {text:"Consulta agendada com sucesso.", color: "success", snackbar: "true", timeout:4000 })
+        this.dialog = false;
+      } catch (e) {
+        console.log("erro: " + e);
+        this.$emit('clicked', {text:"Ocorreu um erro na marcação, por favor tente mais tarde!", color: "warning", snackbar: "true", timeout:4000 })
+      }
     },
   },
   computed: {
@@ -336,8 +360,18 @@ export default {
       let response = await axios.get("http://localhost:7777/clinica/medicos", {
         headers: { Authorization: "Bearer " + store.getters.token },
       });
-      for (var i = 0; i < response.data.length; i++)
-        this.medico.push(response.data[i].nome)
+
+      for (var i = 0; i < response.data.length; i++) {
+        this.medicos.push({
+          nome: response.data[i].nome,
+          id: response.data[i].id,
+        });
+      }
+      let response2 = await axios.get("http://localhost:7777/clinica/utentes", {
+        headers: { Authorization: "Bearer " + store.getters.token },
+      });
+      for (i = 0; i < response2.data.utentes.length; i++)
+        this.items.push(response2.data.utentes[i].animal);
     } catch (e) {
       console.log(e);
     }

@@ -114,16 +114,20 @@
                 <span class="caption">Dados do utente</span>
               </v-tooltip>
               <span class="ml-2 mr-1 blue--text">{{ item.utente }}</span>
-              <span>({{ item.especie }})</span>
+              <span>({{ item.animal.especie }})</span>
             </template>
 
             <template v-slot:[`item.cliente`]="{ item }">
-              <span class="ml-1 blue--text">{{ item.cliente }}</span>
+              <span class="ml-1">{{ item.cliente }}</span>
             </template>
 
-            <template v-slot:[`item.servico`]="{ item }">
-              <v-chip :color="servico(item.servico)" small>
-                {{ item.servico }}
+            <template v-slot:[`item.marcacao`]="{ item }">
+              <span class="ml-1">{{ format(item.marcacao) }}</span>
+            </template>
+
+            <template v-slot:[`item.tipo`]="{ item }">
+              <v-chip :color="servico(item.tipo)" small>
+                {{ item.tipo }}
               </v-chip>
             </template>
 
@@ -158,10 +162,12 @@
 
 
 <script>
+import axios from "axios";
+import store from "@/store.js";
 import Detalhes from '@/components/Dialogs/Detalhes.vue'
 import Admissao from '@/components/Dialogs/Admissao.vue'
 import CancelarConsulta from '@/components/Dialogs/CancelarComDados.vue'
-
+import moment from 'moment'
 export default {
   data() {
     return {
@@ -190,7 +196,7 @@ export default {
         },
         {
           text: "DATA",
-          value: "data",
+          value: "marcacao",
           sortable: true,
           align: "start",
         },
@@ -202,7 +208,7 @@ export default {
         },
         {
           text: "SERVIÇO",
-          value: "servico",
+          value: "tipo",
           sortable: true,
           align: "start",
         },
@@ -219,62 +225,7 @@ export default {
           align: "start",
         },
       ],
-      agendamento: [
-        {
-          utente: "Rubi",
-          cliente: "Carolina Cunha",
-          data: "21/05/2021 15:00",
-          motivo: "Consulta Anual/Vacinação",
-          servico: "Consulta",
-          estado: "A decorrer",
-          especie: "Canídeo",
-        },
-        {
-          utente: "Runa",
-          cliente: "Carolina Cunha",
-          data: "05/05/2021 10:00",
-          servico: "Cirurgia",
-          motivo: "Castração",
-          estado: "Agendada",
-          especie: "Canídeo",
-        },
-        {
-          utente: "Puscas",
-          cliente: "Carolina Cunha",
-          data: "29/04/2021 16:30",
-          servico: "Consulta",
-          motivo: "Consulta de seguimento",
-          estado: "Agendada",
-          especie: "Canídeo",
-        },
-        {
-          utente: "Nikita",
-          cliente: "Carolina Cunha",
-          data: "21/05/2021 15:30",
-          servico: "Consulta",
-          motivo: "Consulta extraordinária/Por doença",
-          estado: "A decorrer",
-          especie: "Canídeo",
-        },
-        {
-          utente: "Zuki",
-          cliente: "Carolina Cunha",
-          data: "07/06/2021 11:00",
-          servico: "Cirurgia",
-          motivo: "Castração",
-          estado: "Agendada",
-          especie: "Canídeo",
-        },
-        {
-          utente: "Rudi",
-          cliente: "Carolina Cunha",
-          data: "15/07/2021 17:30",
-          servico: "Cirurgia",
-          motivo: "Castração",
-          estado: "Agendada",
-          especie: "Canídeo",
-        },
-      ],
+      agendamento: [],
     };
   },
   components: {
@@ -295,14 +246,25 @@ export default {
       this.$router.push("/clinica/utente/");
       console.log(item);
     },
+    format(data) {
+      return moment(data).locale("pt").format( "DD/MM/YYYY HH:mm")
+    }
   },
-  created() {
-    /*
-    let response = await axios.post("http://localhost:7777/clinica/getClientes", {
-      email: this.$store.state.user.email,
+  created: async function() {
+    let response = await axios.get("http://localhost:7777/clinica/consultas", {
+     headers: { Authorization: "Bearer " + store.getters.token }
     });
+    console.log(response.data.intervencoes)
+    for (var i = 0; i < response.data.intervencoes.length; i++){
+      var element = response.data.intervencoes[i];
+      element.utente = response.data.intervencoes[i].animal.nome;
+      element.cliente = response.data.intervencoes[i].cliente.nome;
+      element.especie = response.data.intervencoes[i].animal.especie;
+      element.marcacao = response.data.intervencoes[i].data + " " + response.data.intervencoes[i].hora
+      this.agendamento.push(element);
+    }
+    
 
-    */
   },
 };
 </script>

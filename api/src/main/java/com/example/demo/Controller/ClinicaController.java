@@ -2,6 +2,7 @@ package com.example.demo.Controller;
 
 import com.example.demo.Entity.*;
 import com.example.demo.Service.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -26,6 +29,8 @@ public class ClinicaController {
     private AnimalService animalService;
     @Autowired
     private VeterinarioService veterinarioService;
+    @Autowired
+    private ImunizacaoService imunizacaoService;
 
     @CrossOrigin
     @PostMapping(path = "/clinica/adicionarClinica")
@@ -45,7 +50,51 @@ public class ClinicaController {
         if(intervencoes.size()==0){
             return ResponseEntity.badRequest().body("Não Existem Intervenções Agendadas!");
         }
-        return  ResponseEntity.accepted().body(intervencoes);
+        JSONObject intervencoesObject = new JSONObject();
+        intervencoes.forEach(intervencao -> {
+            Cliente cliente = clienteService.findClienteByAnimais(intervencao.getAnimal());
+            JSONObject c = new JSONObject();
+            JSONObject a = new JSONObject();
+            JSONObject i = new JSONObject();
+            try {
+                c.put("id",cliente.getId());
+                c.put("nome",cliente.getNome());
+                c.put("concelho",cliente.getConcelho());
+                c.put("contacto",cliente.getContacto());
+                c.put("freguesia",cliente.getFreguesia());
+                c.put("morada",cliente.getMorada());
+                c.put("nif",cliente.getNif());
+                a.put("id",intervencao.getAnimal().getId());
+                a.put("nome",intervencao.getAnimal().getNome());
+                a.put("raca",intervencao.getAnimal().getRaca());
+                a.put("dataNascimento",intervencao.getAnimal().getDataNascimento());
+                a.put("sexo",intervencao.getAnimal().getSexo());
+                a.put("especie",intervencao.getAnimal().getEspecie());
+                a.put("cor",intervencao.getAnimal().getCor());
+                a.put("cauda",intervencao.getAnimal().getCauda());
+                a.put("pelagem",intervencao.getAnimal().getPelagem());
+                a.put("altura",intervencao.getAnimal().getAltura());
+                a.put("chip",intervencao.getAnimal().getChip());
+                a.put("castracao",intervencao.getAnimal().isCastracao());
+                a.put("observacoes",intervencao.getAnimal().getObservacoes());
+                a.put("cliente_nome",cliente.getNome());
+                a.put("cliente_email",cliente.getEmail());
+
+                i.put("id",intervencao.getId());
+                i.put("data",intervencao.getData());
+                i.put("hora",intervencao.getHora());
+                i.put("descricao",intervencao.getDescricao());
+                i.put("estado",intervencao.getEstado());
+                i.put("motivo",intervencao.getMotivo());
+                i.put("tipo",intervencao.getTipo());
+                i.put("cliente",c);
+                i.put("animal",a);
+                intervencoesObject.accumulate("intervencoes",i);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
+        return  ResponseEntity.accepted().body(intervencoesObject.toString());
     }
 
     @CrossOrigin
@@ -84,7 +133,8 @@ public class ClinicaController {
                     a.put("chip",animal.getChip());
                     a.put("castracao",animal.isCastracao());
                     a.put("observacoes",animal.getObservacoes());
-                    a.put("cliente",cliente.getNome());
+                    a.put("cliente_nome",cliente.getNome());
+                    a.put("cliente_email",cliente.getEmail());
                     utente.put("animal",a);
                     animais.accumulate("utentes",utente);
                 } catch (JSONException e) {
@@ -142,5 +192,106 @@ public class ClinicaController {
         }
         veterinarioService.saveVeterinario(veterinario);
         return  ResponseEntity.accepted().body("Veterinário Registado com sucesso");
+    }
+
+    @CrossOrigin
+    @PostMapping("/clinica/intervencao/agendar")
+    public ResponseEntity<?> adicionarIntervencao(@RequestBody String body) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+        Intervencao intervencao = mapper.convertValue(node.get("intervencao"),Intervencao.class);
+        //System.out.println(intervencao);
+        int animal_id =mapper.convertValue(node.get("animal"),Integer.class);
+        Animal animal = animalService.getAnimalById(animal_id);
+        int vetId = node.get("veterinario").asInt();
+        Veterinario vet = veterinarioService.getVetById(vetId);
+        String clienteEmail = node.get("cliente").asText();
+        Cliente cliente = clienteService.getClienteByEmail(clienteEmail);
+
+        if(intervencao==null || animal==null|| vet==null || cliente==null){
+            return ResponseEntity.badRequest().body("Erro no agendamento de Consulta! Alguma das entidades nao existe!");
+        }
+
+        List<Animal> animais = cliente.getAnimais();
+
+        if(!animais.contains(animal)){
+            return ResponseEntity.badRequest().body("Erro a obter animal!");
+        }
+
+        String data = intervencao.getData();
+        String hora = intervencao.getHora();
+
+        List<Intervencao> intervencoes = intervencaoService.findAllByVeterinarioIdAndEstadoEquals(vetId,"Agendada");
+        List<Intervencao> temp = new ArrayList<>();
+        intervencoes.forEach(intervencao1 -> {
+            if (intervencao1.getData().equals(data) && intervencao1.getHora().equals(hora)) {
+                temp.add(intervencao1);
+            }
+        });
+
+        if(!temp.isEmpty()){
+            return ResponseEntity.badRequest().body("Erro no agendamento de Consulta! Horario Indisponivel!");
+        }
+
+        intervencao.setAnimal(animal);
+        intervencao.setVeterinario(vet);
+        intervencao.setEstado("Agendada");
+        intervencao.setData_pedido(LocalDateTime.now().toString());
+        //System.out.println("\n\nAQUI:"+intervencao);
+        intervencaoService.saveIntervencao(intervencao);
+        return ResponseEntity.accepted().body("Intervençao agendada!");
+    }
+
+    @CrossOrigin
+    @PutMapping("/clinica/intervencao/cancelar")
+    public ResponseEntity<?> cancelarIntervencao(@RequestBody String body) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+
+        int id_intervencao = node.get("id").asInt();
+        Intervencao intervencao = intervencaoService.getIntervencao(id_intervencao);
+
+        if(intervencao==null){
+            return ResponseEntity.badRequest().body("Erro a cancelar intervenção! Intervençao nao existe!");
+        }
+
+        intervencao.setEstado("Cancelado");
+        intervencaoService.saveIntervencao(intervencao);
+        return ResponseEntity.accepted().body("Intervenção cancelada!");
+    }
+
+    @CrossOrigin
+    @PutMapping("/clinica/utente/editar")
+    public ResponseEntity<?> editarAnimal(@RequestBody String body) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+        int id_animal = node.get("id").asInt();
+        Animal animal = animalService.getAnimalById(id_animal);
+
+        if(animal == null){
+            return ResponseEntity.badRequest().body("Animal nao existe");
+        }
+        Animal animalNew = mapper.convertValue(node.get("animal"),Animal.class);
+
+        if(animalNew == null){
+            return ResponseEntity.badRequest().body("Erro a editar animal, por favor verifique os campos!");
+        }
+
+        animal.setNome(animalNew.getNome());
+        animal.setRaca(animalNew.getRaca());
+        animal.setDataNascimento(animalNew.getDataNascimento());
+        animal.setSexo(animalNew.getSexo());
+        animal.setEspecie(animalNew.getEspecie());
+        animal.setCor(animalNew.getCor());
+        animal.setCauda(animalNew.getCauda());
+        animal.setPelagem(animalNew.getPelagem());
+        animal.setAltura(animalNew.getAltura());
+        animal.setChip(animalNew.getChip());
+        animal.setCastracao(animalNew.isCastracao());
+        animal.setObservacoes(animalNew.getObservacoes());
+
+        animalService.updateAnimal(animal);
+
+        return ResponseEntity.accepted().body("Animal editado com sucesso");
     }
 }

@@ -85,7 +85,7 @@ export default {
         },
         {
           text: "CLIENTE",
-          value: "cliente",
+          value: "cliente_nome",
           sortable: true,
           align: "start",
         },
@@ -122,8 +122,8 @@ export default {
       let response = await axios.get("http://localhost:7777/clinica/utentes", {
         headers: { Authorization: "Bearer " + store.getters.token },
       });
-      this.utentes = response.data
-      console.log(this.utentes)
+      for (var i = 0; i < response.data.utentes.length; i++)
+        this.utentes.push(response.data.utentes[i].animal)
     } catch (e) {
       console.log(e);
     }

@@ -230,7 +230,10 @@ public class ClienteController {
         }
 
         imunizacao.setVeterinario(veterinario);
-        imunizacao.setEstado("Pendente");
+        //Estados
+        //Agendada
+        //Administrada
+        imunizacao.setEstado("Agendada");
        // System.out.println("\n\nAQUI:"+imunizacao);
         imunizacaoService.saveImunizacao(imunizacao);
         return ResponseEntity.accepted().body("Imunização agendada!");
@@ -415,4 +418,5 @@ public class ClienteController {
         }
         return  ResponseEntity.accepted().body("Dados alterados com sucesso!");
     }
+
 }

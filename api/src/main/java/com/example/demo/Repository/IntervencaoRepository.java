@@ -2,6 +2,7 @@ package com.example.demo.Repository;
 
 import com.example.demo.Entity.Intervencao;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -11,4 +12,6 @@ public interface IntervencaoRepository extends JpaRepository<Intervencao,Integer
     Intervencao findById(int id);
 
     List<Intervencao> findAllByVeterinarioId(int veterinario_id);
+
+    List<Intervencao> findAllByVeterinarioIdAndEstadoEquals(int vet_id, String estado);
 }

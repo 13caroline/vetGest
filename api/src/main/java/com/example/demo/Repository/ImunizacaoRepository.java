@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface ImunizacaoRepository extends JpaRepository<Imunizacao,Integer>{
     List<Imunizacao> findAllByAnimalId(int animal_id);
+    Imunizacao findById(int id);
 }

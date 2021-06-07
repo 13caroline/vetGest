@@ -20,4 +20,8 @@ public class ImunizacaoService {
     public List<Imunizacao> getImunizacoes(int animal_id){
         return repository.findAllByAnimalId(animal_id);
     }
+
+    public Imunizacao getImunizacao(int id) {
+        return repository.findById(id);
+    }
 }

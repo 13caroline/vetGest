@@ -214,7 +214,7 @@ export default {
           align: "start",
         },
         {
-          text: "LOCALIDADE",
+          text: "MORADA",
           value: "morada",
           sortable: false,
           align: "start",
