@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -142,5 +143,39 @@ public class ClinicaController {
         }
         veterinarioService.saveVeterinario(veterinario);
         return  ResponseEntity.accepted().body("Veterinário Registado com sucesso");
+    }
+
+    //Check
+    @CrossOrigin
+    @PostMapping("/clinica/intervencao/agendar")
+    public ResponseEntity<?> adicionarIntervencao(@RequestBody String body) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+        Intervencao intervencao = mapper.convertValue(node.get("intervencao"),Intervencao.class);
+        //System.out.println(intervencao);
+        int animal_id =mapper.convertValue(node.get("animal"),Integer.class);
+        Animal animal = animalService.getAnimalById(animal_id);
+        int vetId = node.get("veterinario").asInt();
+        Veterinario vet = veterinarioService.getVetById(vetId);
+        String clienteEmail = node.get("cliente").asText();
+        Cliente cliente = clienteService.getClienteByEmail(clienteEmail);
+
+        if(intervencao==null || animal==null|| vet==null || cliente==null){
+            return ResponseEntity.badRequest().body("Erro no agendamento de Consulta! Alguma das entidades nao existe!");
+        }
+
+        List<Animal> animais = cliente.getAnimais();
+
+        if(!animais.contains(animal)){
+            return ResponseEntity.badRequest().body("Erro a obter animal!");
+        }
+
+        intervencao.setAnimal(animal);
+        intervencao.setVeterinario(vet);
+        intervencao.setEstado("Agendada");
+        intervencao.setData_pedido(LocalDateTime.now().toString());
+        //System.out.println("\n\nAQUI:"+intervencao);
+        intervencaoService.saveIntervencao(intervencao);
+        return ResponseEntity.accepted().body("Intervençao agendada!");
     }
 }
