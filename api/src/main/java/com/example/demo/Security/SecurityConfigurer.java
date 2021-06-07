@@ -66,7 +66,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable()
                 .authorizeRequests().antMatchers("/authenticate","/cliente/registar","/clinica/adicionarClinica").permitAll()
-                .antMatchers("/addDica/{emailVet}").hasAnyRole("Veterinario")
+                .antMatchers("/addDica/{emailVet}","/medico/intervencoes","/medico/agendar/intervencao").hasAnyRole("Veterinario")
                 //Acessos da Clinica
                 .antMatchers("/addVet","/clinica/consultas","/clinica/clientes",
                         "/clinica/utentes/registar","/clinica/clientes/registar","/clinica/medicos","/clinica/medicos/registar","/clinica/utentes").hasAnyRole("Clinica")
@@ -74,7 +74,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .antMatchers("/","/cliente","/cliente/animal/registar","/cliente/animal/{id_animal}",
                         "/cliente/animal/cancelar/{id_intervencao}","/cliente/animal/{id_animal}","/cliente/animal/{id_animal}/vacinas",
                         "/cliente/consulta","/cliente/consultas","/cliente/cirurgias","/cliente/preferenciassa","/sobre-nos","/dicas").hasAnyRole("Cliente")
-
+                //Acessos de todos
                 .antMatchers("/","/terminar-sessao").hasAnyRole("Clinica","Veterinario","Cliente").
                 anyRequest().authenticated().and().
                 exceptionHandling().and().sessionManagement()

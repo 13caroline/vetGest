@@ -31,4 +31,8 @@ public class IntervencaoService {
     public List<Intervencao> getAllConsultas() {
         return repository.findAll();
     }
+
+    public List<Intervencao> getIntervencoesVeterinario(int veterinario_id) {
+        return repository.findAllByVeterinarioId(veterinario_id);
+    }
 }
