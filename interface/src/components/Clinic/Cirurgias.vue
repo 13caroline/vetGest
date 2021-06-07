@@ -10,7 +10,7 @@
             </h3>
             <v-row justify="end">
               <v-col cols="auto">
-                <MarcarCirurgiaLivre></MarcarCirurgiaLivre>
+                <MarcarCirurgiaLivre @clicked="registar"></MarcarCirurgiaLivre>
               </v-col>
             </v-row>
           </v-row>
@@ -136,11 +136,22 @@
         </v-col>
       </v-row>
     </v-container>
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="timeout"
+      :color="color"
+      :top="true"
+      class="headline"
+    >
+      {{ text }}
+    </v-snackbar>
   </div>
 </template>
 
 <script>
-import MarcarCirurgiaLivre from "@/components/Dialogs/MarcarCirurgiaLivre.vue"
+import axios from "axios";
+import store from "@/store.js";
+import MarcarCirurgiaLivre from "@/components/Dialogs/MarcarCirurgiaLivre.vue";
 export default {
   data: () => ({
     focus: new Date().toISOString().substr(0, 10),
@@ -180,16 +191,20 @@ export default {
         details: "Cirurgia de Rotina Rubi",
       },
     ],
-    medico: ["Drº José Vieira", "Drª Joana Ferreira"],
+    medico: [],
     search: "",
     colors: ["orange"],
+    snackbar: false,
+    color: "",
+    text: "",
+    timeout: -1,
   }),
   mounted() {
     //this.getEvents();
     this.$refs.calendar.checkChange();
   },
-  components:{
-    MarcarCirurgiaLivre
+  components: {
+    MarcarCirurgiaLivre,
   },
   methods: {
     //get events
@@ -217,10 +232,6 @@ export default {
       } else {
         //show error
       }
-    },
-    handleClick(row) {
-      this.nomeSelected = row.nome;
-      this.dialogUtente = false;
     },
     viewDay({ date }) {
       this.focus = date;
@@ -267,12 +278,29 @@ export default {
     rnd(a, b) {
       return Math.floor((b - a + 1) * Math.random()) + a;
     },
+    registar(value) {
+      this.snackbar = value.snackbar;
+      this.color = value.color;
+      this.text = value.text;
+      this.timeout = value.timeout;
+    },
   },
   computed: {
     filteredData() {
       let motivo = this.motivos;
       return this.desc.filter((item) => item.tipo === motivo);
     },
+  },
+  created: async function () {
+    try {
+      let response = await axios.get("http://localhost:7777/clinica/medicos", {
+        headers: { Authorization: "Bearer " + store.getters.token },
+      });
+      for (var i = 0; i < response.data.length; i++)
+        this.medico.push(response.data[i].nome);
+    } catch (e) {
+      console.log(e);
+    }
   },
 };
 </script>

@@ -10,24 +10,24 @@
             </h3>
             <v-row justify="end">
               <v-col cols="auto">
-                <MarcarConsultaLivre></MarcarConsultaLivre>
+                <MarcarConsultaLivre @clicked="registar"></MarcarConsultaLivre>
                 <v-tooltip top>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    class="body-2 mt-8 ml-2"
-                    small
-                    color="#2596be"
-                    v-bind="attrs"
-                    v-on="on"
-                    fab
-                    dark
-                    to="/clinica/consultas/pedidos"
-                  >
-                    <v-icon small>fas fa-book-medical</v-icon>
-                  </v-btn>
-                </template>
-                <span class="caption">Pedidos de consulta</span>
-              </v-tooltip>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      class="body-2 mt-8 ml-2"
+                      small
+                      color="#2596be"
+                      v-bind="attrs"
+                      v-on="on"
+                      fab
+                      dark
+                      to="/clinica/consultas/pedidos"
+                    >
+                      <v-icon small>fas fa-book-medical</v-icon>
+                    </v-btn>
+                  </template>
+                  <span class="caption">Pedidos de consulta</span>
+                </v-tooltip>
               </v-col>
             </v-row>
           </v-row>
@@ -153,16 +153,25 @@
         </v-col>
       </v-row>
     </v-container>
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="timeout"
+      :color="color"
+      :top="true"
+      class="headline"
+    >
+      {{ text }}
+    </v-snackbar>
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import store from "@/store.js";
-import MarcarConsultaLivre from "@/components/Dialogs/MarcarConsultaLivre.vue"
+import MarcarConsultaLivre from "@/components/Dialogs/MarcarConsultaLivre.vue";
 export default {
   data: () => ({
-    search: "", 
+    search: "",
     focus: new Date().toISOString().substr(0, 10),
     today: new Date().toISOString().substr(0, 10),
     type: "month",
@@ -202,6 +211,10 @@ export default {
       },
     ],
     colors: ["orange"],
+    snackbar: false,
+    color: "",
+    text: "",
+    timeout: -1,
   }),
   mounted() {
     //this.getEvents();
@@ -234,7 +247,7 @@ export default {
         //show error
       }
     },
-    
+
     viewDay({ date }) {
       this.focus = date;
       this.type = "day";
@@ -280,9 +293,15 @@ export default {
     rnd(a, b) {
       return Math.floor((b - a + 1) * Math.random()) + a;
     },
+    registar(value) {
+      this.snackbar = value.snackbar;
+      this.color = value.color;
+      this.text = value.text;
+      this.timeout = value.timeout;
+    },
   },
-  components:{
-    MarcarConsultaLivre
+  components: {
+    MarcarConsultaLivre,
   },
   created: async function () {
     try {
@@ -290,7 +309,7 @@ export default {
         headers: { Authorization: "Bearer " + store.getters.token },
       });
       for (var i = 0; i < response.data.length; i++)
-        this.medico.push(response.data[i].nome)
+        this.medico.push(response.data[i].nome);
     } catch (e) {
       console.log(e);
     }

@@ -145,6 +145,9 @@
                   format="24hr"
                   v-model="hora"
                   full-width
+                  min="10:00"
+                  max="20:00"
+                  :allowed-minutes="allowedStep"
                   color="#2596be"
                 ></v-time-picker>
               </v-menu>
@@ -159,7 +162,9 @@
                 color="#2596be"
                 dense
                 outlined
-                :items="medico"
+                :items="medicos"
+                item-text="nome"
+                item-value="id"
                 v-model="medico"
               ></v-autocomplete>
             </v-col>
@@ -170,7 +175,7 @@
               <Cancelar :dialogs="cancelar" @clicked="close()"></Cancelar>
             </v-col>
             <v-col cols="auto">
-              <v-btn color="#2596be" small dark>Registar</v-btn>
+              <v-btn color="#2596be" small dark @click="registar()">Registar</v-btn>
             </v-col>
           </v-row>
         </v-card-text>
@@ -200,6 +205,8 @@
 </template>
 
 <script>
+import axios from "axios";
+import store from "@/store.js";
 import Cancelar from "@/components/Dialogs/Cancel.vue";
 
 export default {
@@ -215,10 +222,11 @@ export default {
     nomeSelected: "",
     descricao: "",
     motivos: "",
+    medico: "",
     date: new Date().toISOString().substr(0, 10),
     menu2: false,
     hora: new Date().getHours() + ":" + new Date().getMinutes(),
-    medico: ["Drº José Vieira", "Drª Joana Ferreira"],
+    medicos: [],
     motivo: [
       "Consulta anual/Vacinação",
       "Consulta extraordinária/Por doença",
@@ -296,29 +304,44 @@ export default {
         align: "center",
       },
     ],
-    items: [
-      {
-        nome: "Rubi",
-        cliente: "Carolina",
-        raca: "Serra da Estrela",
-        sexo: "Macho",
-      },
-      {
-        nome: "Runa",
-        cliente: "Carolina",
-        raca: "Serra da Estrela",
-        sexo: "Fêmea",
-      },
-    ],
+    items: [],
   }),
   methods: {
+    allowedStep: (m) => m % 15 === 0,
     handleClick(row) {
       this.nomeSelected = row.nome;
+      this.id = row.id;
+      this.dono = row.cliente_email;
       this.dialogUtente = false;
     },
     close(){
         this.dialog = false; 
-    }
+    },
+    registar: async function () {
+      try {
+        await axios.post(
+          "http://localhost:7777/clinica/intervencao/agendar",
+          {
+            intervencao: {
+              data: this.date,
+              hora: this.hora,
+              descricao: this.descricao,
+              motivo: this.motivos,
+              tipo: "Cirurgia",
+            },
+            animal: this.id,
+            veterinario: this.medico,
+            cliente: this.dono,
+          },
+          { headers: { Authorization: "Bearer " + store.getters.token } }
+        );
+        this.$emit('clicked', {text:"Cirurgia agendada com sucesso.", color: "success", snackbar: "true", timeout:4000 })
+        this.dialog = false;
+      } catch (e) {
+        console.log("erro: " + e);
+        this.$emit('clicked', {text:"Ocorreu um erro na marcação, por favor tente mais tarde!", color: "warning", snackbar: "true", timeout:4000 })
+      }
+    },
   },
   computed: {
     filteredData() {
@@ -328,6 +351,27 @@ export default {
   },
   components:{
       Cancelar
-  }
+  },
+  created: async function () {
+    try {
+      let response = await axios.get("http://localhost:7777/clinica/medicos", {
+        headers: { Authorization: "Bearer " + store.getters.token },
+      });
+
+      for (var i = 0; i < response.data.length; i++) {
+        this.medicos.push({
+          nome: response.data[i].nome,
+          id: response.data[i].id,
+        });
+      }
+      let response2 = await axios.get("http://localhost:7777/clinica/utentes", {
+        headers: { Authorization: "Bearer " + store.getters.token },
+      });
+      for (i = 0; i < response2.data.utentes.length; i++)
+        this.items.push(response2.data.utentes[i].animal);
+    } catch (e) {
+      console.log(e);
+    }
+  },
 };
 </script>

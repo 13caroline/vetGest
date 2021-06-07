@@ -22,7 +22,7 @@
               flat
               dense
               single-line
-              :rules="nameRules"
+              :rules="textRules"
               color="#2596be"
               placeholder="Nome"
               v-model="nome"
@@ -56,6 +56,7 @@
                   color="#2596be"
                   name="morada"
                   placeholder="Morada"
+                  :rules="textRules"
                   required
                 />
               </v-col>
@@ -67,7 +68,7 @@
                   dense
                   single-line
                   v-model="freguesia"
-                  :rules="freguesiaRules"
+                  :rules="textRules"
                   color="#2596be"
                   name="freguesia"
                   placeholder="Freguesia"
@@ -83,7 +84,7 @@
                   dense
                   single-line
                   color="#2596be"
-                  :rules="concelhoRules"
+                  :rules="textRules"
                   name="concelho"
                   placeholder="Concelho"
                   v-model="concelho"
@@ -116,7 +117,7 @@
                   placeholder="Contacto telefónico"
                   name="contacto"
                   v-model="contacto"
-                  :rules="contactoRules"
+                  :rules="numberRules"
                   maxlength="9"
                   required
                 />
@@ -132,7 +133,7 @@
                   placeholder="Número de Identificação Fiscal"
                   name="nif"
                   v-model="nif"
-                  :rules="nifRules"
+                  :rules="numberRules"
                   maxlength="9"
                   required
                 />
@@ -199,51 +200,22 @@ export default {
         return pattern.test(value) || "E-mail inválido";
       },
     ],
-    nameRules: [
-      (v) => !!v || "Insira o nome completo.",
+    textRules: [
+      (v) => !!v || "Este campo não pode estar vazio.",
       (v) => {
         const pattern = /^[a-zA-Z\sÀ-ÿ]+$/;
         return (
           pattern.test(v) ||
-          "Nome inválido. Insira apenas caracteres do alfabeto."
+          "Campo inválido. Insira apenas caracteres do alfabeto."
         );
       },
     ],
-    freguesiaRules: [
-      (v) => !!v || "Insira uma freguesia.",
-      (v) => {
-        const pattern = /^[a-zA-Z\sÀ-ÿ]+$/;
-        return (
-          pattern.test(v) ||
-          "Freguesia inválida. Insira apenas caracteres do alfabeto."
-        );
-      },
-    ],
-    concelhoRules: [
-      (v) => !!v || "Insira um concelho.",
-      (v) => {
-        const pattern = /^[a-zA-Z\sÀ-ÿ]+$/;
-        return (
-          pattern.test(v) ||
-          "Concelho inválido. Insira apenas caracteres do alfabeto."
-        );
-      },
-    ],
-    contactoRules: [
-      (v) => !!v || "Insira um contacto telefónico.",
+    numberRules: [
+      (v) => !!v || "Este campo não pode estar vazio.",
       (v) => {
         const pattern = /^[0-9]{9}$/;
         return (
-          pattern.test(v) || "Contacto telefónico inválido. Insira 9 dígitos."
-        );
-      },
-    ],
-    nifRules: [
-      (v) => {
-        const pattern = /^[0-9]{9}$/;
-        return (
-          pattern.test(v) ||
-          "Número de identificação fiscal inválido. Insira 9 dígitos."
+          pattern.test(v) || "Campo inválido. Insira 9 dígitos."
         );
       },
     ],
