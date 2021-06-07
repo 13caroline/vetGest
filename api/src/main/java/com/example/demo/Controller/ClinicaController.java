@@ -70,7 +70,6 @@ public class ClinicaController {
             cliente.getAnimais().forEach(animal -> {
                 try {
                     JSONObject utente= new JSONObject();
-                    utente.put("cliente",cliente.getNome());
                     JSONObject a= new JSONObject();
                     a.put("id",animal.getId());
                     a.put("nome",animal.getNome());
@@ -85,6 +84,7 @@ public class ClinicaController {
                     a.put("chip",animal.getChip());
                     a.put("castracao",animal.isCastracao());
                     a.put("observacoes",animal.getObservacoes());
+                    a.put("cliente",cliente.getNome());
                     utente.put("animal",a);
                     animais.accumulate("utentes",utente);
                 } catch (JSONException e) {

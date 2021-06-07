@@ -66,18 +66,16 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable()
                 .authorizeRequests().antMatchers("/authenticate","/cliente/registar","/clinica/adicionarClinica").permitAll()
-                .antMatchers("/addDica/{emailVet}","/terminar-sessao").hasAnyRole("Veterinario")
+                .antMatchers("/addDica/{emailVet}").hasAnyRole("Veterinario")
                 //Acessos da Clinica
                 .antMatchers("/addVet","/clinica/consultas","/clinica/clientes",
-                        "/clinica/utentes/registar","/clinica/clientes/registar","/clinica/medicos","/clinica/medicos/registar","/terminar-sessao","/clinica/utentes").hasAnyRole("Clinica")
+                        "/clinica/utentes/registar","/clinica/clientes/registar","/clinica/medicos","/clinica/medicos/registar","/clinica/utentes").hasAnyRole("Clinica")
                 //Acessos do Cliente
                 .antMatchers("/","/cliente","/cliente/animal/registar","/cliente/animal/{id_animal}",
                         "/cliente/animal/cancelar/{id_intervencao}","/cliente/animal/{id_animal}","/cliente/animal/{id_animal}/vacinas",
-                        "/cliente/consulta","/cliente/consultas","/cliente/cirurgias","/cliente/preferenciassa","/sobre-nos","/dicas","/terminar-sessao").hasAnyRole("Cliente")
+                        "/cliente/consulta","/cliente/consultas","/cliente/cirurgias","/cliente/preferenciassa","/sobre-nos","/dicas").hasAnyRole("Cliente")
 
-                .antMatchers("/").hasAnyRole("Clinica","Veterinario")
-                .antMatchers("/").hasAnyRole("Clinica","Cliente")
-                .antMatchers("/").hasAnyRole("Veterinario","Cliente").
+                .antMatchers("/","/terminar-sessao").hasAnyRole("Clinica","Veterinario","Cliente").
                 anyRequest().authenticated().and().
                 exceptionHandling().and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
