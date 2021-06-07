@@ -35,5 +35,8 @@ public class ClienteService {
         return repository.save(cliente);
     }
 
+    public  Cliente findClienteByAnimais(Animal animals){
+        return repository.findClienteByAnimais(animals);
+    }
 }
 
