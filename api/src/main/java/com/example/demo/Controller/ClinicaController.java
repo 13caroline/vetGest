@@ -196,4 +196,39 @@ public class ClinicaController {
         intervencaoService.saveIntervencao(intervencao);
         return ResponseEntity.accepted().body("Intervenção cancelada!");
     }
+
+    @CrossOrigin
+    @PutMapping("/clinica/utente/editar")
+    public ResponseEntity<?> editarAnimal(@RequestBody String body) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+        int id_animal = node.get("id").asInt();
+        Animal animal = animalService.getAnimalById(id_animal);
+
+        if(animal == null){
+            return ResponseEntity.badRequest().body("Animal nao existe");
+        }
+        Animal animalNew = mapper.convertValue(node.get("animal"),Animal.class);
+
+        if(animalNew == null){
+            return ResponseEntity.badRequest().body("Erro a editar animal, por favor verifique os campos!");
+        }
+
+        animal.setNome(animalNew.getNome());
+        animal.setRaca(animalNew.getRaca());
+        animal.setDataNascimento(animalNew.getDataNascimento());
+        animal.setSexo(animalNew.getSexo());
+        animal.setEspecie(animalNew.getEspecie());
+        animal.setCor(animalNew.getCor());
+        animal.setCauda(animalNew.getCauda());
+        animal.setPelagem(animalNew.getPelagem());
+        animal.setAltura(animalNew.getAltura());
+        animal.setChip(animalNew.getChip());
+        animal.setCastracao(animalNew.isCastracao());
+        animal.setObservacoes(animalNew.getObservacoes());
+
+        animalService.updateAnimal(animal);
+
+        return ResponseEntity.accepted().body("Animal editado com sucesso");
+    }
 }
