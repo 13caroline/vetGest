@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -28,6 +29,8 @@ public class VeterinarioController {
     private ClienteService clienteService;
     @Autowired
     private ImunizacaoService imunizacaoService;
+    @Autowired
+    private InternamentoService internamentoService;
 
     @CrossOrigin
     @PostMapping( "/medico/intervencoes")
@@ -131,9 +134,36 @@ public class VeterinarioController {
         if(a==null ){
             return ResponseEntity.badRequest().body("Erro a obter animal!");
         }
+        Cliente cliente = clienteService.findClienteByAnimais(a);
+        if(cliente==null ){
+            return ResponseEntity.badRequest().body("Erro a obter cliente!");
+        }
+        JSONObject o = new JSONObject();
+        o.put("id",a.getId());
+        o.put("nome",a.getNome());
+        o.put("raca",a.getRaca());
+        o.put("dataNascimento",a.getDataNascimento());
+        o.put("sexo",a.getSexo());
+        o.put("especie",a.getEspecie());
+        o.put("cor",a.getCor());
+        o.put("cauda",a.getCauda());
+        o.put("pelagem",a.getPelagem());
+        o.put("altura",a.getAltura());
+        o.put("chip",a.getChip());
+        o.put("castracao",a.isCastracao());
+        o.put("observacoes",a.getObservacoes());
+        JSONObject c = new JSONObject();
+        c.put("id",cliente.getId());
+        c.put("nome",cliente.getNome());
+        c.put("concelho",cliente.getConcelho());
+        c.put("contacto",cliente.getContacto());
+        c.put("freguesia",cliente.getFreguesia());
+        c.put("morada",cliente.getMorada());
+        c.put("nif",cliente.getNif());
         JSONObject animal = new JSONObject();
-        animal.put("animal",a);
-        return ResponseEntity.accepted().body(animal);
+        animal.put("animal",o);
+        animal.put("cliente",c);
+        return ResponseEntity.accepted().body(animal.toString());
     }
 
 
@@ -243,5 +273,54 @@ public class VeterinarioController {
         imunizacaoService.saveImunizacao(imunizacao);
         return ResponseEntity.accepted().body("Imunização confirmada com sucesso!");
     }
+
+    @CrossOrigin
+    @PutMapping("/medico/utente/editar")
+    public ResponseEntity<?> editarAnimal(@RequestBody String body) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+        int id_animal = node.get("id").asInt();
+        Animal animal = animalService.getAnimalById(id_animal);
+
+        if(animal == null){
+            return ResponseEntity.badRequest().body("Animal nao existe");
+        }
+        Animal animalNew = mapper.convertValue(node.get("animal"),Animal.class);
+
+        if(animalNew == null){
+            return ResponseEntity.badRequest().body("Erro a editar animal, por favor verifique os campos!");
+        }
+
+        animal.setNome(animalNew.getNome());
+        animal.setRaca(animalNew.getRaca());
+        animal.setDataNascimento(animalNew.getDataNascimento());
+        animal.setSexo(animalNew.getSexo());
+        animal.setEspecie(animalNew.getEspecie());
+        animal.setCor(animalNew.getCor());
+        animal.setCauda(animalNew.getCauda());
+        animal.setPelagem(animalNew.getPelagem());
+        animal.setAltura(animalNew.getAltura());
+        animal.setChip(animalNew.getChip());
+        animal.setCastracao(animalNew.isCastracao());
+        animal.setObservacoes(animalNew.getObservacoes());
+
+        animalService.updateAnimal(animal);
+
+        return ResponseEntity.accepted().body("Animal editado com sucesso");
+    }
+
+    @CrossOrigin
+    @PostMapping("/medico/internamento")
+    public ResponseEntity<?> getInternamentos(@RequestBody Veterinario email){
+        Veterinario veterinario = veterinarioService.getVetByEmail(email.getEmail());
+        List<Internamento> internamentos = internamentoService.getAllInternamentosByVetId(veterinario.getId());
+        if(internamentos.size()==0){
+            return ResponseEntity.badRequest().body("Não tem internamentos efetuados!");
+        }
+        System.out.println("\n\nAQUI: "+internamentos);
+        return ResponseEntity.accepted().body(internamentos);
+    }
+
+
 }
 
