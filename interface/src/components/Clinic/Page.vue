@@ -97,6 +97,8 @@
             :page.sync="page"
             :items-per-page="itemsPerPage"
             @page-count="pageCount = $event"
+            no-data-text="Não existem intervenções agendadas."
+          no-results-text="Não foram encontrados resultados."
           >
             <template v-slot:[`item.utente`]="{ item }">
               <v-tooltip top>

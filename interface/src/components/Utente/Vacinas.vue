@@ -24,6 +24,8 @@
             :items="items"
             class="elevation-1"
             hide-default-footer
+            no-data-text="Não existem vacinas ou desparasitações registadas."
+            no-results-text="Não foram encontrados resultados."
           >
             <template v-slot:[`item.estado`]="{ item }">
               <v-chip :color="estadopedido(item.estado)" small>

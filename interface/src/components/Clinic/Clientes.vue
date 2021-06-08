@@ -46,6 +46,8 @@
         :search="search"
         class="elevation-1"
         hide-default-footer
+        no-data-text="Não existem clientes registados."
+        no-results-text="Não foram encontrados resultados."
       >
         <template v-slot:[`item.detalhes`]="{ item }">
           <v-tooltip right>

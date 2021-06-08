@@ -61,6 +61,7 @@ import Cirurgia from "@/components/Utente/Cirurgias.vue"
 import Dados from "@/components/Utente/Dados.vue"
 import axios from "axios"
 
+
 export default {
   props:["id"],
   data: () => ({

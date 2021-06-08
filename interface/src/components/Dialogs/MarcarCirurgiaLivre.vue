@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="dialog" width="100%" max-width="500" persistent>
-      <template v-slot:activator="{ diag, attrs }">
+    <template v-slot:activator="{ diag, attrs }">
       <v-tooltip top>
         <template v-slot:activator="{ on }">
           <v-btn
@@ -175,7 +175,9 @@
               <Cancelar :dialogs="cancelar" @clicked="close()"></Cancelar>
             </v-col>
             <v-col cols="auto">
-              <v-btn color="#2596be" small dark @click="registar()">Registar</v-btn>
+              <v-btn color="#2596be" small dark @click="registar()"
+                >Registar</v-btn
+              >
             </v-col>
           </v-row>
         </v-card-text>
@@ -198,6 +200,8 @@
           :headers="headers"
           :items="items"
           :search="search"
+          no-data-text="Não existem clientes registados."
+          no-results-text="Não foram encontrados resultados."
         ></v-data-table>
       </v-card>
     </v-dialog>
@@ -211,7 +215,7 @@ import Cancelar from "@/components/Dialogs/Cancel.vue";
 
 export default {
   data: () => ({
-      dialogs: {},
+    dialogs: {},
     cancelar: {
       title: "agendamento da cirurgia",
       text: "o agendamento da cirurgia",
@@ -314,32 +318,44 @@ export default {
       this.dono = row.cliente_email;
       this.dialogUtente = false;
     },
-    close(){
-        this.dialog = false; 
+    close() {
+      this.dialog = false;
     },
     registar: async function () {
       try {
-        await axios.post(
-          "http://localhost:7777/clinica/intervencao/agendar",
-          {
-            intervencao: {
-              data: this.date,
-              hora: this.hora,
-              descricao: this.descricao,
-              motivo: this.motivos,
-              tipo: "Cirurgia",
+        if (store.state.tipo == "Clinica") {
+          await axios.post(
+            "http://localhost:7777/clinica/intervencao/agendar",
+            {
+              intervencao: {
+                data: this.date,
+                hora: this.hora,
+                descricao: this.descricao,
+                motivo: this.motivos,
+                tipo: "Cirurgia",
+              },
+              animal: this.id,
+              veterinario: this.medico,
+              cliente: this.dono,
             },
-            animal: this.id,
-            veterinario: this.medico,
-            cliente: this.dono,
-          },
-          { headers: { Authorization: "Bearer " + store.getters.token } }
-        );
-        this.$emit('clicked', {text:"Cirurgia agendada com sucesso.", color: "success", snackbar: "true", timeout:4000 })
-        this.dialog = false;
+            { headers: { Authorization: "Bearer " + store.getters.token } }
+          );
+          this.$emit("clicked", {
+            text: "Cirurgia agendada com sucesso.",
+            color: "success",
+            snackbar: "true",
+            timeout: 4000,
+          });
+          this.dialog = false;
+        }
       } catch (e) {
         console.log("erro: " + e);
-        this.$emit('clicked', {text:"Ocorreu um erro na marcação, por favor tente mais tarde!", color: "warning", snackbar: "true", timeout:4000 })
+        this.$emit("clicked", {
+          text: "Ocorreu um erro na marcação, por favor tente mais tarde!",
+          color: "warning",
+          snackbar: "true",
+          timeout: 4000,
+        });
       }
     },
   },
@@ -349,8 +365,8 @@ export default {
       return this.desc.filter((item) => item.tipo === motivo);
     },
   },
-  components:{
-      Cancelar
+  components: {
+    Cancelar,
   },
   created: async function () {
     try {

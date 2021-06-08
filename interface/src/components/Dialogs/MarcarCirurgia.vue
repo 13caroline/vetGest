@@ -1,6 +1,6 @@
 <template>
-    <v-dialog v-model="dialog" width="100%" max-width="500" persistent>
-       <template v-slot:activator="{ diag, attrs }">
+  <v-dialog v-model="dialog" width="100%" max-width="500" persistent>
+    <template v-slot:activator="{ diag, attrs }">
       <v-tooltip top>
         <template v-slot:activator="{ on }">
           <v-btn
@@ -19,163 +19,172 @@
         <span class="caption">Marcar cirurgia</span>
       </v-tooltip>
     </template>
-      <v-card>
-        <v-form>
-          <v-card-title class="font-weight-regular text-uppercase">
-            Marcar cirurgia
-          </v-card-title>
-          <v-card-subtitle
-            >Por favor preencha o seguinte formulário</v-card-subtitle
-          >
+    <v-card>
+      <v-form>
+        <v-card-title class="font-weight-regular text-uppercase">
+          Marcar cirurgia
+        </v-card-title>
+        <v-card-subtitle
+          >Por favor preencha o seguinte formulário</v-card-subtitle
+        >
 
-          <v-card-text>
-            <v-row align="center">
-              <v-col cols="12" class="pb-0">
-                <p class="ma-0">Utente</p>
-                <v-text-field
-                  color="#2596be"
-                  flat
-                  outlined
-                  readonly
-                  dense
-                  value="Rubi"
-                ></v-text-field>
-              </v-col>
+        <v-card-text>
+          <v-row align="center">
+            <v-col cols="12" class="pb-0">
+              <p class="ma-0">Utente</p>
+              <v-text-field
+                color="#2596be"
+                flat
+                outlined
+                readonly
+                dense
+                :value="dados.nome"
+              ></v-text-field>
+            </v-col>
 
-              <v-col cols="12" class="py-0">
-                <p class="ma-0">Motivo</p>
-                <v-select
-                  :items="motivo"
-                  dense
-                  color="#2596be"
-                  flat
-                  outlined
-                  v-model="motivos"
-                ></v-select>
-              </v-col>
+            <v-col cols="12" class="py-0">
+              <p class="ma-0">Motivo</p>
+              <v-select
+                :items="motivo"
+                dense
+                color="#2596be"
+                flat
+                outlined
+                v-model="motivos"
+              ></v-select>
+            </v-col>
 
-              <v-col cols="12" class="py-0">
-                <p class="ma-0">Descrição</p>
-                <v-select
-                  :items="filteredData"
-                  dense
-                  color="#2596be"
-                  flat
-                  outlined
-                  v-model="descricao"
-                  item-text="text"
-                  item-value="text"
-                ></v-select>
-              </v-col>
+            <v-col cols="12" class="py-0">
+              <p class="ma-0">Descrição</p>
+              <v-select
+                :items="filteredData"
+                dense
+                color="#2596be"
+                flat
+                outlined
+                v-model="descricao"
+                item-text="text"
+                item-value="text"
+              ></v-select>
+            </v-col>
 
-              <v-col cols="12" class="py-0">
-                <p class="ma-0">Data</p>
-              </v-col>
+            <v-col cols="12" class="py-0">
+              <p class="ma-0">Data</p>
+            </v-col>
 
-              <v-col cols="12" class="py-0">
-                <v-menu
-                  ref="dataMarcacao"
-                  v-model="dataMarcacao"
-                  :close-on-content-click="true"
-                  :nudge-right="40"
-                  :return-value.sync="dataMarcacao"
-                  transition="scale-transition"
-                  offset-y
-                  max-width="290px"
-                  min-width="290px"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-text-field
-                      append-icon="fas fa-calendar-day"
-                      outlined
-                      color="#2596be"
-                      v-on="on"
-                      v-bind="attrs"
-                      v-model="date"
-                      dense
-                      readonly
-                    ></v-text-field>
-                  </template>
-                  <v-date-picker
-                    full-width
-                    color="#2596be"
-                    :min="new Date().toISOString().substr(0, 10)"
+            <v-col cols="12" class="py-0">
+              <v-menu
+                v-model="menu2"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                transition="scale-transition"
+                offset-y
+                min-width="auto"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
                     v-model="date"
-                    locale="pt-PT"
-                  ></v-date-picker>
-                </v-menu>
-              </v-col>
-
-              <v-col cols="12" class="py-0">
-                <p class="ma-0">Hora</p>
-              </v-col>
-
-              <v-col cols="12" class="py-0">
-                <v-menu
-                  ref="horaMarcacao"
-                  v-model="horaMarcacao"
-                  :close-on-content-click="false"
-                  :nudge-right="40"
-                  :return-value.sync="horaMarcacao"
-                  transition="scale-transition"
-                  offset-y
-                  max-width="290px"
-                  min-width="290px"
-                >
-                  <template v-slot:activator="{ on }">
-                    <v-text-field
-                      append-icon="fas fa-clock"
-                      color="#2596be"
-                      v-on="on"
-                      outlined
-                      dense
-                      v-model="hora"
-                    ></v-text-field>
-                  </template>
-                  <v-time-picker
-                    format="24hr"
-                    v-model="hora"
-                    full-width
-                    color="#2596be"
-                  ></v-time-picker>
-                </v-menu>
-              </v-col>
-
-              <!--<v-col cols="12" class="py-0">
-                  <p class="ma-0">Médico Veterinário</p>
-                </v-col>
-                <v-col cols="12" class="py-0">
-                  <v-autocomplete
-                    flat
-                    color="#2596be"
+                    append-icon="fas fa-calendar-alt"
+                    readonly
                     dense
                     outlined
-                    :items="medico"
-                    v-model="medico"
-                  ></v-autocomplete>
-                </v-col>-->
-              <!-- v-if tipo == clinica -->
-            </v-row>
+                    v-bind="attrs"
+                    v-on="on"
+                  ></v-text-field>
+                </template>
+                <v-date-picker
+                  v-model="date"
+                  @input="menu2 = false"
+                  locale="pt PT"
+                  :min="new Date().toISOString().substr(0, 10)"
+                ></v-date-picker>
+              </v-menu>
+            </v-col>
 
-            <v-row align="end" justify="end">
-              <v-col cols="auto">
-                <Cancelar :dialogs="cancelar" @clicked="close()"></Cancelar>
-              </v-col>
-              <v-col cols="auto">
-                <v-btn color="#2596be" small dark>Registar</v-btn>
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-form>
-      </v-card>
-    </v-dialog>
+            <v-col cols="12" class="py-0">
+              <p class="ma-0">Hora</p>
+            </v-col>
+
+            <v-col cols="12" class="py-0">
+              <v-menu
+                ref="horaMarcacao"
+                v-model="horaMarcacao"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                :return-value.sync="horaMarcacao"
+                transition="scale-transition"
+                offset-y
+                max-width="290px"
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    append-icon="fas fa-clock"
+                    color="#2596be"
+                    v-on="on"
+                    outlined
+                    dense
+                    v-model="hora"
+                  ></v-text-field>
+                </template>
+                <v-time-picker
+                  format="24hr"
+                  v-model="hora"
+                  full-width
+                  min="10:00"
+                  max="20:00"
+                  :allowed-minutes="allowedStep"
+                  color="#2596be"
+                ></v-time-picker>
+              </v-menu>
+            </v-col>
+
+            <v-col
+              cols="12"
+              class="py-0"
+              v-if="this.$store.state.tipo == 'Clinica'"
+            >
+              <p class="ma-0">Médico Veterinário</p>
+            </v-col>
+            <v-col
+              cols="12"
+              class="py-0"
+              v-if="this.$store.state.tipo == 'Clinica'"
+            >
+              <v-autocomplete
+                flat
+                color="#2596be"
+                dense
+                outlined
+                :items="medicos"
+                v-model="medico"
+                item-text="nome"
+                item-value="id"
+              ></v-autocomplete>
+            </v-col>
+          </v-row>
+
+          <v-row align="end" justify="end">
+            <v-col cols="auto">
+              <Cancelar :dialogs="cancelar" @clicked="close()"></Cancelar>
+            </v-col>
+            <v-col cols="auto">
+              <v-btn color="#2596be" small dark @click="registar()">Registar</v-btn>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-form>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from "axios";
 import Cancelar from "@/components/Dialogs/Cancel.vue";
+import store from "@/store.js";
 
 export default {
+  props: ["dados"],
   data: () => ({
     dialog: false,
     dialogs: {},
@@ -185,10 +194,11 @@ export default {
     },
     motivos: "",
     descricao: "",
-    dataMarcacao: false,
+    medico: "",
     horaMarcacao: null,
     date: new Date().toISOString().substr(0, 10),
-    hora: new Date().getHours() + ":" + new Date().getMinutes(),
+    menu2: false,
+    hora: '09:00',
     desc: [
       { text: "Consulta anual/Vacinação", tipo: "Consulta anual/Vacinação" },
       {
@@ -239,21 +249,76 @@ export default {
       "Consulta de seguimento",
       "Procedimentos específicos",
     ],
+    medicos: [],
   }),
   components: {
     Cancelar,
   },
   methods: {
+    allowedStep: (m) => m % 15 === 0,
     close() {
       this.dialog = false;
     },
-    
+    registar: async function () {
+      try {
+        if (store.state.tipo == "Clinica") {
+          await axios.post(
+            "http://localhost:7777/clinica/intervencao/agendar",
+            {
+              intervencao: {
+                data: this.date,
+                hora: this.hora,
+                descricao: this.descricao,
+                motivo: this.motivos,
+                tipo: "Cirurgia",
+              },
+              animal: this.dados.id,
+              veterinario: this.medico,
+              cliente: this.dados.cliente_email,
+            },
+            { headers: { Authorization: "Bearer " + store.getters.token } }
+          );
+          this.dialog=false;
+          this.$emit("clicked", {
+            text: "Cirurgia agendada com sucesso.",
+            color: "success",
+            snackbar: "true",
+            timeout: 4000,
+          });
+        }
+      } catch (e) {
+        console.log("erro: " + e);
+        this.$emit("clicked", {
+          text: "Ocorreu um erro na marcação, por favor tente mais tarde!",
+          color: "warning",
+          snackbar: "true",
+          timeout: 4000,
+        });
+      }
+    },
   },
   computed: {
     filteredData() {
       let motivo = this.motivos;
       return this.desc.filter((item) => item.tipo === motivo);
     },
+  },
+  created: async function () {
+    try {
+      let response = await axios.get("http://localhost:7777/clinica/medicos", {
+        headers: { Authorization: "Bearer " + store.getters.token },
+      });
+
+      for (var i = 0; i < response.data.length; i++) {
+        this.medicos.push({
+          nome: response.data[i].nome,
+          id: response.data[i].id,
+        });
+      }
+      console.log(this.dados)
+    } catch (e) {
+      console.log(e);
+    }
   },
 };
 </script>

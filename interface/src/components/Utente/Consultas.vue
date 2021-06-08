@@ -20,6 +20,7 @@
             :items="filteredData"
             class="elevation-1"
             hide-default-footer
+            no-data-text="Não existe histórico de consultas."
           >
             <template v-slot:[`item.marcacao`]="{ item }">
               {{ format(item.marcacao) }}
@@ -101,7 +102,7 @@ import CancelarComDados from "@/components/Dialogs/CancelarComDados.vue";
 import MarcarConsulta from "@/components/Dialogs/MarcarConsulta.vue";
 import axios from "axios";
 import moment from "moment";
-
+import store from "@/store.js";
 export default {
   props: ["animal"],
   data: () => ({
@@ -178,6 +179,26 @@ export default {
     },
     atualiza: async function () {
       this.consultas = [];
+      if (store.state.tipo == "Clinica") {
+        let response = await axios.post(
+          "http://localhost:7777/clinica/intervencao",
+          {
+            id: this.animal.id,
+          }
+        );
+        for (var i = 0; i < response.data.length; i++) {
+          var element = response.data[i];
+          element.veterinario_nome = response.data[i].veterinario.nome;
+          element.utente = response.data[i].animal.nome;
+          element.marcacao =
+            response.data[i].data + " " + response.data[i].hora;
+          this.consultas.push(element);
+        }
+      }
+    },
+  },
+  created: async function () {
+    if (store.state.tipo == "Clinica") {
       let response = await axios.post(
         "http://localhost:7777/clinica/intervencao",
         {
@@ -191,21 +212,6 @@ export default {
         element.marcacao = response.data[i].data + " " + response.data[i].hora;
         this.consultas.push(element);
       }
-    },
-  },
-  created: async function () {
-    let response = await axios.post(
-      "http://localhost:7777/clinica/intervencao",
-      {
-        id: this.animal.id,
-      }
-    );
-    for (var i = 0; i < response.data.length; i++) {
-      var element = response.data[i];
-      element.veterinario_nome = response.data[i].veterinario.nome;
-      element.utente = response.data[i].animal.nome;
-      element.marcacao = response.data[i].data + " " + response.data[i].hora;
-      this.consultas.push(element);
     }
   },
   computed: {

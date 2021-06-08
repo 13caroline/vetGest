@@ -11,7 +11,7 @@
               </h3>
             </v-col>
             <v-col cols="auto">
-              <MarcarCirurgia :dados="animal"></MarcarCirurgia>
+              <MarcarCirurgia :dados="animal" @clicked="registar"></MarcarCirurgia>
             </v-col>
           </v-row>
 
@@ -20,6 +20,8 @@
             :items="filteredData"
             class="elevation-1"
             hide-default-footer
+            no-data-text="Não existe histórico de cirurgias."
+          no-results-text="Não foram encontrados resultados."
           >
 
           <template v-slot:[`item.marcacao`]="{ item }">
@@ -90,6 +92,7 @@
 <script>
 import axios from "axios";
 import moment from "moment";
+import store from "@/store.js";
 import exemplo from "@/components/Client/exemploCirurgia.vue";
 import MarcarCirurgia from "@/components/Dialogs/MarcarCirurgia.vue";
 import CancelarComDados from "@/components/Dialogs/CancelarComDados.vue";
@@ -151,8 +154,10 @@ export default {
   },
   methods: {
     estadopedido(estado) {
-      if (estado == "Agendada") return "#C5E1A5";
-      else return "#FFE082";
+       if (estado == "Agendada") return "#C5E1A5";
+      else if (estado == "Cancelada") return "#EF9A9A";
+      else if (estado == "Pendente") return "#fccea2";
+      else return "#9ae5ff";
     },
     more(item) {
       console.log(item.data);
@@ -186,9 +191,9 @@ export default {
         this.cirurgias.push(element);
       }
     },
-    
   },
   created: async function () {
+     if (store.state.tipo == "Clinica") {
       let response = await axios.post(
         "http://localhost:7777/clinica/intervencao",
         {
@@ -202,6 +207,7 @@ export default {
         element.marcacao = response.data[i].data + " " + response.data[i].hora;
         this.cirurgias.push(element);
       }
+     }
     },
     computed: {
       filteredData() {
