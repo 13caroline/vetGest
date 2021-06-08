@@ -222,7 +222,7 @@ public class ClienteController {
         }
 
         imunizacao.setAnimal(animal);
-
+        imunizacao.setTipo("Desparasitação");
 
         imunizacao.setVeterinario(null);
         //Estados
@@ -234,7 +234,7 @@ public class ClienteController {
             proximaImunizacao.setData(imunizacao.getProxImunizacao());
             proximaImunizacao.setEstado("Agendada");
             proximaImunizacao.setProxImunizacao(null);
-            proximaImunizacao.setTipo(imunizacao.getTipo());
+            proximaImunizacao.setTipo("Desparasitação");
             proximaImunizacao.setVacina(imunizacao.getVacina());
             proximaImunizacao.setObservacoes(imunizacao.getObservacoes());
             proximaImunizacao.setTratamento(imunizacao.getTratamento());
