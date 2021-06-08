@@ -141,7 +141,8 @@
               
               <Admissao :dados="item"></Admissao>
               
-              <CancelarConsulta :dialogs="cancelar" :dados="item"></CancelarConsulta>
+              <CancelarConsulta v-if="item.tipo == 'Cirurgia'" :dialogs="cancelar" :dados="item"></CancelarConsulta>
+              <CancelarConsulta v-else :dialogs="cancelarC" :dados="item"></CancelarConsulta>
             </template>
           </v-data-table>
           <div class="text-center pt-2">
@@ -173,9 +174,13 @@ export default {
     return {
       dados:{},
       dialogs: {},
+      cancelarC: {
+        title: "o agendamento da consulta",
+        text: "consulta",
+      },
       cancelar: {
-        title: "agendamento da consulta",
-        text: "o agendamento da consulta",
+        title: "o agendamento da cirurgia",
+        text: "cirurgia",
       },
       page: 1,
       pageCount: 0,
