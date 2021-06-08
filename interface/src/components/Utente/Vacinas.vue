@@ -5,7 +5,10 @@
         <v-col cols="12">
           <v-row align="center" class="my-5">
             <v-col>
-              <h3 class="font-weight-regular text-uppercase"></h3>
+              <h3 class="font-weight-regular text-uppercase">
+                <v-icon small>fas fa-syringe</v-icon>
+                Vacinas e desparasitações
+              </h3>
             </v-col>
             <v-col cols="auto" class="ml-auto pl-0">
               <!-- v-if tipo == medico -->
@@ -35,7 +38,10 @@
               <div
                 v-if="item.estado == 'Atualizada' || item.estado == 'Atrasada'"
               >
-                <ConfirmaDespar :dataPrev="item.dataPrev" @clicked="close()"></ConfirmaDespar>
+                <ConfirmaDespar
+                  :dataPrev="item.dataPrev"
+                  @clicked="close()"
+                ></ConfirmaDespar>
               </div>
             </template>
           </v-data-table>
@@ -131,12 +137,12 @@ export default {
         tipo: "Desparasitação",
         estado: "Atrasada",
       },
-    ],    
+    ],
   }),
   components: {
     ConfirmaDespar,
     NovaVacina,
-    NovaDesparasitacao
+    NovaDesparasitacao,
   },
   methods: {
     close() {
@@ -148,8 +154,6 @@ export default {
       else if (estado == "Atrasada") return "#EF9A9A";
       else return "#FFE082";
     },
-
-    
   },
   created() {
     /*

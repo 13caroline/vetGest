@@ -74,7 +74,7 @@ const routes = [
   },
   // Ir para a página de um utente
   {
-    path: '/clinica/utente/',
+    path: '/clinica/utente/:id',
     name: 'Utente',
     component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Paciente.vue')
   },

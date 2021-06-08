@@ -91,7 +91,7 @@
         <v-col cols="12">
           <v-data-table
             :headers="headers"
-            :items="agendamento"
+            :items="filteredData"
             class="elevation-1"
             hide-default-footer
             :page.sync="page"
@@ -138,11 +138,21 @@
             </template>
             <template v-slot:[`item.detalhes`]="{ item }">
               <Detalhes :dados="item"></Detalhes>
-              
+
               <Admissao :dados="item"></Admissao>
-              
-              <CancelarConsulta v-if="item.tipo == 'Cirurgia'" :dialogs="cancelar" :dados="item"></CancelarConsulta>
-              <CancelarConsulta v-else :dialogs="cancelarC" :dados="item"></CancelarConsulta>
+
+              <CancelarConsulta
+                v-if="item.tipo == 'Cirurgia'"
+                :dialogs="cancelar"
+                :dados="item"
+                @clicked="registar"
+              ></CancelarConsulta>
+              <CancelarConsulta
+                v-else
+                :dialogs="cancelarC"
+                :dados="item"
+                @clicked="registar"
+              ></CancelarConsulta>
             </template>
           </v-data-table>
           <div class="text-center pt-2">
@@ -157,6 +167,15 @@
           </div>
         </v-col>
       </v-row>
+      <v-snackbar
+        v-model="snackbar"
+        :timeout="timeout"
+        :color="color"
+        :top="true"
+        class="headline"
+      >
+        {{ text }}
+      </v-snackbar>
     </v-container>
   </div>
 </template>
@@ -165,14 +184,14 @@
 <script>
 import axios from "axios";
 import store from "@/store.js";
-import Detalhes from '@/components/Dialogs/Detalhes.vue'
-import Admissao from '@/components/Dialogs/Admissao.vue'
-import CancelarConsulta from '@/components/Dialogs/CancelarComDados.vue'
-import moment from 'moment'
+import Detalhes from "@/components/Dialogs/Detalhes.vue";
+import Admissao from "@/components/Dialogs/Admissao.vue";
+import CancelarConsulta from "@/components/Dialogs/CancelarComDados.vue";
+import moment from "moment";
 export default {
   data() {
     return {
-      dados:{},
+      dados: {},
       dialogs: {},
       cancelarC: {
         title: "o agendamento da consulta",
@@ -231,12 +250,16 @@ export default {
         },
       ],
       agendamento: [],
+      snackbar: false,
+      color: "",
+      text: "",
+      timeout: -1,
     };
   },
   components: {
     Detalhes,
     Admissao,
-    CancelarConsulta
+    CancelarConsulta,
   },
   methods: {
     estado(item) {
@@ -252,24 +275,58 @@ export default {
       console.log(item);
     },
     format(data) {
-      return moment(data).locale("pt").format( "DD/MM/YYYY HH:mm")
-    }
+      return moment(data).locale("pt").format("DD/MM/YYYY HH:mm");
+    },
+    registar(value) {
+      this.snackbar = value.snackbar;
+      this.color = value.color;
+      this.text = value.text;
+      this.timeout = value.timeout;
+      this.atualiza();
+    },
+    atualiza: async function () {
+      this.agendamento = [];
+      let response = await axios.get(
+        "http://localhost:7777/clinica/consultas",
+        {
+          headers: { Authorization: "Bearer " + store.getters.token },
+        }
+      );
+      console.log(response.data.intervencoes);
+      for (var i = 0; i < response.data.intervencoes.length; i++) {
+        var element = response.data.intervencoes[i];
+        element.utente = response.data.intervencoes[i].animal.nome;
+        element.cliente = response.data.intervencoes[i].cliente.nome;
+        element.especie = response.data.intervencoes[i].animal.especie;
+        element.marcacao =
+          response.data.intervencoes[i].data +
+          " " +
+          response.data.intervencoes[i].hora;
+        this.agendamento.push(element);
+      }
+    },
   },
-  created: async function() {
+  created: async function () {
     let response = await axios.get("http://localhost:7777/clinica/consultas", {
-     headers: { Authorization: "Bearer " + store.getters.token }
+      headers: { Authorization: "Bearer " + store.getters.token },
     });
-    console.log(response.data.intervencoes)
-    for (var i = 0; i < response.data.intervencoes.length; i++){
+    console.log(response.data.intervencoes);
+    for (var i = 0; i < response.data.intervencoes.length; i++) {
       var element = response.data.intervencoes[i];
       element.utente = response.data.intervencoes[i].animal.nome;
       element.cliente = response.data.intervencoes[i].cliente.nome;
       element.especie = response.data.intervencoes[i].animal.especie;
-      element.marcacao = response.data.intervencoes[i].data + " " + response.data.intervencoes[i].hora
+      element.marcacao =
+        response.data.intervencoes[i].data +
+        " " +
+        response.data.intervencoes[i].hora;
       this.agendamento.push(element);
     }
-    
-
+  },
+  computed: {
+    filteredData() {
+      return this.agendamento.filter((item) => item.estado === "Agendada" || item.estado === "A decorrer");
+    },
   },
 };
 </script>
