@@ -250,25 +250,34 @@ public class VeterinarioController {
         Imunizacao imunizacao = imunizacaoService.getImunizacao(id_imunizacao);
         imunizacao.setData_toma(node.get("data").asText());
         imunizacao.setTratamento(node.get("tratamento").asText());
-        imunizacao.setProxImunizacao(node.get("dataProx").asText());
-        imunizacao.setEstado("Administrada");
-        if(imunizacao.getProxima_imunizacao()==null){
-            Imunizacao proxima_Imunizacao = new Imunizacao();
-            proxima_Imunizacao.setData(imunizacao.getProxImunizacao());
-            proxima_Imunizacao.setEstado("Agendada");
-            proxima_Imunizacao.setTipo(imunizacao.getTipo());
-            proxima_Imunizacao.setAnimal(imunizacao.getAnimal());
-            proxima_Imunizacao.setVacina(imunizacao.getVacina());
-            proxima_Imunizacao.setObservacoes(imunizacao.getObservacoes());
-            proxima_Imunizacao.setTratamento(imunizacao.getTratamento());
-            proxima_Imunizacao.setVeterinario(imunizacao.getVeterinario());
-            imunizacaoService.saveImunizacao(proxima_Imunizacao);
-            imunizacao.setProxima_imunizacao(proxima_Imunizacao);
+        if(node.get("dataProx").asText().equals("null"))
+        {
+            imunizacao.setProxImunizacao(null);
+            System.out.println("\n\nAQUI1 : "+imunizacao.getProxImunizacao());
         }
         else{
-            Imunizacao proxima_Imunizacao = imunizacao.getProxima_imunizacao();
-            proxima_Imunizacao.setProxImunizacao(node.get("dataProx").asText());
-            imunizacaoService.saveImunizacao(proxima_Imunizacao);
+            imunizacao.setProxImunizacao(node.get("dataProx").asText());
+            System.out.println("\n\nAQUI 2: "+imunizacao.getProxImunizacao());
+        }
+        imunizacao.setEstado("Administrada");
+        if(imunizacao.getProxImunizacao()!=null) {
+            if (imunizacao.getProxima_imunizacao() == null) {
+                Imunizacao proxima_Imunizacao = new Imunizacao();
+                proxima_Imunizacao.setData(imunizacao.getProxImunizacao());
+                proxima_Imunizacao.setEstado("Agendada");
+                proxima_Imunizacao.setTipo(imunizacao.getTipo());
+                proxima_Imunizacao.setAnimal(imunizacao.getAnimal());
+                proxima_Imunizacao.setVacina(imunizacao.getVacina());
+                proxima_Imunizacao.setObservacoes(imunizacao.getObservacoes());
+                proxima_Imunizacao.setTratamento(imunizacao.getTratamento());
+                proxima_Imunizacao.setVeterinario(imunizacao.getVeterinario());
+                imunizacaoService.saveImunizacao(proxima_Imunizacao);
+                imunizacao.setProxima_imunizacao(proxima_Imunizacao);
+            } else {
+                Imunizacao proxima_Imunizacao = imunizacao.getProxima_imunizacao();
+                proxima_Imunizacao.setProxImunizacao(node.get("dataProx").asText());
+                imunizacaoService.saveImunizacao(proxima_Imunizacao);
+            }
         }
         imunizacaoService.saveImunizacao(imunizacao);
         return ResponseEntity.accepted().body("Imunização confirmada com sucesso!");
