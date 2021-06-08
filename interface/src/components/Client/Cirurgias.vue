@@ -24,6 +24,10 @@
               </v-chip>
             </template>
 
+            <template v-slot:[`item.data`]="{ item }">
+              <span class="ml-1">{{ format(item.data) }}</span>
+            </template>
+
             <template v-slot:[`item.detalhes`]="{ item }">
               <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
@@ -82,6 +86,7 @@ import exemplo from "@/components/Client/exemploCirurgia.vue";
 import CancelarComDados from "@/components/Dialogs/CancelarComDados.vue";
 import axios from "axios";
 import store from "@/store.js";
+import moment from "moment"
 
 export default {
   data: () => ({
@@ -165,8 +170,14 @@ export default {
   methods: {
     estadopedido(estado) {
       if (estado == "Agendada") return "#C5E1A5";
-      else return "#FFE082";
+      if (estado == "A decorrer") return "#FFECB3";
+      if (estado == "Concluída") return "#9AE5FF";
+      else return "#EF9A9A"
     },
+    format(data) {
+      return moment(data).locale("pt").format("DD/MM/YYYY");
+    },
+    //confirmaImunizacao: async
   },
    created: async function () {
     try {

@@ -105,10 +105,15 @@
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from 'axios'
 import Cancelar from "@/components/Dialogs/Cancel.vue";
+import store from "@/store.js";
+
 
 export default {
+    props:["idAnimal"],
+    
+
   data: () => ({
     dialog: false,
     dialogs: {},
@@ -130,7 +135,30 @@ export default {
     close() {
       this.dialog = false;
     },
-    adicionaDesparasita() {},
+   adicionaDesparasita: async function() {
+         try {
+      if (store.state.tipo == "Clinica") {
+      var response = await axios.post(
+        "http://localhost:7777/cliente/animal/"+this.idAnimal+"/vacinas",
+        {
+          email: this.$store.state.email,
+          data: this.data,
+          hora: this.hora,
+          motivo: this.motivo,
+          proxImunizacao: this.proxImunizacao,
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + store.getters.token.toString(),
+          },
+        }
+      );
+      console.log(response)
+      }
+    } catch (e) {
+      console.log("erro: +" + e);
+    }
+    },
   },
 };
 </script>

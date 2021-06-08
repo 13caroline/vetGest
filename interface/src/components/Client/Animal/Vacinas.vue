@@ -2,12 +2,18 @@
     <div>
         <v-card flat color="#fafafa">
             <v-row>
-        <v-col cols="12">
-          <h3 class="font-weight-regular text-uppercase mt-10 mb-4">
+        <v-col>
+          <v-row align="center" class="my-5">
+            <v-col>
+          <h3 class="font-weight-regular text-uppercase ">
             <v-icon small>fas fa-syringe</v-icon>
             Vacinas e desparasitações
           </h3>
-
+</v-col>
+          <v-col cols="auto" class="pl-0">
+              <NovaDesparasitacao :dados="idAnimal" @clicked="close()"></NovaDesparasitacao>
+            </v-col>
+</v-row>
           <v-data-table
             :headers="headers"
             :items="items"
@@ -25,7 +31,7 @@
                 fas fa-check-circle
               </v-icon>
               <v-btn
-                v-if="item.estado == 'Atualizada' || item.estado == 'Atrasada'"
+                v-if="item.estado == 'Atualizada' || item.estado == 'Atrasada' && item.Tipo=='Desparasitacao' " 
                 small
                 outlined
                 rounded
@@ -36,7 +42,8 @@
               </v-btn>
             </template>
           </v-data-table>
-        </v-col>
+                  </v-col>
+
       </v-row>
       <v-dialog v-model="dialog" width="100%" max-width="700">
         <v-card>
@@ -157,14 +164,20 @@
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from 'axios'
+import store from "@/store.js";
+import NovaDesparasitacao from "@/components/Dialogs/NovaDesparasitacao.vue";
+
 export default {
+  props:["animal"],
   data: () => ({
+    idAnimal: {},
     dialog: false,
     dialogCancel: false,
     dataPrevista: "",
     dataToma: null,
     tratamento: "", 
+    id:0,
     date: new Date().toISOString().substr(0, 10),
     snackbar: false,
     color: "",
@@ -176,7 +189,7 @@ export default {
         text: "Data Prevista",
         align: "start",
         sortable: true,
-        value: "dataPrev",
+        value: "dataPrevista",
       },
       {
         text: "Data de Toma",
@@ -216,47 +229,52 @@ export default {
       },
     ],
     items: [
-      {
-        dataPrev: "05/04/2021",
-        dataToma: "06/04/2021",
-        tipo: "Desparasitação",
-        tratamento: "Bravacto",
-        medico: "Drº José Vieira",
-        estado: "Administrada",
-      },
-      {
-        dataPrev: "05/05/2021",
-        tipo: "Desparasitação",
-        tratamento: "Bravacto",
-        estado: "Atualizada",
-      },
-      {
-        dataPrev: "05/04/2021",
-        dataToma: "05/04/2021",
-        tipo: "Vacina",
-        tratamento: "Rabis",
-        medico: "Drº José Vieira",
-        estado: "Administrada",
-      },
-      {
-        dataPrev: "05/04/2021",
-        tipo: "Desparasitação",
-        estado: "Atrasada",
-      },
+      
     ],
   }),
   methods: {
+    atualiza: async function(){
+      this.items=[];
+      try {
+      var response = await axios.post(
+        "http://localhost:7777/cliente/animal/"+this.animal.id+"/getvacinas",
+        {
+          email: this.$store.state.email,
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + store.getters.token.toString(),
+          },
+        }
+      );
+    } catch (e) {
+      console.log("erro: +" + e);
+    }
+    console.log(response)
+   for (var i = 0; i < response.data.length; i++) {
+      this.items.push({
+        dataPrevista: response.data[i].data,
+        tipo: response.data[i].tipo,
+        tratamento: response.data[i].tratamento,
+        medico: response.data[i].veterinario.nome,
+        estado: response.data[i].estado,
+        id: response.data[i].id
+        
+      })
+    } 
+    },
     estadopedido(estado) {
-      if (estado == "Administrada") return "#C5E1A5";
+      if (estado == "Administrada") return "#9AE5FF";
       else if (estado == "Atrasada") return "#EF9A9A";
-      else return "#FFE082";
+      else return "#C5E1A5";
     },
     more(item) {
       console.log(item.data);
     },
     openDialog(item) {
-      this.dataPrevista = item.dataPrev;
-
+      this.dataPrevista = item.data;
+      console.log(item.id)
+      this.id = item.id;
       this.dialog = true;
     },
     cancelar() {
@@ -264,18 +282,19 @@ export default {
       this.dialog = false;
     },
     confirma: async function () {
-      /*
       try {
-          var resposta = await axios.post("http://localhost:7777/cliente/confirmaDesparasitacao", {
-            idVacina: this.idVacina @TODO Adicionar idVacina
-            dataToma: this.dataToma,
+          var resposta = await axios.post("http://localhost:7777/cliente/animal/confirma/imunizacao", {
+            id: this.id,
+            data: this.dataToma,
             tratamento: this.tratamento,
+            dataProx:"1213123"
           });
           console.log(JSON.stringify(resposta.data));
           this.dialog = false;
           this.text = "Desparasitação confirmada com sucesso.";
           this.color = "success";
           this.snackbar = true;
+          this.atualiza();
         } catch (e) {
           console.log("erro: " + e);
           this.dialog = false;
@@ -283,17 +302,41 @@ export default {
           this.color = "warning";
           this.snackbar = true;
         }
-      */
+        
     },
   },
-  created() {
-    /*
-    let response = await axios.post("http://localhost:7777/cliente/getVacinas", {
-      email: this.$store.state.user.email,
-      animal
-    });
+created: async function () {
+    try {
+      var response = await axios.post(
+        "http://localhost:7777/cliente/animal/"+this.animal.id+"/getvacinas",
+        {
+          email: this.$store.state.email,
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + store.getters.token.toString(),
+          },
+        }
+      );
+    } catch (e) {
+      console.log("erro: +" + e);
+    }
+    console.log(response)
+   for (var i = 0; i < response.data.length; i++) {
+      this.items.push({
+        dataPrevista: response.data[i].data,
+        tipo: response.data[i].tipo,
+        tratamento: response.data[i].tratamento,
+        medico: response.data[i].veterinario.nome,
+        estado: response.data[i].estado,
+        id: response.data[i].id
+      })
+    } 
+          this.idAnimal= response.data[i].animal.idAnimal;
 
-    */
   },
+  components: {
+    NovaDesparasitacao,
+  }
 };
 </script>

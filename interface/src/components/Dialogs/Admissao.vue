@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="dialog" persistent width="100%" max-width="460">
-      <template v-slot:activator="{ diag, attrs }">
+    <template v-slot:activator="{ diag, attrs }">
       <v-tooltip top>
         <template v-slot:activator="{ on }">
           <v-icon
@@ -13,7 +13,7 @@
             mdi-calendar-check
           </v-icon>
         </template>
-        <span class="caption">Mais detalhes</span>
+        <span class="caption">Admitir utente</span>
       </v-tooltip>
     </template>
     <v-card>
@@ -25,8 +25,8 @@
           </v-col>
           <v-col class="pl-0 pb-0" cols="7">
             <span class="black--text">
-              <strong>Rubi</strong>
-              (Serra da Estrela)
+              <strong>{{ dados.utente }}</strong>
+              ({{ dados.animal.raca }})
             </span>
           </v-col>
 
@@ -35,10 +35,10 @@
           </v-col>
           <v-col class="pl-0 pb-0" cols="7">
             <span class="black--text">
-              <strong>Vómito/Diarreia/Recusa a comer</strong>
+              <strong>{{ dados.descricao }}</strong>
             </span>
             <br />
-            <span>Consulta extraordinária/Por doença</span>
+            <span>{{ dados.motivo }}</span>
           </v-col>
 
           <v-col class="pb-0" align="right" cols="5">
@@ -46,7 +46,7 @@
           </v-col>
           <v-col class="pl-0 pb-0" cols="7">
             <span class="black--text">
-              <strong>19/04/2021 15:30</strong>
+              <strong>{{ format(dados.marcacao) }}</strong>
             </span>
           </v-col>
 
@@ -87,10 +87,17 @@
 </template>
 
 <script>
+import moment from "moment";
+
 export default {
-    props: ['dados'],
+  props: ["dados"],
   data: () => ({
     dialog: false,
   }),
+  methods: {
+    format(data) {
+      return moment(data).locale("pt").format("DD/MM/YYYY HH:mm");
+    },
+  },
 };
 </script>

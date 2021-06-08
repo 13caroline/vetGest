@@ -79,14 +79,17 @@ public class ClinicaController {
                 a.put("observacoes",intervencao.getAnimal().getObservacoes());
                 a.put("cliente_nome",cliente.getNome());
                 a.put("cliente_email",cliente.getEmail());
-
                 i.put("id",intervencao.getId());
                 i.put("data",intervencao.getData());
+                i.put("observacoes",intervencao.getObservacoes());
                 i.put("hora",intervencao.getHora());
                 i.put("descricao",intervencao.getDescricao());
                 i.put("estado",intervencao.getEstado());
                 i.put("motivo",intervencao.getMotivo());
                 i.put("tipo",intervencao.getTipo());
+                i.put("data_pedido",intervencao.getData_pedido());
+                i.put("veterinario_id",intervencao.getVeterinario().getId());
+                i.put("veterinario_nome",intervencao.getVeterinario().getNome());
                 i.put("cliente",c);
                 i.put("animal",a);
                 intervencoesObject.accumulate("intervencoes",i);
@@ -143,6 +146,71 @@ public class ClinicaController {
             });
         });
         return  ResponseEntity.accepted().body(animais.toString());
+    }
+
+    @CrossOrigin
+    @PostMapping("/clinica/utente")
+    public ResponseEntity<?> getUtente(@RequestBody String body) throws JSONException, JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+        Animal a = animalService.getAnimalById(node.get("id").asInt());
+        if(a==null){
+            return ResponseEntity.badRequest().body("Utente não encontrado!");
+        }
+        Cliente c = clienteService.findClienteByAnimais(a);
+        if(c==null){
+            return ResponseEntity.badRequest().body("Cliente não encontrado!");
+        }
+        JSONObject animal = new JSONObject();
+        animal.put("id",a.getId());
+        animal.put("nome",a.getNome());
+        animal.put("raca",a.getRaca());
+        animal.put("dataNascimento",a.getDataNascimento());
+        animal.put("sexo",a.getSexo());
+        animal.put("especie",a.getEspecie());
+        animal.put("cor",a.getCor());
+        animal.put("cauda",a.getCauda());
+        animal.put("pelagem",a.getPelagem());
+        animal.put("altura",a.getAltura());
+        animal.put("chip",a.getChip());
+        animal.put("castracao",a.isCastracao());
+        animal.put("observacoes",a.getObservacoes());
+        animal.put("cliente_nome",c.getNome());
+        animal.put("cliente_email",c.getEmail());
+        animal.put("cliente_id",c.getId());
+        return  ResponseEntity.accepted().body(animal.toString());
+    }
+
+    @CrossOrigin
+    @PostMapping("/clinica/imunizacao")
+    public ResponseEntity<?> getImunizacao(@RequestBody String body) throws JSONException, JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+        Animal a = animalService.getAnimalById(node.get("id").asInt());
+        if(a==null){
+            return ResponseEntity.badRequest().body("Utente não encontrado!");
+        }
+        List<Imunizacao> imunizacoes = imunizacaoService.getImunizacoes(a.getId());
+        if(imunizacoes.size()==0){
+            return ResponseEntity.badRequest().body("Não foi possível obter imunizações!");
+        }
+        return  ResponseEntity.accepted().body(imunizacoes);
+    }
+
+    @CrossOrigin
+    @PostMapping("/clinica/intervencao")
+    public ResponseEntity<?> getIntervencao(@RequestBody String body) throws JSONException, JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+        Animal a = animalService.getAnimalById(node.get("id").asInt());
+        if(a==null){
+            return ResponseEntity.badRequest().body("Utente não encontrado!");
+        }
+        List<Intervencao> intervencoes = intervencaoService.getIntervencoesAnimal(a.getId());
+        if(intervencoes.size()==0){
+            return ResponseEntity.badRequest().body("Não foi possível obter intervencões!");
+        }
+        return  ResponseEntity.accepted().body(intervencoes);
     }
 
     @CrossOrigin
@@ -243,19 +311,20 @@ public class ClinicaController {
     }
 
     @CrossOrigin
-    @PutMapping("/clinica/intervencao/cancelar")
+    @PostMapping("/clinica/intervencao/alterar")
     public ResponseEntity<?> cancelarIntervencao(@RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);
 
         int id_intervencao = node.get("id").asInt();
+        String estado = node.get("estado").asText();
         Intervencao intervencao = intervencaoService.getIntervencao(id_intervencao);
 
         if(intervencao==null){
             return ResponseEntity.badRequest().body("Erro a cancelar intervenção! Intervençao nao existe!");
         }
 
-        intervencao.setEstado("Cancelado");
+        intervencao.setEstado(estado);
         intervencaoService.saveIntervencao(intervencao);
         return ResponseEntity.accepted().body("Intervenção cancelada!");
     }

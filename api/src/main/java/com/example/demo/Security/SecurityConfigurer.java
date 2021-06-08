@@ -4,6 +4,7 @@ package com.example.demo.Security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -49,9 +50,9 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     }
 
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedOrigins("http://localhost:8080");
-        registry.addMapping("/**").allowedOrigins("http://localhost:7777");
-        registry.addMapping("/**").allowedOrigins("http://localhost:9090");
+        registry.addMapping("/**").allowedMethods("GET", "POST", "PUT", "DELETE").allowedOrigins("http://localhost:8080");
+        registry.addMapping("/**").allowedMethods("GET", "POST", "PUT", "DELETE").allowedOrigins("http://localhost:7777");
+        registry.addMapping("/**").allowedMethods("GET", "POST", "PUT", "DELETE").allowedOrigins("http://localhost:9090");
 
     }
 
@@ -65,18 +66,24 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable()
-                .authorizeRequests().antMatchers("/authenticate","/cliente/registar","/clinica/adicionarClinica").permitAll()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.GET).permitAll()
+                .antMatchers(HttpMethod.POST).permitAll()
+                .antMatchers(HttpMethod.PUT).permitAll()
+                .antMatchers("/authenticate","/cliente/registar","/clinica/adicionarClinica").permitAll()
                 .antMatchers("/addDica/{emailVet}","/medico/intervencoes","/medico/agendar/intervencao","/medico/utentes",
                         "/medico/cirurgias","/medico/utente","/medico/animal/adiciona/imunizacao","/medico/utente/vacinas",
                         "/medico/utente/desparasitacoes","/medico/animal/confirma/imunizacao","/medico/utente/editar","/medico/internamento",
                         "/medico/internamento/detalhes").hasAnyRole("Veterinario")
                 //Acessos da Clinica
                 .antMatchers("/addVet","/clinica/consultas","/clinica/clientes",
-                        "/clinica/utentes/registar","/clinica/clientes/registar","/clinica/medicos","/clinica/medicos/registar","/clinica/utentes").hasAnyRole("Clinica")
+                        "/clinica/utentes/registar","/clinica/clientes/registar","/clinica/medicos","/clinica/medicos/registar","/clinica/utentes",
+                        "/clinica/intervencao/alterar","/clinica/utente","/clinica/imunizacao","/clinica/intervencao").hasAnyRole("Clinica")
                 //Acessos do Cliente
                 .antMatchers("/","/cliente","/cliente/animal/registar","/cliente/animal/{id_animal}",
-                        "/cliente/animal/cancelar/{id_intervencao}","/cliente/animal/{id_animal}","/cliente/animal/{id_animal}/vacinas",
-                        "/cliente/consulta","/cliente/consultas","/cliente/cirurgias","/cliente/preferenciassa","/sobre-nos","/dicas").hasAnyRole("Cliente")
+                        "/cliente/animal/cancelar/{id_intervencao}","/cliente/animal/{id_animal}","/cliente/animal/{id_animal}/getvacinas",
+                        "/cliente/consulta","/cliente/consultas","/cliente/cirurgias","/cliente/preferenciassa","/sobre-nos","/dicas",
+                        "/cliente/animal/confirma/imunizacao").hasAnyRole("Cliente")
                 //Acessos de todos
                 .antMatchers("/","/terminar-sessao").hasAnyRole("Clinica","Veterinario","Cliente").
                 anyRequest().authenticated().and().
