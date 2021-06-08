@@ -25,7 +25,7 @@
                 fas fa-check-circle
               </v-icon>
               <v-btn
-                v-if="item.estado == 'Atualizada' || item.estado == 'Atrasada'"
+                v-if="item.estado == 'Atualizada' || item.estado == 'Atrasada' && item.Tipo=='Desparasitacao' " 
                 small
                 outlined
                 rounded
