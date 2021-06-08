@@ -149,6 +149,71 @@ public class ClinicaController {
     }
 
     @CrossOrigin
+    @PostMapping("/clinica/utente")
+    public ResponseEntity<?> getUtente(@RequestBody String body) throws JSONException, JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+        Animal a = animalService.getAnimalById(node.get("id").asInt());
+        if(a==null){
+            return ResponseEntity.badRequest().body("Utente não encontrado!");
+        }
+        Cliente c = clienteService.findClienteByAnimais(a);
+        if(c==null){
+            return ResponseEntity.badRequest().body("Cliente não encontrado!");
+        }
+        JSONObject animal = new JSONObject();
+        animal.put("id",a.getId());
+        animal.put("nome",a.getNome());
+        animal.put("raca",a.getRaca());
+        animal.put("dataNascimento",a.getDataNascimento());
+        animal.put("sexo",a.getSexo());
+        animal.put("especie",a.getEspecie());
+        animal.put("cor",a.getCor());
+        animal.put("cauda",a.getCauda());
+        animal.put("pelagem",a.getPelagem());
+        animal.put("altura",a.getAltura());
+        animal.put("chip",a.getChip());
+        animal.put("castracao",a.isCastracao());
+        animal.put("observacoes",a.getObservacoes());
+        animal.put("cliente_nome",c.getNome());
+        animal.put("cliente_email",c.getEmail());
+        animal.put("cliente_id",c.getId());
+        return  ResponseEntity.accepted().body(animal.toString());
+    }
+
+    @CrossOrigin
+    @PostMapping("/clinica/imunizacao")
+    public ResponseEntity<?> getImunizacao(@RequestBody String body) throws JSONException, JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+        Animal a = animalService.getAnimalById(node.get("id").asInt());
+        if(a==null){
+            return ResponseEntity.badRequest().body("Utente não encontrado!");
+        }
+        List<Imunizacao> imunizacoes = imunizacaoService.getImunizacoes(a.getId());
+        if(imunizacoes.size()==0){
+            return ResponseEntity.badRequest().body("Não foi possível obter imunizações!");
+        }
+        return  ResponseEntity.accepted().body(imunizacoes);
+    }
+
+    @CrossOrigin
+    @PostMapping("/clinica/intervencao")
+    public ResponseEntity<?> getIntervencao(@RequestBody String body) throws JSONException, JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+        Animal a = animalService.getAnimalById(node.get("id").asInt());
+        if(a==null){
+            return ResponseEntity.badRequest().body("Utente não encontrado!");
+        }
+        List<Intervencao> intervencoes = intervencaoService.getIntervencoesAnimal(a.getId());
+        if(intervencoes.size()==0){
+            return ResponseEntity.badRequest().body("Não foi possível obter intervencões!");
+        }
+        return  ResponseEntity.accepted().body(intervencoes);
+    }
+
+    @CrossOrigin
     @PostMapping("/clinica/utentes/registar")
     public ResponseEntity<?> registarAnimal(@RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();

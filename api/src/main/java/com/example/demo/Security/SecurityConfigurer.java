@@ -73,7 +73,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 //Acessos da Clinica
                 .antMatchers("/addVet","/clinica/consultas","/clinica/clientes",
                         "/clinica/utentes/registar","/clinica/clientes/registar","/clinica/medicos","/clinica/medicos/registar","/clinica/utentes",
-                        "/clinica/intervencao/alterar").hasAnyRole("Clinica")
+                        "/clinica/intervencao/alterar","/clinica/utente","/clinica/imunizacao","/clinica/intervencao").hasAnyRole("Clinica")
                 //Acessos do Cliente
                 .antMatchers("/","/cliente","/cliente/animal/registar","/cliente/animal/{id_animal}",
                         "/cliente/animal/cancelar/{id_intervencao}","/cliente/animal/{id_animal}","/cliente/animal/{id_animal}/vacinas",
