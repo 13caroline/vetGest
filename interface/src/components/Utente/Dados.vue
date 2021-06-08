@@ -9,35 +9,35 @@
             <v-col cols="6" sm="4">
               <div class="font-weight-bold mx-2 mt-2" color="grey">Nome</div>
               <div class="font-weight-regular mx-2 mb-2">
-                {{ cao.nome }}
+                {{ animal.nome }}
               </div>
             </v-col>
 
             <v-col cols="6" sm="4">
               <div class="font-weight-bold mx-2 mt-2" color="grey">Espécie</div>
               <div class="font-weight-regular mx-2 mb-2">
-                {{ cao.especie }}
+                {{ animal.especie }}
               </div>
             </v-col>
 
             <v-col cols="6" sm="4">
               <div class="font-weight-bold mx-2 mt-2" color="grey">Dono</div>
               <div class="font-weight-regular mx-2 mb-2">
-                {{ cao.dono }}
+                {{ animal.cliente_nome }}
               </div>
             </v-col>
             <div class="d-none d-sm-block w-100"></div>
             <v-col cols62 sm="4">
               <div class="font-weight-bold mx-2 mt-2" color="grey">Sexo</div>
               <div class="font-weight-regular mx-2 mb-2">
-                {{ cao.sexo }}
+                {{ animal.sexo }}
               </div>
             </v-col>
 
             <v-col cols="6" sm="4">
               <div class="font-weight-bold mx-2 mt-2" color="grey">Raça</div>
               <div class="font-weight-regular mx-2 mb-2">
-                {{ cao.raca }}
+                {{ animal.raca }}
               </div>
             </v-col>
 
@@ -45,8 +45,11 @@
               <div class="font-weight-bold mx-2 mt-2" color="grey">
                 Esterilizado
               </div>
-              <div class="font-weight-regular mx-2 mb-2">
-                {{ cao.castracao }}
+              <div v-if="animal.castracao === true" class="font-weight-regular mx-2 mb-2">
+                Sim 
+              </div>
+              <div v-else class="font-weight-regular mx-2 mb-2">
+                Não 
               </div>
             </v-col>
             <div class="d-none d-sm-block w-100"></div>
@@ -55,7 +58,7 @@
               <div>
                 <div class="font-weight-bold mx-2 mt-2" color="grey">Chip</div>
                 <div class="font-weight-regular mx-2 mb-2">
-                  {{ cao.chip }}
+                  {{ animal.chip }}
                 </div>
               </div>
             </v-col>
@@ -65,7 +68,7 @@
                 Data de Nascimento
               </div>
               <div class="font-weight-regular mx-2 mb-2">
-                {{ cao.data }}
+                {{ format(animal.dataNascimento) }}
               </div>
             </v-col>
           </v-row>
@@ -103,27 +106,27 @@
       <v-row class="animal-info">
         <v-col cols="6" sm="3">
           <div class="font-weight-bold mx-2 mt-2" color="grey">Altura</div>
-          <div class="font-weight-regular mx-2 mb-2">{{ cao.altura }} (cm)</div>
+          <div class="font-weight-regular mx-2 mb-2">{{ animal.altura }} (cm)</div>
         </v-col>
 
         <v-col cols="6" sm="3">
           <div class="font-weight-bold mx-2 mt-2" color="grey">Pelagem</div>
           <div class="font-weight-regular mx-2 mb-2">
-            {{ cao.pelagem }}
+            {{ animal.pelagem }}
           </div>
         </v-col>
 
         <v-col cols="6" sm="3">
           <div class="font-weight-bold mx-2 mt-2" color="grey">Cor</div>
           <div class="font-weight-regular mx-2 mb-2">
-            {{ cao.cor }}
+            {{ animal.cor }}
           </div>
         </v-col>
 
         <v-col cols="6" sm="3">
           <div class="font-weight-bold mx-2 mt-2" color="grey">Cauda</div>
           <div class="font-weight-regular mx-2 mb-2">
-            {{ cao.cauda }}
+            {{ animal.cauda }}
           </div>
         </v-col>
       </v-row>
@@ -132,31 +135,16 @@
 </template>
 
 <script>
+import moment from "moment"
 export default {
+  props:["animal"],
   data: () => ({
-    cao: {
-      nome: "Rubi",
-      especie: "Canídeo",
-      raca: "Serra da Estrela",
-      sexo: "Macho",
-      cor: "Castanho",
-      data: "02/01/2014",
-      altura: 70,
-      pelagem: "Média, Lisa",
-      cauda: "Comprida",
-      chip: "AC14ASC7984",
-      castracao: "Sim",
-      dono: "Carolina Cunha",
-    },
   }),
-  created() {
-    /*
-    let response = await axios.post("http://localhost:7777/clinica/getUtentes", {
-      email: this.$store.state.user.email,
-    });
-
-    */
-  },
+  methods:{
+    format(data) {
+      return moment(data).locale("pt").format("DD/MM/YYYY");
+    },
+  }
 };
 </script>
 

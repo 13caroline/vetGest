@@ -146,7 +146,7 @@
                     full-width
                     color="#2596be"
                     min="10:00"
-                    max="20:00"
+                    max="19:45"
                     :allowed-minutes="allowedStep"
                   ></v-time-picker>
                 </v-menu>
@@ -229,7 +229,7 @@ export default {
     menu2: false,
     horaMarcacao: null,
     date: new Date().toISOString().substr(0, 10),
-    hora: new Date().getHours() + ":" + new Date().getMinutes(),
+    hora: "10:00",
     animais: [],
     medicos: [],
     /*animais: ["Rubi", "Puscas", "Nikita", "Rudi"], */

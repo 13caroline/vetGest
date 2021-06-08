@@ -11,16 +11,23 @@
               </h3>
             </v-col>
             <v-col cols="auto">
-              <MarcarCirurgia></MarcarCirurgia>
+              <MarcarCirurgia :dados="animal" @clicked="registar"></MarcarCirurgia>
             </v-col>
           </v-row>
 
           <v-data-table
             :headers="headers"
-            :items="cirurgias"
+            :items="filteredData"
             class="elevation-1"
             hide-default-footer
+            no-data-text="Não existe histórico de cirurgias."
+          no-results-text="Não foram encontrados resultados."
           >
+
+          <template v-slot:[`item.marcacao`]="{ item }">
+              {{ format(item.marcacao) }}
+            </template>
+
             <template v-slot:[`item.estado`]="{ item }">
               <v-chip :color="estadopedido(item.estado)" small>
                 {{ item.estado }}
@@ -45,7 +52,11 @@
                 <span class="caption">Ver detalhes</span>
               </v-tooltip>
               <div v-if="item.estado == 'Agendada'">
-                    <CancelarComDados :dados="item"></CancelarComDados>
+                <CancelarComDados
+                  :dados="item"
+                  :dialogs="cancelar"
+                  @clicked="registar"
+                ></CancelarComDados>
               </div>
             </template>
           </v-data-table>
@@ -66,35 +77,47 @@
         </v-card>
       </v-dialog>
     </v-card>
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="timeout"
+      :color="color"
+      :top="true"
+      class="headline"
+    >
+      {{ text }}
+    </v-snackbar>
   </div>
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from "axios";
+import moment from "moment";
+import store from "@/store.js";
 import exemplo from "@/components/Client/exemploCirurgia.vue";
 import MarcarCirurgia from "@/components/Dialogs/MarcarCirurgia.vue";
 import CancelarComDados from "@/components/Dialogs/CancelarComDados.vue";
 
 export default {
+  props: ["animal"],
   data: () => ({
     dialog: false,
     detalhes: false,
     dialogs: {},
     dados: {},
     cancelar: {
-      title: "agendamento da cirurgia",
-      text: "o agendamento da cirurgia",
+      title: "o agendamento da cirurgia",
+      text: "cirurgia",
     },
     headers: [
       {
         text: "Data de Marcação",
         align: "start",
         sortable: true,
-        value: "data",
+        value: "marcacao",
       },
       {
         text: "Médico Veterinário",
-        value: "medico",
+        value: "veterinario_nome",
         sortable: true,
         align: "start",
       },
@@ -117,32 +140,12 @@ export default {
         align: "center",
       },
     ],
-    cirurgias: [
-      {
-        data: "05/04/2021 10:15",
-        medico: "Drº José Vieira",
-        descricao: "Cirurgia",
-        estado: "Concluída",
-      },
-      {
-        data: "19/04/2021 15:30",
-        medico: "Drº José Vieira",
-        descricao: "Cirurgia",
-        estado: "Agendada",
-      },
-      {
-        data: "26/04/2021 14:30",
-        medico: "Drº José Vieira",
-        descricao: "Cirurgia",
-        estado: "Agendada",
-      },
-      {
-        data: "26/04/2021 15:00",
-        medico: "Drº José Vieira",
-        descricao: "Cirurgia",
-        estado: "Agendada",
-      },
-    ],
+    cirurgias: [],
+    snackbar: false,
+    color: "",
+    done: false,
+    timeout: -1,
+    text: "",
   }),
   components: {
     exemplo,
@@ -151,8 +154,10 @@ export default {
   },
   methods: {
     estadopedido(estado) {
-      if (estado == "Agendada") return "#C5E1A5";
-      else return "#FFE082";
+       if (estado == "Agendada") return "#C5E1A5";
+      else if (estado == "Cancelada") return "#EF9A9A";
+      else if (estado == "Pendente") return "#fccea2";
+      else return "#9ae5ff";
     },
     more(item) {
       console.log(item.data);
@@ -160,6 +165,54 @@ export default {
     close() {
       this.dialog = false;
     },
+    registar(value) {
+      this.snackbar = value.snackbar;
+      this.color = value.color;
+      this.text = value.text;
+      this.timeout = value.timeout;
+      this.atualiza();
+    },
+    format(data) {
+      return moment(data).locale("pt").format("DD/MM/YYYY HH:mm");
+    },
+    atualiza: async function () {
+      this.cirurgias = [];
+      let response = await axios.post(
+        "http://localhost:7777/clinica/intervencao",
+        {
+          id: this.animal.id,
+        }
+      );
+      for (var i = 0; i < response.data.length; i++) {
+        var element = response.data[i];
+        element.veterinario_nome = response.data[i].veterinario.nome;
+        element.utente = response.data[i].animal.nome;
+        element.marcacao = response.data[i].data + " " + response.data[i].hora;
+        this.cirurgias.push(element);
+      }
+    },
   },
+  created: async function () {
+     if (store.state.tipo == "Clinica") {
+      let response = await axios.post(
+        "http://localhost:7777/clinica/intervencao",
+        {
+          id: this.animal.id,
+        }
+      );
+      for (var i = 0; i < response.data.length; i++) {
+        var element = response.data[i];
+        element.veterinario_nome = response.data[i].veterinario.nome;
+        element.utente = response.data[i].animal.nome;
+        element.marcacao = response.data[i].data + " " + response.data[i].hora;
+        this.cirurgias.push(element);
+      }
+     }
+    },
+    computed: {
+      filteredData() {
+        return this.cirurgias.filter((item) => item.tipo === "Cirurgia");
+      },
+    },
 };
 </script>

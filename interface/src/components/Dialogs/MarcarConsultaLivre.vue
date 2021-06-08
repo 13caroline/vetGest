@@ -146,7 +146,7 @@
                   v-model="hora"
                   full-width
                   min="10:00"
-                  max="20:00"
+                  max="19:45"
                   :allowed-minutes="allowedStep"
                   color="#2596be"
                 ></v-time-picker>
@@ -199,10 +199,11 @@
           :headers="headers"
           :items="items"
           :search="search"
+          no-data-text="Não existem clientes registados."
+          no-results-text="Não foram encontrados resultados."
         ></v-data-table>
       </v-card>
     </v-dialog>
- 
   </v-dialog>
 </template>
 
@@ -223,7 +224,7 @@ export default {
     dono: "",
     menu2: false,
     date: new Date().toISOString().substr(0, 10),
-    hora: new Date().getHours() + ":" + new Date().getMinutes(),
+    hora: "10:00",
     medicos: [],
     motivo: [
       "Consulta anual/Vacinação",
@@ -325,27 +326,39 @@ export default {
     },
     registar: async function () {
       try {
-        await axios.post(
-          "http://localhost:7777/clinica/intervencao/agendar",
-          {
-            intervencao: {
-              data: this.date,
-              hora: this.hora,
-              descricao: this.descricao,
-              motivo: this.motivos,
-              tipo: "Consulta",
+        if (store.state.tipo == "Clinica") {
+          await axios.post(
+            "http://localhost:7777/clinica/intervencao/agendar",
+            {
+              intervencao: {
+                data: this.date,
+                hora: this.hora,
+                descricao: this.descricao,
+                motivo: this.motivos,
+                tipo: "Consulta",
+              },
+              animal: this.id,
+              veterinario: this.medico,
+              cliente: this.dono,
             },
-            animal: this.id,
-            veterinario: this.medico,
-            cliente: this.dono,
-          },
-          { headers: { Authorization: "Bearer " + store.getters.token } }
-        );
-        this.$emit('clicked', {text:"Consulta agendada com sucesso.", color: "success", snackbar: "true", timeout:4000 })
-        this.dialog = false;
+            { headers: { Authorization: "Bearer " + store.getters.token } }
+          );
+          this.$emit("clicked", {
+            text: "Consulta agendada com sucesso.",
+            color: "success",
+            snackbar: "true",
+            timeout: 4000,
+          });
+          this.dialog = false;
+        }
       } catch (e) {
         console.log("erro: " + e);
-        this.$emit('clicked', {text:"Ocorreu um erro na marcação, por favor tente mais tarde!", color: "warning", snackbar: "true", timeout:4000 })
+        this.$emit("clicked", {
+          text: "Ocorreu um erro na marcação, por favor tente mais tarde!",
+          color: "warning",
+          snackbar: "true",
+          timeout: 4000,
+        });
       }
     },
   },

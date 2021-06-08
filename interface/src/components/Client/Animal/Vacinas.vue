@@ -11,7 +11,7 @@
           </h3>
 </v-col>
           <v-col cols="auto" class="pl-0">
-              <NovaDesparasitacao :dados="idAnimal" @clicked="close()"></NovaDesparasitacao>
+              <NovaDesparasitacao :dados="idAnimal" @clicked="registar"></NovaDesparasitacao>
             </v-col>
 </v-row>
           <v-data-table
@@ -160,6 +160,15 @@
         </v-card>
       </v-dialog>
         </v-card>
+        <v-snackbar
+      v-model="snackbar"
+      :timeout="timeout"
+      :color="color"
+      :top="true"
+      class="headline"
+    >
+      {{ text }}
+    </v-snackbar>
     </div>
 </template>
 
@@ -181,6 +190,7 @@ export default {
     date: new Date().toISOString().substr(0, 10),
     snackbar: false,
     color: "",
+    nomeMedico: "",
     done: false,
     timeout: -1,
     text: "",
@@ -233,6 +243,13 @@ export default {
     ],
   }),
   methods: {
+    registar(value){
+      this.snackbar=value.snackbar
+      this.color=value.color
+      this.text=value.text
+      this.timeout=value.timeout
+      this.atualiza()
+    },
     atualiza: async function(){
       this.items=[];
       try {
@@ -250,16 +267,17 @@ export default {
     } catch (e) {
       console.log("erro: +" + e);
     }
-    console.log(response)
+    //console.log(response)
    for (var i = 0; i < response.data.length; i++) {
+     if(!response.data[i].veterinario) this.nomeMedico="Sem Referência"
+     else this.nomeMedico= response.data[i].veterinario.nome
       this.items.push({
         dataPrevista: response.data[i].data,
         tipo: response.data[i].tipo,
         tratamento: response.data[i].tratamento,
-        medico: response.data[i].veterinario.nome,
+        medico: this.nomeMedico,
         estado: response.data[i].estado,
         id: response.data[i].id
-        
       })
     } 
     },
@@ -323,16 +341,18 @@ created: async function () {
     }
     console.log(response)
    for (var i = 0; i < response.data.length; i++) {
+     if(!response.data[i].veterinario) this.nomeMedico="Sem Referência"
+     else this.nomeMedico= response.data[i].veterinario.nome
       this.items.push({
         dataPrevista: response.data[i].data,
         tipo: response.data[i].tipo,
         tratamento: response.data[i].tratamento,
-        medico: response.data[i].veterinario.nome,
+        medico: this.nomeMedico,
         estado: response.data[i].estado,
         id: response.data[i].id
       })
     } 
-          this.idAnimal= response.data[i].animal.idAnimal;
+          this.idAnimal= response.data[0].animal.id;
 
   },
   components: {

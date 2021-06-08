@@ -35,19 +35,19 @@
 
       <v-tabs-items v-model="tab">
         <v-tab-item>
-          <Dados></Dados>
+          <Dados :animal="dados"></Dados>
         </v-tab-item>
 
         <v-tab-item>
-          <PacienteVacinas></PacienteVacinas>
+          <PacienteVacinas :animal="dados"></PacienteVacinas>
         </v-tab-item>
 
         <v-tab-item>
-          <Consultas></Consultas>
+          <Consultas :animal="dados"></Consultas>
         </v-tab-item>
 
         <v-tab-item>
-          <Cirurgia></Cirurgia>
+          <Cirurgia :animal="dados"></Cirurgia>
         </v-tab-item>
       </v-tabs-items>
     </v-container>
@@ -59,10 +59,15 @@ import PacienteVacinas from "@/components/Utente/Vacinas.vue"
 import Consultas from "@/components/Utente/Consultas.vue"
 import Cirurgia from "@/components/Utente/Cirurgias.vue"
 import Dados from "@/components/Utente/Dados.vue"
+import axios from "axios"
+
 
 export default {
+  props:["id"],
   data: () => ({
     tab: null,    
+    animal:{},
+    dados: "",
     items: [
       { tab: "Informações gerais" },
       { tab: "Vacinas e Desparasitações" },
@@ -86,13 +91,11 @@ export default {
     Cirurgia,
     Dados
   },
-  created() {
-    /*
-    let response = await axios.post("http://localhost:7777/clinica/getUtentes", {
-      email: this.$store.state.user.email,
+  created: async function() {
+    let response = await axios.post("http://localhost:7777/clinica/utente", {
+      id: this.id,
     });
-
-    */
+    this.dados = response.data
   },
 };
 </script>

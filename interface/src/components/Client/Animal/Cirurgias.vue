@@ -257,6 +257,9 @@
                       v-model="hora"
                       full-width
                       color="#2596be"
+                      min="10:00"
+                      max="19:45"
+                      :allowed-minutes="allowedStep"
                     ></v-time-picker>
                   </v-menu>
                 </v-col>
@@ -397,7 +400,7 @@ export default {
         estado: "Agendada",
       },
     ],
-    hora: new Date().getHours() + ":" + new Date().getMinutes(),
+    hora: "10:00",
     date: new Date().toISOString().substr(0, 10),
     menu2: false,
     descricao: "",
@@ -410,6 +413,7 @@ export default {
     exemplo,
   },
   methods: {
+    allowedStep: (m) => m % 15 === 0,
     estadopedido(estado) {
       if (estado == "Agendada") return "#C5E1A5";
       else return "#FFE082";

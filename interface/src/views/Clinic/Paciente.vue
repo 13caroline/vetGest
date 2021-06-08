@@ -1,7 +1,7 @@
 <template>
   <div class="extra-padding" id="page">
     <Header />
-    <Paciente />
+    <Paciente :id="$route.params.id"/>
     <Footer />
   </div>
 </template>

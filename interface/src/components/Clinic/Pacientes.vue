@@ -2,32 +2,31 @@
   <div class="d-flex flex-column">
     <v-container>
       <v-row class="w-100">
-           <h3 class="font-weight-regular text-uppercase mb-4 mt-10 ml-3">
-             <v-icon class="mr-2">fas fa-paw</v-icon>
-            Utentes
-          </h3>
-           <v-row justify="end">
-            <v-col cols="auto">
-              <v-tooltip top>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    class="body-2 mt-8"
-                    small
-                    color="#2596be"
-                    v-bind="attrs"
-                    v-on="on"
-                    fab
-                    dark
-                    to="/clinica/utentes/registar"
-                  >
-                    <v-icon small>fas fa-paw</v-icon>
-                  </v-btn>
-                </template>
-                <span class="caption">Registar utente</span>
-              </v-tooltip>
-            </v-col>
-          </v-row>
-        
+        <h3 class="font-weight-regular text-uppercase mb-4 mt-10 ml-3">
+          <v-icon class="mr-2">fas fa-paw</v-icon>
+          Utentes
+        </h3>
+        <v-row justify="end">
+          <v-col cols="auto">
+            <v-tooltip top>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  class="body-2 mt-8"
+                  small
+                  color="#2596be"
+                  v-bind="attrs"
+                  v-on="on"
+                  fab
+                  dark
+                  to="/clinica/utentes/registar"
+                >
+                  <v-icon small>fas fa-paw</v-icon>
+                </v-btn>
+              </template>
+              <span class="caption">Registar utente</span>
+            </v-tooltip>
+          </v-col>
+        </v-row>
       </v-row>
       <v-text-field
         v-model="search"
@@ -45,7 +44,8 @@
         :items="utentes"
         :search="search"
         class="elevation-1"
-        
+        no-data-text="Não existem utentes registados."
+        no-results-text="Não foram encontrados resultados."
         hide-default-footer
       >
         <template v-slot:[`item.detalhes`]="{ item }">
@@ -58,6 +58,10 @@
             <span class="caption">Mais detalhes</span>
           </v-tooltip>
         </template>
+
+        <template v-slot:[`item.dataNascimento`]="{ item }">
+          <span class="ml-1">{{ format(item.dataNascimento) }}</span>
+        </template>
       </v-data-table>
     </v-container>
   </div>
@@ -66,10 +70,11 @@
 <script>
 import axios from "axios";
 import store from "@/store.js";
+import moment from "moment";
 export default {
   data() {
     return {
-      search: '',
+      search: "",
       headers: [
         {
           text: "UTENTE",
@@ -79,7 +84,7 @@ export default {
         },
         {
           text: "IDADE",
-          value: "idade",
+          value: "dataNascimento",
           sortable: true,
           align: "start",
         },
@@ -113,8 +118,10 @@ export default {
   },
   methods: {
     more(item) {
-      this.$router.push("/clinica/utente/");
-      console.log(item)
+      this.$router.push("/clinica/utente/" + item.id);
+    },
+    format(data) {
+      return moment(data).locale("pt").toNow(true); // 4 years
     },
   },
   created: async function () {
@@ -123,7 +130,7 @@ export default {
         headers: { Authorization: "Bearer " + store.getters.token },
       });
       for (var i = 0; i < response.data.utentes.length; i++)
-        this.utentes.push(response.data.utentes[i].animal)
+        this.utentes.push(response.data.utentes[i].animal);
     } catch (e) {
       console.log(e);
     }
