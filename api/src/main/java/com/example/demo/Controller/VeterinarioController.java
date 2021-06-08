@@ -248,7 +248,7 @@ public class VeterinarioController {
         JsonNode node = mapper.readTree(body);
         int id_imunizacao = node.get("id").asInt();
         Imunizacao imunizacao = imunizacaoService.getImunizacao(id_imunizacao);
-        imunizacao.setData(node.get("data").asText());
+        imunizacao.setData_toma(node.get("data").asText());
         imunizacao.setTratamento(node.get("tratamento").asText());
         imunizacao.setProxImunizacao(node.get("dataProx").asText());
         imunizacao.setEstado("Administrada");

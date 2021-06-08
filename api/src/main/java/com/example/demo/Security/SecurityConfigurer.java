@@ -49,9 +49,9 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     }
 
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedOrigins("http://localhost:8080");
-        registry.addMapping("/**").allowedOrigins("http://localhost:7777");
-        registry.addMapping("/**").allowedOrigins("http://localhost:9090");
+        registry.addMapping("/**").allowedMethods("GET", "POST", "PUT", "DELETE").allowedOrigins("http://localhost:8080");
+        registry.addMapping("/**").allowedMethods("GET", "POST", "PUT", "DELETE").allowedOrigins("http://localhost:7777");
+        registry.addMapping("/**").allowedMethods("GET", "POST", "PUT", "DELETE").allowedOrigins("http://localhost:9090");
 
     }
 
@@ -72,7 +72,8 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                         "/medico/internamento/detalhes").hasAnyRole("Veterinario")
                 //Acessos da Clinica
                 .antMatchers("/addVet","/clinica/consultas","/clinica/clientes",
-                        "/clinica/utentes/registar","/clinica/clientes/registar","/clinica/medicos","/clinica/medicos/registar","/clinica/utentes").hasAnyRole("Clinica")
+                        "/clinica/utentes/registar","/clinica/clientes/registar","/clinica/medicos","/clinica/medicos/registar","/clinica/utentes",
+                        "/clinica/intervencao/alterar").hasAnyRole("Clinica")
                 //Acessos do Cliente
                 .antMatchers("/","/cliente","/cliente/animal/registar","/cliente/animal/{id_animal}",
                         "/cliente/animal/cancelar/{id_intervencao}","/cliente/animal/{id_animal}","/cliente/animal/{id_animal}/vacinas",
