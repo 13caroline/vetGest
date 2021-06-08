@@ -181,6 +181,7 @@ export default {
     date: new Date().toISOString().substr(0, 10),
     snackbar: false,
     color: "",
+    nomeMedico: "",
     done: false,
     timeout: -1,
     text: "",
@@ -250,16 +251,17 @@ export default {
     } catch (e) {
       console.log("erro: +" + e);
     }
-    console.log(response)
+    //console.log(response)
    for (var i = 0; i < response.data.length; i++) {
+     if(!response.data[i].veterinario) this.nomeMedico="Sem Referência"
+     else this.nomeMedico= response.data[i].veterinario.nome
       this.items.push({
         dataPrevista: response.data[i].data,
         tipo: response.data[i].tipo,
         tratamento: response.data[i].tratamento,
-        medico: response.data[i].veterinario.nome,
+        medico: this.nomeMedico,
         estado: response.data[i].estado,
         id: response.data[i].id
-        
       })
     } 
     },
@@ -323,16 +325,18 @@ created: async function () {
     }
     console.log(response)
    for (var i = 0; i < response.data.length; i++) {
+     if(!response.data[i].veterinario) this.nomeMedico="Sem Referência"
+     else this.nomeMedico= response.data[i].veterinario.nome
       this.items.push({
         dataPrevista: response.data[i].data,
         tipo: response.data[i].tipo,
         tratamento: response.data[i].tratamento,
-        medico: response.data[i].veterinario.nome,
+        medico: this.nomeMedico,
         estado: response.data[i].estado,
         id: response.data[i].id
       })
     } 
-          this.idAnimal= response.data[i].animal.idAnimal;
+          this.idAnimal= response.data[0].animal.id;
 
   },
   components: {

@@ -68,7 +68,7 @@
               color="#2596be"
               dense
               placeholder="Próxima toma"
-              v-model="proxToma"
+              v-model="proxImunizacao"
               :items="tomas"
             ></v-select>
           </div>
@@ -81,7 +81,7 @@
               clearable
               clear-icon="fas fa-times-circle"
               no-resize
-              v-model="observacoes"
+              v-model="motivo"
             ></v-textarea>
           </div>
           <v-row align="end" justify="end">
@@ -93,7 +93,7 @@
                 color="#2596be"
                 small
                 dark
-                @click="adicionaDesparasita()"
+                @click="adicionaDesparasitacao()"
               >
                 Confirmar
               </v-btn>
@@ -108,12 +108,11 @@
 import axios from 'axios'
 import Cancelar from "@/components/Dialogs/Cancel.vue";
 import store from "@/store.js";
+import moment from "moment"
 
 
 export default {
-    props:["idAnimal"],
-    
-
+    props:["dados"],
   data: () => ({
     dialog: false,
     dialogs: {},
@@ -123,8 +122,8 @@ export default {
     },
     menu3: false,
     tratamento: "",
-    proxToma: "",
-    observacoes: "",
+    proxImunizacao: "",
+    motivo: "",
     dateToma: new Date().toISOString().substr(0, 10),
     tomas: ["1 mês", "3 meses"],
   }),
@@ -135,17 +134,19 @@ export default {
     close() {
       this.dialog = false;
     },
-   adicionaDesparasita: async function() {
+   adicionaDesparasitacao: async function() {
          try {
-      if (store.state.tipo == "Clinica") {
+      if (store.state.tipo == "Cliente") {
+        console.log(this.dados)
       var response = await axios.post(
-        "http://localhost:7777/cliente/animal/"+this.idAnimal+"/vacinas",
+        "http://localhost:7777/cliente/animal/"+this.dados+"/vacinas",
         {
-          email: this.$store.state.email,
-          data: this.data,
-          hora: this.hora,
-          motivo: this.motivo,
-          proxImunizacao: this.proxImunizacao,
+          "imunizacao":{
+          data: this.dateToma,
+          observacoes: this.motivo,
+          proxImunizacao: moment(this.data).add(1,'months')
+          },
+         email: this.$store.state.email,
         },
         {
           headers: {
