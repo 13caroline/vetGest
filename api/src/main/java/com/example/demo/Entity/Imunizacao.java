@@ -26,6 +26,11 @@ public class Imunizacao {
     )
     private String  data;
 
+    @Column(
+            name = "data_toma",
+            nullable = false
+    )
+    private String  data_toma;
 
     @Column(
             name = "prox_imunizacao"
@@ -70,6 +75,7 @@ public class Imunizacao {
 
     public Imunizacao(Imunizacao imunizacao) {
         this.data = imunizacao.getData();
+        this.data_toma=imunizacao.getData_toma();
         this.proxImunizacao = imunizacao.getProxImunizacao();
         this.tipo = imunizacao.getTipo();
         this.estado = imunizacao.getEstado();
