@@ -17,10 +17,14 @@
 
           <v-data-table
             :headers="headers"
-            :items="consultas"
+            :items="filteredData"
             class="elevation-1"
             hide-default-footer
           >
+            <template v-slot:[`item.marcacao`]="{ item }">
+              {{ format(item.marcacao) }}
+            </template>
+
             <template v-slot:[`item.estado`]="{ item }">
               <v-chip :color="estadopedido(item.estado)" small>
                 {{ item.estado }}
@@ -31,7 +35,9 @@
               <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
                   <v-icon
-                    v-if="item.estado == 'Concluída' || item.estado == 'Cancelada'"
+                    v-if="
+                      item.estado == 'Concluída' || item.estado == 'Cancelada'
+                    "
                     @click="dialog = true"
                     small
                     v-on="on"
@@ -42,12 +48,15 @@
                 </template>
                 <span class="caption">Ver detalhes</span>
               </v-tooltip>
-              <div v-if="
-                      item.estado == 'Agendada' || item.estado == 'Pendente'
-                    ">
-                <CancelarComDados :dados="item" @clicked="close()"></CancelarComDados>
+              <div
+                v-if="item.estado == 'Agendada' || item.estado == 'Pendente'"
+              >
+                <CancelarComDados
+                  :dados="item"
+                  :dialogs="cancelar"
+                  @clicked="registar"
+                ></CancelarComDados>
               </div>
-
             </template>
           </v-data-table>
         </v-col>
@@ -73,22 +82,36 @@
         </v-card>
       </v-dialog>
     </v-card>
+
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="timeout"
+      :color="color"
+      :top="true"
+      class="headline"
+    >
+      {{ text }}
+    </v-snackbar>
   </div>
 </template>
 
 
 <script>
-import CancelarComDados from "@/components/Dialogs/CancelarComDados.vue"
-import MarcarConsulta from "@/components/Dialogs/MarcarConsulta.vue"
+import CancelarComDados from "@/components/Dialogs/CancelarComDados.vue";
+import MarcarConsulta from "@/components/Dialogs/MarcarConsulta.vue";
+import axios from "axios";
+import moment from "moment";
 
 export default {
+  props: ["animal"],
   data: () => ({
-    animal: {},
-    dialog: false, 
+    dialog: false,
+    dialogs: {},
     dados: {},
+    cancela: {},
     cancelar: {
-      title: "agendamento da consulta",
-      text: "o agendamento da consulta",
+      title: "o agendamento da consulta",
+      text: "consulta",
     },
     snackbar: false,
     color: "",
@@ -100,11 +123,11 @@ export default {
         text: "Data de Marcação",
         align: "start",
         sortable: true,
-        value: "data",
+        value: "marcacao",
       },
       {
         text: "Médico Veterinário",
-        value: "medico",
+        value: "veterinario_nome",
         sortable: true,
         align: "start",
       },
@@ -127,40 +150,11 @@ export default {
         align: "center",
       },
     ],
-    consultas: [
-      {
-        data: "05/04/2021 10:15",
-        animal: "Rubi",
-        medico: "Drº José Vieira",
-        descricao: "Desparasitação",
-        estado: "Concluída",
-      },
-      {
-        data: "19/04/2021 15:30",
-        animal: "Puscas",
-        medico: "Drº José Vieira",
-        descricao: "Vacinação",
-        estado: "Agendada",
-      },
-      {
-        data: "26/04/2021 14:30",
-        animal: "Luffy",
-        medico: "Drº José Vieira",
-        descricao: "Consulta de Rotina",
-        estado: "Pendente",
-      },
-      {
-        data: "26/04/2021 15:00",
-        animal: "Rubi",
-        medico: "Drº José Vieira",
-        descricao: "Consulta de Rotina",
-        estado: "Cancelada",
-      },
-    ],
+    consultas: [],
   }),
   components: {
-    CancelarComDados, 
-    MarcarConsulta
+    CancelarComDados,
+    MarcarConsulta,
   },
   methods: {
     estadopedido(estado) {
@@ -172,8 +166,51 @@ export default {
     more(item) {
       console.log(item.data);
     },
-     close() {
-      this.dialogNova = false;
+    registar(value) {
+      this.snackbar = value.snackbar;
+      this.color = value.color;
+      this.text = value.text;
+      this.timeout = value.timeout;
+      this.atualiza();
+    },
+    format(data) {
+      return moment(data).locale("pt").format("DD/MM/YYYY HH:mm");
+    },
+    atualiza: async function () {
+      this.consultas = [];
+      let response = await axios.post(
+        "http://localhost:7777/clinica/intervencao",
+        {
+          id: this.animal.id,
+        }
+      );
+      for (var i = 0; i < response.data.length; i++) {
+        var element = response.data[i];
+        element.veterinario_nome = response.data[i].veterinario.nome;
+        element.utente = response.data[i].animal.nome;
+        element.marcacao = response.data[i].data + " " + response.data[i].hora;
+        this.consultas.push(element);
+      }
+    },
+  },
+  created: async function () {
+    let response = await axios.post(
+      "http://localhost:7777/clinica/intervencao",
+      {
+        id: this.animal.id,
+      }
+    );
+    for (var i = 0; i < response.data.length; i++) {
+      var element = response.data[i];
+      element.veterinario_nome = response.data[i].veterinario.nome;
+      element.utente = response.data[i].animal.nome;
+      element.marcacao = response.data[i].data + " " + response.data[i].hora;
+      this.consultas.push(element);
+    }
+  },
+  computed: {
+    filteredData() {
+      return this.consultas.filter((item) => item.tipo === "Consulta");
     },
   },
 };

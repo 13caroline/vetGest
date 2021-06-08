@@ -58,6 +58,10 @@
             <span class="caption">Mais detalhes</span>
           </v-tooltip>
         </template>
+
+        <template v-slot:[`item.dataNascimento`]="{ item }">
+              <span class="ml-1">{{ format(item.dataNascimento) }}</span>
+            </template>
       </v-data-table>
     </v-container>
   </div>
@@ -66,6 +70,7 @@
 <script>
 import axios from "axios";
 import store from "@/store.js";
+import moment from "moment"
 export default {
   data() {
     return {
@@ -79,7 +84,7 @@ export default {
         },
         {
           text: "IDADE",
-          value: "idade",
+          value: "dataNascimento",
           sortable: true,
           align: "start",
         },
@@ -113,9 +118,11 @@ export default {
   },
   methods: {
     more(item) {
-      this.$router.push("/clinica/utente/");
-      console.log(item)
+      this.$router.push("/clinica/utente/" + item.id);
     },
+    format(data){
+      return moment(data).locale("pt").toNow(true); // 4 years
+    }
   },
   created: async function () {
     try {

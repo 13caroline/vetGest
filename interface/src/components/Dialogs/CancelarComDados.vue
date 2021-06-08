@@ -55,7 +55,7 @@
           </v-col>
           <v-col class="pl-0 pb-0" cols="7">
             <span class="black--text">
-              <strong>Sem preferência</strong>
+              <strong>Dr.º {{ dados.veterinario_nome }}</strong>
             </span>
           </v-col>
         </v-row>
@@ -93,31 +93,53 @@
 
 <script>
 import moment from "moment";
+import axios from "axios";
+import store from "@/store.js";
 export default {
   props: ["dados", "dialogs"],
   data: () => ({
     dialog: false,
   }),
   methods: {
-    confirmar() {
-      /*
-		 try {
-          var resposta = await axios.post("http://localhost:7777/cliente/cancelarConsulta", {
-            estado: "Cancelada"
-          });
-          console.log(JSON.stringify(resposta.data));
-          this.cancelar = false;
-          this.text = "Desparasitação confirmada com sucesso.";
-          this.color = "success";
-          this.snackbar = true;
-        } catch (e) {
-          console.log("erro: " + e);
-          this.cancelar = false;
-          this.text = "Ocorreu um erro, por favor tente mais tarde!";
-          this.color = "warning";
-          this.snackbar = true;
+    confirmar: async function () {
+      try {
+        if (store.state.tipo == "Clinica") {
+          await axios.post(
+            "http://localhost:7777/clinica/intervencao/alterar",
+            {
+              id: this.dados.id,
+              estado: "Cancelada",
+            },
+            {
+              headers: { Authorization: "Bearer " + store.getters.token },
+            }
+          );
         }
-		*/
+        this.dialog = false;
+        if (this.dialogs.text == "consulta")
+          this.$emit("clicked", {
+            text: "Consulta cancelada com sucesso.",
+            color: "success",
+            snackbar: "true",
+            timeout: 4000,
+          });
+        if (this.dialogs.text == "cirurgia")
+          this.$emit("clicked", {
+            text: "Cirurgia cancelada com sucesso.",
+            color: "success",
+            snackbar: "true",
+            timeout: 4000,
+          });
+      } catch (e) {
+        console.log("erro: " + e);
+        this.dialog = false;
+        this.$emit("clicked", {
+          text: "Ocorreu um erro, por favor tente mais tarde!",
+          color: "warning",
+          snackbar: "true",
+          timeout: 4000,
+        });
+      }
     },
     format(data) {
       return moment(data).locale("pt").format("DD/MM/YYYY HH:mm");

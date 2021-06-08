@@ -55,7 +55,7 @@
           </v-col>
           <v-col class="pl-0 pb-0" cols="7">
             <span class="black--text">
-              <strong>Dr. José Vieira</strong>
+              <strong>Dr.º {{dados.veterinario_nome}}</strong>
             </span>
           </v-col>
         </v-row>
