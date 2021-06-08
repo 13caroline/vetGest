@@ -168,6 +168,7 @@ export default {
     dataPrevista: "",
     dataToma: null,
     tratamento: "", 
+    id:0,
     date: new Date().toISOString().substr(0, 10),
     snackbar: false,
     color: "",
@@ -232,8 +233,9 @@ export default {
       console.log(item.data);
     },
     openDialog(item) {
-      this.dataPrevista = item.dataPrev;
-
+      this.dataPrevista = item.data;
+      console.log(item.id)
+      this.id = item.id;
       this.dialog = true;
     },
     cancelar() {
@@ -241,12 +243,12 @@ export default {
       this.dialog = false;
     },
     confirma: async function () {
-      /*
       try {
-          var resposta = await axios.post("http://localhost:7777/cliente/confirmaDesparasitacao", {
-            idVacina: this.idVacina @TODO Adicionar idVacina
-            dataToma: this.dataToma,
+          var resposta = await axios.post("http://localhost:7777/cliente/animal/confirma/imunizacao", {
+            id: this.id,
+            data: this.dataToma,
             tratamento: this.tratamento,
+            dataProx:"1213123"
           });
           console.log(JSON.stringify(resposta.data));
           this.dialog = false;
@@ -260,7 +262,6 @@ export default {
           this.color = "warning";
           this.snackbar = true;
         }
-      */
     },
   },
 created: async function () {
@@ -287,6 +288,7 @@ created: async function () {
         tratamento: response.data[i].tratamento,
         medico: response.data[i].veterinario.nome,
         estado: response.data[i].estado,
+        id: response.data[i].id
       })
     } 
   },
