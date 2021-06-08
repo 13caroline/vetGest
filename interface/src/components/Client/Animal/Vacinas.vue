@@ -11,7 +11,7 @@
           </h3>
 </v-col>
           <v-col cols="auto" class="pl-0">
-              <NovaDesparasitacao :dados="idAnimal" @clicked="close()"></NovaDesparasitacao>
+              <NovaDesparasitacao :dados="idAnimal" @clicked="registar"></NovaDesparasitacao>
             </v-col>
 </v-row>
           <v-data-table
@@ -160,6 +160,15 @@
         </v-card>
       </v-dialog>
         </v-card>
+        <v-snackbar
+      v-model="snackbar"
+      :timeout="timeout"
+      :color="color"
+      :top="true"
+      class="headline"
+    >
+      {{ text }}
+    </v-snackbar>
     </div>
 </template>
 
@@ -234,6 +243,13 @@ export default {
     ],
   }),
   methods: {
+    registar(value){
+      this.snackbar=value.snackbar
+      this.color=value.color
+      this.text=value.text
+      this.timeout=value.timeout
+      this.atualiza()
+    },
     atualiza: async function(){
       this.items=[];
       try {
