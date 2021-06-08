@@ -246,19 +246,20 @@ public class ClinicaController {
     }
 
     @CrossOrigin
-    @PutMapping("/clinica/intervencao/cancelar")
+    @PutMapping("/clinica/intervencao/alterar")
     public ResponseEntity<?> cancelarIntervencao(@RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);
 
         int id_intervencao = node.get("id").asInt();
+        String estado = node.get("estado").asText();
         Intervencao intervencao = intervencaoService.getIntervencao(id_intervencao);
 
         if(intervencao==null){
             return ResponseEntity.badRequest().body("Erro a cancelar intervenção! Intervençao nao existe!");
         }
 
-        intervencao.setEstado("Cancelado");
+        intervencao.setEstado(estado);
         intervencaoService.saveIntervencao(intervencao);
         return ResponseEntity.accepted().body("Intervenção cancelada!");
     }
