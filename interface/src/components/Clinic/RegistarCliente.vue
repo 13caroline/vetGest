@@ -52,6 +52,7 @@
                   flat
                   dense
                   v-model="rua"
+                  :rules="textRules"
                   single-line
                   color="#2596be"
                   name="rua"
