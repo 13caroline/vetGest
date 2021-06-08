@@ -79,14 +79,17 @@ public class ClinicaController {
                 a.put("observacoes",intervencao.getAnimal().getObservacoes());
                 a.put("cliente_nome",cliente.getNome());
                 a.put("cliente_email",cliente.getEmail());
-
                 i.put("id",intervencao.getId());
                 i.put("data",intervencao.getData());
+                i.put("observacoes",intervencao.getObservacoes());
                 i.put("hora",intervencao.getHora());
                 i.put("descricao",intervencao.getDescricao());
                 i.put("estado",intervencao.getEstado());
                 i.put("motivo",intervencao.getMotivo());
                 i.put("tipo",intervencao.getTipo());
+                i.put("data_pedido",intervencao.getData_pedido());
+                i.put("veterinario_id",intervencao.getVeterinario().getId());
+                i.put("veterinario_nome",intervencao.getVeterinario().getNome());
                 i.put("cliente",c);
                 i.put("animal",a);
                 intervencoesObject.accumulate("intervencoes",i);
