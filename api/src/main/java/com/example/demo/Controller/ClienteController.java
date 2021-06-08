@@ -215,7 +215,6 @@ public class ClienteController {
         }
 
         Imunizacao imunizacao = mapper.convertValue(node.get("imunizacao"),Imunizacao.class);
-        System.out.println(imunizacao);
 
         if(imunizacao==null){
             return ResponseEntity.badRequest().body("Erro no agendamento de Imunização!");
@@ -226,13 +225,14 @@ public class ClienteController {
 
         imunizacao.setVeterinario(null);
         //Estados
-        //Agendada
+        //Atualizada
         //Administrada
-        imunizacao.setEstado("Agendada");
+        imunizacao.setEstado("Atualizada");
+
         if(imunizacao.getProxImunizacao()!=null){
             Imunizacao proximaImunizacao = new Imunizacao();
             proximaImunizacao.setData(imunizacao.getProxImunizacao());
-            proximaImunizacao.setEstado("Agendada");
+            proximaImunizacao.setEstado("Atualizada");
             proximaImunizacao.setProxImunizacao(null);
             proximaImunizacao.setTipo("Desparasitação");
             proximaImunizacao.setVacina(imunizacao.getVacina());
@@ -240,11 +240,16 @@ public class ClienteController {
             proximaImunizacao.setTratamento(imunizacao.getTratamento());
             proximaImunizacao.setAnimal(imunizacao.getAnimal());
             proximaImunizacao.setVeterinario(imunizacao.getVeterinario());
+            imunizacao.setProxImunizacao(null);
+            imunizacaoService.saveImunizacao(imunizacao);
             imunizacaoService.saveImunizacao(proximaImunizacao);
             imunizacao.setProxima_imunizacao(proximaImunizacao);
+            imunizacaoService.saveImunizacao(imunizacao);
         }
-       // System.out.println("\n\nAQUI:"+imunizacao);
-        imunizacaoService.saveImunizacao(imunizacao);
+        else {
+            imunizacao.setProxImunizacao(null);
+            imunizacaoService.saveImunizacao(imunizacao);
+        }
         return ResponseEntity.accepted().body("Imunização agendada!");
 
     }
@@ -272,7 +277,7 @@ public class ClienteController {
             if (imunizacao.getProxima_imunizacao() == null) {
                 Imunizacao proxima_Imunizacao = new Imunizacao();
                 proxima_Imunizacao.setData(imunizacao.getProxImunizacao());
-                proxima_Imunizacao.setEstado("Agendada");
+                proxima_Imunizacao.setEstado("Atualizada");
                 proxima_Imunizacao.setTipo(imunizacao.getTipo());
                 proxima_Imunizacao.setAnimal(imunizacao.getAnimal());
                 proxima_Imunizacao.setVacina(imunizacao.getVacina());
