@@ -4,6 +4,7 @@ package com.example.demo.Security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -65,7 +66,11 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable()
-                .authorizeRequests().antMatchers("/authenticate","/cliente/registar","/clinica/adicionarClinica").permitAll()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.GET).permitAll()
+                .antMatchers(HttpMethod.POST).permitAll()
+                .antMatchers(HttpMethod.PUT).permitAll()
+                .antMatchers("/authenticate","/cliente/registar","/clinica/adicionarClinica").permitAll()
                 .antMatchers("/addDica/{emailVet}","/medico/intervencoes","/medico/agendar/intervencao","/medico/utentes",
                         "/medico/cirurgias","/medico/utente","/medico/animal/adiciona/imunizacao","/medico/utente/vacinas",
                         "/medico/utente/desparasitacoes","/medico/animal/confirma/imunizacao","/medico/utente/editar","/medico/internamento",
