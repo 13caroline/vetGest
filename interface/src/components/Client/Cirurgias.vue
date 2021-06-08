@@ -165,7 +165,9 @@ export default {
   methods: {
     estadopedido(estado) {
       if (estado == "Agendada") return "#C5E1A5";
-      else return "#FFE082";
+      if (estado == "A decorrer") return "#FFECB3";
+      if (estado == "Concluída") return "#9AE5FF";
+      else return "#EF9A9A"
     },
   },
    created: async function () {

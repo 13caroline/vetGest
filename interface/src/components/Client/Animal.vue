@@ -25,7 +25,7 @@
         </v-tab-item>
 
         <v-tab-item>
-          <PacienteVacinas></PacienteVacinas>
+          <PacienteVacinas :animal="animal"></PacienteVacinas>
         </v-tab-item>
 
         <v-tab-item>

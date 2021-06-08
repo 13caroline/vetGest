@@ -363,6 +363,8 @@
 
 
 <script>
+import axios from 'axios'
+import store from "@/store.js";
 export default {
   data: () => ({
       dialogNova: false, 
@@ -467,6 +469,34 @@ export default {
         }
 		*/
     },
+  },
+
+  created: async function () {
+    try {
+      var response = await axios.post(
+        "http://localhost:7777/cliente/consultas",
+        {
+          cliente: this.$store.state.email,
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + store.getters.token.toString(),
+          },
+        }
+      );
+    } catch (e) {
+      console.log("erro: +" + e);
+    }
+    console.log(response)
+    for (var i = 0; i < response.data.length; i++) {
+      this.consultas.push({
+        data: response.data[i].data,
+        animal: response.data[i].animal.nome,
+        medico: response.data[i].veterinario.nome,
+        descricao: response.data[i].descricao,
+        estado: response.data[i].estado,
+      })
+    }    
   },
 };
 </script>

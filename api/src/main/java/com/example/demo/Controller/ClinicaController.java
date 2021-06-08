@@ -311,7 +311,7 @@ public class ClinicaController {
     }
 
     @CrossOrigin
-    @PutMapping("/clinica/intervencao/alterar")
+    @PostMapping("/clinica/intervencao/alterar")
     public ResponseEntity<?> cancelarIntervencao(@RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);
