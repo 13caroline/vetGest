@@ -169,7 +169,9 @@
               <Cancelar :dialogs="cancelar" @clicked="close()"></Cancelar>
             </v-col>
             <v-col cols="auto">
-              <v-btn color="#2596be" small dark @click="registar()">Registar</v-btn>
+              <v-btn color="#2596be" small dark @click="registar()"
+                >Registar</v-btn
+              >
             </v-col>
           </v-row>
         </v-card-text>
@@ -198,7 +200,7 @@ export default {
     horaMarcacao: null,
     date: new Date().toISOString().substr(0, 10),
     menu2: false,
-    hora: '09:00',
+    hora: "10:00",
     desc: [
       { text: "Consulta anual/Vacinação", tipo: "Consulta anual/Vacinação" },
       {
@@ -278,7 +280,7 @@ export default {
             },
             { headers: { Authorization: "Bearer " + store.getters.token } }
           );
-          this.dialog=false;
+          this.dialog = false;
           this.$emit("clicked", {
             text: "Cirurgia agendada com sucesso.",
             color: "success",
@@ -315,7 +317,7 @@ export default {
           id: response.data[i].id,
         });
       }
-      console.log(this.dados)
+      console.log(this.dados);
     } catch (e) {
       console.log(e);
     }

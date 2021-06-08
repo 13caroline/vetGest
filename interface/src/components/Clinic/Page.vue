@@ -141,7 +141,7 @@
             <template v-slot:[`item.detalhes`]="{ item }">
               <Detalhes :dados="item"></Detalhes>
 
-              <Admissao :dados="item"></Admissao>
+              <Admissao :dados="item" @clicked="registar"></Admissao>
 
               <CancelarConsulta
                 v-if="item.tipo == 'Cirurgia'"
@@ -294,7 +294,7 @@ export default {
           headers: { Authorization: "Bearer " + store.getters.token },
         }
       );
-      console.log(response.data.intervencoes);
+
       for (var i = 0; i < response.data.intervencoes.length; i++) {
         var element = response.data.intervencoes[i];
         element.utente = response.data.intervencoes[i].animal.nome;
@@ -312,7 +312,7 @@ export default {
     let response = await axios.get("http://localhost:7777/clinica/consultas", {
       headers: { Authorization: "Bearer " + store.getters.token },
     });
-    console.log(response.data.intervencoes);
+
     for (var i = 0; i < response.data.intervencoes.length; i++) {
       var element = response.data.intervencoes[i];
       element.utente = response.data.intervencoes[i].animal.nome;

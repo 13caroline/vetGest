@@ -4,6 +4,18 @@
       <v-tooltip top>
         <template v-slot:activator="{ on }">
           <v-icon
+            v-if="dados.estado == 'A decorrer'"
+            color="#66BB6A"
+            v-bind="attrs"
+            v-on="{ ...on, ...diag }"
+            small
+            disabled
+            @click="dialog = true"
+          >
+            mdi-calendar-check
+          </v-icon>
+          <v-icon
+            v-else
             color="#66BB6A"
             v-bind="attrs"
             v-on="{ ...on, ...diag }"
@@ -77,7 +89,7 @@
           dark
           color="#2596be"
           width="50%"
-          @click="dialog = false"
+          @click="confirmar()"
         >
           Admitir
         </v-btn>
@@ -88,6 +100,8 @@
 
 <script>
 import moment from "moment";
+import axios from "axios";
+import store from "@/store.js";
 
 export default {
   props: ["dados"],
@@ -97,6 +111,46 @@ export default {
   methods: {
     format(data) {
       return moment(data).locale("pt").format("DD/MM/YYYY HH:mm");
+    },
+    confirmar: async function () {
+      try {
+        if (store.state.tipo == "Clinica") {
+          await axios.post(
+            "http://localhost:7777/clinica/intervencao/alterar",
+            {
+              id: this.dados.id,
+              estado: "A decorrer",
+            },
+            {
+              headers: { Authorization: "Bearer " + store.getters.token },
+            }
+          );
+        }
+        this.dialog = false;
+        if (this.dados.tipo == "Consulta")
+          this.$emit("clicked", {
+            text: "Consulta admitida com sucesso.",
+            color: "success",
+            snackbar: "true",
+            timeout: 4000,
+          });
+        if (this.dados.tipo == "Cirurgia")
+          this.$emit("clicked", {
+            text: "Cirurgia admitida com sucesso.",
+            color: "success",
+            snackbar: "true",
+            timeout: 4000,
+          });
+      } catch (e) {
+        console.log("erro: " + e);
+        this.dialog = false;
+        this.$emit("clicked", {
+          text: "Ocorreu um erro, por favor tente mais tarde!",
+          color: "warning",
+          snackbar: "true",
+          timeout: 4000,
+        });
+      }
     },
   },
 };

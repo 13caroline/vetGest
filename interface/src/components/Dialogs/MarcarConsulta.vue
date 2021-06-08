@@ -130,6 +130,9 @@
                   format="24hr"
                   v-model="hora"
                   full-width
+                  min="10:00"
+                  max="19:45"
+                  :allowed-minutes="allowedStep"
                   color="#2596be"
                 ></v-time-picker>
               </v-menu>
@@ -228,7 +231,7 @@ export default {
       "Consulta de seguimento",
       "Procedimentos específicos",
     ],
-    hora: new Date().getHours() + ":" + new Date().getMinutes(),
+    hora: "10:00",
     date: new Date().toISOString().substr(0, 10),
     menu2: false,
     descricao: "",
@@ -241,9 +244,10 @@ export default {
     Cancelar,
   },
   methods: {
-      close(){
-          this.dialog = false;
-      }
+    close() {
+      this.dialog = false;
+    },
+    allowedStep: (m) => m % 15 === 0,
   },
   computed: {
     filteredData() {

@@ -146,7 +146,7 @@
                   v-model="hora"
                   full-width
                   min="10:00"
-                  max="20:00"
+                  max="19:45"
                   :allowed-minutes="allowedStep"
                   color="#2596be"
                 ></v-time-picker>
@@ -224,7 +224,7 @@ export default {
     dono: "",
     menu2: false,
     date: new Date().toISOString().substr(0, 10),
-    hora: new Date().getHours() + ":" + new Date().getMinutes(),
+    hora: "10:00",
     medicos: [],
     motivo: [
       "Consulta anual/Vacinação",
