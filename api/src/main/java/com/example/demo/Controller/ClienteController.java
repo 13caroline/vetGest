@@ -222,14 +222,9 @@ public class ClienteController {
         }
 
         imunizacao.setAnimal(animal);
-        String vetEmail = node.get("veterinario").asText();
-        Veterinario veterinario = veterinarioService.getVetByEmail(vetEmail);
 
-        if(veterinario==null){
-            return ResponseEntity.badRequest().body("Erro a obter Vet!");
-        }
 
-        imunizacao.setVeterinario(veterinario);
+        imunizacao.setVeterinario(null);
         //Estados
         //Agendada
         //Administrada
