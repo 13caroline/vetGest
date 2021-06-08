@@ -120,6 +120,7 @@ export default {
     motivo: "",
     dateToma: new Date().toISOString().substr(0, 10),
     tomas: ["1 mês", "3 meses"],
+    timeskip: 0,
   }),
   components: {
     Cancelar,
@@ -131,14 +132,18 @@ export default {
     adicionaDesparasitacao: async function () {
       try {
         if (store.state.tipo == "Cliente") {
-          console.log(this.dados);
-          var response = await axios.post(
+          if (this.proxImunizacao == "1 mês") this.timeskip = 1;
+          else this.timeskip = 3;
+
+          await axios.post(
             "http://localhost:7777/cliente/animal/" + this.dados + "/vacinas",
             {
               imunizacao: {
                 data: this.dateToma,
                 observacoes: this.motivo,
-                proxImunizacao: moment(this.data).add(1, "months"),
+
+                proxImunizacao: moment(this.data).add(this.timeskip, "months"),
+                tratamento: this.tratamento,
               },
               email: this.$store.state.email,
             },
@@ -148,10 +153,22 @@ export default {
               },
             }
           );
-          console.log(response);
         }
+        this.dialog = false;
+        this.$emit("clicked", {
+          text: "Desparasitação registada com sucesso.",
+          color: "success",
+          snackbar: "true",
+          timeout: 4000,
+        });
       } catch (e) {
         console.log("erro: +" + e);
+        this.$emit("clicked", {
+          text: "Ocorreu um erro, por favor tente mais tarde!",
+          color: "warning",
+          snackbar: "true",
+          timeout: 4000,
+        });
       }
     },
   },
