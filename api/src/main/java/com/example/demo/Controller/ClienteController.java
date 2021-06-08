@@ -234,10 +234,57 @@ public class ClienteController {
         //Agendada
         //Administrada
         imunizacao.setEstado("Agendada");
+        if(imunizacao.getProxImunizacao()!=null){
+            Imunizacao proximaImunizacao = new Imunizacao();
+            proximaImunizacao.setData(imunizacao.getProxImunizacao());
+            proximaImunizacao.setEstado("Agendada");
+            proximaImunizacao.setProxImunizacao(null);
+            proximaImunizacao.setTipo(imunizacao.getTipo());
+            proximaImunizacao.setVacina(imunizacao.getVacina());
+            proximaImunizacao.setObservacoes(imunizacao.getObservacoes());
+            proximaImunizacao.setTratamento(imunizacao.getTratamento());
+            proximaImunizacao.setAnimal(imunizacao.getAnimal());
+            proximaImunizacao.setVeterinario(imunizacao.getVeterinario());
+            imunizacaoService.saveImunizacao(proximaImunizacao);
+            imunizacao.setProxima_imunizacao(proximaImunizacao);
+        }
        // System.out.println("\n\nAQUI:"+imunizacao);
         imunizacaoService.saveImunizacao(imunizacao);
         return ResponseEntity.accepted().body("Imunização agendada!");
 
+    }
+
+    @CrossOrigin
+    @PostMapping("/cliente/animal/confirma/imunizacao")
+    public ResponseEntity<?> confirmaDesparasitacao(@RequestBody String body) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+        int id_imunizacao = node.get("id").asInt();
+        Imunizacao imunizacao = imunizacaoService.getImunizacao(id_imunizacao);
+        imunizacao.setData_toma(node.get("data").asText());
+        imunizacao.setTratamento(node.get("tratamento").asText());
+        imunizacao.setProxImunizacao(node.get("dataProx").asText());
+        imunizacao.setEstado("Administrada");
+        if(imunizacao.getProxima_imunizacao()==null){
+            Imunizacao proxima_Imunizacao = new Imunizacao();
+            proxima_Imunizacao.setData(imunizacao.getProxImunizacao());
+            proxima_Imunizacao.setEstado("Agendada");
+            proxima_Imunizacao.setTipo(imunizacao.getTipo());
+            proxima_Imunizacao.setAnimal(imunizacao.getAnimal());
+            proxima_Imunizacao.setVacina(imunizacao.getVacina());
+            proxima_Imunizacao.setObservacoes(imunizacao.getObservacoes());
+            proxima_Imunizacao.setTratamento(imunizacao.getTratamento());
+            proxima_Imunizacao.setVeterinario(imunizacao.getVeterinario());
+            imunizacaoService.saveImunizacao(proxima_Imunizacao);
+            imunizacao.setProxima_imunizacao(proxima_Imunizacao);
+        }
+        else{
+            Imunizacao proxima_Imunizacao = imunizacao.getProxima_imunizacao();
+            proxima_Imunizacao.setProxImunizacao(node.get("dataProx").asText());
+            imunizacaoService.saveImunizacao(proxima_Imunizacao);
+        }
+        imunizacaoService.saveImunizacao(imunizacao);
+        return ResponseEntity.accepted().body("Imunização confirmada com sucesso!");
     }
 
     //Check

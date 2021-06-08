@@ -81,8 +81,9 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                         "/clinica/intervencao/alterar","/clinica/utente","/clinica/imunizacao","/clinica/intervencao").hasAnyRole("Clinica")
                 //Acessos do Cliente
                 .antMatchers("/","/cliente","/cliente/animal/registar","/cliente/animal/{id_animal}",
-                        "/cliente/animal/cancelar/{id_intervencao}","/cliente/animal/{id_animal}","/cliente/animal/{id_animal}/vacinas",
-                        "/cliente/consulta","/cliente/consultas","/cliente/cirurgias","/cliente/preferenciassa","/sobre-nos","/dicas").hasAnyRole("Cliente")
+                        "/cliente/animal/cancelar/{id_intervencao}","/cliente/animal/{id_animal}","/cliente/animal/{id_animal}/getvacinas",
+                        "/cliente/consulta","/cliente/consultas","/cliente/cirurgias","/cliente/preferenciassa","/sobre-nos","/dicas",
+                        "/cliente/animal/confirma/imunizacao").hasAnyRole("Cliente")
                 //Acessos de todos
                 .antMatchers("/","/terminar-sessao").hasAnyRole("Clinica","Veterinario","Cliente").
                 anyRequest().authenticated().and().
