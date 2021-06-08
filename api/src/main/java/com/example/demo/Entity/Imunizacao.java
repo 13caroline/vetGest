@@ -27,8 +27,7 @@ public class Imunizacao {
     private String  data;
 
     @Column(
-            name = "data_toma",
-            nullable = false
+            name = "data_toma"
     )
     private String  data_toma;
 
