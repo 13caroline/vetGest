@@ -157,8 +157,11 @@
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from 'axios'
+import store from "@/store.js";
+
 export default {
+  props:["animal"],
   data: () => ({
     dialog: false,
     dialogCancel: false,
@@ -176,7 +179,7 @@ export default {
         text: "Data Prevista",
         align: "start",
         sortable: true,
-        value: "dataPrev",
+        value: "dataPrevista",
       },
       {
         text: "Data de Toma",
@@ -216,40 +219,14 @@ export default {
       },
     ],
     items: [
-      {
-        dataPrev: "05/04/2021",
-        dataToma: "06/04/2021",
-        tipo: "Desparasitação",
-        tratamento: "Bravacto",
-        medico: "Drº José Vieira",
-        estado: "Administrada",
-      },
-      {
-        dataPrev: "05/05/2021",
-        tipo: "Desparasitação",
-        tratamento: "Bravacto",
-        estado: "Atualizada",
-      },
-      {
-        dataPrev: "05/04/2021",
-        dataToma: "05/04/2021",
-        tipo: "Vacina",
-        tratamento: "Rabis",
-        medico: "Drº José Vieira",
-        estado: "Administrada",
-      },
-      {
-        dataPrev: "05/04/2021",
-        tipo: "Desparasitação",
-        estado: "Atrasada",
-      },
+      
     ],
   }),
   methods: {
     estadopedido(estado) {
-      if (estado == "Administrada") return "#C5E1A5";
+      if (estado == "Administrada") return "#9AE5FF";
       else if (estado == "Atrasada") return "#EF9A9A";
-      else return "#FFE082";
+      else return "#C5E1A5";
     },
     more(item) {
       console.log(item.data);
@@ -286,14 +263,32 @@ export default {
       */
     },
   },
-  created() {
-    /*
-    let response = await axios.post("http://localhost:7777/cliente/getVacinas", {
-      email: this.$store.state.user.email,
-      animal
-    });
-
-    */
+created: async function () {
+    try {
+      var response = await axios.post(
+        "http://localhost:7777/cliente/animal/"+this.animal.id+"/getvacinas",
+        {
+          email: this.$store.state.email,
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + store.getters.token.toString(),
+          },
+        }
+      );
+    } catch (e) {
+      console.log("erro: +" + e);
+    }
+    console.log(response)
+   for (var i = 0; i < response.data.length; i++) {
+      this.items.push({
+        dataPrevista: response.data[i].data,
+        tipo: response.data[i].tipo,
+        tratamento: response.data[i].tratamento,
+        medico: response.data[i].veterinario.nome,
+        estado: response.data[i].estado,
+      })
+    } 
   },
 };
 </script>
