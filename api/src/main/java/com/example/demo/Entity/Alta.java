@@ -51,9 +51,6 @@ public class Alta {
     )
     private String orientacao;
 
-    @ManyToOne(cascade = {CascadeType.ALL})
-    private Animal animal;
-
-    @ManyToOne(cascade = {CascadeType.ALL})
-    private Veterinario veterinario;
+    @OneToOne(cascade = {CascadeType.ALL})
+    private Internamento internamento;
 }

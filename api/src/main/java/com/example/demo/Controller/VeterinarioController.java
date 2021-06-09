@@ -309,7 +309,7 @@ public class VeterinarioController {
     }
 
     @CrossOrigin
-    @PostMapping("/medico/internamento")
+    @PostMapping("/medico/internamentos")
     public ResponseEntity<?> getInternamentos(@RequestBody Veterinario email){
         Veterinario veterinario = veterinarioService.getVetByEmail(email.getEmail());
         List<Internamento> internamentos = internamentoService.getAllInternamentosByVetId(veterinario.getId());
@@ -320,6 +320,83 @@ public class VeterinarioController {
         return ResponseEntity.accepted().body(internamentos);
     }
 
+    @CrossOrigin
+    @PostMapping("/medico/internar")
+    public ResponseEntity<?> getInternamentos(@RequestBody String body) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+        Animal animal = animalService.getAnimalById(node.get("animal").asInt());
+        Veterinario vet = veterinarioService.getVetByEmail(node.get("email").asText());
+        Internamento internamento = mapper.convertValue(node.get("internamento"), Internamento.class);
+        if(animal==null || vet == null || internamento ==null){
+            return ResponseEntity.badRequest().body("Alguma das Entidades nao existe!");
+        }
+        internamento.setVeterinario(vet);
+        internamento.setAnimal(animal);
+        internamentoService.saveInternamento(internamento);
+        //System.out.println("\n\nAQUI: "+internamento);
+        return ResponseEntity.accepted().body(internamento);
+    }
+
+    @CrossOrigin
+    @PostMapping("/medico/internamento/detalhes")
+    public ResponseEntity<?> getInternamento(@RequestBody String body) throws JsonProcessingException, JSONException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+        int id_animal = node.get("animal").asInt();
+        Animal animal = animalService.getAnimalById(id_animal);
+        String vet_email = node.get("email").asText();
+        Veterinario vet = veterinarioService.getVetByEmail(vet_email);
+        int id = node.get("internamentoId").asInt();
+        Internamento internamento = internamentoService.findById(id);
+
+        if(animal==null || vet == null || internamento ==null){
+            return ResponseEntity.badRequest().body("Alguma das Entidades nao existe!");
+        }
+
+        if(internamento.getVeterinario().getEmail().equals(vet_email) && internamento.getAnimal().getId() == id_animal) {
+
+            List<NotaInternamento> notaInternamentos = internamentoService.findAllByInternamento(internamento);
+
+            String nome = animal.getNome();
+            String dataNascimento = animal.getDataNascimento();
+
+            System.out.println("Aqui");
+            JSONObject response = new JSONObject();
+            response.put("nome", nome);
+            response.put("dataNascimento", dataNascimento);
+            response.put("notasInternamento", notaInternamentos);
+
+            return ResponseEntity.accepted().body(response.toString());
+        }
+
+        return ResponseEntity.badRequest().body("Erro entre entidades e internamento");
+
+    }
+
+    @CrossOrigin
+    @PostMapping("/medico/internamento/detalhes/adiciona")
+    public ResponseEntity<?> adicionarNotaInternamento(@RequestBody String body) throws JsonProcessingException, JSONException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+        int id_animal = node.get("animal").asInt();
+        Animal animal = animalService.getAnimalById(id_animal);
+        String vet_email = node.get("email").asText();
+        Veterinario vet = veterinarioService.getVetByEmail(vet_email);
+        int id = node.get("id").asInt();
+        Internamento internamento = internamentoService.findById(id);
+
+        if(animal==null || vet == null || internamento == null){
+            return ResponseEntity.badRequest().body("Alguma das Entidades nao existe!");
+        }
+
+        NotaInternamento notaInternamento =  mapper.convertValue(node.get("notaInternamento"), NotaInternamento.class);
+        notaInternamento.setInternamento(internamento);
+        internamentoService.saveNota(notaInternamento);
+
+        System.out.println("\n\nAQUI: Sucesso");
+        return ResponseEntity.accepted().body("Nota de Internamento adicionada com sucesso!");
+    }
 
 }
 
