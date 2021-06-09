@@ -3,7 +3,7 @@
     <v-container>
       <v-card-title class="font-weight-bold text-uppercase">
         <v-icon small class="mr-2">fas fa-paw</v-icon>
-        Editar dados de {{ animal.animal.nome }}
+        Editar dados de {{ animal.nome }}
       </v-card-title>
       <v-card-text>
         <v-form ref="form" v-model="valid" lazy-validation>
@@ -47,7 +47,7 @@
                     outlined
                     dense
                     disabled
-                    v-model="animal.animal.nome"
+                    v-model="animal.nome"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="3" class="py-0">
@@ -59,7 +59,7 @@
                     outlined
                     dense
                     disabled
-                    :value="animal.animal.especie"
+                    v-model="animal.especie"
                   >
                   </v-text-field>
                 </v-col>
@@ -71,7 +71,7 @@
                     class="font-weight-regular"
                     outlined
                     dense
-                    :value="animal.animal.raca"
+                    v-model="animal.raca"
                   >
                   </v-text-field>
                 </v-col>
@@ -84,8 +84,8 @@
                     color="#2596be"
                     outlined
                     dense
-                    :value="animal.animal.dataNascimento"
                     disabled
+                    v-model="animal.dataNascimento"
                   ></v-text-field>
                 </v-col>
                 <v-col sm="2" class="py-0">
@@ -97,9 +97,8 @@
                     outlined
                     dense
                     suffix="cm"
-                    :value="animal.animal.altura"
                     :rules="alturaRules"
-                    v-model="altura"
+                    v-model="animal.altura"
                   >
                   </v-text-field>
                 </v-col>
@@ -111,7 +110,7 @@
                     class="font-weight-regular"
                     outlined
                     dense
-                    :value="animal.animal.chip"
+                    v-model="animal.chip"
                   >
                   </v-text-field>
                 </v-col>
@@ -127,7 +126,6 @@
                     dense
                     :items="itemscor"
                     multiple
-                    :value="animal.animal.cor"
                     v-model="cor"
                   ></v-select>
                 </v-col>
@@ -141,7 +139,6 @@
                     dense
                     :items="itemspelagem"
                     multiple
-                    :value="animal.animal.pelagem"
                     v-model="pelagem"
                   ></v-select>
                 </v-col>
@@ -154,8 +151,7 @@
                     outlined
                     dense
                     :items="itemscauda"
-                    :value="animal.animal.cauda"
-                    v-model="cauda"
+                    v-model="animal.cauda"
                   ></v-select>
                 </v-col>
               </v-row>
@@ -164,36 +160,22 @@
                 <v-col class="py-0">
                   <p class="ma-0">Observações</p>
                   <v-textarea
-                    v-if="animal.animal.observacoes"
                     outlined
                     color="#2596be"
                     rows="2"
                     clearable
                     clear-icon="fas fa-times-circle"
                     no-resize
-                    :value="animal.animal.observacoes"
-                    v-model="observacoes"
+                    v-model="animal.observacoes"
                   ></v-textarea>
 
-                  <v-textarea
-                    v-else
-                    outlined
-                    color="#2596be"
-                    value="Sem observações"
-                    rows="2"
-                    clearable
-                    clear-icon="fas fa-times-circle"
-                    no-resize
-                    v-model="observacoes"
-                  ></v-textarea>
                 </v-col>
               </v-row>
 
               <v-row>
                 <v-col cols="12" sm="auto" class="py-0">
                   <v-radio-group
-                    :value="animal.animal.sexo"
-                    v-model="sexo"
+                    v-model="animal.sexo"
                     row
                     disabled
                   >
@@ -214,19 +196,18 @@
                 </v-col>
                 <v-col cols="12" sm="auto" class="py-0">
                   <v-radio-group
-                    :value="animal.animal.castracao"
-                    v-model="castracao"
+                    v-model="animal.castracao"
                     row
                   >
                     <template v-slot:label>
                       <div>Castração</div>
                     </template>
-                    <v-radio value="Sim" color="#2596be">
+                    <v-radio :value="true" color="#2596be">
                       <template v-slot:label>
                         <div class="body-2">Sim</div>
                       </template>
                     </v-radio>
-                    <v-radio value="Não" color="#2596be">
+                    <v-radio :value="false" color="#2596be">
                       <template v-slot:label>
                         <div class="body-2">Não</div>
                       </template>
@@ -308,12 +289,12 @@ import store from "@/store.js";
 export default {
   props: ["id"],
   data: () => ({
-    altura: 0,
-    cor: "",
-    pelagem: "",
-    cauda: "",
-    observacoes: "",
-    castracao: "",
+
+
+    
+    cor: [],
+    pelagem: [],
+    
     dialog: false,
     animal: {},
     itemscor: [
@@ -366,13 +347,13 @@ export default {
             "http://localhost:7777/cliente/animal/" + this.id,
             {
               email: store.state.email,
-              nome: this.animal.animal.nome,
-              altura: this.altura,
+              nome: this.animal.nome,
+              altura: this.animal.altura,
               cor: this.cor,
               pelagem: this.pelagem,
-              cauda: this.cauda,
-              observacoes: this.observacoes,
-              castracao: this.castracao,
+              cauda: this.animal.cauda,
+              observacoes: this.animal.observacoes,
+              castracao: this.animal.castracao,
             }
           );
           console.log(JSON.stringify(resposta.data));
@@ -401,7 +382,11 @@ export default {
       }
     );
     this.animal = response.data;
-    console.log(this.animal);
+    console.log(response)
+    this.cor= response.data.animal.cor.split(",");
+    this.pelagem= response.data.animal.pelagem.split(",");
+    if(this.animal.observacoes.length==0) this.animal.observacoes="Sem observações"
+    
   },
 };
 </script>
