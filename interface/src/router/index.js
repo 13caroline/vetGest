@@ -58,7 +58,7 @@ const routes = [
   },
 
   {
-    path: '/cliente/animal/editar',
+    path: '/cliente/animal/editar/:id',
     name: 'Editar Animal Cliente',
     component: () => import (/* webpackChunkName: "about" */ '../views/Client/EditData.vue')
   },
