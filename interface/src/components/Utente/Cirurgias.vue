@@ -160,9 +160,6 @@ export default {
       else if (estado == "A decorrer") return "#FFECB3";
       return "#9ae5ff";
     },
-    more(item) {
-      console.log(item.data);
-    },
     close() {
       this.dialog = false;
     },

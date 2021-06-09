@@ -10,11 +10,18 @@
                 Vacinas e desparasitações
               </h3>
             </v-col>
-            <v-col cols="auto" class="ml-auto pl-0">
-              <!-- v-if tipo == medico -->
+            <v-col
+              cols="auto"
+              class="ml-auto pl-0"
+              v-if="this.$store.state.tipo == 'Veterinario'"
+            >
               <NovaVacina @clicked="close()"></NovaVacina>
             </v-col>
-            <v-col cols="auto" class="pl-0">
+            <v-col
+              cols="auto"
+              class="pl-0"
+              v-if="this.$store.state.tipo == 'Veterinario'"
+            >
               <NovaDesparasitacao @clicked="close()"></NovaDesparasitacao>
             </v-col>
           </v-row>
@@ -33,12 +40,25 @@
               </v-chip>
             </template>
 
+            <template v-slot:[`item.veterinario`]="{ item }">
+              <span v-if="item.veterinario">{{ item.veterinario.nome }}</span>
+            </template>
+
+            <template v-slot:[`item.data`]="{ item }">
+              {{ format(item.data) }}
+            </template>
+
+            <template v-slot:[`item.data_toma`]="{ item }">
+              {{ format(item.data_toma) }}
+            </template>
+
             <template v-slot:[`item.confirmar`]="{ item }">
               <v-icon v-if="item.estado == 'Administrada'" small color="green">
                 fas fa-check-circle
               </v-icon>
+              
               <div
-                v-if="item.estado == 'Atualizada' || item.estado == 'Atrasada'"
+                v-if="(item.estado == 'Atualizada' || item.estado == 'Atrasada') && $store.state.tipo == 'Veterinario'" 
               >
                 <ConfirmaDespar
                   :dataPrev="item.dataPrev"
@@ -46,6 +66,7 @@
                 ></ConfirmaDespar>
               </div>
             </template>
+            
           </v-data-table>
         </v-col>
       </v-row>
@@ -54,12 +75,13 @@
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from "axios";
 import ConfirmaDespar from "@/components/Dialogs/ConfirmaDesparasitacao.vue";
 import NovaVacina from "@/components/Dialogs/NovaVacina.vue";
 import NovaDesparasitacao from "@/components/Dialogs/NovaDesparasitacao.vue";
-
+import moment from "moment";
 export default {
+  props: ["animal"],
   data: () => ({
     dataPrev: {},
     snackbar: false,
@@ -72,17 +94,23 @@ export default {
         text: "Data Prevista",
         align: "start",
         sortable: true,
-        value: "dataPrev",
+        value: "data",
       },
       {
         text: "Data de Toma",
-        value: "dataToma",
+        value: "data_toma",
         sortable: true,
         align: "start",
       },
       {
         text: "Tipo",
         value: "tipo",
+        sortable: true,
+        align: "start",
+      },
+      {
+        text: "Vacina contra",
+        value: "vacina",
         sortable: true,
         align: "start",
       },
@@ -94,9 +122,9 @@ export default {
       },
       {
         text: "Médico Veterinário",
-        value: "medico",
+        value: "veterinario",
         sortable: false,
-        align: "center",
+        align: "start",
       },
       {
         text: "Estado",
@@ -124,20 +152,27 @@ export default {
       this.$router.push("/medico/utente");
     },
     estadopedido(estado) {
-      if (estado == "Administrada") return "#C5E1A5";
+      if (estado == "Administrada") return "#9AE5FF";
       else if (estado == "Atrasada") return "#EF9A9A";
-      else return "#FFE082";
+      else return "#C5E1A5";
+    },
+
+    format(data) {
+      if (data) return moment(data).locale("pt").format("DD/MM/YYYY");
     },
   },
   created: async function () {
-    // try {
-    //   let response = await axios.post("http://localhost:7777/clinica/utente", {
-    //     id: this.id,
-    //   });
-    //   this.dados = response.data;
-    // } catch (e) {
-    //   console.log(e);
-    // }
-  }
+    try {
+      let response = await axios.post(
+        "http://localhost:7777/clinica/imunizacao",
+        {
+          id: this.animal.id,
+        }
+      );
+      this.items = response.data;
+    } catch (e) {
+      console.log(e);
+    }
+  },
 };
 </script>

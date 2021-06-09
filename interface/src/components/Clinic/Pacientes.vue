@@ -129,11 +129,8 @@ export default {
       let response = await axios.get("http://localhost:7777/clinica/utentes", {
         headers: { Authorization: "Bearer " + store.getters.token },
       });
-      console.log(response.data.utentes);
-      for (var i = 0; i < response.data.utentes.length; i++) {
+      for (var i = 0; i < response.data.utentes.length; i++) 
         this.utentes.push(response.data.utentes[i].animal);
-        console.log(response.data.utentes[i].animal);
-      }
     } catch (e) {
       console.log(e);
     }

@@ -429,7 +429,7 @@ export default {
     registar: async function () {
       if (this.$refs.form.validate()) {
         try {
-          var resposta = await axios.post(
+          await axios.post(
             "http://localhost:7777/clinica/utentes/registar",
             {
               cliente: {
@@ -452,7 +452,6 @@ export default {
             },
             { headers: { Authorization: "Bearer " + store.getters.token } }
           );
-          console.log(JSON.stringify(resposta.data));
           this.text = "Utente registado com sucesso.";
           this.color = "success";
           this.snackbar = true;
