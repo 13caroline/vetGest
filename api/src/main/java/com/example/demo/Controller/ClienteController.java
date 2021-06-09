@@ -141,7 +141,7 @@ public class ClienteController {
 
     //Check
     @CrossOrigin
-    @PutMapping("/cliente/animal/{id_animal}")
+    @PostMapping("/cliente/animal/{id_animal}")
     public ResponseEntity<?> editarAnimal(@PathVariable int id_animal,@RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);
@@ -192,6 +192,22 @@ public class ClienteController {
         List<Imunizacao> imunizacoes = imunizacaoService.getImunizacoes(id_animal);
         //System.out.println(imunizacoes);
         return ResponseEntity.accepted().body(imunizacoes);
+    }
+
+    @CrossOrigin
+    @PostMapping("/cliente/animal/intervencoes/{id}")
+    public ResponseEntity<?> getIntervencoes(@PathVariable int id, @RequestBody Cliente emailCliente){
+        Cliente cliente = clienteService.getClienteByEmail(emailCliente.getEmail());
+        List<Animal> animais = cliente.getAnimais();
+        Animal animal = animalService.getAnimalById(id);
+
+        if(animal==null || !animais.contains(animal)){
+            return ResponseEntity.badRequest().body("Erro a obter animal!");
+        }
+
+        List<Intervencao> intervencoes = intervencaoService.getIntervencoesAnimal(id);
+        System.out.println(intervencoes);
+        return ResponseEntity.accepted().body(intervencoes);
     }
 
     //Check
@@ -433,10 +449,10 @@ public class ClienteController {
         List<Intervencao> consultas = intervencaoService.getIntervencoesAnimal(id_animal);
         Intervencao intervencao = intervencaoService.getIntervencao(id_intervencao);
         //System.out.println(intervencao);
-        if(intervencao==null || !consultas.contains(intervencao) || intervencao.getEstado().equals("Cancelado")){
+        if(intervencao==null || !consultas.contains(intervencao) || intervencao.getEstado().equals("Cancelada")){
             return ResponseEntity.badRequest().body("Erro a cancelar intervenção!");
         }
-        intervencao.setEstado("Cancelado");
+        intervencao.setEstado("Cancelada");
         intervencaoService.saveIntervencao(intervencao);
         //System.out.println(intervencao);
         return ResponseEntity.accepted().body("Intervenção cancelada!");

@@ -3,7 +3,7 @@
     <v-container>
       <v-card-title class="font-weight-bold text-uppercase">
         <v-icon small class="mr-2">fas fa-paw</v-icon>
-        Editar dados de {{ cao.nome }}
+        Editar dados de {{ dados.nome }}
       </v-card-title>
       <v-card-text>
         <v-form ref="form" v-model="valid" lazy-validation>
@@ -41,7 +41,7 @@
                     :rules="nomeRules"
                     outlined
                     dense
-                    v-model="cao.nome"
+                    v-model="dados.nome"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="3" class="py-0">
@@ -53,7 +53,7 @@
                     outlined
                     dense
                     disabled
-                    :value="cao.especie"
+                    v-model="dados.especie"
                   >
                   </v-text-field>
                 </v-col>
@@ -65,7 +65,7 @@
                     class="font-weight-regular"
                     outlined
                     dense
-                    :value="cao.raca"
+                    :value="dados.raca"
                   >
                   </v-text-field>
                 </v-col>
@@ -78,7 +78,7 @@
                     color="#2596be"
                     outlined
                     dense
-                    :value="cao.data"
+                    :value="dados.dataNascimento"
                     disabled
                   ></v-text-field>
                 </v-col>
@@ -91,7 +91,7 @@
                     outlined
                     dense
                     suffix="cm"
-                    v-model="cao.altura"
+                    v-model="dados.altura"
                     :rules="alturaRules"
                   >
                   </v-text-field>
@@ -104,7 +104,7 @@
                     class="font-weight-regular"
                     outlined
                     dense
-                    :value="cao.chip"
+                    :value="dados.chip"
                   >
                   </v-text-field>
                 </v-col>
@@ -120,7 +120,7 @@
                     dense
                     :items="itemscor"
                     multiple
-                    v-model="cao.cor"
+                    v-model="this.cor"
                   ></v-select>
                 </v-col>
 
@@ -133,7 +133,7 @@
                     dense
                     :items="itemspelagem"
                     multiple
-                    v-model="cao.pelagem"
+                    v-model="this.pelagem"
                   ></v-select>
                 </v-col>
 
@@ -145,7 +145,7 @@
                     outlined
                     dense
                     :items="itemscauda"
-                    v-model="cao.cauda"
+                    v-model="dados.cauda"
                   ></v-select>
                 </v-col>
               </v-row>
@@ -154,33 +154,20 @@
                 <v-col class="py-0">
                   <p class="ma-0">Observações</p>
                   <v-textarea
-                    v-if="cao.observacoes"
                     outlined
                     color="#2596be"
                     rows="2"
                     clearable
                     clear-icon="fas fa-times-circle"
                     no-resize
-                    v-model="cao.observacoes"
-                  ></v-textarea>
-
-                  <v-textarea
-                    v-else
-                    outlined
-                    color="#2596be"
-                    value="Sem observações"
-                    rows="2"
-                    clearable
-                    clear-icon="fas fa-times-circle"
-                    no-resize
-                    v-model="cao.observacoes"
+                    v-model="dados.observacoes"
                   ></v-textarea>
                 </v-col>
               </v-row>
 
               <v-row>
                 <v-col cols="12" sm="auto" class="py-0">
-                  <v-radio-group v-model="cao.sexo" row disabled>
+                  <v-radio-group v-model="dados.sexo" row disabled>
                     <template v-slot:label>
                       <div>Sexo</div>
                     </template>
@@ -197,16 +184,16 @@
                   </v-radio-group>
                 </v-col>
                 <v-col cols="12" sm="auto" class="py-0">
-                  <v-radio-group v-model="cao.castracao" row>
+                  <v-radio-group v-model="dados.castracao" row>
                     <template v-slot:label>
                       <div>Castração</div>
                     </template>
-                    <v-radio value="Sim" color="#2596be">
+                    <v-radio :value="true" color="#2596be">
                       <template v-slot:label>
                         <div class="body-2">Sim</div>
                       </template>
                     </v-radio>
-                    <v-radio value="Não" color="#2596be">
+                    <v-radio :value="false" color="#2596be">
                       <template v-slot:label>
                         <div class="body-2">Não</div>
                       </template>
@@ -249,29 +236,16 @@
 </template>
 
 <script>
-// import axios from "axios";
+import axios from "axios";
 import Cancelar from "@/components/Dialogs/Cancel.vue"
 
 export default {
-  props: ["id"],
+  props: ["id", "animal"],
   data: () => ({
     dialog: false,
     dialogs: {},
     cancelar: {title: "edição de dados", text: "a edição dos dados"},
-    cao: {
-      nome: "Rubi",
-      especie: "Canídeo",
-      raca: "Serra da Estrela",
-      sexo: "Macho",
-      cor: "Castanho",
-      data: "02/01/2014",
-      altura: 70,
-      pelagem: ["Média", "Lisa"],
-      cauda: "Comprida",
-      chip: "AC14ASC7984",
-      castracao: "Não",
-      observacoes: "Observações Rubi",
-    },
+    dados: {},
     itemscor: [
       "Amarelo",
       "Azul",
@@ -313,29 +287,39 @@ export default {
           return pattern.test(value) || "Introduza apenas dígitos";
         },
       ],
+      cor: [],
+      pelagem: [],
   }),
   components: {
     Cancelar
   },
   methods: {
     close(){
-      // if medico 
-      this.$router.push("/medico/utente");
+      let route = this.$store.state.tipo == 'Clinica' ? "/clinica/utente/" : "/medico/utente/"; 
+      this.$router.push(route + this.id);
     },
     editarDados: async function () {
-      /*
+      console.log(this.cor)
+    console.log(this.pelagem)
+    console.log(this.dados.altura)
+    console.log(this.dados.cauda)
+    console.log(this.dados.observacoes)
+    console.log(this.dados.castracao)
+    console.log(this.dados.nome)
+      let route = this.$store.state.tipo == 'Clinica' ? "http://localhost:7777/clinica/utente/editar" : "http://localhost:7777/medico/utente/editar";
       if (this.$refs.form.validate()) {
         try {
-          var resposta = await axios.post("http://localhost:7777//cliente/editaDadosAnimal", {
-            nome: this.cao.nome,
-            altura: this.cao.altura,
-            cor: this.cao.cor,
-            pelagem: this.cao.pelagem, 
-            cauda: this.cao.cauda, 
-            observacoes: this.cao.observacoes
-            castracao: this.cao.castracao
+          await axios.post(route, {
+            id: this.id,
+            nome: this.dados.nome,
+            altura: this.dados.altura,
+            cor: this.cor,
+            pelagem: this.pelagem, 
+            cauda: this.dados.cauda, 
+            observacoes: this.dados.observacoes,
+            castracao: this.dados.castracao
           });
-          console.log(JSON.stringify(resposta.data));
+          this.$route.push("/clinica/utente" + this.id);
           this.text = "Dados editados com sucesso.";
           this.color = "success";
           this.snackbar = true;
@@ -351,19 +335,20 @@ export default {
         this.snackbar = true;
         this.done = false;
       }
-      */
+      
     },
   },
   created: async function () {
-    console.log(this.id)
-    // try {
-    //   let response = await axios.post("http://localhost:7777/clinica/utente", {
-    //     id: this.id,
-    //   });
-    //   this.dados = response.data;
-    // } catch (e) {
-    //   console.log(e);
-    // }
+    let route = this.$store.state.tipo == 'Clinica' ? "http://localhost:7777/clinica/utente" : "http://localhost:7777/medico/utente";
+    let response = await axios.post(route, {
+      id: this.id,
+    });
+    this.dados = response.data
+    this.cor = response.data.cor.split(",")
+    this.pelagem = response.data.pelagem.split(",")
+    if (this.dados.observacoes.length == 0) this.dados.observacoes = "Sem observações"
+
+    console.log(this.cor)
   },
 };
 </script>
