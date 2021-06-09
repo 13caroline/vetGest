@@ -299,6 +299,13 @@ export default {
       this.$router.push(route + this.id);
     },
     editarDados: async function () {
+      console.log(this.cor)
+    console.log(this.pelagem)
+    console.log(this.dados.altura)
+    console.log(this.dados.cauda)
+    console.log(this.dados.observacoes)
+    console.log(this.dados.castracao)
+    console.log(this.dados.nome)
       let route = this.$store.state.tipo == 'Clinica' ? "http://localhost:7777/clinica/utente/editar" : "http://localhost:7777/medico/utente/editar";
       if (this.$refs.form.validate()) {
         try {
@@ -341,7 +348,7 @@ export default {
     this.pelagem = response.data.pelagem.split(",")
     if (this.dados.observacoes.length == 0) this.dados.observacoes = "Sem observações"
 
-    console.log(this.dados)
+    console.log(this.cor)
   },
 };
 </script>
