@@ -160,7 +160,8 @@ export default {
         this.$store.commit("limpaStore");
         this.$router.push("/");
       } catch (e) {
-        console.log(e);
+        this.$store.commit("limpaStore");
+        this.$router.push("/");
       }
     },
     home: function () {

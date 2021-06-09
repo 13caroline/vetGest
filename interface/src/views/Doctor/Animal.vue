@@ -1,14 +1,14 @@
 <template>
   <div class="extra-padding" id="page">
     <Header />
-    <Animal />
+    <Paciente :id="$route.params.id"/>
     <Footer />
   </div>
 </template>
 
 <script>
 import Header from "@/components/Headers/DoctorHeader.vue";
-import Animal from "@/components/Doctor/Paciente.vue"
+import Paciente from "@/components/Doctor/Paciente.vue"
 import Footer from "@/components/Footer.vue";
 
 export default {
@@ -18,7 +18,7 @@ export default {
   },
   components: {
     Header,
-    Animal,
+    Paciente,
     Footer,
   },
  

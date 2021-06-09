@@ -111,35 +111,7 @@ export default {
         align: "center",
       },
     ],
-    items: [
-      {
-        dataPrev: "05/04/2021",
-        dataToma: "06/04/2021",
-        tipo: "Desparasitação",
-        tratamento: "Bravacto",
-        medico: "Drº José Vieira",
-        estado: "Administrada",
-      },
-      {
-        dataPrev: "05/05/2021",
-        tipo: "Desparasitação",
-        tratamento: "Bravacto",
-        estado: "Atualizada",
-      },
-      {
-        dataPrev: "05/04/2021",
-        dataToma: "05/04/2021",
-        tipo: "Vacina",
-        tratamento: "Rabis",
-        medico: "Drº José Vieira",
-        estado: "Administrada",
-      },
-      {
-        dataPrev: "05/04/2021",
-        tipo: "Desparasitação",
-        estado: "Atrasada",
-      },
-    ],
+    items: [],
   }),
   components: {
     ConfirmaDespar,
@@ -157,14 +129,15 @@ export default {
       else return "#FFE082";
     },
   },
-  created() {
-    /*
-    let response = await axios.post("http://localhost:7777/cliente/getVacinas", {
-      email: this.$store.state.user.email,
-      animal
-    });
-
-    */
-  },
+  created: async function () {
+    // try {
+    //   let response = await axios.post("http://localhost:7777/clinica/utente", {
+    //     id: this.id,
+    //   });
+    //   this.dados = response.data;
+    // } catch (e) {
+    //   console.log(e);
+    // }
+  }
 };
 </script>

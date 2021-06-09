@@ -3,14 +3,11 @@
     <Header />
     <v-container>
       <v-row class="w-100">
-           <h3 class="font-weight-regular text-uppercase mb-4 mt-10 ml-3">
-             <v-icon class="mr-2">fas fa-paw</v-icon>
-            Utentes
-          </h3>
-           <v-row justify="end">
-            
-          </v-row>
-        
+        <h3 class="font-weight-regular text-uppercase mb-4 mt-10 ml-3">
+          <v-icon class="mr-2">fas fa-paw</v-icon>
+          Utentes
+        </h3>
+        <v-row justify="end"> </v-row>
       </v-row>
       <v-text-field
         v-model="search"
@@ -25,10 +22,9 @@
       ></v-text-field>
       <v-data-table
         :headers="headers"
-        :items="consultas"
+        :items="utentes"
         :search="search"
         class="elevation-1"
-        
         hide-default-footer
       >
         <template v-slot:[`item.detalhes`]="{ item }">
@@ -51,27 +47,29 @@
 <script>
 import Header from "@/components/Headers/DoctorHeader.vue";
 import Footer from "@/components/Footer.vue";
+import axios from "axios";
+import store from "@/store.js";
 
 export default {
   data() {
     return {
-      search: '',
+      search: "",
       headers: [
         {
           text: "UTENTE",
-          align: "center",
+          align: "start",
           sortable: true,
-          value: "paciente",
+          value: "nome",
         },
         {
           text: "IDADE",
-          value: "idade",
+          value: "dataNascimento",
           sortable: true,
           align: "start",
         },
         {
           text: "CLIENTE",
-          value: "cliente",
+          value: "cliente_nome",
           sortable: true,
           align: "start",
         },
@@ -95,22 +93,7 @@ export default {
         },
       ],
 
-      consultas: [
-        {
-          paciente: "Runa",
-          idade: "10",
-          cliente: "Carolina Cunha",
-          especie: "Canídeo",
-          raca: "Labrador",
-        },
-        {
-          paciente: "Riscas",
-          idade: "4",
-          cliente: "João Mota",
-          especie: "Felídeo",
-          raca: "Gato Europeu",
-        },
-      ],
+      utentes: [],
     };
   },
   components: {
@@ -119,9 +102,26 @@ export default {
   },
   methods: {
     more(item) {
-      this.$router.push("/medico/utente/");
-      console.log(item)
+      this.$router.push("/medico/utente/" + item.id);
     },
+  },
+  created: async function () {
+    try {
+      let response = await axios.get(
+        "http://localhost:7777/clinica/utentes",
+        { email: this.$store.state.email },
+        {
+          headers: { Authorization: "Bearer " + store.getters.token },
+        }
+      );
+      console.log(response);
+      this.utentes = response.data.utentes.map((ut) => {
+        return ut.animal;
+      });
+      if (typeof response.data == "object") this.agendamentos = response.data;
+    } catch (e) {
+      console.log(e);
+    }
   },
 };
 </script>

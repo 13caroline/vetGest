@@ -253,6 +253,7 @@
 import Cancelar from "@/components/Dialogs/Cancel.vue"
 
 export default {
+  props: ["id"],
   data: () => ({
     dialog: false,
     dialogs: {},
@@ -353,13 +354,16 @@ export default {
       */
     },
   },
-  created: {
-    /*
-    let response = await axios.post("http://localhost:7777/cliente/animal/getDados", {
-      email: this.$store.state.user.email,
-      animal
-    });
-    */
+  created: async function () {
+    console.log(this.id)
+    // try {
+    //   let response = await axios.post("http://localhost:7777/clinica/utente", {
+    //     id: this.id,
+    //   });
+    //   this.dados = response.data;
+    // } catch (e) {
+    //   console.log(e);
+    // }
   },
 };
 </script>

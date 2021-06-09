@@ -456,6 +456,7 @@ export default {
           this.text = "Utente registado com sucesso.";
           this.color = "success";
           this.snackbar = true;
+          this.$router.push("/clinica/utentes");
         } catch (e) {
           console.log("erro: " + e);
           this.text = "Ocorreu um erro no registo, por favor tente mais tarde!";

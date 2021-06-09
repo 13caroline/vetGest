@@ -72,14 +72,7 @@ public class VeterinarioController {
         if(veterinario==null ){
             return ResponseEntity.badRequest().body("Erro a obter veterinário!");
         }
-        List<Intervencao> intervencoes = intervencaoService.getIntervencoesVeterinario(veterinario.getId());
-        if(intervencoes.size()==0){
-            return ResponseEntity.badRequest().body("Veterinário não tem intervencões marcadas!");
-        }
-        List<Animal> animais = new ArrayList<>();
-        intervencoes.forEach(intervencao -> {
-            animais.add(intervencao.getAnimal());
-        });
+        List<Animal> animais = animalService.getAnimais();
         return ResponseEntity.accepted().body(animais);
     }
 

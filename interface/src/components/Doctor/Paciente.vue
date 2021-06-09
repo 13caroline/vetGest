@@ -27,14 +27,14 @@
           <v-tooltip top>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
-               class="body-2 ml-2 mb-2"
+                class="body-2 ml-2 mb-2"
                 small
                 color="#2596be"
                 v-bind="attrs"
                 v-on="on"
                 fab
                 dark
-                to="/medico/utente/editar"
+                :to="'/medico/utente/editar/' + id"
               >
                 <v-icon small>fas fa-pen</v-icon>
               </v-btn>
@@ -53,73 +53,71 @@
 
       <v-tabs-items v-model="tab">
         <v-tab-item>
-          <Dados></Dados>
+          <Dados :animal="dados"></Dados>
         </v-tab-item>
 
         <v-tab-item>
-          <PacienteVacinas></PacienteVacinas>
+          <PacienteVacinas :animal="dados"></PacienteVacinas>
         </v-tab-item>
 
         <v-tab-item>
-          <Consultas></Consultas>
+          <Consultas :animal="dados"></Consultas>
         </v-tab-item>
 
         <v-tab-item>
-          <Cirurgia></Cirurgia>
+          <Cirurgia :animal="dados"></Cirurgia>
         </v-tab-item>
       </v-tabs-items>
 
       <v-dialog v-model="internamento" width="100%" max-width="500" persistent>
-            <v-card>
-              <v-form>
-               <v-card-title class="font-weight-regular text-uppercase">
-                  Admitir em internamento
-                </v-card-title>
-                <v-card-subtitle
-                  >Por favor preencha o seguinte formulário</v-card-subtitle
-                >
-                <v-card-text>
-                  <v-row align="center">
-                    <v-col cols="12" class="pb-0">
-                      <p class="ma-0">Nota de admissão</p>
-                      <v-textarea
-                        color="#2596be"
-                        flat
-                        outlined
-                        rows="5"
-                        no-resize
-                        v-model="nota"
-                      ></v-textarea>
-                    </v-col>
+        <v-card>
+          <v-form>
+            <v-card-title class="font-weight-regular text-uppercase">
+              Admitir em internamento
+            </v-card-title>
+            <v-card-subtitle
+              >Por favor preencha o seguinte formulário</v-card-subtitle
+            >
+            <v-card-text>
+              <v-row align="center">
+                <v-col cols="12" class="pb-0">
+                  <p class="ma-0">Nota de admissão</p>
+                  <v-textarea
+                    color="#2596be"
+                    flat
+                    outlined
+                    rows="5"
+                    no-resize
+                    v-model="nota"
+                  ></v-textarea>
+                </v-col>
 
-                    <v-col cols="12" class="py-0">
-                      <p class="ma-0">Motivo de internamento</p>
-                      <v-textarea
-                        no-resize
-                        dense
-                        color="#2596be"
-                        flat
-                        outlined
-                        rows="2"
-                        v-model="motivo"
-                      ></v-textarea>
-                    </v-col>
-                  </v-row>
+                <v-col cols="12" class="py-0">
+                  <p class="ma-0">Motivo de internamento</p>
+                  <v-textarea
+                    no-resize
+                    dense
+                    color="#2596be"
+                    flat
+                    outlined
+                    rows="2"
+                    v-model="motivo"
+                  ></v-textarea>
+                </v-col>
+              </v-row>
 
-                  <v-row align="end" justify="end">
-                    <v-col cols="auto">
-                      <Cancelar :dialogs="cancelar" @clicked="close()"></Cancelar>
-                    </v-col>
-                    <v-col cols="auto">
-                      <v-btn color="#2596be" small dark
-                        >Admitir</v-btn
-                      >
-                    </v-col>
-                  </v-row>
-                </v-card-text>
-              </v-form>
-            </v-card>
-          </v-dialog>
+              <v-row align="end" justify="end">
+                <v-col cols="auto">
+                  <Cancelar :dialogs="cancelar" @clicked="close()"></Cancelar>
+                </v-col>
+                <v-col cols="auto">
+                  <v-btn color="#2596be" small dark>Admitir</v-btn>
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-form>
+        </v-card>
+      </v-dialog>
     </v-container>
   </div>
 </template>
@@ -129,14 +127,16 @@ import PacienteVacinas from "@/components/Utente/Vacinas.vue";
 import Consultas from "@/components/Utente/Consultas.vue";
 import Cirurgia from "@/components/Utente/Cirurgias.vue";
 import Dados from "@/components/Utente/Dados.vue";
-import Cancelar from "@/components/Dialogs/Cancel.vue"
+import Cancelar from "@/components/Dialogs/Cancel.vue";
+import axios from "axios";
 
 export default {
+  props: ["id"],
   data: () => ({
     tab: null,
+    motivo: "",
     internamento: false,
-    dialogs: {},
-    motivo: "", 
+    dados: "",
     nota: "",
     items: [
       { tab: "Informações gerais" },
@@ -145,7 +145,11 @@ export default {
       { tab: "Cirurgias" },
       { tab: "Histórico Clínico" },
     ],
-    cancelar: {title: "edição de dados", text: "a edição dos dados", route: "/medico/utente"}
+    cancelar: {
+      title: "edição de dados",
+      text: "a edição dos dados",
+      route: "/medico/utente",
+    },
   }),
   methods: {
     estadopedido(estado) {
@@ -157,22 +161,24 @@ export default {
     },
     close() {
       this.internamento = false;
-    }
+    },
   },
   components: {
     PacienteVacinas,
     Consultas,
     Cirurgia,
     Dados,
-    Cancelar
+    Cancelar,
   },
-  created() {
-    /*
-    let response = await axios.post("http://localhost:7777/clinica/getUtentes", {
-      email: this.$store.state.user.email,
-    });
-
-    */
+  created: async function () {
+    try {
+      let response = await axios.post("http://localhost:7777/clinica/utente", {
+        id: this.id,
+      });
+      this.dados = response.data;
+    } catch (e) {
+      console.log(e);
+    }
   },
 };
 </script>

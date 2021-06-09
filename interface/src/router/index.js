@@ -176,14 +176,14 @@ const routes = [
 
   // Animal Médico
   {
-    path: '/medico/utente/',
+    path: '/medico/utente/:id',
     name: 'Animal Médico',
     component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/Animal.vue')
   },
 
   // Médico edita animal
   {
-    path: '/medico/utente/editar',
+    path: '/medico/utente/editar/:id',
     name: 'Médico Editar Animal',
     component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/EditData.vue')
   },
