@@ -412,7 +412,7 @@ public class ClienteController {
     }
     //Check
     @CrossOrigin
-    @PutMapping("/cliente/animal/cancelar/{id_intervencao}")
+    @PostMapping("/cliente/animal/cancelar/{id_intervencao}")
     public ResponseEntity<?> cancelarIntervencao(@PathVariable int id_intervencao, @RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);
