@@ -141,7 +141,7 @@ public class ClienteController {
 
     //Check
     @CrossOrigin
-    @PostMapping("/cliente/animal/{id_animal}")
+    @PostMapping("/cliente/editar/animal/{id_animal}")
     public ResponseEntity<?> editarAnimal(@PathVariable int id_animal,@RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);

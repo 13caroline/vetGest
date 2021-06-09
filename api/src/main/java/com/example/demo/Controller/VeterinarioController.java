@@ -352,6 +352,7 @@ public class VeterinarioController {
         }
         internamento.setVeterinario(vet);
         internamento.setAnimal(animal);
+        internamento.setEstado("Internado");
         internamentoService.saveInternamento(internamento);
         //System.out.println("\n\nAQUI: "+internamento);
         return ResponseEntity.accepted().body(internamento);
