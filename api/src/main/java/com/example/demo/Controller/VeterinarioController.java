@@ -293,7 +293,7 @@ public class VeterinarioController {
     }
 
     @CrossOrigin
-    @PutMapping("/medico/utente/editar")
+    @PostMapping("/medico/utente/editar")
     public ResponseEntity<?> editarAnimal(@RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);
