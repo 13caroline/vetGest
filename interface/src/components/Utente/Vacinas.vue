@@ -10,11 +10,11 @@
                 Vacinas e desparasitações
               </h3>
             </v-col>
-            <v-col cols="auto" class="ml-auto pl-0">
+            <v-col cols="auto" class="ml-auto pl-0" v-if="this.$store.state.tipo == 'Veterinario'">
               <!-- v-if tipo == medico -->
               <NovaVacina @clicked="close()"></NovaVacina>
             </v-col>
-            <v-col cols="auto" class="pl-0">
+            <v-col cols="auto" class="pl-0" v-if="this.$store.state.tipo == 'Veterinario'">
               <NovaDesparasitacao @clicked="close()"></NovaDesparasitacao>
             </v-col>
           </v-row>
@@ -124,9 +124,9 @@ export default {
       this.$router.push("/medico/utente");
     },
     estadopedido(estado) {
-      if (estado == "Administrada") return "#C5E1A5";
+      if (estado == "Administrada") return "#9AE5FF";
       else if (estado == "Atrasada") return "#EF9A9A";
-      else return "#FFE082";
+      else return "#C5E1A5";
     },
   },
   created: async function () {

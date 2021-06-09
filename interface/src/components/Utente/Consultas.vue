@@ -165,9 +165,6 @@ export default {
       else if (estado == "A decorrer") return "#FFECB3";
       return "#9ae5ff";
     },
-    more(item) {
-      console.log(item.data);
-    },
     registar(value) {
       this.snackbar = value.snackbar;
       this.color = value.color;

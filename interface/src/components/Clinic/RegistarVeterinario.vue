@@ -56,7 +56,6 @@
                   color="#2596be"
                   name="morada"
                   placeholder="Morada"
-                  :rules="textRules"
                   required
                 />
               </v-col>
