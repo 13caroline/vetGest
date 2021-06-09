@@ -16,7 +16,7 @@
                 v-on="on"
                 fab
                 dark
-                to="/clinica/editar/utente"
+                @click="editar()"
               >
                 <v-icon small>fas fa-pen</v-icon>
               </v-btn>
@@ -81,9 +81,10 @@ export default {
       if (estado == "Agendada") return "#C5E1A5";
       else return "#FFE082";
     },
-    more(item) {
-      console.log(item.data);
-    },
+    editar(){
+      let route = this.$store.state.tipo == 'Clinica' ? "/clinica/editar/utente/" : "/medico/editar/utente/";
+      this.$router.push(route + this.id)
+    }
   },
   components:{
     PacienteVacinas, 
