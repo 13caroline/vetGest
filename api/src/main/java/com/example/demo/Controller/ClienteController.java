@@ -194,6 +194,22 @@ public class ClienteController {
         return ResponseEntity.accepted().body(imunizacoes);
     }
 
+    @CrossOrigin
+    @PostMapping("/cliente/animal/intervencoes/{id}")
+    public ResponseEntity<?> getIntervencoes(@PathVariable int id, @RequestBody Cliente emailCliente){
+        Cliente cliente = clienteService.getClienteByEmail(emailCliente.getEmail());
+        List<Animal> animais = cliente.getAnimais();
+        Animal animal = animalService.getAnimalById(id);
+
+        if(animal==null || !animais.contains(animal)){
+            return ResponseEntity.badRequest().body("Erro a obter animal!");
+        }
+
+        List<Intervencao> intervencoes = intervencaoService.getIntervencoesAnimal(id);
+        System.out.println(intervencoes);
+        return ResponseEntity.accepted().body(intervencoes);
+    }
+
     //Check
     @CrossOrigin
     @PostMapping("/cliente/animal/{id_animal}/vacinas")
@@ -433,10 +449,10 @@ public class ClienteController {
         List<Intervencao> consultas = intervencaoService.getIntervencoesAnimal(id_animal);
         Intervencao intervencao = intervencaoService.getIntervencao(id_intervencao);
         //System.out.println(intervencao);
-        if(intervencao==null || !consultas.contains(intervencao) || intervencao.getEstado().equals("Cancelado")){
+        if(intervencao==null || !consultas.contains(intervencao) || intervencao.getEstado().equals("Cancelada")){
             return ResponseEntity.badRequest().body("Erro a cancelar intervenção!");
         }
-        intervencao.setEstado("Cancelado");
+        intervencao.setEstado("Cancelada");
         intervencaoService.saveIntervencao(intervencao);
         //System.out.println(intervencao);
         return ResponseEntity.accepted().body("Intervenção cancelada!");

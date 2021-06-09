@@ -368,7 +368,7 @@ public class ClinicaController {
     }
 
     @CrossOrigin
-    @PutMapping("/clinica/utente/editar")
+    @PostMapping("/clinica/utente/editar")
     public ResponseEntity<?> editarAnimal(@RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);

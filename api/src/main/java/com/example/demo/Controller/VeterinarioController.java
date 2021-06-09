@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class VeterinarioController {
     public ResponseEntity<?> addIntervencao(@RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);
-        String email =node.get("email").asText();
+        String email =node.get("veterinario").asText();
         int animal_id = node.get("animal").asInt();
         Intervencao intervencao = mapper.convertValue(node.get("intervencao"), Intervencao.class);
         Veterinario veterinario = veterinarioService.getVetByEmail(email);
@@ -59,7 +60,25 @@ public class VeterinarioController {
         if(animal==null ){
             return ResponseEntity.badRequest().body("Erro a obter animal!");
         }
+
+        String data = intervencao.getData();
+        String hora = intervencao.getHora();
+
+        List<Intervencao> intervencoes = intervencaoService.findAllByVeterinarioIdAndEstadoEquals(veterinario.getId(),"Agendada");
+        List<Intervencao> temp = new ArrayList<>();
+        intervencoes.forEach(intervencao1 -> {
+            if (intervencao1.getData().equals(data) && intervencao1.getHora().equals(hora)) {
+                temp.add(intervencao1);
+            }
+        });
+
+        if(!temp.isEmpty()){
+            return ResponseEntity.badRequest().body("Erro no agendamento de Consulta! Horario Indisponivel!");
+        }
+
         intervencao.setAnimal(animal);
+        intervencao.setEstado("Agendada");
+        intervencao.setData_pedido(LocalDateTime.now().toString());
         intervencao.setVeterinario(veterinario);
         intervencaoService.saveIntervencao(intervencao);
         return ResponseEntity.accepted().body("Intervenção agendada com sucesso!");
@@ -398,5 +417,29 @@ public class VeterinarioController {
         return ResponseEntity.accepted().body("Nota de Internamento adicionada com sucesso!");
     }
 
+    /*
+    @CrossOrigin
+    @PostMapping("/medico/internamento/alta")
+    public ResponseEntity<?> getAlta(@RequestBody String body) throws JsonProcessingException, JSONException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+        int id_animal = node.get("animal").asInt();
+        Animal animal = animalService.getAnimalById(id_animal);
+        String vet_email = node.get("email").asText();
+        Veterinario vet = veterinarioService.getVetByEmail(vet_email);
+        int id = node.get("id").asInt();
+        Internamento internamento = internamentoService.findById(id);
+
+        if(animal==null || vet == null || internamento == null){
+            return ResponseEntity.badRequest().body("Alguma das Entidades nao existe!");
+        }
+
+        NotaInternamento notaInternamento =  mapper.convertValue(node.get("notaInternamento"), NotaInternamento.class);
+        notaInternamento.setInternamento(internamento);
+        internamentoService.saveNota(notaInternamento);
+
+        System.out.println("\n\nAQUI: Sucesso");
+        return ResponseEntity.accepted().body("Nota de Internamento adicionada com sucesso!");
+    }*/
 }
 
