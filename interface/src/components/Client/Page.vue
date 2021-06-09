@@ -98,7 +98,7 @@
 
           <v-data-table
             :headers="headers"
-            :items="consultas"
+            :items="filteredData"
             class="elevation-1"
             hide-default-footer
             v-if="consultas.length"
@@ -110,21 +110,13 @@
             </template>
 
             <template v-slot:[`item.detalhes`]="{ item }">
-              <v-tooltip right>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-icon
-                    v-if="
-                      item.estado == 'Agendada' || item.estado == 'Pendente'
-                    "
-                    v-bind="attrs"
-                    v-on="on"
-                    small
-                  >
-                    fas fa-calendar-times
-                  </v-icon>
-                </template>
-                <span class="caption">Cancelar marcação</span>
-              </v-tooltip>
+              <CancelarConsulta
+                v-if="item.estado == 'Agendada' || item.estado == 'Pendente'"
+                :dialogs="cancelar"
+                :dados="item"
+                @clicked="registar"
+              ></CancelarConsulta>
+             
             </template>
           </v-data-table>
           <small v-else> <em> sem consultas agendadas </em></small>
@@ -147,39 +139,50 @@
         </v-sheet>
       </v-carousel-item>
     </v-carousel>
+    <v-snackbar v-model="snackbar" :timeout="timeout" :color="color" :top="true" class="headline">
+      {{text}}
+    </v-snackbar>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import store from "@/store.js"
-
+import store from "@/store.js";
+import CancelarConsulta from "@/components/Dialogs/CancelarComDados.vue";
 export default {
   data() {
     return {
+
+      snackbar: false,
+      color: "",
+      text: "",
+      timeout: -1,
+      dados: {},
+      dialogs: {},
+      cancelar: { title: "o agendamento da consulta", text: "consulta" },
       animals: [],
       headers: [
         {
           text: "Nome",
           align: "start",
           sortable: true,
-          value: "paciente",
+          value: "utente",
         },
         {
           text: "Médico Veterinário",
-          value: "medico",
+          value: "veterinario_nome",
           sortable: true,
           align: "start",
         },
         {
           text: "Data de Marcação",
-          value: "data",
+          value: "marcacao",
           sortable: true,
           align: "start",
         },
         { text: "Estado", value: "estado", sortable: true, align: "center" },
         {
-          text: "Mais detalhes",
+          text: "Ações",
           value: "detalhes",
           sortable: false,
           align: "center",
@@ -196,46 +199,107 @@ export default {
       slides: ["First", "Second", "Third", "Fourth", "Fifth"],
     };
   },
+  components: {
+    CancelarConsulta,
+  },
   methods: {
+    registar(value){
+      this.snackbar=value.snackbar,
+      this.color=value.color,
+      this.text=value.text,
+      this.timeout=value.timeout,
+      this.atualiza()
+    },
+    atualiza: async function(){
+      this.consultas=[]
+      let response = await axios.post(
+      "http://localhost:7777/cliente",
+      {
+        email: this.$store.state.email,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + store.getters.token.toString(),
+        },
+      }
+    );
+    let response2 = await axios.post(
+      "http://localhost:7777/cliente/intervencoes",
+      {
+        cliente: this.$store.state.email,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + store.getters.token.toString(),
+        },
+      }
+    );
+    console.log(response2);
+    for (var i = 0; i < response2.data.length; i++) {
+      this.consultas.push({
+        idConsulta: response2.data[i].id,
+        utente: response2.data[i].animal.nome,
+        veterinario_nome: response2.data[i].veterinario.nome,
+        marcacao: response2.data[i].data +" " + response2.data[i].hora,
+        estado: response2.data[i].estado,
+        descricao: response2.data[i].descricao,
+        motivo: response2.data[i].motivo,
+        animal: response2.data[i].animal,
+      });
+    }
+    this.animals = response.data.cliente.animais;
+    },
     estadopedido(estado) {
       if (estado == "Agendada") return "#C5E1A5";
       else return "#FFE082";
     },
-    toAnimal(id){
-      this.$router.push("/cliente/animal/"+id)
-    }
+    toAnimal(id) {
+      this.$router.push("/cliente/animal/" + id);
+    },
   },
-  created: async function() {
-    let response = await axios.post("http://localhost:7777/cliente", {
-      email: this.$store.state.email,
+  computed: {
+    filteredData() {
+      return this.consultas.filter((item) => item.estado === "Agendada" || item.estado === "Pendente");
     },
-    {
-      headers: {
-            "Authorization": 'Bearer ' +store.getters.token.toString()
-       }   
-       
-       })
-         let response2 = await axios.post("http://localhost:7777/cliente/intervencoes", {
-      cliente: this.$store.state.email,
-    },
-    {
-      headers: {
-            "Authorization": 'Bearer ' +store.getters.token.toString()
-       }   
-       
-       });
-       console.log(response.data)
-        console.log(response2.data)
-    this.animals=response.data.cliente.animais;
-    //this.consultas=response.data.cliente.intervencoes;
-       
-/*
-    let response2 = await axios.post("http://localhost:7777/cliente/getConsultas", {
-      email: this.$store.state.user.email,
-    });
-
-    */
-  }
+  },
+  created: async function () {
+    let response = await axios.post(
+      "http://localhost:7777/cliente",
+      {
+        email: this.$store.state.email,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + store.getters.token.toString(),
+        },
+      }
+    );
+    let response2 = await axios.post(
+      "http://localhost:7777/cliente/intervencoes",
+      {
+        cliente: this.$store.state.email,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + store.getters.token.toString(),
+        },
+      }
+    );
+    console.log(response2);
+    for (var i = 0; i < response2.data.length; i++) {
+      this.consultas.push({
+        idConsulta: response2.data[i].id,
+        utente: response2.data[i].animal.nome,
+        veterinario_nome: response2.data[i].veterinario.nome,
+        marcacao: response2.data[i].data +" " + response2.data[i].hora,
+        estado: response2.data[i].estado,
+        descricao: response2.data[i].descricao,
+        motivo: response2.data[i].motivo,
+        animal: response2.data[i].animal,
+      });
+    }
+    this.animals = response.data.cliente.animais;
+  },
 };
 </script>
 

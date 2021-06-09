@@ -115,6 +115,20 @@ export default {
             }
           );
         }
+        if(store.state.tipo == "Cliente"){
+          console.log(this.dados)
+            await axios.post(
+            "http://localhost:7777/cliente/animal/cancelar/"+this.dados.idConsulta,
+            {
+              email: this.$store.state.email,
+              animal: this.dados.animal.id,
+
+            },
+            {
+              headers: { Authorization: "Bearer " + store.getters.token },
+            }
+          );
+        }
         this.dialog = false;
         if (this.dialogs.text == "consulta")
           this.$emit("clicked", {
