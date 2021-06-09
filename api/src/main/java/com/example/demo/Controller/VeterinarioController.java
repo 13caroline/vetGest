@@ -398,5 +398,29 @@ public class VeterinarioController {
         return ResponseEntity.accepted().body("Nota de Internamento adicionada com sucesso!");
     }
 
+    /*
+    @CrossOrigin
+    @PostMapping("/medico/internamento/alta")
+    public ResponseEntity<?> getAlta(@RequestBody String body) throws JsonProcessingException, JSONException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+        int id_animal = node.get("animal").asInt();
+        Animal animal = animalService.getAnimalById(id_animal);
+        String vet_email = node.get("email").asText();
+        Veterinario vet = veterinarioService.getVetByEmail(vet_email);
+        int id = node.get("id").asInt();
+        Internamento internamento = internamentoService.findById(id);
+
+        if(animal==null || vet == null || internamento == null){
+            return ResponseEntity.badRequest().body("Alguma das Entidades nao existe!");
+        }
+
+        NotaInternamento notaInternamento =  mapper.convertValue(node.get("notaInternamento"), NotaInternamento.class);
+        notaInternamento.setInternamento(internamento);
+        internamentoService.saveNota(notaInternamento);
+
+        System.out.println("\n\nAQUI: Sucesso");
+        return ResponseEntity.accepted().body("Nota de Internamento adicionada com sucesso!");
+    }*/
 }
 
