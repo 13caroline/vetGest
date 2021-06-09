@@ -151,6 +151,7 @@
 <script>
 import axios from "axios";
 import store from "@/store.js";
+import moment from "moment"
 import MarcarCirurgiaLivre from "@/components/Dialogs/MarcarCirurgiaLivre.vue";
 export default {
   data: () => ({
@@ -207,6 +208,30 @@ export default {
     MarcarCirurgiaLivre,
   },
   methods: {
+    medicoAgenda: async function(value){
+      this.events = [];
+      let response2 = await axios.post("http://localhost:7777/clinica/intervencoes/medico", {
+        tipo: "Consulta",
+        veterinario: value,
+      },
+      {
+        headers: { Authorization: "Bearer " + store.getters.token },
+      });
+      console.log(response2)
+      for (var i = 0; i < response2.data.length; i++){
+        if(response2.data[i].estado != "Cancelada"){
+          var marcacao = moment(response2.data[i].data + " " + response2.data[i].hora, "YYYY-MM-DD HH:mm", true).locale("pt").format("YYYY-MM-DD HH:mm");
+          var final = moment(marcacao).add(15, 'minutes').locale("pt").format("YYYY-MM-DD HH:mm")
+          this.events.push({
+            name: response2.data[i].tipo,
+            start: marcacao,
+            end: final, 
+            details: response2.data[i].motivo,
+            state: response2.data[i].estado
+          })
+        }
+      }
+    },
     //get events
     getEvents() {},
     // atualizar evento
@@ -229,6 +254,7 @@ export default {
         this.details = "";
         this.start == "";
         this.end = "";
+        this.state= "";
       } else {
         //show error
       }
@@ -238,8 +264,9 @@ export default {
       this.type = "day";
     },
     getEventColor(event) {
-      if (event.name.includes("Consulta")) return "#00d4ff";
-      else return "#ffc44d";
+      if (event.state.includes("Agendada")) return "#ACD47F";
+      if (event.state.includes("A decorrer")) return "#FFDF80";
+      if (event.state.includes("Pendente")) return "#FAB471"
     },
     setToday() {
       this.focus = this.today;
@@ -297,7 +324,28 @@ export default {
         headers: { Authorization: "Bearer " + store.getters.token },
       });
       for (var i = 0; i < response.data.length; i++)
-        this.medico.push(response.data[i].nome);
+        this.medico.push({nome: response.data[i].nome, id: response.data[i].id});
+      let response2 = await axios.post("http://localhost:7777/clinica/intervencoes", {
+        tipo: "Cirurgia"
+      },
+      {
+        headers: { Authorization: "Bearer " + store.getters.token },
+      });
+      console.log(response2)
+      for (i = 0; i < response2.data.length; i++){
+        if(response2.data[i].estado != "Cancelada"){
+          var marcacao = moment(response2.data[i].data + " " + response2.data[i].hora, "YYYY-MM-DD HH:mm", true).locale("pt").format("YYYY-MM-DD HH:mm");
+          var final = moment(marcacao).add(15, 'minutes').locale("pt").format("YYYY-MM-DD HH:mm")
+          this.events.push({
+            name: response2.data[i].tipo,
+            start: marcacao,
+            end: final, 
+            details: response2.data[i].motivo,
+            state: response2.data[i].estado
+          })
+        }
+      }
+
     } catch (e) {
       console.log(e);
     }

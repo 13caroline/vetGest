@@ -127,7 +127,7 @@ const routes = [
   },
   // Editar dados de utente
   {
-    path: '/clinica/editar/utente',
+    path: '/clinica/editar/utente/:id',
     name: 'Clinica Editar Dados Utente',
     component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/EditData.vue')
   },
