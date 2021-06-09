@@ -37,7 +37,7 @@
                 outlined
                 readonly
                 dense
-                value="Rubi"
+                :value="dados.nome"
               ></v-text-field>
             </v-col>
 
@@ -137,20 +137,29 @@
                 ></v-time-picker>
               </v-menu>
             </v-col>
-            <!--<v-col cols="12" class="py-0">
-                      <p class="ma-0">Médico Veterinário</p>
-                    </v-col>
-                    <v-col cols="12" class="py-0">
-                      <v-autocomplete
-                        flat
-                        color="#2596be"
-                        dense
-                        outlined
-                        :items="medico"
-                        v-model="medico"
-                      ></v-autocomplete>
-                    </v-col>-->
-            <!-- V-if tipo utilizador = clínica -->
+            <v-col
+              cols="12"
+              class="py-0"
+              v-if="this.$store.state.tipo == 'Clinica'"
+            >
+              <p class="ma-0">Médico Veterinário</p>
+            </v-col>
+            <v-col
+              cols="12"
+              class="py-0"
+              v-if="this.$store.state.tipo == 'Clinica'"
+            >
+              <v-autocomplete
+                flat
+                color="#2596be"
+                dense
+                outlined
+                :items="medicos"
+                item-text="nome"
+                item-value="id"
+                v-model="medico"
+              ></v-autocomplete>
+            </v-col>
           </v-row>
 
           <v-row align="end" justify="end">
@@ -158,7 +167,9 @@
               <Cancelar :dialogs="cancelar" @clicked="close()"></Cancelar>
             </v-col>
             <v-col cols="auto">
-              <v-btn color="#2596be" small dark>Registar</v-btn>
+              <v-btn color="#2596be" small dark @click="registar()"
+                >Registar</v-btn
+              >
             </v-col>
           </v-row>
         </v-card-text>
@@ -170,17 +181,17 @@
 
 <script>
 import Cancelar from "@/components/Dialogs/Cancel.vue";
-
+import store from "@/store.js";
+import axios from "axios";
 export default {
+  props: ["dados"],
   data: () => ({
     dialog: false,
     dialogs: {},
-    dados: {},
     cancelar: {
       title: "agendamento da consulta",
       text: "o agendamento da consulta",
     },
-
     desc: [
       { text: "Consulta anual/Vacinação", tipo: "Consulta anual/Vacinação" },
       {
@@ -231,6 +242,7 @@ export default {
       "Consulta de seguimento",
       "Procedimentos específicos",
     ],
+    medicos: [],
     hora: "10:00",
     date: new Date().toISOString().substr(0, 10),
     menu2: false,
@@ -248,12 +260,65 @@ export default {
       this.dialog = false;
     },
     allowedStep: (m) => m % 15 === 0,
+    registar: async function () {
+      try {
+        if (store.state.tipo == "Clinica") {
+          await axios.post(
+            "http://localhost:7777/clinica/intervencao/agendar",
+            {
+              intervencao: {
+                data: this.date,
+                hora: this.hora,
+                descricao: this.descricao,
+                motivo: this.motivos,
+                tipo: "Consulta",
+              },
+              animal: this.dados.id,
+              veterinario: this.medico,
+              cliente: this.dados.cliente_email,
+            },
+            { headers: { Authorization: "Bearer " + store.getters.token } }
+          );
+          this.dialog = false;
+          this.$emit("clicked", {
+            text: "Consulta agendada com sucesso.",
+            color: "success",
+            snackbar: "true",
+            timeout: 4000,
+          });
+        }
+      } catch (e) {
+        console.log("erro: " + e);
+        this.$emit("clicked", {
+          text: "Ocorreu um erro na marcação, por favor tente mais tarde!",
+          color: "warning",
+          snackbar: "true",
+          timeout: 4000,
+        });
+      }
+    },
   },
   computed: {
     filteredData() {
       let motivo = this.motivos;
       return this.desc.filter((item) => item.tipo === motivo);
     },
+  },
+  created: async function () {
+    try {
+      let response = await axios.get("http://localhost:7777/clinica/medicos", {
+        headers: { Authorization: "Bearer " + store.getters.token },
+      });
+
+      for (var i = 0; i < response.data.length; i++) {
+        this.medicos.push({
+          nome: response.data[i].nome,
+          id: response.data[i].id,
+        });
+      }
+    } catch (e) {
+      console.log(e);
+    }
   },
 };
 </script>

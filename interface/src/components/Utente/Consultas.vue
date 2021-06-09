@@ -11,7 +11,7 @@
               </h3>
             </v-col>
             <v-col cols="auto" class="pl-0">
-              <MarcarConsulta :dados="animal"></MarcarConsulta>
+              <MarcarConsulta :dados="animal" @clicked="registar"></MarcarConsulta>
             </v-col>
           </v-row>
 
@@ -162,7 +162,8 @@ export default {
       if (estado == "Agendada") return "#C5E1A5";
       else if (estado == "Cancelada") return "#EF9A9A";
       else if (estado == "Pendente") return "#fccea2";
-      else return "#9ae5ff";
+      else if (estado == "A decorrer") return "#FFECB3";
+      return "#9ae5ff";
     },
     more(item) {
       console.log(item.data);

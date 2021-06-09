@@ -317,7 +317,6 @@ export default {
           id: response.data[i].id,
         });
       }
-      console.log(this.dados);
     } catch (e) {
       console.log(e);
     }

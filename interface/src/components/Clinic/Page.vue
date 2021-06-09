@@ -273,8 +273,7 @@ export default {
       else return "#FFCCBC";
     },
     utente(item) {
-      this.$router.push("/clinica/utente/");
-      console.log(item);
+      this.$router.push("/clinica/utente/" + item.animal.id);
     },
     format(data) {
       return moment(data).locale("pt").format("DD/MM/YYYY HH:mm");
