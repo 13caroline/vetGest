@@ -14,4 +14,6 @@ public interface IntervencaoRepository extends JpaRepository<Intervencao,Integer
     List<Intervencao> findAllByVeterinarioId(int veterinario_id);
 
     List<Intervencao> findAllByVeterinarioIdAndEstadoEquals(int vet_id, String estado);
+
+    List<Intervencao> findAllByTipo(String tipo);
 }

@@ -214,6 +214,24 @@ public class ClinicaController {
     }
 
     @CrossOrigin
+    @PostMapping("/clinica/intervencoes")
+    public ResponseEntity<?> getIntervencoes(@RequestBody String body) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+        String tipo = node.get("tipo").asText();
+        if(tipo.equals("Consulta")){
+            List<Intervencao> consultas = intervencaoService.findAllByTipo(tipo);
+            return ResponseEntity.accepted().body(consultas);
+        }
+
+        if(tipo.equals("Cirurgia")){
+            List<Intervencao> cirurgias = intervencaoService.findAllByTipo(tipo);
+            return ResponseEntity.accepted().body(cirurgias);
+        }
+        return  ResponseEntity.badRequest().body("Não foi possível obter intervencões!");
+    }
+
+    @CrossOrigin
     @PostMapping("/clinica/utentes/registar")
     public ResponseEntity<?> registarAnimal(@RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
