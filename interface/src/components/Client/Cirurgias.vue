@@ -65,6 +65,7 @@
           <v-card-text class="black--text">
             <exemplo></exemplo>
           </v-card-text>
+          
         </v-card>
       </v-dialog>
     </v-container>

@@ -57,7 +57,7 @@
               </v-row>
 
               <v-row class="mt-n5">
-                <v-col cols="4">
+                <v-col cols="3">
                   <div>
                     <p class="ma-0">Raça *</p>
                     <v-select
@@ -122,7 +122,7 @@
                 <v-col>
                   <div>
                     <p class="ma-0">Sexo *</p>
-                    <v-radio-group row class="ma-0" v-model="sexo">
+                    <v-radio-group  class="ma-0" v-model="sexo">
                       <v-radio value="Macho" color="#2596be">
                         <template v-slot:label>
                           <div class="body-2">Macho</div>
@@ -140,7 +140,7 @@
                 <v-col>
                   <div>
                     <p class="ma-0">Castração *</p>
-                    <v-radio-group row class="ma-0" v-model="castracao">
+                    <v-radio-group class="ma-0" v-model="castracao">
                       <v-radio :value="true" color="#2596be">
                         <template v-slot:label>
                           <div class="body-2">Sim</div>
@@ -360,7 +360,7 @@ export default {
                 chip: this.chip,
                 especie: this.especie,
                 altura: this.altura,
-                dataNascimento: this.data,
+                dataNascimento: this.date,
                 sexo: this.sexo,
                 cor: this.cor.toString(),
                 pelagem: this.pelagem.toString(),

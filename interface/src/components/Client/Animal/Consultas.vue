@@ -447,9 +447,7 @@ export default {
       else if (estado == "Pendente") return "#FFE082";
       else return "#9ae5ff";
     },
-    more(item) {
-      console.log(item.data);
-    },
+
     cancelar: async function () {
       /*
 		 try {
@@ -488,7 +486,6 @@ export default {
     } catch (e) {
       console.log("erro: +" + e);
     }
-    console.log(response);
     for (var i = 0; i < response.data.length; i++) {
       this.consultas.push({
         data: response.data[i].data,

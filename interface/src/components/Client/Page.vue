@@ -234,7 +234,6 @@ export default {
         },
       }
     );
-    console.log(response2);
     for (var i = 0; i < response2.data.length; i++) {
       this.consultas.push({
         idConsulta: response2.data[i].id,
@@ -285,7 +284,6 @@ export default {
         },
       }
     );
-    console.log(response2);
     for (var i = 0; i < response2.data.length; i++) {
       this.consultas.push({
         idConsulta: response2.data[i].id,

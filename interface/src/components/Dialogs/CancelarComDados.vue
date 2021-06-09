@@ -116,7 +116,6 @@ export default {
           );
         }
         if(store.state.tipo == "Cliente"){
-          console.log(this.dados)
             await axios.post(
             "http://localhost:7777/cliente/animal/cancelar/"+this.dados.idConsulta,
             {

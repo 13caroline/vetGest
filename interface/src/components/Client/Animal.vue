@@ -5,10 +5,24 @@
         <v-col cols="auto">
           <span class="subtitle-1 head">{{animal.nome}}</span>
         </v-col>
-        <v-col cols="auto" class="ml-auto">
-          <v-btn icon depressed to="/cliente/animal/editar">
-            <v-icon color="#2596be">fas fa-pen</v-icon>
-          </v-btn>
+       <v-col cols="auto" class="ml-auto">
+          <v-tooltip top>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+               class="body-2 ml-2 mb-2"
+                small
+                color="#2596be"
+                v-bind="attrs"
+                v-on="on"
+                fab
+                dark
+                to="/cliente/animal/editar"
+              >
+                <v-icon small>fas fa-pen</v-icon>
+              </v-btn>
+            </template>
+            <span>Editar dados</span>
+          </v-tooltip>
         </v-col>
       </v-row>
       <v-divider></v-divider>
@@ -67,9 +81,6 @@ export default {
       if (estado == "Agendada") return "#C5E1A5";
       else return "#FFE082";
     },
-    more(item) {
-      console.log(item.data);
-    },
   },
   components:{
     PacienteVacinas, 
@@ -88,7 +99,6 @@ export default {
        }   
        
        });
-    console.log(response)
     this.animal=response.data.animal;
 
   },
