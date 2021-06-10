@@ -410,4 +410,21 @@ public class ClinicaController {
         List<Internamento> internamentos = internamentoService.findAllByEstado("Internado");
         return ResponseEntity.accepted().body(internamentos);
     }
+
+    @CrossOrigin
+    @PostMapping("/clinica/internamento/detalhes")
+    public ResponseEntity<?> getInternamentosByAnimal(@RequestBody String body) throws JsonProcessingException, JSONException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+        int id_animal = node.get("id").asInt();
+        Animal animal = animalService.getAnimalById(id_animal);
+
+        if(animal==null)
+            return ResponseEntity.badRequest().body("Animal nao exite");
+
+        Internamento internamento = internamentoService.findByAnimalIdAndEstado(id_animal,"Internado");
+        List<NotaInternamento> notaInternamentos = internamentoService.findAllByInternamento(internamento);
+
+        return ResponseEntity.accepted().body(notaInternamentos);
+    }
 }

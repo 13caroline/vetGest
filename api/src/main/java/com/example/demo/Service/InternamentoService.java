@@ -52,4 +52,9 @@ public class InternamentoService {
     public List<Internamento> findAllByEstado(String estado){
         return repository.findAllByEstado(estado);
     }
+
+    public  Internamento findByAnimalIdAndEstado(int id_animal, String estado){
+        return repository.findByAnimalIdAndEstado(id_animal, estado);
+    };
+
 }
