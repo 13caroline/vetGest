@@ -14,6 +14,7 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -378,6 +379,7 @@ public class VeterinarioController {
         }
         internamento.setVeterinario(vet);
         internamento.setAnimal(animal);
+        internamento.setData(LocalDateTime.now().toString());
         internamento.setEstado("Internado");
         internamentoService.saveInternamento(internamento);
         //System.out.println("\n\nAQUI: "+internamento);
