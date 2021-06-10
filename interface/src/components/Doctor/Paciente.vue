@@ -3,7 +3,7 @@
     <v-container>
       <v-row justify="space-around" class="mt-2">
         <v-col cols="auto">
-          <span class="subtitle-1 head">Rubi</span>
+          <span class="subtitle-1 head">{{ dados.nome }}</span>
         </v-col>
         <v-col cols="auto" class="ml-auto">
           <v-tooltip top>
@@ -172,7 +172,7 @@ export default {
   },
   created: async function () {
     try {
-      let response = await axios.post("http://localhost:7777/clinica/utente", {
+      let response = await axios.post("http://localhost:7777/medico/utente", {
         id: this.id,
       });
       this.dados = response.data;

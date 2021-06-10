@@ -56,9 +56,12 @@
               <v-icon v-if="item.estado == 'Administrada'" small color="green">
                 fas fa-check-circle
               </v-icon>
-              
+
               <div
-                v-if="(item.estado == 'Atualizada' || item.estado == 'Atrasada') && $store.state.tipo == 'Veterinario'" 
+                v-if="
+                  (item.estado == 'Atualizada' || item.estado == 'Atrasada') &&
+                  $store.state.tipo == 'Veterinario'
+                "
               >
                 <ConfirmaDespar
                   :dataPrev="item.dataPrev"
@@ -66,7 +69,6 @@
                 ></ConfirmaDespar>
               </div>
             </template>
-            
           </v-data-table>
         </v-col>
       </v-row>
@@ -162,9 +164,11 @@ export default {
     },
   },
   created: async function () {
+    let route = this.$store.state.tipo == 'Veterinario' ? "http://localhost:7777/medico/imunizacao" : "http://localhost:7777/clinica/imunizacao";
+
     try {
       let response = await axios.post(
-        "http://localhost:7777/clinica/imunizacao",
+        route,
         {
           id: this.animal.id,
         }

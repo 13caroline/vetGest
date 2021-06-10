@@ -261,32 +261,37 @@ export default {
     },
     allowedStep: (m) => m % 15 === 0,
     registar: async function () {
+      let route =
+        this.$store.state.tipo == "Clinica"
+          ? "http://localhost:7777/clinica/intervencao/agendar"
+          : "http://localhost:7777/medico/intervencao/agendar";
       try {
-        if (store.state.tipo == "Clinica") {
-          await axios.post(
-            "http://localhost:7777/clinica/intervencao/agendar",
-            {
-              intervencao: {
-                data: this.date,
-                hora: this.hora,
-                descricao: this.descricao,
-                motivo: this.motivos,
-                tipo: "Consulta",
-              },
-              animal: this.dados.id,
-              veterinario: this.medico,
-              cliente: this.dados.cliente_email,
+        await axios.post(
+          route,
+          {
+            intervencao: {
+              data: this.date,
+              hora: this.hora,
+              descricao: this.descricao,
+              motivo: this.motivos,
+              tipo: "Consulta",
             },
-            { headers: { Authorization: "Bearer " + store.getters.token } }
-          );
-          this.dialog = false;
-          this.$emit("clicked", {
-            text: "Consulta agendada com sucesso.",
-            color: "success",
-            snackbar: "true",
-            timeout: 4000,
-          });
-        }
+            animal: this.dados.id,
+            veterinario:
+              this.$store.state.tipo == "Clinica"
+                ? this.medico
+                : this.$store.state.email,
+            cliente: this.dados.cliente_email,
+          },
+          { headers: { Authorization: "Bearer " + store.getters.token } }
+        );
+        this.dialog = false;
+        this.$emit("clicked", {
+          text: "Consulta agendada com sucesso.",
+          color: "success",
+          snackbar: "true",
+          timeout: 4000,
+        });
       } catch (e) {
         console.log("erro: " + e);
         this.$emit("clicked", {
@@ -305,19 +310,24 @@ export default {
     },
   },
   created: async function () {
-    try {
-      let response = await axios.get("http://localhost:7777/clinica/medicos", {
-        headers: { Authorization: "Bearer " + store.getters.token },
-      });
+    if (store.state.tipo == "Clinica") {
+      try {
+        let response = await axios.get(
+          "http://localhost:7777/clinica/medicos",
+          {
+            headers: { Authorization: "Bearer " + store.getters.token },
+          }
+        );
 
-      for (var i = 0; i < response.data.length; i++) {
-        this.medicos.push({
-          nome: response.data[i].nome,
-          id: response.data[i].id,
-        });
+        for (var i = 0; i < response.data.length; i++) {
+          this.medicos.push({
+            nome: response.data[i].nome,
+            id: response.data[i].id,
+          });
+        }
+      } catch (e) {
+        console.log(e);
       }
-    } catch (e) {
-      console.log(e);
     }
   },
 };

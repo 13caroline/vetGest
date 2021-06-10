@@ -72,8 +72,41 @@ public class VeterinarioController {
         if(veterinario==null ){
             return ResponseEntity.badRequest().body("Erro a obter veterinário!");
         }
-        List<Animal> animais = animalService.getAnimais();
-        return ResponseEntity.accepted().body(animais);
+
+        List<Cliente> clientes = clienteService.getClientes();
+        if(clientes.size()==0){
+            return ResponseEntity.badRequest().body("Não Existem Clientes Registados!");
+        }
+
+        JSONObject animais = new JSONObject();
+        clientes.forEach(cliente -> {
+            cliente.getAnimais().forEach(animal -> {
+                try {
+                    JSONObject utente= new JSONObject();
+                    JSONObject a= new JSONObject();
+                    a.put("id",animal.getId());
+                    a.put("nome",animal.getNome());
+                    a.put("raca",animal.getRaca());
+                    a.put("dataNascimento",animal.getDataNascimento());
+                    a.put("sexo",animal.getSexo());
+                    a.put("especie",animal.getEspecie());
+                    a.put("cor",animal.getCor());
+                    a.put("cauda",animal.getCauda());
+                    a.put("pelagem",animal.getPelagem());
+                    a.put("altura",animal.getAltura());
+                    a.put("chip",animal.getChip());
+                    a.put("castracao",animal.isCastracao());
+                    a.put("observacoes",animal.getObservacoes());
+                    a.put("cliente_nome",cliente.getNome());
+                    a.put("cliente_email",cliente.getEmail());
+                    utente.put("animal",a);
+                    animais.accumulate("utentes",utente);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            });
+        });
+        return  ResponseEntity.accepted().body(animais.toString());
     }
 
     @CrossOrigin
@@ -119,43 +152,36 @@ public class VeterinarioController {
 
     @CrossOrigin
     @PostMapping("/medico/utente")
-    public ResponseEntity<?> getUtente(@RequestBody Animal id) throws JSONException {
-        Animal a = animalService.getAnimalById(id.getId());
-        if(a==null ){
-            return ResponseEntity.badRequest().body("Erro a obter animal!");
+        public ResponseEntity<?> getUtente(@RequestBody String body) throws JSONException, JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+        Animal a = animalService.getAnimalById(node.get("id").asInt());
+        if(a==null){
+            return ResponseEntity.badRequest().body("Utente não encontrado!");
         }
-        Cliente cliente = clienteService.findClienteByAnimais(a);
-        if(cliente==null ){
-            return ResponseEntity.badRequest().body("Erro a obter cliente!");
+        Cliente c = clienteService.findClienteByAnimais(a);
+        if(c==null){
+            return ResponseEntity.badRequest().body("Cliente não encontrado!");
         }
-        JSONObject o = new JSONObject();
-        o.put("id",a.getId());
-        o.put("nome",a.getNome());
-        o.put("raca",a.getRaca());
-        o.put("dataNascimento",a.getDataNascimento());
-        o.put("sexo",a.getSexo());
-        o.put("especie",a.getEspecie());
-        o.put("cor",a.getCor());
-        o.put("cauda",a.getCauda());
-        o.put("pelagem",a.getPelagem());
-        o.put("altura",a.getAltura());
-        o.put("chip",a.getChip());
-        o.put("castracao",a.isCastracao());
-        o.put("observacoes",a.getObservacoes());
-        JSONObject c = new JSONObject();
-        c.put("id",cliente.getId());
-        c.put("nome",cliente.getNome());
-        c.put("concelho",cliente.getConcelho());
-        c.put("contacto",cliente.getContacto());
-        c.put("freguesia",cliente.getFreguesia());
-        c.put("morada",cliente.getMorada());
-        c.put("nif",cliente.getNif());
         JSONObject animal = new JSONObject();
-        animal.put("animal",o);
-        animal.put("cliente",c);
-        return ResponseEntity.accepted().body(animal.toString());
+        animal.put("id",a.getId());
+        animal.put("nome",a.getNome());
+        animal.put("raca",a.getRaca());
+        animal.put("dataNascimento",a.getDataNascimento());
+        animal.put("sexo",a.getSexo());
+        animal.put("especie",a.getEspecie());
+        animal.put("cor",a.getCor());
+        animal.put("cauda",a.getCauda());
+        animal.put("pelagem",a.getPelagem());
+        animal.put("altura",a.getAltura());
+        animal.put("chip",a.getChip());
+        animal.put("castracao",a.isCastracao());
+        animal.put("observacoes",a.getObservacoes());
+        animal.put("cliente_nome",c.getNome());
+        animal.put("cliente_email",c.getEmail());
+        animal.put("cliente_id",c.getId());
+        return  ResponseEntity.accepted().body(animal.toString());
     }
-
 
     @CrossOrigin
     @PostMapping("/medico/animal/adiciona/imunizacao")

@@ -107,8 +107,8 @@ export default {
   },
   created: async function () {
     try {
-      let response = await axios.get(
-        "http://localhost:7777/clinica/utentes",
+      let response = await axios.post(
+        "http://localhost:7777/medico/utentes",
         { email: this.$store.state.email },
         {
           headers: { Authorization: "Bearer " + store.getters.token },
