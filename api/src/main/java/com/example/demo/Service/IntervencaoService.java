@@ -48,4 +48,8 @@ public class IntervencaoService {
         return repository.findAllByVeterinarioIdAndTipo(vet_id,estado);
     }
 
+    public List<Intervencao> findByAnimalIdAndTipo(int id, String tipo){
+        return repository.findByAnimalIdAndTipo(id,tipo);
+    }
+
 }

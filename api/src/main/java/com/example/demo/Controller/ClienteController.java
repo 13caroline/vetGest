@@ -377,6 +377,42 @@ public class ClienteController {
         return ResponseEntity.accepted().body(consultas);
     }
 
+    @CrossOrigin
+    @PostMapping("/cliente/animal/cirurgias")
+    public ResponseEntity<?> getCirurgiasAnimal(@RequestBody String body) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+        String clienteEmail = node.get("cliente").asText();
+        Cliente cliente = clienteService.getClienteByEmail(clienteEmail);
+        int id_animal = node.get("animal").asInt();
+        Animal animal = animalService.getAnimalById(id_animal);
+        List<Animal> animals = cliente.getAnimais();
+
+        if(animal==null||!animals.contains(animal))
+            return ResponseEntity.badRequest().body("Erro em alguma das Entidades");
+
+        List<Intervencao> cirurgias = intervencaoService.findByAnimalIdAndTipo(id_animal,"Cirurgia");
+        return ResponseEntity.accepted().body(cirurgias);
+    }
+
+    @CrossOrigin
+    @PostMapping("/cliente/animal/consultas")
+    public ResponseEntity<?> getConsultasAnimal(@RequestBody String body) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+        String clienteEmail = node.get("cliente").asText();
+        Cliente cliente = clienteService.getClienteByEmail(clienteEmail);
+        int id_animal = node.get("animal").asInt();
+        Animal animal = animalService.getAnimalById(id_animal);
+        List<Animal> animals = cliente.getAnimais();
+
+        if(animal==null||!animals.contains(animal))
+            return ResponseEntity.badRequest().body("Erro em alguma das Entidades");
+
+        List<Intervencao> consultas = intervencaoService.findByAnimalIdAndTipo(id_animal,"Consulta");
+        return ResponseEntity.accepted().body(consultas);
+    }
+
     //Check
     @CrossOrigin
     @PostMapping("/cliente/cirurgias")
