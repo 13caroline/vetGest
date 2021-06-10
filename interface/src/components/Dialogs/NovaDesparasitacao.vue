@@ -3,17 +3,19 @@
     <template v-slot:activator="{ diag, attrs }">
       <v-tooltip top>
         <template v-slot:activator="{ on }">
-          <v-btn
-            color="#2596be"
-            v-bind="attrs"
-            v-on="{ ...on, ...diag }"
-            small
-            dark
-            fab
-            @click="dialog = true"
-          >
-            <v-icon small> fas fa-spider</v-icon>
-          </v-btn>
+
+<v-btn
+                class="body-2"
+                small
+                v-bind="attrs"
+                color="#2596be"
+                v-on="{ ...on, ...diag }"
+                dark
+                @click="dialog = true"
+              >
+                Adicionar Desparasitação
+                <v-icon small class="ml-4">fas fa-spider</v-icon>
+              </v-btn>
         </template>
         <span class="caption">Adicionar desparasitação</span>
       </v-tooltip>
