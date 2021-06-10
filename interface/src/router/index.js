@@ -58,7 +58,7 @@ const routes = [
   },
 
   {
-    path: '/cliente/animal/editar',
+    path: '/cliente/animal/editar/:id',
     name: 'Editar Animal Cliente',
     component: () => import (/* webpackChunkName: "about" */ '../views/Client/EditData.vue')
   },
@@ -127,7 +127,7 @@ const routes = [
   },
   // Editar dados de utente
   {
-    path: '/clinica/editar/utente',
+    path: '/clinica/editar/utente/:id',
     name: 'Clinica Editar Dados Utente',
     component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/EditData.vue')
   },

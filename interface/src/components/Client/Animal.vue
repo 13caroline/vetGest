@@ -16,7 +16,7 @@
                 v-on="on"
                 fab
                 dark
-                to="/cliente/animal/editar"
+                @click="editar()"
               >
                 <v-icon small>fas fa-pen</v-icon>
               </v-btn>
@@ -77,6 +77,9 @@ export default {
     animal:{}
   }),
   methods: {
+    editar(){
+      this.$router.push("/cliente/animal/editar/"+this.id)
+    },
     estadopedido(estado) {
       if (estado == "Agendada") return "#C5E1A5";
       else return "#FFE082";

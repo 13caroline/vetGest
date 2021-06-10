@@ -41,7 +41,10 @@
             class="my-4"
             color="#2596be"
             :items="medico"
+            item-text="nome"
+            item-value="id"
             hide-details
+            @change="medicoAgenda"
           ></v-select>
 
           <v-sheet>
@@ -90,7 +93,7 @@
               :event-color="getEventColor"
               :type="type"
               locale="pt"
-              first-time="08:00"
+              first-time="10:00"
               interval-count="12"
               @click:event="showEvent"
               @click:more="viewDay"
@@ -168,6 +171,7 @@
 <script>
 import axios from "axios";
 import store from "@/store.js";
+import moment from "moment";
 import MarcarConsultaLivre from "@/components/Dialogs/MarcarConsultaLivre.vue";
 export default {
   data: () => ({
@@ -186,31 +190,12 @@ export default {
     details: null,
     start: null,
     end: null,
+    state:null,
     currentlyEditing: null,
     selectedEvent: {},
     selectedElement: null,
     selectedOpen: false,
-    events: [
-      {
-        name: "Consulta",
-        start: "2021-05-21 15:00",
-        end: "2021-05-21 15:20",
-        details: "Consulta de Rotina Rubi",
-      },
-      {
-        name: "Consulta",
-        start: "2021-05-05 11:00",
-        end: "2021-05-05 11:30",
-        details: "Consulta de Rotina Rubi",
-      },
-      {
-        name: "Cirurgia",
-        start: "2021-05-21 10:00",
-        end: "2021-05-21 16:20",
-        details: "Cirurgia de Rotina Rubi",
-      },
-    ],
-    colors: ["orange"],
+    events: [],
     snackbar: false,
     color: "",
     text: "",
@@ -235,6 +220,30 @@ export default {
       this.selectedOpen = false;
       this.getEvents();
     },
+    medicoAgenda: async function(value){
+      this.events = [];
+      let response2 = await axios.post("http://localhost:7777/clinica/intervencoes/medico", {
+        tipo: "Consulta",
+        veterinario: value,
+      },
+      {
+        headers: { Authorization: "Bearer " + store.getters.token },
+      });
+      console.log(response2)
+      for (var i = 0; i < response2.data.length; i++){
+        if(response2.data[i].estado != "Cancelada"){
+          var marcacao = moment(response2.data[i].data + " " + response2.data[i].hora, "YYYY-MM-DD HH:mm", true).locale("pt").format("YYYY-MM-DD HH:mm");
+          var final = moment(marcacao).add(15, 'minutes').locale("pt").format("YYYY-MM-DD HH:mm")
+          this.events.push({
+            name: response2.data[i].tipo,
+            start: marcacao,
+            end: final, 
+            details: response2.data[i].motivo,
+            state: response2.data[i].estado
+          })
+        }
+      }
+    },
     // adicionar evento
     addEvent() {
       if (this.name && this.start && this.end && this.details) {
@@ -243,6 +252,7 @@ export default {
         this.details = "";
         this.start == "";
         this.end = "";
+        this.state= "";
       } else {
         //show error
       }
@@ -253,8 +263,9 @@ export default {
       this.type = "day";
     },
     getEventColor(event) {
-      if (event.name.includes("Consulta")) return "#00d4ff";
-      else return "#ffc44d";
+      if (event.state.includes("Agendada")) return "#ACD47F";
+      if (event.state.includes("A decorrer")) return "#FFDF80";
+      if (event.state.includes("Pendente")) return "#FAB471"
     },
     setToday() {
       this.focus = this.today;
@@ -309,7 +320,28 @@ export default {
         headers: { Authorization: "Bearer " + store.getters.token },
       });
       for (var i = 0; i < response.data.length; i++)
-        this.medico.push(response.data[i].nome);
+        this.medico.push({nome: response.data[i].nome, id: response.data[i].id});
+      let response2 = await axios.post("http://localhost:7777/clinica/intervencoes", {
+        tipo: "Consulta"
+      },
+      {
+        headers: { Authorization: "Bearer " + store.getters.token },
+      });
+      console.log(response2)
+      for (i = 0; i < response2.data.length; i++){
+        if(response2.data[i].estado != "Cancelada"){
+          var marcacao = moment(response2.data[i].data + " " + response2.data[i].hora, "YYYY-MM-DD HH:mm", true).locale("pt").format("YYYY-MM-DD HH:mm");
+          var final = moment(marcacao).add(15, 'minutes').locale("pt").format("YYYY-MM-DD HH:mm")
+          this.events.push({
+            name: response2.data[i].tipo,
+            start: marcacao,
+            end: final, 
+            details: response2.data[i].motivo,
+            state: response2.data[i].estado
+          })
+        }
+      }
+
     } catch (e) {
       console.log(e);
     }

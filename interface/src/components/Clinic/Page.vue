@@ -215,10 +215,10 @@ export default {
           value: "utente",
         },
         {
-          text: "CLIENTE",
+          text: "MÉDICO",
           align: "start",
           sortable: true,
-          value: "cliente",
+          value: "veterinario",
         },
         {
           text: "DATA",
@@ -297,7 +297,7 @@ export default {
       for (var i = 0; i < response.data.intervencoes.length; i++) {
         var element = response.data.intervencoes[i];
         element.utente = response.data.intervencoes[i].animal.nome;
-        element.cliente = response.data.intervencoes[i].cliente.nome;
+        element.veterinario = response.data.intervencoes[i].veterinario_nome;
         element.especie = response.data.intervencoes[i].animal.especie;
         element.marcacao =
           response.data.intervencoes[i].data +
@@ -311,11 +311,10 @@ export default {
     let response = await axios.get("http://localhost:7777/clinica/consultas", {
       headers: { Authorization: "Bearer " + store.getters.token },
     });
-
     for (var i = 0; i < response.data.intervencoes.length; i++) {
       var element = response.data.intervencoes[i];
       element.utente = response.data.intervencoes[i].animal.nome;
-      element.cliente = response.data.intervencoes[i].cliente.nome;
+      element.veterinario = response.data.intervencoes[i].veterinario_nome;
       element.especie = response.data.intervencoes[i].animal.especie;
       element.marcacao =
         response.data.intervencoes[i].data +

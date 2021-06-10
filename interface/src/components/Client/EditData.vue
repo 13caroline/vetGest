@@ -3,7 +3,7 @@
     <v-container>
       <v-card-title class="font-weight-bold text-uppercase">
         <v-icon small class="mr-2">fas fa-paw</v-icon>
-        Editar dados de {{ cao.nome }}
+        Editar dados de {{ animal.nome }}
       </v-card-title>
       <v-card-text>
         <v-form ref="form" v-model="valid" lazy-validation>
@@ -46,7 +46,8 @@
                     :rules="nomeRules"
                     outlined
                     dense
-                    v-model="cao.nome"
+                    disabled
+                    v-model="animal.nome"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="3" class="py-0">
@@ -58,7 +59,7 @@
                     outlined
                     dense
                     disabled
-                    :value="cao.especie"
+                    v-model="animal.especie"
                   >
                   </v-text-field>
                 </v-col>
@@ -70,7 +71,7 @@
                     class="font-weight-regular"
                     outlined
                     dense
-                    :value="cao.raca"
+                    v-model="animal.raca"
                   >
                   </v-text-field>
                 </v-col>
@@ -83,8 +84,8 @@
                     color="#2596be"
                     outlined
                     dense
-                    :value="cao.data"
                     disabled
+                    v-model="animal.dataNascimento"
                   ></v-text-field>
                 </v-col>
                 <v-col sm="2" class="py-0">
@@ -96,8 +97,8 @@
                     outlined
                     dense
                     suffix="cm"
-                    v-model="cao.altura"
                     :rules="alturaRules"
+                    v-model="animal.altura"
                   >
                   </v-text-field>
                 </v-col>
@@ -109,7 +110,7 @@
                     class="font-weight-regular"
                     outlined
                     dense
-                    :value="cao.chip"
+                    v-model="animal.chip"
                   >
                   </v-text-field>
                 </v-col>
@@ -125,7 +126,7 @@
                     dense
                     :items="itemscor"
                     multiple
-                    v-model="cao.cor"
+                    v-model="cor"
                   ></v-select>
                 </v-col>
 
@@ -138,7 +139,7 @@
                     dense
                     :items="itemspelagem"
                     multiple
-                    v-model="cao.pelagem"
+                    v-model="pelagem"
                   ></v-select>
                 </v-col>
 
@@ -150,7 +151,7 @@
                     outlined
                     dense
                     :items="itemscauda"
-                    v-model="cao.cauda"
+                    v-model="animal.cauda"
                   ></v-select>
                 </v-col>
               </v-row>
@@ -159,33 +160,25 @@
                 <v-col class="py-0">
                   <p class="ma-0">Observações</p>
                   <v-textarea
-                    v-if="cao.observacoes"
                     outlined
                     color="#2596be"
                     rows="2"
                     clearable
                     clear-icon="fas fa-times-circle"
                     no-resize
-                    v-model="cao.observacoes"
+                    v-model="animal.observacoes"
                   ></v-textarea>
 
-                  <v-textarea
-                    v-else
-                    outlined
-                    color="#2596be"
-                    value="Sem observações"
-                    rows="2"
-                    clearable
-                    clear-icon="fas fa-times-circle"
-                    no-resize
-                    v-model="cao.observacoes"
-                  ></v-textarea>
                 </v-col>
               </v-row>
 
               <v-row>
                 <v-col cols="12" sm="auto" class="py-0">
-                  <v-radio-group v-model="cao.sexo" row disabled>
+                  <v-radio-group
+                    v-model="animal.sexo"
+                    row
+                    disabled
+                  >
                     <template v-slot:label>
                       <div>Sexo</div>
                     </template>
@@ -202,16 +195,19 @@
                   </v-radio-group>
                 </v-col>
                 <v-col cols="12" sm="auto" class="py-0">
-                  <v-radio-group v-model="cao.castracao" row>
+                  <v-radio-group
+                    v-model="animal.castracao"
+                    row
+                  >
                     <template v-slot:label>
                       <div>Castração</div>
                     </template>
-                    <v-radio value="Sim" color="#2596be">
+                    <v-radio :value="true" color="#2596be">
                       <template v-slot:label>
                         <div class="body-2">Sim</div>
                       </template>
                     </v-radio>
-                    <v-radio value="Não" color="#2596be">
+                    <v-radio :value="false" color="#2596be">
                       <template v-slot:label>
                         <div class="body-2">Não</div>
                       </template>
@@ -288,24 +284,19 @@
 </template>
 
 <script>
-// import axios from "axios";
+import axios from "axios";
+import store from "@/store.js";
 export default {
+  props: ["id"],
   data: () => ({
+
+
+    
+    cor: [],
+    pelagem: [],
+    
     dialog: false,
-    cao: {
-      nome: "Rubi",
-      especie: "Canídeo",
-      raca: "Serra da Estrela",
-      sexo: "Macho",
-      cor: "Castanho",
-      data: "02/01/2014",
-      altura: 70,
-      pelagem: ["Média", "Lisa"],
-      cauda: "Comprida",
-      chip: "AC14ASC7984",
-      castracao: "Não",
-      observacoes: "Observações Rubi",
-    },
+    animal: {},
     itemscor: [
       "Amarelo",
       "Azul",
@@ -336,32 +327,35 @@ export default {
     timeout: -1,
     text: "",
     nomeRules: [
-        (value) => {
-          const pattern = /^([a-zA-Z]+)$/;
-          return pattern.test(value) || "O nome só pode conter letras";
-        },
-      ],
+      (value) => {
+        const pattern = /^([a-zA-Z]+)$/;
+        return pattern.test(value) || "O nome só pode conter letras";
+      },
+    ],
     alturaRules: [
-        (value) => {
-          const pattern = /^([0-9]+)$/;
-          return pattern.test(value) || "Introduza apenas dígitos";
-        },
-      ],
+      (value) => {
+        const pattern = /^([0-9]+)$/;
+        return pattern.test(value) || "Introduza apenas dígitos";
+      },
+    ],
   }),
   methods: {
     editarDados: async function () {
-      /*
       if (this.$refs.form.validate()) {
         try {
-          var resposta = await axios.post("http://localhost:7777//cliente/editaDadosAnimal", {
-            nome: this.cao.nome,
-            altura: this.cao.altura,
-            cor: this.cao.cor,
-            pelagem: this.cao.pelagem, 
-            cauda: this.cao.cauda, 
-            observacoes: this.cao.observacoes
-            castracao: this.cao.castracao
-          });
+          var resposta = await axios.post(
+            "http://localhost:7777/cliente/animal/" + this.id,
+            {
+              email: store.state.email,
+              nome: this.animal.nome,
+              altura: this.animal.altura,
+              cor: this.cor,
+              pelagem: this.pelagem,
+              cauda: this.animal.cauda,
+              observacoes: this.animal.observacoes,
+              castracao: this.animal.castracao,
+            }
+          );
           console.log(JSON.stringify(resposta.data));
           this.text = "Dados editados com sucesso.";
           this.color = "success";
@@ -378,16 +372,21 @@ export default {
         this.snackbar = true;
         this.done = false;
       }
-      */
     },
   },
-  created() {
-    /*
-    let response = await axios.post("http://localhost:7777/cliente/animal/getDados", {
-      email: this.$store.state.user.email,
-      animal
-    });
-    */
+  created: async function () {
+    let response = await axios.post(
+      "http://localhost:7777/cliente/animal/" + this.id,
+      {
+        email: store.state.email,
+      }
+    );
+    this.animal = response.data;
+    console.log(response)
+    this.cor= response.data.animal.cor.split(",");
+    this.pelagem= response.data.animal.pelagem.split(",");
+    if(this.animal.observacoes.length==0) this.animal.observacoes="Sem observações"
+    
   },
 };
 </script>

@@ -38,6 +38,12 @@ public class Internamento {
     )
     private String motivo;
 
+    @Column(
+            name = "estado",  //"Internado" || "Com Alta"
+            nullable = false
+    )
+    private String estado;
+
     @ManyToOne(cascade = {CascadeType.ALL})
     private Animal animal;
 
