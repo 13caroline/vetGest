@@ -81,6 +81,20 @@
             <v-card-text>
               <v-row align="center">
                 <v-col cols="12" class="pb-0">
+                  <p class="ma-0">Motivo de internamento</p>
+                  <v-textarea
+                    no-resize
+                    dense
+                    color="#2596be"
+                    flat
+                    outlined
+                    rows="2"
+                    v-model="motivo"
+                  ></v-textarea>
+                  
+                </v-col>
+
+                <v-col cols="12" class="py-0">
                   <p class="ma-0">Nota de admissão</p>
                   <v-textarea
                     color="#2596be"
@@ -93,16 +107,15 @@
                 </v-col>
 
                 <v-col cols="12" class="py-0">
-                  <p class="ma-0">Motivo de internamento</p>
-                  <v-textarea
-                    no-resize
-                    dense
+                  <p class="ma-0">Localização</p>
+                  <v-text-field
                     color="#2596be"
                     flat
                     outlined
-                    rows="2"
-                    v-model="motivo"
-                  ></v-textarea>
+                    dense
+                    no-resize
+                    v-model="localização"
+                  ></v-text-field>
                 </v-col>
               </v-row>
 

@@ -182,6 +182,23 @@
   </div>
 </template>
 
+<script>
+
+export default {
+  props: ["id"],
+  data() {
+    return {
+
+    }
+
+  },
+  created: async function(){
+
+  }
+}
+</script>
+
+
 <style scoped>
   .details{
     text-align: left;

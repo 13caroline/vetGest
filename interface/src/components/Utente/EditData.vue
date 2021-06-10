@@ -239,6 +239,7 @@
 <script>
 import axios from "axios";
 import Cancelar from "@/components/Dialogs/Cancel.vue";
+import store from "@/store.js"
 
 export default {
   props: ["id", "animal"],
@@ -325,7 +326,8 @@ export default {
               castracao: this.dados.castracao,
               chip: this.dados.chip,
             }
-          });
+          },
+           { headers: { Authorization: "Bearer " + store.getters.token } });
           this.$router.push("/clinica/utente/" + this.id);
           this.text = "Dados editados com sucesso.";
           this.color = "success";
@@ -351,7 +353,8 @@ export default {
         : "http://localhost:7777/medico/utente";
     let response = await axios.post(route, {
       id: this.id,
-    });
+    },
+     { headers: { Authorization: "Bearer " + store.getters.token } });
     this.dados = response.data;
     this.cor = response.data.cor.split(",");
     this.pelagem = response.data.pelagem.split(",");

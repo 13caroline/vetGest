@@ -179,6 +179,9 @@ export default {
         "http://localhost:7777/clinica/intervencao",
         {
           id: this.animal.id,
+        }, 
+        {
+          headers: { Authorization: "Bearer " + store.getters.token },
         }
       );
       for (var i = 0; i < response.data.length; i++) {
@@ -196,6 +199,9 @@ export default {
         "http://localhost:7777/clinica/intervencao",
         {
           id: this.animal.id,
+        },
+        {
+          headers: { Authorization: "Bearer " + store.getters.token },
         }
       );
       for (var i = 0; i < response.data.length; i++) {

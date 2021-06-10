@@ -60,7 +60,7 @@ import Consultas from "@/components/Utente/Consultas.vue"
 import Cirurgia from "@/components/Utente/Cirurgias.vue"
 import Dados from "@/components/Utente/Dados.vue"
 import axios from "axios"
-
+import store from "@/store.js"
 
 export default {
   props:["id"],
@@ -95,7 +95,8 @@ export default {
   created: async function() {
     let response = await axios.post("http://localhost:7777/clinica/utente", {
       id: this.id,
-    });
+    },
+     { headers: { Authorization: "Bearer " + store.getters.token } });
     this.dados = response.data
   },
 };

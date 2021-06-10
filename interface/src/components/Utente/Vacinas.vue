@@ -82,6 +82,7 @@ import ConfirmaDespar from "@/components/Dialogs/ConfirmaDesparasitacao.vue";
 import NovaVacina from "@/components/Dialogs/NovaVacina.vue";
 import NovaDesparasitacao from "@/components/Dialogs/NovaDesparasitacao.vue";
 import moment from "moment";
+import store from "@/store.js"
 export default {
   props: ["animal"],
   data: () => ({
@@ -171,6 +172,9 @@ export default {
         route,
         {
           id: this.animal.id,
+        },
+        {
+          headers: { Authorization: "Bearer " + store.getters.token },
         }
       );
       this.items = response.data;

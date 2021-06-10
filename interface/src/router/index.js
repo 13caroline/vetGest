@@ -149,6 +149,12 @@ const routes = [
     name: 'Clínica Internamento',
     component: () => import(/* webpackChunkName: "about" */ '../views/Internamento/Internamento.vue')
   },
+   // Internamento Clínica Detalhes
+   {
+    path: '/clinica/internamento/detalhes/:id',
+    name: 'Clínica Internamento Detalhes',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Internamento/DetInternamento.vue')
+  },
   //------------------------------------- Médico -------------------------------------
 
   //Página inicial médico
