@@ -48,4 +48,8 @@ public class InternamentoService {
     public NotaInternamento saveNota(NotaInternamento nota){
         return repositoryNota.save(nota);
     }
+
+    public List<Internamento> findAllByEstado(String estado){
+        return repository.findAllByEstado(estado);
+    }
 }

@@ -31,6 +31,8 @@ public class ClinicaController {
     private VeterinarioService veterinarioService;
     @Autowired
     private ImunizacaoService imunizacaoService;
+    @Autowired
+    private InternamentoService internamentoService;
 
     @CrossOrigin
     @PostMapping(path = "/clinica/adicionarClinica")
@@ -400,5 +402,12 @@ public class ClinicaController {
         animalService.updateAnimal(animal);
 
         return ResponseEntity.accepted().body("Animal editado com sucesso");
+    }
+
+    @CrossOrigin
+    @GetMapping("/clinica/internamentos")
+    public ResponseEntity<?> getInternamentos(){
+        List<Internamento> internamentos = internamentoService.findAllByEstado("Internado");
+        return ResponseEntity.accepted().body(internamentos);
     }
 }
