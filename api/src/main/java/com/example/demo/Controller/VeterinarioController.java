@@ -79,7 +79,7 @@ public class VeterinarioController {
 
         intervencao.setAnimal(animal);
         intervencao.setEstado("Agendada");
-        intervencao.setData_pedido(LocalDateTime.now().toString());
+        intervencao.setData_pedido(LocalDateTime.now().toString().substring(0,16));
         intervencao.setVeterinario(veterinario);
         intervencaoService.saveIntervencao(intervencao);
         return ResponseEntity.accepted().body("Intervenção agendada com sucesso!");
@@ -379,7 +379,7 @@ public class VeterinarioController {
         }
         internamento.setVeterinario(vet);
         internamento.setAnimal(animal);
-        internamento.setData(LocalDateTime.now().toString());
+        internamento.setData(LocalDateTime.now().toString().substring(0,16));
         internamento.setEstado("Internado");
         internamentoService.saveInternamento(internamento);
         //System.out.println("\n\nAQUI: "+internamento);

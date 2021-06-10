@@ -344,7 +344,7 @@ public class ClienteController {
        intervencao.setVeterinario(vet);
        intervencao.setEstado("Pendente");
        intervencao.setTipo("Consulta");
-       intervencao.setData_pedido(LocalDateTime.now().toString());
+       intervencao.setData_pedido(LocalDateTime.now().toString().substring(0,16));
        //System.out.println("\n\nAQUI:"+intervencao);
        intervencaoService.saveIntervencao(intervencao);
        return ResponseEntity.accepted().body("Consulta agendada!");
