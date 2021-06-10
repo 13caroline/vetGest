@@ -37,7 +37,7 @@
         </v-tab-item>
 
         <v-tab-item>
-          <Consultas></Consultas>
+          <Consultas :animal="animal"></Consultas>
         </v-tab-item>
 
         <v-tab-item>

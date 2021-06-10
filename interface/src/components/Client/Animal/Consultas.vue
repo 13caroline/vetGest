@@ -185,7 +185,7 @@
                     outlined
                     readonly
                     dense
-                    value="Rubi"
+                    :value="animal.nome"
                   ></v-text-field>
                 </v-col>
 
@@ -220,37 +220,32 @@
                 </v-col>
 
                 <v-col cols="12" class="py-0">
-                  <v-menu
-                    ref="dataMarcacao"
-                    v-model="dataMarcacao"
-                    :close-on-content-click="true"
-                    :nudge-right="40"
-                    :return-value.sync="dataMarcacao"
-                    transition="scale-transition"
-                    offset-y
-                    max-width="290px"
-                    min-width="290px"
-                  >
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-text-field
-                        append-icon="fas fa-calendar-day"
-                        outlined
-                        color="#2596be"
-                        v-on="on"
-                        v-bind="attrs"
-                        v-model="date"
-                        dense
-                        readonly
-                      ></v-text-field>
-                    </template>
-                    <v-date-picker
-                      full-width
-                      color="#2596be"
-                      :min="new Date().toISOString().substr(0, 10)"
-                      v-model="date"
-                      locale="pt-PT"
-                    ></v-date-picker>
-                  </v-menu>
+         <v-menu
+                v-model="menu2"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                transition="scale-transition"
+                offset-y
+                min-width="auto"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    v-model="date"
+                    append-icon="fas fa-calendar-alt"
+                    readonly
+                    dense
+                    outlined
+                    v-bind="attrs"
+                    v-on="on"
+                  ></v-text-field>
+                </template>
+                <v-date-picker
+                  v-model="date"
+                  @input="menu2 = false"
+                  locale="pt PT"
+                  :min="new Date().toISOString().substr(0, 10)"
+                ></v-date-picker>
+              </v-menu>
                 </v-col>
 
                 <v-col cols="12" class="py-0">
@@ -300,7 +295,9 @@
                     color="#2596be"
                     dense
                     outlined
-                    :items="medico"
+                    :items="medicos"
+                    item-text="nome"
+                    item-value="id"
                     v-model="medico"
                   ></v-autocomplete>
                 </v-col>
@@ -314,6 +311,7 @@
                 </v-col>
                 <v-col cols="auto">
                   <v-btn color="#2596be" small dark class="ml-3"
+                  @click="registaConsulta()"
                     >Registar</v-btn
                   >
                 </v-col>
@@ -365,12 +363,70 @@
 import axios from "axios";
 import store from "@/store.js";
 export default {
+  props:["animal"],
   data: () => ({
     dialogNova: false,
     cancelDialog: false,
     snackbar: false,
     color: "",
     done: false,
+    motivos:"",
+    motivo: [
+      "Consulta anual/Vacinação",
+      "Consulta extraordinária/Por doença",
+      "Consulta de seguimento",
+      "Procedimentos específicos",
+    ],
+    descricao:"",
+desc: [
+      { text: "Consulta anual/Vacinação", tipo: "Consulta anual/Vacinação" },
+      {
+        text: "Vómitos/Diarreia/Recusa em comer",
+        tipo: "Consulta extraordinária/Por doença",
+      },
+      {
+        text: "Comportamento letárgico",
+        tipo: "Consulta extraordinária/Por doença",
+      },
+      {
+        text: "Alterações da marcha",
+        tipo: "Consulta extraordinária/Por doença",
+      },
+      {
+        text: "Problema de olhos ou ouvidos",
+        tipo: "Consulta extraordinária/Por doença",
+      },
+      {
+        text: "Problemas de dentes ou boca",
+        tipo: "Consulta extraordinária/Por doença",
+      },
+      {
+        text: "Problemas cutâneos",
+        tipo: "Consulta extraordinária/Por doença",
+      },
+      {
+        text: "Problemas urinários",
+        tipo: "Consulta extraordinária/Por doença",
+      },
+      { text: "Outros", tipo: "Consulta extraordinária/Por doença" },
+      { text: "Consulta de seguimento", tipo: "Consulta de seguimento" },
+      { text: "Cortar unhas", tipo: "Procedimentos específicos" },
+      {
+        text: "Expressão de glândulas anais",
+        tipo: "Procedimentos específicos",
+      },
+      { text: "Análises", tipo: "Procedimentos específicos" },
+      { text: "Limpeza de ouvidos", tipo: "Procedimentos específicos" },
+      { text: "Cortar o pêlo", tipo: "Procedimentos específicos" },
+      { text: "Lavagem", tipo: "Procedimentos específicos" },
+      { text: "Desparasitação", tipo: "Procedimentos específicos" },
+      { text: "Outros", tipo: "Procedimentos específicos" },
+    ],
+    menu2:false,
+    date:new Date().toISOString().substr(0,10),
+    horaMarcacao:null,
+    medicos:[],
+    medico:"",
     timeout: -1,
     hora: "10:00",
     text: "",
@@ -421,8 +477,8 @@ export default {
       else return "#9ae5ff";
     },
 
-    cancelar: async function () {
-      /*
+    /*cancelar: async function () {
+      
 		 try {
           var resposta = await axios.post("http://localhost:7777/cliente/cancelarConsulta", {
             estado: "Cancelada"
@@ -439,11 +495,44 @@ export default {
           this.color = "warning";
           this.snackbar = true;
         }
-		*/
+		
+    },*/
+     registaConsulta: async function () {
+      try {
+        if (this.motivos == "Consulta anual/Vacinação")
+          this.descricao = "Consulta anual/Vacinação";
+        if (this.motivos == "Consulta de seguimento")
+          this.descricao = "Consulta de seguimento";
+        await axios.post(
+          "http://localhost:7777/cliente/consulta",
+          {
+            intervencao: {
+              data: this.date,
+              hora: this.hora,
+              descricao: this.descricao,
+              motivo: this.motivos,
+            },
+            animal: this.animal.id,
+            veterinario: this.medico,
+            cliente: this.$store.state.email,
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + store.getters.token.toString(),
+            },
+          }
+        );
+        this.$router.push("/cliente/consultas");
+      } catch (e) {
+        console.log("erro: +" + e);
+      }
     },
   },
+ 
 
   created: async function () {
+
+
     try {
       var response = await axios.post(
         "http://localhost:7777/cliente/consultas",
@@ -456,9 +545,20 @@ export default {
           },
         }
       );
+      let response2 = await axios.get("http://localhost:7777/cliente/medicos", {
+        headers: { Authorization: "Bearer " + store.getters.token },
+      });
+      console.log(response2)
+      for (var j = 0; j < response2.data.length; j++)
+        this.medicos.push({
+          nome: response2.data[j].nome,
+          id: response2.data[j].id,
+        });
     } catch (e) {
       console.log("erro: +" + e);
     }
+
+
     for (var i = 0; i < response.data.length; i++) {
       this.consultas.push({
         data: response.data[i].data,
@@ -468,6 +568,12 @@ export default {
         estado: response.data[i].estado,
       });
     }
+  },
+  computed: {
+    filteredData() {
+      let motivo = this.motivos;
+      return this.desc.filter((item) => item.tipo === motivo);
+    },
   },
 };
 </script>
