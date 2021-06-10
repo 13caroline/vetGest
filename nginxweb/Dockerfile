@@ -1,5 +1,5 @@
 FROM nginx
-WORKDIR /nginx
+WORKDIR /nginxweb
 
 RUN rm /etc/nginx/conf.d/default.conf
 
