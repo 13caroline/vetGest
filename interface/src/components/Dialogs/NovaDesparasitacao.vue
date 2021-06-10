@@ -3,17 +3,19 @@
     <template v-slot:activator="{ diag, attrs }">
       <v-tooltip top>
         <template v-slot:activator="{ on }">
-          <v-btn
-            color="#2596be"
-            v-bind="attrs"
-            v-on="{ ...on, ...diag }"
-            small
-            dark
-            fab
-            @click="dialog = true"
-          >
-            <v-icon small> fas fa-spider</v-icon>
-          </v-btn>
+
+<v-btn
+                class="body-2"
+                small
+                v-bind="attrs"
+                color="#2596be"
+                v-on="{ ...on, ...diag }"
+                dark
+                @click="dialog = true"
+              >
+                Adicionar Desparasitação
+                <v-icon small class="ml-4">fas fa-spider</v-icon>
+              </v-btn>
         </template>
         <span class="caption">Adicionar desparasitação</span>
       </v-tooltip>
@@ -134,7 +136,6 @@ export default {
         if (store.state.tipo == "Cliente") {
           if (this.proxImunizacao == "1 mês") this.timeskip = 1;
           else this.timeskip = 3;
-
           await axios.post(
             "http://localhost:7777/cliente/animal/" + this.dados + "/vacinas",
             {
@@ -142,7 +143,7 @@ export default {
                 data: this.dateToma,
                 observacoes: this.motivo,
 
-                proxImunizacao: moment(this.data).add(this.timeskip, "months"),
+                proxImunizacao: moment(this.data).add(this.timeskip, "months").format("YYYY-MM-DD"),
                 tratamento: this.tratamento,
               },
               email: this.$store.state.email,

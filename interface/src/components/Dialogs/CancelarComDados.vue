@@ -103,6 +103,7 @@ export default {
   methods: {
     confirmar: async function () {
       try {
+        
         if (store.state.tipo == "Clinica") {
           await axios.post(
             "http://localhost:7777/clinica/intervencao/alterar",
@@ -143,6 +144,7 @@ export default {
             snackbar: "true",
             timeout: 4000,
           });
+          console.log(this.dados)
       } catch (e) {
         console.log("erro: " + e);
         this.dialog = false;

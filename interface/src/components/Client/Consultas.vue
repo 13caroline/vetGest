@@ -57,6 +57,7 @@
                 <CancelarComDados
                   :dialogs="cancelar"
                   :dados="item"
+                  @clicked="registar"
                 ></CancelarComDados>
               </div>
             </template>
@@ -105,7 +106,8 @@ export default {
     dados: {},
     dialogs: {},
     cancelar: {
-      title: "consulta",
+      text: "consulta",
+      title: "o agendamento da consulta"
     },
     snackbar: false,
     color: "",
@@ -117,17 +119,17 @@ export default {
         text: "Data de Marcação",
         align: "start",
         sortable: true,
-        value: "data",
+        value: "marcacao",
       },
       {
         text: "Animal",
         align: "start",
         sortable: true,
-        value: "animal",
+        value: "utente",
       },
       {
         text: "Médico Veterinário",
-        value: "medico",
+        value: "veterinario_nome",
         sortable: true,
         align: "start",
       },
@@ -158,6 +160,42 @@ export default {
     CancelarComDados,
   },
   methods: {
+    atualiza: async function(){
+      this.consultas=[]
+      try {
+      var response = await axios.post(
+        "http://localhost:7777/cliente/consultas",
+        {
+          cliente: this.$store.state.email,
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + store.getters.token.toString(),
+          },
+        }
+      );
+    } catch (e) {
+      console.log("erro: +" + e);
+    }
+    for (var i = 0; i < response.data.length; i++) {
+      this.consultas.push({
+        idConsulta: response.data[i].id,
+        animal: response.data[i].animal,
+        marcacao: response.data[i].data +" "+response.data[i].hora,
+        utente: response.data[i].animal.nome,
+        veterinario_nome: response.data[i].veterinario.nome,
+        descricao: response.data[i].descricao,
+        estado: response.data[i].estado,
+      })
+    }   
+    },
+    registar(value){
+      this.snackbar=value.snackbar
+      this.color=value.color
+      this.text=value.text
+      this.timeout=value.timeout
+      this.atualiza()
+    },
     estadopedido(estado) {
       if (estado == "Agendada") return "#C5E1A5";
       else if (estado == "Cancelada") return "#EF9A9A";
@@ -181,12 +219,13 @@ export default {
     } catch (e) {
       console.log("erro: +" + e);
     }
-    console.log(response)
     for (var i = 0; i < response.data.length; i++) {
       this.consultas.push({
-        data: response.data[i].data,
-        animal: response.data[i].animal.nome,
-        medico: response.data[i].veterinario.nome,
+        idConsulta: response.data[i].id,
+        animal: response.data[i].animal,
+        marcacao: response.data[i].data +" "+response.data[i].hora,
+        utente: response.data[i].animal.nome,
+        veterinario_nome: response.data[i].veterinario.nome,
         descricao: response.data[i].descricao,
         estado: response.data[i].estado,
       })

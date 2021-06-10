@@ -347,8 +347,7 @@ export default {
     registaAnimal: async function () {
       if (this.$refs.form.validate()) {
         try {
-          console.log(store.getters.token);
-          var resposta = await axios.post(
+           await axios.post(
             "http://localhost:7777/cliente/animal/registar",
             {
               cliente: {
@@ -375,7 +374,6 @@ export default {
               },
             }
           );
-          console.log(JSON.stringify(resposta.data));
           this.$router.push("/cliente/inicio");
           this.text = "Animal registado com sucesso.";
           this.color = "success";

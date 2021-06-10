@@ -6,23 +6,17 @@
           <span class="subtitle-1 head">{{animal.nome}}</span>
         </v-col>
        <v-col cols="auto" class="ml-auto">
-          <v-tooltip top>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-               class="body-2 ml-2 mb-2"
+          
+    <v-btn
+                class="body-2"
                 small
                 color="#2596be"
-                v-bind="attrs"
-                v-on="on"
-                fab
                 dark
                 @click="editar()"
               >
-                <v-icon small>fas fa-pen</v-icon>
+                Editar dados
+                <v-icon small class="ml-4">fas fa-pen</v-icon>
               </v-btn>
-            </template>
-            <span>Editar dados</span>
-          </v-tooltip>
         </v-col>
       </v-row>
       <v-divider></v-divider>

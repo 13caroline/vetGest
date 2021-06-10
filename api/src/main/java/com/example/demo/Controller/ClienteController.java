@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.tomcat.util.http.parser.Authorization;
+import org.hibernate.dialect.SybaseAnywhereDialect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.http.ResponseEntity;
@@ -243,7 +244,15 @@ public class ClienteController {
         //Estados
         //Atualizada
         //Administrada
-        imunizacao.setEstado("Atualizada");
+
+        String data_toma = imunizacao.getData_toma();
+        LocalDate date = LocalDate.parse(data_toma);
+        //System.out.println(date);
+
+        if(date.isAfter(LocalDate.now()))
+            imunizacao.setEstado("Atualizada");
+        else
+            imunizacao.setEstado("Administrada");
 
         if(imunizacao.getProxImunizacao()!=null){
             Imunizacao proximaImunizacao = new Imunizacao();

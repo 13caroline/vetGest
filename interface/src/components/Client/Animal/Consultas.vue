@@ -407,34 +407,7 @@ export default {
       },
     ],
     consultas: [
-      {
-        data: "05/04/2021 10:15",
-        animal: "Rubi",
-        medico: "Drº José Vieira",
-        descricao: "Desparasitação",
-        estado: "Concluída",
-      },
-      {
-        data: "19/04/2021 15:30",
-        animal: "Puscas",
-        medico: "Drº José Vieira",
-        descricao: "Vacinação",
-        estado: "Agendada",
-      },
-      {
-        data: "26/04/2021 14:30",
-        animal: "Luffy",
-        medico: "Drº José Vieira",
-        descricao: "Consulta de Rotina",
-        estado: "Pendente",
-      },
-      {
-        data: "26/04/2021 15:00",
-        animal: "Rubi",
-        medico: "Drº José Vieira",
-        descricao: "Consulta de Rotina",
-        estado: "Cancelada",
-      },
+      
     ],
     dialog: false,
     cancelar: false,

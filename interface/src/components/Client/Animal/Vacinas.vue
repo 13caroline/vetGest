@@ -15,6 +15,9 @@
             </v-col>
 </v-row>
           <v-data-table
+          :page.sync="page"
+            :items-per-page="itemsPerPage"
+            @page-count="pageCount = $event"
             :headers="headers"
             :items="items"
             class="elevation-1"
@@ -42,6 +45,16 @@
               </v-btn>
             </template>
           </v-data-table>
+          <div class="text-center pt-2">
+            <v-pagination
+              v-model="page"
+              :length="pageCount"
+              circle
+              :total-visible="4"
+              color="#2596be"
+              class="custom"
+            ></v-pagination>
+          </div>
                   </v-col>
 
       </v-row>
@@ -56,6 +69,7 @@
               <v-text-field
                 color="#2596be"
                 flat
+                disabled
                 outlined
                 dense
                 readonly
@@ -176,10 +190,14 @@
 import axios from 'axios'
 import store from "@/store.js";
 import NovaDesparasitacao from "@/components/Dialogs/NovaDesparasitacao.vue";
-
+import moment from "moment";
 export default {
   props:["animal"],
   data: () => ({
+    page: 1,
+      pageCount: 0,
+      itemsPerPage: 10,
+
     idAnimal: {},
     dialog: false,
     dialogCancel: false,
@@ -267,12 +285,11 @@ export default {
     } catch (e) {
       console.log("erro: +" + e);
     }
-    //console.log(response)
    for (var i = 0; i < response.data.length; i++) {
      if(!response.data[i].veterinario) this.nomeMedico="Sem Referência"
      else this.nomeMedico= response.data[i].veterinario.nome
       this.items.push({
-        dataPrevista: response.data[i].data,
+        dataPrevista:  moment(response.data[i].data,"YYYY-MM-DD",true).locale("pt").format("DD/MM/YYYY"),
         tipo: response.data[i].tipo,
         tratamento: response.data[i].tratamento,
         medico: this.nomeMedico,
@@ -290,7 +307,7 @@ export default {
       console.log(item.data);
     },
     openDialog(item) {
-      this.dataPrevista = item.data;
+      this.dataPrevista = item.dataPrevista;
       console.log(item.id)
       this.id = item.id;
       this.dialog = true;
@@ -339,12 +356,13 @@ created: async function () {
     } catch (e) {
       console.log("erro: +" + e);
     }
-    console.log(response)
+ 
+    if(response.data.length!=0){
    for (var i = 0; i < response.data.length; i++) {
      if(!response.data[i].veterinario) this.nomeMedico="Sem Referência"
      else this.nomeMedico= response.data[i].veterinario.nome
       this.items.push({
-        dataPrevista: response.data[i].data,
+        dataPrevista: moment(response.data[i].data,"YYYY-MM-DD",true).locale("pt").format("DD/MM/YYYY"),
         tipo: response.data[i].tipo,
         tratamento: response.data[i].tratamento,
         medico: this.nomeMedico,
@@ -353,6 +371,7 @@ created: async function () {
       })
     } 
           this.idAnimal= response.data[0].animal.id;
+    }
 
   },
   components: {
@@ -360,3 +379,30 @@ created: async function () {
   }
 };
 </script>
+
+<style>
+.custom {
+  width: auto;
+  margin-left: auto;
+}
+
+.custom .v-pagination__navigation {
+  height: 26px !important;
+  width: 26px !important;
+}
+
+.custom .v-pagination__navigation .v-icon {
+  font-size: 16px !important;
+}
+
+.custom .v-pagination__item {
+  height: 26px !important;
+  min-width: 26px !important;
+  font-size: 0.85rem !important;
+}
+
+.body-2 .v-icon.v-icon {
+  font-size: 15px;
+}
+
+</style>

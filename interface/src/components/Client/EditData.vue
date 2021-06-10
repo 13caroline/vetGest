@@ -168,17 +168,12 @@
                     no-resize
                     v-model="animal.observacoes"
                   ></v-textarea>
-
                 </v-col>
               </v-row>
 
               <v-row>
                 <v-col cols="12" sm="auto" class="py-0">
-                  <v-radio-group
-                    v-model="animal.sexo"
-                    row
-                    disabled
-                  >
+                  <v-radio-group v-model="animal.sexo" row disabled>
                     <template v-slot:label>
                       <div>Sexo</div>
                     </template>
@@ -195,10 +190,7 @@
                   </v-radio-group>
                 </v-col>
                 <v-col cols="12" sm="auto" class="py-0">
-                  <v-radio-group
-                    v-model="animal.castracao"
-                    row
-                  >
+                  <v-radio-group v-model="animal.castracao" row>
                     <template v-slot:label>
                       <div>Castração</div>
                     </template>
@@ -289,12 +281,9 @@ import store from "@/store.js";
 export default {
   props: ["id"],
   data: () => ({
-
-
-    
     cor: [],
     pelagem: [],
-    
+
     dialog: false,
     animal: {},
     itemscor: [
@@ -343,23 +332,32 @@ export default {
     editarDados: async function () {
       if (this.$refs.form.validate()) {
         try {
-          var resposta = await axios.post(
-            "http://localhost:7777/cliente/animal/" + this.id,
+          await axios.post(
+            "http://localhost:7777/cliente/editar/animal/" + this.id,
             {
-              email: store.state.email,
-              nome: this.animal.nome,
-              altura: this.animal.altura,
-              cor: this.cor,
-              pelagem: this.pelagem,
-              cauda: this.animal.cauda,
-              observacoes: this.animal.observacoes,
-              castracao: this.animal.castracao,
+              cliente: {
+                email: store.state.email,
+              },
+              animal: {
+                nome: this.animal.nome,
+                raca: this.animal.raca,
+                dataNascimento: this.animal.raca,
+                sexo: this.animal.sexo,
+                especie: this.animal.especie,
+                altura: this.animal.altura,
+                cor: this.cor.toString(),
+                pelagem: this.pelagem.toString(),
+                cauda: this.animal.cauda,
+                chip: this.animal.chip,
+                observacoes: this.animal.observacoes,
+                castracao: this.animal.castracao,
+              },
             }
           );
-          console.log(JSON.stringify(resposta.data));
           this.text = "Dados editados com sucesso.";
           this.color = "success";
           this.snackbar = true;
+          this.$router.push("/cliente/animal/"+this.id)
         } catch (e) {
           console.log("erro: " + e);
           this.text = "Ocorreu um erro no registo, por favor tente mais tarde!";
@@ -373,6 +371,7 @@ export default {
         this.done = false;
       }
     },
+
   },
   created: async function () {
     let response = await axios.post(
@@ -381,12 +380,11 @@ export default {
         email: store.state.email,
       }
     );
-    this.animal = response.data;
-    console.log(response)
-    this.cor= response.data.animal.cor.split(",");
-    this.pelagem= response.data.animal.pelagem.split(",");
-    if(this.animal.observacoes.length==0) this.animal.observacoes="Sem observações"
-    
+    this.animal = response.data.animal;
+    this.cor = response.data.animal.cor.split(",");
+    this.pelagem = response.data.animal.pelagem.split(",");
+    if (this.animal.observacoes.length == 0)
+      this.animal.observacoes = "Sem observações";
   },
 };
 </script>
