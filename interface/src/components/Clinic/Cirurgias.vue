@@ -271,7 +271,7 @@ export default {
       {
         headers: { Authorization: "Bearer " + store.getters.token },
       });
-      console.log(response2)
+
       for (var i = 0; i < response2.data.length; i++){
         if(response2.data[i].estado != "Cancelada"){
           var marcacao = moment(response2.data[i].data + " " + response2.data[i].hora, "YYYY-MM-DD HH:mm", true).locale("pt").format("YYYY-MM-DD HH:mm");
@@ -292,12 +292,6 @@ export default {
     },
     //get events
     getEvents() {},
-    // apagar evento
-    deleteEvent(ev) {
-      console.log(ev);
-      this.selectedOpen = false;
-      this.getEvents();
-    },
     // adicionar evento
     addEvent() {
       if (this.name && this.start && this.end && this.details) {
