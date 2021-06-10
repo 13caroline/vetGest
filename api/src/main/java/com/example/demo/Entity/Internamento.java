@@ -44,6 +44,11 @@ public class Internamento {
     )
     private String estado;
 
+    @Column(
+            name = "nota"
+    )
+    private String nota;
+
     @ManyToOne(cascade = {CascadeType.ALL})
     private Animal animal;
 
