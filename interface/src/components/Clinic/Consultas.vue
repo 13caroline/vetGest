@@ -106,49 +106,111 @@
               :activator="selectedElement"
               offset-x
             >
-              <v-card color="grey lighten-4" min-width="350px" flat>
-                <v-toolbar :color="selectedEvent.color" dark>
-                  <v-btn @click="deleteEvent(selectedEvent.id)" icon>
-                    <v-icon>mdi-delete</v-icon>
-                  </v-btn>
-                  <v-toolbar-title
-                    v-html="selectedEvent.name"
-                  ></v-toolbar-title>
-                  <v-spacer></v-spacer>
-                </v-toolbar>
+              <v-card color="grey lighten-4" max-width="500px" flat>
                 <v-card-text>
-                  <form v-if="currentlyEditing !== selectedEvent.id">
-                    {{ selectedEvent.details }}
-                  </form>
-                  <form v-else>
-                    <textarea
-                      v-model="selectedEvent.details"
-                      type="text"
-                      style="width: 100%"
-                      :min-height="100"
-                      placeholder="add note"
-                    ></textarea>
-                  </form>
-                </v-card-text>
-                <v-card-actions>
-                  <v-btn text color="secondary" @click="selectedOpen = false">
-                    Fechar
-                  </v-btn>
+                  <v-row>
+                    <v-col class="pb-0" align="right" cols="5">
+                      <span class="text-uppercase">Nome do Animal</span>
+                    </v-col>
+                    <v-col class="pl-0 pb-0" cols="7">
+                      <span class="black--text">
+                        <strong>{{ selectedEvent.utente }}</strong>
+                        ({{ selectedEvent.raca }})
+                      </span>
+                    </v-col>
 
-                  <v-btn
-                    text
-                    v-if="currentlyEditing !== selectedEvent.id"
-                    @click.prevent="editEvent(selectedEvent)"
-                  >
-                    Editar
-                  </v-btn>
-                  <v-btn
-                    text
-                    v-else
-                    @click.prevent="updateEvent(selectedEvent)"
-                  >
-                    Guardar
-                  </v-btn>
+                    <v-col class="pb-0" align="right" cols="5">
+                      <span class="text-uppercase">Motivo da consulta</span>
+                    </v-col>
+                    <v-col class="pl-0 pb-0" cols="7">
+                      <span class="black--text">
+                        <strong>{{ selectedEvent.details }}</strong>
+                      </span>
+                      <br />
+                      <span>{{ selectedEvent.desc }}</span>
+                    </v-col>
+
+                    <v-col class="pb-0" align="right" cols="5">
+                      <span class="text-uppercase">Data</span>
+                    </v-col>
+                    <v-col class="pl-0 pb-0" cols="7">
+                      <span class="black--text">
+                        <strong
+                          >{{ format(selectedEvent.start) }} -
+                          {{ format(selectedEvent.end) }}</strong
+                        >
+                      </span>
+                    </v-col>
+
+                    <v-col class="pb-0" align="right" cols="5">
+                      <span class="text-uppercase">Médico</span>
+                    </v-col>
+                    <v-col class="pl-0 pb-0" cols="7">
+                      <span class="black--text">
+                        <strong>Dr.º {{ selectedEvent.vet }}</strong>
+                      </span>
+                    </v-col>
+
+                    <v-col class="pb-0" align="right" cols="5">
+                      <span class="text-uppercase">estado</span>
+                    </v-col>
+                    <v-col class="pl-0 pb-0" cols="7">
+                      <v-chip :color="colors" small>
+                        {{ selectedEvent.state }}
+                      </v-chip>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-icon
+                        v-if="selectedEvent.state == 'Pendente'"
+                        color="#28a428"
+                        v-bind="attrs"
+                        v-on="{ on }"
+                        @click="selectedOpen = false"
+                      >
+                        clipboard-check
+                      </v-icon>
+                    </template>
+                    <span class="caption">Confirmar consulta</span>
+                  </v-tooltip>
+
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-icon
+                        v-if="selectedEvent.state == 'Agendada'"
+                        color="#66BB6A"
+                        v-bind="attrs"
+                        v-on="{ on }"
+                        @click="confirmar('A decorrer')"
+                      >
+                        mdi-calendar-check
+                      </v-icon>
+                    </template>
+                    <span class="caption">Admitir utente</span>
+                  </v-tooltip>
+
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-icon
+                        v-if="
+                          selectedEvent.state == 'Agendada' ||
+                          selectedEvent.state == 'Pendente'
+                        "
+                        color="#E57373"
+                        v-bind="attrs"
+                        v-on="{ on }"
+                        @click="confirmar('Cancelada')"
+                      >
+                        mdi-calendar-remove
+                      </v-icon>
+                    </template>
+                    <span class="caption">Cancelar agendamento</span>
+                  </v-tooltip>
                 </v-card-actions>
               </v-card>
             </v-menu>
@@ -190,7 +252,10 @@ export default {
     details: null,
     start: null,
     end: null,
-    state:null,
+    state: null,
+    colors: null,
+    vet: null,
+    desc: null,
     currentlyEditing: null,
     selectedEvent: {},
     selectedElement: null,
@@ -208,39 +273,49 @@ export default {
   methods: {
     //get events
     getEvents() {},
-    // atualizar evento
-    updateEvents(ev) {
-      console.log(ev);
-      this.selectedOpen = false;
-      this.currentlyEditing = null;
-    },
+
     // apagar evento
     deleteEvent(ev) {
       console.log(ev);
       this.selectedOpen = false;
       this.getEvents();
     },
-    medicoAgenda: async function(value){
+    medicoAgenda: async function (value) {
       this.events = [];
-      let response2 = await axios.post("http://localhost:7777/clinica/intervencoes/medico", {
-        tipo: "Consulta",
-        veterinario: value,
-      },
-      {
-        headers: { Authorization: "Bearer " + store.getters.token },
-      });
-      console.log(response2)
-      for (var i = 0; i < response2.data.length; i++){
-        if(response2.data[i].estado != "Cancelada"){
-          var marcacao = moment(response2.data[i].data + " " + response2.data[i].hora, "YYYY-MM-DD HH:mm", true).locale("pt").format("YYYY-MM-DD HH:mm");
-          var final = moment(marcacao).add(15, 'minutes').locale("pt").format("YYYY-MM-DD HH:mm")
+      let response2 = await axios.post(
+        "http://localhost:7777/clinica/intervencoes/medico",
+        {
+          tipo: "Consulta",
+          veterinario: value,
+        },
+        {
+          headers: { Authorization: "Bearer " + store.getters.token },
+        }
+      );
+      for (var i = 0; i < response2.data.length; i++) {
+        if (response2.data[i].estado != "Cancelada") {
+          var marcacao = moment(
+            response2.data[i].data + " " + response2.data[i].hora,
+            "YYYY-MM-DD HH:mm",
+            true
+          )
+            .locale("pt")
+            .format("YYYY-MM-DD HH:mm");
+          var final = moment(marcacao)
+            .add(15, "minutes")
+            .locale("pt")
+            .format("YYYY-MM-DD HH:mm");
           this.events.push({
             name: response2.data[i].tipo,
             start: marcacao,
-            end: final, 
+            end: final,
             details: response2.data[i].motivo,
-            state: response2.data[i].estado
-          })
+            state: response2.data[i].estado,
+            vet: response2.data[i].veterinario.nome,
+            desc: response2.data[i].descricao,
+            utente: response2.data[i].animal.nome,
+            raca: response2.data[i].animal.raca,
+          });
         }
       }
     },
@@ -252,7 +327,9 @@ export default {
         this.details = "";
         this.start == "";
         this.end = "";
-        this.state= "";
+        this.state = "";
+        this.vet = "";
+        this.desc = "";
       } else {
         //show error
       }
@@ -265,7 +342,7 @@ export default {
     getEventColor(event) {
       if (event.state.includes("Agendada")) return "#ACD47F";
       if (event.state.includes("A decorrer")) return "#FFDF80";
-      if (event.state.includes("Pendente")) return "#FAB471"
+      if (event.state.includes("Pendente")) return "#FAB471";
     },
     setToday() {
       this.focus = this.today;
@@ -282,6 +359,7 @@ export default {
     showEvent({ nativeEvent, event }) {
       const open = () => {
         this.selectedEvent = event;
+        this.colors = this.getEventColor(event);
         this.selectedElement = nativeEvent.target;
         requestAnimationFrame(() =>
           requestAnimationFrame(() => (this.selectedOpen = true))
@@ -305,10 +383,92 @@ export default {
       return Math.floor((b - a + 1) * Math.random()) + a;
     },
     registar(value) {
+      this.atualiza();
       this.snackbar = value.snackbar;
       this.color = value.color;
       this.text = value.text;
       this.timeout = value.timeout;
+    },
+    format(data) {
+      return moment(data).locale("pt").format("DD/MM/YYYY HH:mm");
+    },
+    confirmar: async function (estado) {
+      try {
+        if (store.state.tipo == "Clinica") {
+          await axios.post(
+            "http://localhost:7777/clinica/intervencao/alterar",
+            {
+              id: this.selectedEvent.id,
+              estado: estado,
+            },
+            {
+              headers: { Authorization: "Bearer " + store.getters.token },
+            }
+          );
+        }
+        this.selectedOpen = false;
+        this.atualiza();
+        if(estado == 'Cancelada'){
+          this.text = "Utente admitido com sucesso.",
+          this.color = "success" 
+        }
+        else{
+          this.text = "Consulta cancelada com sucesso.",
+          this.color = "success" 
+        }
+          this.snackbar = "true",
+          this.timeout = 4000;
+      } catch (e) {
+        this.selectedOpen = false;
+        this.text = "Ocorreu um erro, por favor tente mais tarde!",
+        this.color = "warning",
+        this.snackbar = "true",
+        this.timeout = 4000;
+        console.log(e);
+      }
+    },
+    atualiza: async function () {
+      try {
+        this.events = [];
+        let response2 = await axios.post(
+          "http://localhost:7777/clinica/intervencoes",
+          {
+            tipo: "Consulta",
+          },
+          {
+            headers: { Authorization: "Bearer " + store.getters.token },
+          }
+        );
+        for (var i = 0; i < response2.data.length; i++) {
+          if (response2.data[i].estado != "Cancelada") {
+            var marcacao = moment(
+              response2.data[i].data + " " + response2.data[i].hora,
+              "YYYY-MM-DD HH:mm",
+              true
+            )
+              .locale("pt")
+              .format("YYYY-MM-DD HH:mm");
+            var final = moment(marcacao)
+              .add(15, "minutes")
+              .locale("pt")
+              .format("YYYY-MM-DD HH:mm");
+            this.events.push({
+              id: response2.data[i].id,
+              name: response2.data[i].tipo,
+              start: marcacao,
+              end: final,
+              details: response2.data[i].motivo,
+              state: response2.data[i].estado,
+              vet: response2.data[i].veterinario.nome,
+              desc: response2.data[i].descricao,
+              utente: response2.data[i].animal.nome,
+              raca: response2.data[i].animal.raca,
+            });
+          }
+        }
+      } catch (e) {
+        console.log(e);
+      }
     },
   },
   components: {
@@ -319,29 +479,48 @@ export default {
       let response = await axios.get("http://localhost:7777/clinica/medicos", {
         headers: { Authorization: "Bearer " + store.getters.token },
       });
+
       for (var i = 0; i < response.data.length; i++)
-        this.medico.push({nome: response.data[i].nome, id: response.data[i].id});
-      let response2 = await axios.post("http://localhost:7777/clinica/intervencoes", {
-        tipo: "Consulta"
-      },
-      {
-        headers: { Authorization: "Bearer " + store.getters.token },
-      });
-      console.log(response2)
-      for (i = 0; i < response2.data.length; i++){
-        if(response2.data[i].estado != "Cancelada"){
-          var marcacao = moment(response2.data[i].data + " " + response2.data[i].hora, "YYYY-MM-DD HH:mm", true).locale("pt").format("YYYY-MM-DD HH:mm");
-          var final = moment(marcacao).add(15, 'minutes').locale("pt").format("YYYY-MM-DD HH:mm")
+        this.medico.push({
+          nome: response.data[i].nome,
+          id: response.data[i].id,
+        });
+      let response2 = await axios.post(
+        "http://localhost:7777/clinica/intervencoes",
+        {
+          tipo: "Consulta",
+        },
+        {
+          headers: { Authorization: "Bearer " + store.getters.token },
+        }
+      );
+      for (i = 0; i < response2.data.length; i++) {
+        if (response2.data[i].estado != "Cancelada") {
+          var marcacao = moment(
+            response2.data[i].data + " " + response2.data[i].hora,
+            "YYYY-MM-DD HH:mm",
+            true
+          )
+            .locale("pt")
+            .format("YYYY-MM-DD HH:mm");
+          var final = moment(marcacao)
+            .add(15, "minutes")
+            .locale("pt")
+            .format("YYYY-MM-DD HH:mm");
           this.events.push({
+            id: response2.data[i].id,
             name: response2.data[i].tipo,
             start: marcacao,
-            end: final, 
+            end: final,
             details: response2.data[i].motivo,
-            state: response2.data[i].estado
-          })
+            state: response2.data[i].estado,
+            vet: response2.data[i].veterinario.nome,
+            desc: response2.data[i].descricao,
+            utente: response2.data[i].animal.nome,
+            raca: response2.data[i].animal.raca,
+          });
         }
       }
-
     } catch (e) {
       console.log(e);
     }

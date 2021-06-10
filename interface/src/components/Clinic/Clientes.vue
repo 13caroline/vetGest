@@ -168,13 +168,13 @@
               </v-col>
 
               <v-col align="right" class="pr-0">
-                <div v-for="utente in utentes" :key="utente.nome">
+                <div v-for="utente in utentes" :key="utente.id">
                   <v-btn
                     class="font-weight-light text-decoration-underline"
                     color="#616161"
                     text
-                    depressed
-                    to="/clinica/utente"
+                    depresseds
+                    @click="toUtente(utente.id)"
                     >{{ utente.nome }}</v-btn
                   >
                 </div>
@@ -249,6 +249,9 @@ export default {
       this.utentes = item.animais;
       this.dialog = true;
     },
+    toUtente(value){
+      this.$router.push("/clinica/utente/" + value ) 
+    }
   },
   created: async function () {
     try {
@@ -256,6 +259,7 @@ export default {
         headers: { Authorization: "Bearer " + store.getters.token },
       });
       this.clientes = response.data;
+      console.log(response.data)
     } catch (e) {
       console.log(e);
     }
