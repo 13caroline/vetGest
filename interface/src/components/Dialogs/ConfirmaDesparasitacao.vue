@@ -24,6 +24,7 @@
               color="#2596be"
               flat
               outlined
+              disabled
               dense
               readonly
               :value="dataPrev"

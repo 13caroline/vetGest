@@ -136,7 +136,6 @@ export default {
         if (store.state.tipo == "Cliente") {
           if (this.proxImunizacao == "1 mês") this.timeskip = 1;
           else this.timeskip = 3;
-
           await axios.post(
             "http://localhost:7777/cliente/animal/" + this.dados + "/vacinas",
             {
@@ -144,7 +143,7 @@ export default {
                 data: this.dateToma,
                 observacoes: this.motivo,
 
-                proxImunizacao: moment(this.data).add(this.timeskip, "months"),
+                proxImunizacao: moment(this.data).add(this.timeskip, "months").format("YYYY-MM-DD"),
                 tratamento: this.tratamento,
               },
               email: this.$store.state.email,
