@@ -360,10 +360,6 @@ export default {
     itemsespecie: [
       "Canídeo",
       "Felídeo",
-      "Pecuário",
-      "Equino",
-      "Selvagem",
-      "Outro",
     ],
     itemsraca: ["Serra da Estrela"],
     search: "",

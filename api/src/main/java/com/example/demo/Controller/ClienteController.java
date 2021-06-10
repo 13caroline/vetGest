@@ -75,13 +75,7 @@ public class ClienteController {
 
     @CrossOrigin
     @PostMapping("/cliente/animais")
-    public ResponseEntity<?> getClienteAnimais(@RequestBody Cliente email){// @RequestHeader String Authorization){
-        //System.out.println(Authorization.substring(7));
-        //String email1 = jwtUtil.extractUsername(Authorization.substring(7));
-        //System.out.println(email1);
-        //if(email1.equals(email.getEmail())){ ....}
-        //Diria que a verificaçao com o token seria assim, ou entao usamos só o token para ir buscar o user
-        // e nao mandamos o email no body... mas diria que como temos é uma dupla verificaçao e nao perdemos nada em faze-la
+    public ResponseEntity<?> getClienteAnimais(@RequestBody Cliente email){
         Cliente cliente = clienteService.getClienteByEmail(email.getEmail());
         if(cliente==null){
             return ResponseEntity.badRequest().body("Utilizador não existe!");
@@ -350,7 +344,7 @@ public class ClienteController {
        intervencao.setVeterinario(vet);
        intervencao.setEstado("Pendente");
        intervencao.setTipo("Consulta");
-       intervencao.setData_pedido(LocalDateTime.now().toString());
+       intervencao.setData_pedido(LocalDateTime.now().toString().substring(0,16));
        //System.out.println("\n\nAQUI:"+intervencao);
        intervencaoService.saveIntervencao(intervencao);
        return ResponseEntity.accepted().body("Consulta agendada!");

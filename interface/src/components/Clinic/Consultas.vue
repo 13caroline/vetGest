@@ -273,13 +273,6 @@ export default {
   methods: {
     //get events
     getEvents() {},
-
-    // apagar evento
-    deleteEvent(ev) {
-      console.log(ev);
-      this.selectedOpen = false;
-      this.getEvents();
-    },
     medicoAgenda: async function (value) {
       this.events = [];
       let response2 = await axios.post(

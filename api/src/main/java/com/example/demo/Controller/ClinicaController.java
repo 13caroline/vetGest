@@ -31,6 +31,8 @@ public class ClinicaController {
     private VeterinarioService veterinarioService;
     @Autowired
     private ImunizacaoService imunizacaoService;
+    @Autowired
+    private InternamentoService internamentoService;
 
     @CrossOrigin
     @PostMapping(path = "/clinica/adicionarClinica")
@@ -342,7 +344,7 @@ public class ClinicaController {
         intervencao.setAnimal(animal);
         intervencao.setVeterinario(vet);
         intervencao.setEstado("Agendada");
-        intervencao.setData_pedido(LocalDateTime.now().toString());
+        intervencao.setData_pedido(LocalDateTime.now().toString().substring(0,16));
         //System.out.println("\n\nAQUI:"+intervencao);
         intervencaoService.saveIntervencao(intervencao);
         return ResponseEntity.accepted().body("Intervençao agendada!");
@@ -400,5 +402,12 @@ public class ClinicaController {
         animalService.updateAnimal(animal);
 
         return ResponseEntity.accepted().body("Animal editado com sucesso");
+    }
+
+    @CrossOrigin
+    @GetMapping("/clinica/internamentos")
+    public ResponseEntity<?> getInternamentos(){
+        List<Internamento> internamentos = internamentoService.findAllByEstado("Internado");
+        return ResponseEntity.accepted().body(internamentos);
     }
 }

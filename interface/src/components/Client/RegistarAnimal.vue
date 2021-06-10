@@ -317,12 +317,8 @@ export default {
     itemsraca: ["podengo"],
     itemscauda: ["Comprida", "Curta", "Amputada"],
     itemsespecie: [
-      "Bovino",
       "Canídeo",
-      "Equino",
       "Felídeo",
-      "Exótico",
-      "Outro",
     ],
     nome: "",
     chip: "",

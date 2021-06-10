@@ -259,7 +259,6 @@ export default {
         headers: { Authorization: "Bearer " + store.getters.token },
       });
       this.clientes = response.data;
-      console.log(response.data)
     } catch (e) {
       console.log(e);
     }

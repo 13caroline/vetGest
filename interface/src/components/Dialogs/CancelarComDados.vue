@@ -144,7 +144,6 @@ export default {
             snackbar: "true",
             timeout: 4000,
           });
-          console.log(this.dados)
       } catch (e) {
         console.log("erro: " + e);
         this.dialog = false;
