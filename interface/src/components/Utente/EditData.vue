@@ -38,6 +38,7 @@
                   <p class="ma-0">Nome</p>
                   <v-text-field
                     color="#2596be"
+                    disabled
                     :rules="nomeRules"
                     outlined
                     dense
@@ -120,7 +121,7 @@
                     dense
                     :items="itemscor"
                     multiple
-                    v-model="this.cor"
+                    v-model="cor"
                   ></v-select>
                 </v-col>
 
@@ -133,7 +134,7 @@
                     dense
                     :items="itemspelagem"
                     multiple
-                    v-model="this.pelagem"
+                    v-model="pelagem"
                   ></v-select>
                 </v-col>
 
@@ -222,7 +223,7 @@
         </v-form>
       </v-card-text>
     </v-container>
-    
+
     <v-snackbar
       v-model="snackbar"
       :timeout="timeout"
@@ -237,14 +238,14 @@
 
 <script>
 import axios from "axios";
-import Cancelar from "@/components/Dialogs/Cancel.vue"
+import Cancelar from "@/components/Dialogs/Cancel.vue";
 
 export default {
   props: ["id", "animal"],
   data: () => ({
     dialog: false,
     dialogs: {},
-    cancelar: {title: "edição de dados", text: "a edição dos dados"},
+    cancelar: { title: "edição de dados", text: "a edição dos dados" },
     dados: {},
     itemscor: [
       "Amarelo",
@@ -276,50 +277,56 @@ export default {
     timeout: -1,
     text: "",
     nomeRules: [
-        (value) => {
-          const pattern = /^([a-zA-Z]+)$/;
-          return pattern.test(value) || "O nome só pode conter letras";
-        },
-      ],
+      (value) => {
+        const pattern = /^([a-zA-Z]+)$/;
+        return pattern.test(value) || "O nome só pode conter letras";
+      },
+    ],
     alturaRules: [
-        (value) => {
-          const pattern = /^([0-9]+)$/;
-          return pattern.test(value) || "Introduza apenas dígitos";
-        },
-      ],
-      cor: [],
-      pelagem: [],
+      (value) => {
+        const pattern = /^([0-9]+)$/;
+        return pattern.test(value) || "Introduza apenas dígitos";
+      },
+    ],
+    cor: [],
+    pelagem: [],
   }),
   components: {
-    Cancelar
+    Cancelar,
   },
   methods: {
-    close(){
-      let route = this.$store.state.tipo == 'Clinica' ? "/clinica/utente/" : "/medico/utente/"; 
+    close() {
+      let route =
+        this.$store.state.tipo == "Clinica"
+          ? "/clinica/utente/"
+          : "/medico/utente/";
       this.$router.push(route + this.id);
     },
     editarDados: async function () {
-      console.log(this.cor)
-    console.log(this.pelagem)
-    console.log(this.dados.altura)
-    console.log(this.dados.cauda)
-    console.log(this.dados.observacoes)
-    console.log(this.dados.castracao)
-    console.log(this.dados.nome)
-      let route = this.$store.state.tipo == 'Clinica' ? "http://localhost:7777/clinica/utente/editar" : "http://localhost:7777/medico/utente/editar";
+      let route =
+        this.$store.state.tipo == "Clinica"
+          ? "http://localhost:7777/clinica/utente/editar"
+          : "http://localhost:7777/medico/utente/editar";
       if (this.$refs.form.validate()) {
         try {
           await axios.post(route, {
             id: this.id,
-            nome: this.dados.nome,
-            altura: this.dados.altura,
-            cor: this.cor,
-            pelagem: this.pelagem, 
-            cauda: this.dados.cauda, 
-            observacoes: this.dados.observacoes,
-            castracao: this.dados.castracao
+            "animal": {
+              raca: this.dados.raca,
+              dataNascimento: this.dados.dataNascimento,
+              nome: this.dados.nome,
+              sexo: this.dados.sexo,
+              especie: this.dados.especie,
+              altura: this.dados.altura,
+              cor: this.cor.toString(),
+              pelagem: this.pelagem.toString(),
+              cauda: this.dados.cauda,
+              observacoes: this.dados.observacoes,
+              castracao: this.dados.castracao,
+              chip: this.dados.chip,
+            }
           });
-          this.$route.push("/clinica/utente" + this.id);
+          this.$router.push("/clinica/utente/" + this.id);
           this.text = "Dados editados com sucesso.";
           this.color = "success";
           this.snackbar = true;
@@ -335,20 +342,21 @@ export default {
         this.snackbar = true;
         this.done = false;
       }
-      
     },
   },
   created: async function () {
-    let route = this.$store.state.tipo == 'Clinica' ? "http://localhost:7777/clinica/utente" : "http://localhost:7777/medico/utente";
+    let route =
+      this.$store.state.tipo == "Clinica"
+        ? "http://localhost:7777/clinica/utente"
+        : "http://localhost:7777/medico/utente";
     let response = await axios.post(route, {
       id: this.id,
     });
-    this.dados = response.data
-    this.cor = response.data.cor.split(",")
-    this.pelagem = response.data.pelagem.split(",")
-    if (this.dados.observacoes.length == 0) this.dados.observacoes = "Sem observações"
-
-    console.log(this.cor)
+    this.dados = response.data;
+    this.cor = response.data.cor.split(",");
+    this.pelagem = response.data.pelagem.split(",");
+    if (this.dados.observacoes.length == 0)
+      this.dados.observacoes = "Sem observações";
   },
 };
 </script>
