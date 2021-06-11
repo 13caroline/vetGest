@@ -1,9 +1,9 @@
 <template>
   <div>
     <v-card flat color="#fafafa">
-      <v-row class="w-100" align="start">
+      <v-row class="w-100 pt-5" align="stretch">
         <v-col>
-          <v-card class="h-100 mt-5" max-width="344" outlined>
+          <v-card class="h-100" outlined>
             <v-list-item>
               <v-list-item-content>
                 <div>
@@ -41,7 +41,7 @@
           </v-card>
         </v-col>
         <v-col>
-          <v-card class="h-100 mt-5" max-width="344" outlined>
+          <v-card class="h-100" outlined>
             <v-list-item>
               <v-list-item-content>
                 <div>
@@ -54,12 +54,9 @@
             </v-list-item>
           </v-card>
         </v-col>
-      </v-row>
-
-      <v-row class="w-100" align="start">
-        <v-col>
-          <v-card class="h-100 mt-5" max-width="750" outlined>
-              <v-list-item>
+        <v-col cols="12">
+          <v-card class="h-100 mt-5" outlined>
+            <v-list-item>
               <v-list-item-content>
                 <div>
                   <p class="font-weight-bold">História médica prévia</p>
@@ -71,12 +68,10 @@
             </v-list-item>
           </v-card>
         </v-col>
-      </v-row>
 
-      <v-row class="w-100" align="start">
-        <v-col>
-          <v-card class="h-100 mt-5" max-width="750" outlined>
-              <v-list-item>
+        <v-col cols="12">
+          <v-card class="h-100 mt-5" outlined>
+            <v-list-item>
               <v-list-item-content>
                 <div>
                   <p class="font-weight-bold">Cirurgias prévias</p>
@@ -88,12 +83,10 @@
             </v-list-item>
           </v-card>
         </v-col>
-      </v-row>
 
-      <v-row class="w-100" align="start">
-        <v-col>
-          <v-card class="h-100 mt-5" max-width="750" outlined>
-              <v-list-item>
+        <v-col cols="12">
+          <v-card class="h-100 mt-5" outlined>
+            <v-list-item>
               <v-list-item-content>
                 <div>
                   <p class="font-weight-bold">História médica prévia</p>
@@ -105,31 +98,25 @@
             </v-list-item>
           </v-card>
         </v-col>
-      </v-row>
-    </v-card>
 
-    <v-row class="w-100" align="start">
         <v-col>
-          <v-card class="h-100 mt-5" max-width="344" outlined>
+          <v-card class="h-100 mt-5" outlined>
             <v-list-item>
               <v-list-item-content>
-                <div>
-                  <v-row>
-                    <v-col>
-                      <p class="infos">Antecedentes familiares</p>
-                    </v-col>
-                    <v-col>
-                      <p class="respos">Sem antecedentes familiares</p>
-                    </v-col>
-                  </v-row>
-                </div>
-                
+                <v-row>
+                  <v-col>
+                    <p class="infos">Antecedentes familiares</p>
+                  </v-col>
+                  <v-col>
+                    <p class="respos">Sem antecedentes familiares</p>
+                  </v-col>
+                </v-row>
               </v-list-item-content>
             </v-list-item>
           </v-card>
         </v-col>
         <v-col>
-          <v-card class="h-100 mt-5" max-width="344" outlined>
+          <v-card class="h-100 mt-5" outlined>
             <v-list-item>
               <v-list-item-content>
                 <div>
@@ -143,7 +130,7 @@
           </v-card>
         </v-col>
       </v-row>
-
+    </v-card>
   </div>
 </template>
 
