@@ -3,19 +3,32 @@
     <template v-slot:activator="{ diag, attrs }">
       <v-tooltip top>
         <template v-slot:activator="{ on }">
-
-<v-btn
-                class="body-2"
-                small
-                v-bind="attrs"
-                color="#2596be"
-                v-on="{ ...on, ...diag }"
-                dark
-                @click="dialog = true"
-              >
-                Adicionar Desparasitação
-                <v-icon small class="ml-4">fas fa-spider</v-icon>
-              </v-btn>
+          <v-btn
+            v-if="this.$store.state.tipo == 'Cliente'"
+            class="body-2"
+            small
+            v-bind="attrs"
+            color="#2596be"
+            v-on="{ ...on, ...diag }"
+            dark
+            @click="dialog = true"
+          >
+            Adicionar Desparasitação
+            <v-icon small class="ml-4">fas fa-spider</v-icon>
+          </v-btn>
+          <v-btn
+            v-else
+            class="body-2"
+            small
+            v-bind="attrs"
+            fab
+            color="#2596be"
+            v-on="{ ...on, ...diag }"
+            dark
+            @click="dialog = true"
+          >
+            <v-icon small class="ml-4">fas fa-spider</v-icon>
+          </v-btn>
         </template>
         <span class="caption">Adicionar desparasitação</span>
       </v-tooltip>
@@ -145,7 +158,9 @@ export default {
                 observacoes: this.motivo,
                 data: this.dateToma,
 
-                proxImunizacao: moment(this.data).add(this.timeskip, "months").format("YYYY-MM-DD"),
+                proxImunizacao: moment(this.data)
+                  .add(this.timeskip, "months")
+                  .format("YYYY-MM-DD"),
                 tratamento: this.tratamento,
               },
               email: this.$store.state.email,
