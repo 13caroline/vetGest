@@ -373,7 +373,32 @@ public class VeterinarioController {
         return ResponseEntity.accepted().body("Historico Adicionado!");
     }
 
+    @CrossOrigin
+    @PostMapping("/medico/animal/historico/alterar")
+    public ResponseEntity<?> editHistorico(@RequestBody String body) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+        int animal_id = node.get("animal").asInt();
+        Animal animal = animalService.getAnimalById(animal_id);
+        Historico historico = mapper.convertValue(node.get("historico"),Historico.class);
 
+        if(historico==null || animal ==null){
+            return ResponseEntity.badRequest().body("Erro no Animal ou Historico!");
+        }
+        Historico historico1 = animalService.findByAnimalId(animal_id);
+
+        historico1.setAlergias(historico.getAlergias());
+        historico1.setTransfusoes(historico.getTransfusoes());
+        historico1.setTipo_alergias(historico.getTipo_alergias());
+        historico1.setHistoria_medica(historico.getHistoria_medica());
+        historico1.setHistoria_ginecologica(historico.getHistoria_ginecologica());
+        historico1.setMedicacao(historico.getMedicacao());
+        historico1.setAntecedentes(historico.getAntecedentes());
+
+        animalService.saveHistorico(historico1);
+
+        return ResponseEntity.accepted().body("Historico Alterado!");
+    }
     @CrossOrigin
     @PostMapping("/medico/internamentos")
     public ResponseEntity<?> getInternamentos(@RequestBody Veterinario email){
@@ -394,9 +419,11 @@ public class VeterinarioController {
         Animal animal = animalService.getAnimalById(node.get("animal").asInt());
         Veterinario vet = veterinarioService.getVetByEmail(node.get("email").asText());
         Internamento internamento = mapper.convertValue(node.get("internamento"), Internamento.class);
-        if(animal==null || vet == null || internamento ==null){
+        Intervencao intervencao = intervencaoService.getIntervencao(node.get("intervencao").asInt());
+        if(animal==null || vet == null || internamento ==null || intervencao ==null){
             return ResponseEntity.badRequest().body("Alguma das Entidades nao existe!");
         }
+        internamento.setIntervencao(intervencao);
         internamento.setVeterinario(vet);
         internamento.setAnimal(animal);
         internamento.setData(LocalDateTime.now().toString().substring(0,16));
