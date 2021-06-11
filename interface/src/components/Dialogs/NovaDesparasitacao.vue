@@ -4,7 +4,7 @@
       <v-tooltip top>
         <template v-slot:activator="{ on }">
           <v-btn
-            v-if="this.$store.state.tipo == 'Cliente'"
+            v-if="tipo == 'Cliente'"
             class="body-2"
             small
             v-bind="attrs"
@@ -136,6 +136,7 @@ export default {
     dateToma: new Date().toISOString().substr(0, 10),
     tomas: ["1 mês", "3 meses"],
     timeskip: 0,
+    tipo: store.state.tipo,
   }),
   components: {
     Cancelar,
@@ -146,14 +147,13 @@ export default {
     },
     adicionaDesparasitacao: async function () {
       try {
-        console.log(this.dados)
         if (store.state.tipo == "Cliente") {
           if (this.proxImunizacao == "1 mês") this.timeskip = 1;
           else this.timeskip = 3;
           await axios.post(
             "http://localhost:7777/cliente/animal/" + this.dados + "/vacinas",
             {
-              "imunizacao": {
+              imunizacao: {
                 data_toma: this.dateToma,
                 observacoes: this.motivo,
                 data: this.dateToma,
