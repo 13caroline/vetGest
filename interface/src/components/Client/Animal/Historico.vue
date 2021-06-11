@@ -140,8 +140,6 @@
 import moment from "moment";
 import axios from "axios";
 import store from "@/store.js";
-import EditaHistorico from "@/components/Dialogs/EditaHistorico.vue";
-import RegistaHistorico from "@/components/Dialogs/RegistaHistorico.vue";
 export default {
   props: ["animal"],
   data: () => ({
@@ -157,10 +155,6 @@ export default {
       return moment(data).locale("pt").format("DD/MM/YYYY");
     },
 
-  },
-  components: {
-    EditaHistorico,
-    RegistaHistorico,
   },
   created: async function () {
     let response = await axios.post(

@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-color">
+  <div class="bg-color">
     <v-row align="center" class="py-3">
       <v-col>
         <h3 class="font-weight-regular text-uppercase">
@@ -8,28 +8,21 @@
         </h3>
       </v-col>
       <v-col cols="auto" class="ml-auto pl-0">
-        <v-tooltip top>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              class="body-2 ma-2"
-              small
-              color="#2596be"
-              v-bind="attrs"
-              v-on="on"
-              fab
-              dark
-              @click="editar()"
-            >
-              <v-icon small>fas fa-pen</v-icon>
-            </v-btn>
-          </template>
-          <span>Editar dados</span>
-        </v-tooltip>
+        <v-btn
+          class="body-2 ma-2"
+          small
+          color="#2596be"
+          dark
+          @click="editar()"
+        >
+          Editar Dados
+          <v-icon small class="ml-4">fas fa-pen</v-icon>
+        </v-btn>
       </v-col>
     </v-row>
 
     <h3>Identificação</h3>
-    <v-divider class="my-3"></v-divider>
+    <v-divider class="mb-3"></v-divider>
 
     <v-row class="w-100" align="stretch">
       <v-col>
@@ -114,16 +107,6 @@
                   <v-col>
                     <p v-if="animal.castracao === true" class="respos">Sim</p>
                     <p v-else class="respos">Não</p>
-                  </v-col>
-                </v-row>
-              </div>
-              <div>
-                <v-row>
-                  <v-col>
-                    <p class="infos mb-0">Dono</p>
-                  </v-col>
-                  <v-col>
-                    <p class="respos mb-0">{{ animal.cliente_nome }}</p>
                   </v-col>
                 </v-row>
               </div>
@@ -213,21 +196,20 @@
 </template>
 
 <script>
-import moment from "moment"
+import moment from "moment";
 
 export default {
-  props:["animal"],
-  data: () => ({
-    methods: {
+  props: ["animal"],
+  data: () => ({}),
+  methods: {
     format(data) {
       return moment(data).locale("pt").format("DD/MM/YYYY");
     },
 
     editar() {
-      this.$router.push("/cliente/animal/editar/"+this.id)
+      this.$router.push("/cliente/animal/editar/" + this.animal.id);
     },
   },
-  }),
 };
 </script>
 
@@ -244,12 +226,13 @@ export default {
   font-size: 2.75rem !important;
 }
 
-.font-weight-bold {
-  width: 40%;
-  font-size: 15px;
+.infos {
+  text-align: start;
 }
-.font-weight-regular {
-  font-size: 14px;
+
+.respos {
+  text-align: end;
+  font-weight: bold;
 }
 
 .font-weight-bold.col-sm-12.col-md-auto.col-auto {

@@ -2,7 +2,7 @@
   <div>
     <v-container>
       <v-row justify="space-around" class="mt-2">
-        <v-col cols="auto">
+        <v-col>
           <span class="subtitle-1 head">{{animal.nome}}</span>
         </v-col>
       </v-row>
@@ -30,6 +30,10 @@
         <v-tab-item>
           <Cirurgia></Cirurgia>
         </v-tab-item>
+
+        <v-tab-item>
+          <Historico :animal="animal"></Historico>
+        </v-tab-item>
       </v-tabs-items>
     </v-container>
   </div>
@@ -40,6 +44,7 @@ import PacienteVacinas from "@/components/Client/Animal/Vacinas.vue"
 import Consultas from "@/components/Client/Animal/Consultas.vue"
 import Cirurgia from "@/components/Client/Animal/Cirurgias.vue"
 import Dados from "@/components/Client/Animal/Dados.vue"
+import Historico from "@/components/Client/Animal/Historico.vue"
 import axios from "axios"
 import store from "@/store.js"
 
@@ -67,7 +72,8 @@ export default {
     PacienteVacinas, 
     Consultas,
     Cirurgia,
-    Dados
+    Dados,
+    Historico
   },
   created: async function() {
     
