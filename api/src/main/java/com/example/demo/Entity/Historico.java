@@ -60,10 +60,6 @@ public class Historico {
     )
     private String antecedentes;
 
-    @OneToMany
-    @Formula("(select intervencao.observacoes from intervencao, historico where intervencao.tipo = \"Cirurgia\" and historico.animal_id = intervencao.animal_id;")
-    private List<Intervencao> cirurgias;
-
     @OneToOne(cascade = {CascadeType.ALL})
     private Animal animal;
 }
