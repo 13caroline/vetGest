@@ -133,15 +133,17 @@ export default {
     },
     adicionaDesparasitacao: async function () {
       try {
+        console.log(this.dados)
         if (store.state.tipo == "Cliente") {
           if (this.proxImunizacao == "1 mês") this.timeskip = 1;
           else this.timeskip = 3;
           await axios.post(
             "http://localhost:7777/cliente/animal/" + this.dados + "/vacinas",
             {
-              imunizacao: {
-                data: this.dateToma,
+              "imunizacao": {
+                data_toma: this.dateToma,
                 observacoes: this.motivo,
+                data: this.dateToma,
 
                 proxImunizacao: moment(this.data).add(this.timeskip, "months").format("YYYY-MM-DD"),
                 tratamento: this.tratamento,

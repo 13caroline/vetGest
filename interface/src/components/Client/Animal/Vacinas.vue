@@ -341,6 +341,7 @@ export default {
     },
   },
 created: async function () {
+  console.log(this.animal.id)
     try {
       var response = await axios.post(
         "http://localhost:7777/cliente/animal/"+this.animal.id+"/getvacinas",

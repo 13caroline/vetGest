@@ -209,10 +209,19 @@ public class ClienteController {
     @CrossOrigin
     @PostMapping("/cliente/animal/{id_animal}/vacinas")
     public ResponseEntity<?> adicionarVacina(@PathVariable int id_animal,@RequestBody String body) throws JsonProcessingException {
+        System.out.println("\n \n");
+        System.out.println(body);
+        System.out.println(id_animal);
+        System.out.println("\n \n");
+
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);
         String clienteEmail = node.get("email").asText();
         Cliente cliente = clienteService.getClienteByEmail(clienteEmail);
+        System.out.println("\n \n");
+        System.out.println(clienteEmail);
+        System.out.println(cliente);
+        System.out.println("\n \n");
 
         if(cliente ==null){
             return ResponseEntity.badRequest().body("Erro a obter cliente!");
@@ -220,6 +229,7 @@ public class ClienteController {
 
         List<Animal> animais = cliente.getAnimais();
         Animal animal = animalService.getAnimalById(id_animal);
+
 
         if(animal==null || !animais.contains(animal)){
             return ResponseEntity.badRequest().body("Erro a obter animal!");
@@ -241,6 +251,8 @@ public class ClienteController {
 
         String data_toma = imunizacao.getData_toma();
         LocalDate date = LocalDate.parse(data_toma);
+
+
         //System.out.println(date);
 
         if(date.isAfter(LocalDate.now()))
@@ -248,7 +260,10 @@ public class ClienteController {
         else
             imunizacao.setEstado("Administrada");
 
+
+
         if(imunizacao.getProxImunizacao()!=null){
+            System.out.println("\n \n Inicio \n \n");
             Imunizacao proximaImunizacao = new Imunizacao();
             proximaImunizacao.setData(imunizacao.getProxImunizacao());
             proximaImunizacao.setEstado("Atualizada");
@@ -259,16 +274,24 @@ public class ClienteController {
             proximaImunizacao.setTratamento(imunizacao.getTratamento());
             proximaImunizacao.setAnimal(imunizacao.getAnimal());
             proximaImunizacao.setVeterinario(imunizacao.getVeterinario());
+            System.out.println("\n \n");
             imunizacao.setProxImunizacao(null);
+            System.out.println(imunizacao);
+            System.out.println(proximaImunizacao);
             imunizacaoService.saveImunizacao(imunizacao);
             imunizacaoService.saveImunizacao(proximaImunizacao);
             imunizacao.setProxima_imunizacao(proximaImunizacao);
             imunizacaoService.saveImunizacao(imunizacao);
+
         }
         else {
             imunizacao.setProxImunizacao(null);
             imunizacaoService.saveImunizacao(imunizacao);
         }
+        System.out.println("\n \n Imunizaçao");
+        System.out.println(imunizacao);
+        System.out.println("\n \n Prox Imunizaçao");
+        System.out.println(imunizacao);
         return ResponseEntity.accepted().body("Imunização agendada!");
 
     }

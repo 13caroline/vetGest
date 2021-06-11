@@ -336,12 +336,64 @@
 <script>
 // import axios from 'axios'
 import exemplo from "@/components/Client/exemploCirurgia.vue";
+import axios from "axios";
+import store from "@/store.js";
 export default {
   data: () => ({
     cancelDialog: false,
     dialog: false,
     detalhes: false,
     cancelar: false,
+     motivo: [
+      "Consulta anual/Vacinação",
+      "Consulta extraordinária/Por doença",
+      "Consulta de seguimento",
+      "Procedimentos específicos",
+    ],
+    desc: [
+      { text: "Consulta anual/Vacinação", tipo: "Consulta anual/Vacinação" },
+      {
+        text: "Vómitos/Diarreia/Recusa em comer",
+        tipo: "Consulta extraordinária/Por doença",
+      },
+      {
+        text: "Comportamento letárgico",
+        tipo: "Consulta extraordinária/Por doença",
+      },
+      {
+        text: "Alterações da marcha",
+        tipo: "Consulta extraordinária/Por doença",
+      },
+      {
+        text: "Problema de olhos ou ouvidos",
+        tipo: "Consulta extraordinária/Por doença",
+      },
+      {
+        text: "Problemas de dentes ou boca",
+        tipo: "Consulta extraordinária/Por doença",
+      },
+      {
+        text: "Problemas cutâneos",
+        tipo: "Consulta extraordinária/Por doença",
+      },
+      {
+        text: "Problemas urinários",
+        tipo: "Consulta extraordinária/Por doença",
+      },
+      { text: "Outros", tipo: "Consulta extraordinária/Por doença" },
+      { text: "Consulta de seguimento", tipo: "Consulta de seguimento" },
+      { text: "Cortar unhas", tipo: "Procedimentos específicos" },
+      {
+        text: "Expressão de glândulas anais",
+        tipo: "Procedimentos específicos",
+      },
+      { text: "Análises", tipo: "Procedimentos específicos" },
+      { text: "Limpeza de ouvidos", tipo: "Procedimentos específicos" },
+      { text: "Cortar o pêlo", tipo: "Procedimentos específicos" },
+      { text: "Lavagem", tipo: "Procedimentos específicos" },
+      { text: "Desparasitação", tipo: "Procedimentos específicos" },
+      { text: "Outros", tipo: "Procedimentos específicos" },
+    ],
     headers: [
       {
         text: "Data de Marcação",
@@ -374,32 +426,7 @@ export default {
         align: "center",
       },
     ],
-    cirurgias: [
-      {
-        data: "05/04/2021 10:15",
-        medico: "Drº José Vieira",
-        descricao: "Cirurgia",
-        estado: "Concluída",
-      },
-      {
-        data: "19/04/2021 15:30",
-        medico: "Drº José Vieira",
-        descricao: "Cirurgia",
-        estado: "Agendada",
-      },
-      {
-        data: "26/04/2021 14:30",
-        medico: "Drº José Vieira",
-        descricao: "Cirurgia",
-        estado: "Agendada",
-      },
-      {
-        data: "26/04/2021 15:00",
-        medico: "Drº José Vieira",
-        descricao: "Cirurgia",
-        estado: "Agendada",
-      },
-    ],
+    cirurgias: [],
     hora: "10:00",
     date: new Date().toISOString().substr(0, 10),
     menu2: false,
@@ -421,8 +448,8 @@ export default {
     more(item) {
       console.log(item.data);
     },
-    cancelar: async function () {
-      /*
+   /* cancelar: async function () {
+      
 		 try {
           var resposta = await axios.post("http://localhost:7777/cliente/cancelarCirurgia", {
             estado: "Cancelada"
@@ -439,7 +466,52 @@ export default {
           this.color = "warning";
           this.snackbar = true;
         }
-		*/
+		
+    },*/
+  },
+   created: async function () {
+
+
+    try {
+      var response = await axios.post(
+        "http://localhost:7777//cliente/cirurgia",
+        {
+          cliente: this.$store.state.email,
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + store.getters.token.toString(),
+          },
+        }
+      );
+      let response2 = await axios.get("http://localhost:7777/cliente/medicos", {
+        headers: { Authorization: "Bearer " + store.getters.token },
+      });
+      console.log(response2)
+      for (var j = 0; j < response2.data.length; j++)
+        this.medicos.push({
+          nome: response2.data[j].nome,
+          id: response2.data[j].id,
+        });
+    } catch (e) {
+      console.log("erro: +" + e);
+    }
+
+
+    for (var i = 0; i < response.data.length; i++) {
+      this.consultas.push({
+        data: response.data[i].data,
+        animal: response.data[i].animal.nome,
+        medico: response.data[i].veterinario.nome,
+        descricao: response.data[i].descricao,
+        estado: response.data[i].estado,
+      });
+    }
+  },
+    computed: {
+    filteredData() {
+      let motivo = this.motivos;
+      return this.desc.filter((item) => item.tipo === motivo);
     },
   },
 };
