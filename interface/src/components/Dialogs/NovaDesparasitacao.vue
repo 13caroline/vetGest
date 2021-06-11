@@ -4,7 +4,7 @@
       <v-tooltip top>
         <template v-slot:activator="{ on }">
           <v-btn
-            v-if="this.$store.state.tipo == 'Cliente'"
+            v-if="tipo == 'Cliente'"
             class="body-2"
             small
             v-bind="attrs"
@@ -136,6 +136,7 @@ export default {
     dateToma: new Date().toISOString().substr(0, 10),
     tomas: ["1 mês", "3 meses"],
     timeskip: 0,
+    tipo: store.state.tipo,
   }),
   components: {
     Cancelar,
@@ -153,8 +154,9 @@ export default {
             "http://localhost:7777/cliente/animal/" + this.dados + "/vacinas",
             {
               imunizacao: {
-                data: this.dateToma,
+                data_toma: this.dateToma,
                 observacoes: this.motivo,
+                data: this.dateToma,
 
                 proxImunizacao: moment(this.data)
                   .add(this.timeskip, "months")

@@ -26,6 +26,9 @@
             class="elevation-1"
             hide-default-footer
           >
+            <template v-slot:[`item.dataToma`]="{ item }">
+              {{ format(item.dataToma) }}
+            </template>
             <template v-slot:[`item.estado`]="{ item }">
               <v-chip :color="estadopedido(item.estado)" small>
                 {{ item.estado }}
@@ -85,34 +88,29 @@
             <div>
               <p class="mb-0">Data de toma</p>
               <v-menu
-                ref="dataToma"
-                v-model="dataToma"
-                :close-on-content-click="true"
+                v-model="menu2"
+                :close-on-content-click="false"
                 :nudge-right="40"
-                :return-value.sync="dataToma"
                 transition="scale-transition"
                 offset-y
-                max-width="290px"
-                min-width="290px"
+                min-width="auto"
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                    append-outer-icon="fas fa-calendar-alt"
-                    outlined
-                    color="#2596be"
-                    v-on="on"
-                    v-bind="attrs"
-                    v-model="date"
-                    dense
+                    v-model="dataToma"
+                    append-icon="fas fa-calendar-alt"
                     readonly
+                    dense
+                    outlined
+                    v-bind="attrs"
+                    v-on="on"
                   ></v-text-field>
                 </template>
                 <v-date-picker
-                  full-width
-                  color="#2596be"
-                  :min="new Date().toISOString().substr(0, 10)"
-                  v-model="date"
-                  locale="pt-PT"
+                  v-model="dataToma"
+                  @input="menu2 = false"
+                  locale="pt PT"
+                  :max="new Date().toISOString().substr(0, 10)"
                 ></v-date-picker>
               </v-menu>
             </div>
@@ -124,6 +122,30 @@
                 dense
                 v-model="tratamento"
               ></v-text-field>
+            </div>
+            <div>
+              <p class="ma-0">Próxima toma</p>
+              <v-row>
+                <v-col cols="auto">
+                  <v-checkbox
+                    v-model="enabled"
+                    hide-details
+                    class="mt-1 pl-4"
+                    color="#2596be"
+                  ></v-checkbox>
+                </v-col>
+                <v-col>
+                  <v-select
+                    outlined
+                    color="#2596be"
+                    dense
+                    placeholder="Próxima toma"
+                    v-model="dateProx"
+                    :items="tomas"
+                    :disabled="!enabled"
+                  ></v-select>
+                </v-col>
+              </v-row>
             </div>
             <v-row align="end" justify="end">
               <v-col cols="auto">
@@ -199,16 +221,20 @@ import moment from "moment";
 export default {
   props: ["animal"],
   data: () => ({
+    tomas: ["1 mês", "3 meses"],
+    dateProx: "",
     page: 1,
     pageCount: 0,
     itemsPerPage: 10,
-
+    enabled: false,
     idAnimal: {},
     dialog: false,
     dialogCancel: false,
     dataPrevista: "",
-    dataToma: null,
+    menu2: false,
+    dataToma: new Date().toISOString().substr(0, 10),
     tratamento: "",
+    timeskip: 0,
     id: 0,
     date: new Date().toISOString().substr(0, 10),
     snackbar: false,
@@ -302,6 +328,7 @@ export default {
           medico: this.nomeMedico,
           estado: response.data[i].estado,
           id: response.data[i].id,
+          dataToma: response.data[i].data_toma,
         });
       }
     },
@@ -325,16 +352,24 @@ export default {
     },
     confirma: async function () {
       try {
-        var resposta = await axios.post(
+        if (this.dateProx == "1 mês") this.timeskip = 1;
+        else this.timeskip = 3;
+        await axios.post(
           "http://localhost:7777/cliente/animal/confirma/imunizacao",
           {
             id: this.id,
             data: this.dataToma,
             tratamento: this.tratamento,
-            dataProx: "1213123",
+            dataProx: moment(this.dataToma)
+              .add(this.timeskip, "months")
+              .format("YYYY-MM-DD"),
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + store.getters.token.toString(),
+            },
           }
         );
-        console.log(JSON.stringify(resposta.data));
         this.dialog = false;
         this.text = "Desparasitação confirmada com sucesso.";
         this.color = "success";
@@ -347,6 +382,12 @@ export default {
         this.color = "warning";
         this.snackbar = true;
       }
+    },
+    format(data) {
+      if (data)
+        return moment(data, "YYYY-MM-DD", true)
+          .locale("pt")
+          .format("DD/MM/YYYY");
     },
   },
   created: async function () {
@@ -381,6 +422,7 @@ export default {
           medico: this.nomeMedico,
           estado: response.data[i].estado,
           id: response.data[i].id,
+          dataToma: response.data[i].data_toma,
         });
       }
       this.idAnimal = response.data[0].animal.id;

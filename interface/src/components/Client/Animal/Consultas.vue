@@ -51,22 +51,15 @@
                 </template>
                 <span class="caption">Ver detalhes</span>
               </v-tooltip>
-              <v-tooltip top>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-icon
-                    v-if="
-                      item.estado == 'Agendada' || item.estado == 'Pendente'
-                    "
-                    v-bind="attrs"
-                    v-on="on"
-                    small
-                    @click="cancelar = true"
-                  >
-                    fas fa-calendar-times
-                  </v-icon>
-                </template>
-                <span class="caption">Cancelar marcação</span>
-              </v-tooltip>
+              <div
+                v-if="item.estado == 'Agendada' || item.estado == 'Pendente'"
+              >
+                <CancelarComDados
+                  :dialogs="cancelar"
+                  :dados="item"
+                  @clicked="registar"
+                ></CancelarComDados>
+              </div>
             </template>
           </v-data-table>
         </v-col>
@@ -89,79 +82,6 @@
             </span>
             <p>Dr.º José Vieira</p>
           </v-card-text>
-        </v-card>
-      </v-dialog>
-
-      <v-dialog v-model="cancelar" persistent width="100%" max-width="460">
-        <v-card>
-          <v-card-title class="cancel"> Cancelar consulta </v-card-title>
-          <v-card-text>
-            <v-row class="mt-2">
-              <v-col class="pb-0" align="right" cols="5">
-                <span class="text-uppercase">Nome do Animal</span>
-              </v-col>
-              <v-col class="pl-0 pb-0" cols="7">
-                <span class="black--text">
-                  <strong>Rubi</strong>
-                  (Serra da Estrela)
-                </span>
-              </v-col>
-
-              <v-col class="pb-0" align="right" cols="5">
-                <span class="text-uppercase">Motivo da Consulta</span>
-              </v-col>
-              <v-col class="pl-0 pb-0" cols="7">
-                <span class="black--text">
-                  <strong>Vómito/Diarreia/Recusa a comer</strong>
-                </span>
-                <br />
-                <span>Consulta extraordinária/Por doença</span>
-              </v-col>
-
-              <v-col class="pb-0" align="right" cols="5">
-                <span class="text-uppercase">Data</span>
-              </v-col>
-              <v-col class="pl-0 pb-0" cols="7">
-                <span class="black--text">
-                  <strong>21/05/2021 15:45</strong>
-                </span>
-              </v-col>
-
-              <v-col class="pb-0" align="right" cols="5">
-                <span class="text-uppercase">Médico</span>
-              </v-col>
-              <v-col class="pl-0 pb-0" cols="7">
-                <span class="black--text">
-                  <strong>Sem preferência</strong>
-                </span>
-              </v-col>
-            </v-row>
-
-            <p class="mt-12">Tem a certeza que pretende cancelar a consulta?</p>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn
-              depressed
-              large
-              width="50%"
-              dark
-              color="#BDBDBD"
-              @click="cancelar = false"
-            >
-              Não
-            </v-btn>
-            <v-btn
-              depressed
-              large
-              dark
-              color="#2596be"
-              width="50%"
-              @click="cancelar()"
-            >
-              Sim
-            </v-btn>
-          </v-card-actions>
         </v-card>
       </v-dialog>
 
@@ -220,32 +140,32 @@
                 </v-col>
 
                 <v-col cols="12" class="py-0">
-         <v-menu
-                v-model="menu2"
-                :close-on-content-click="false"
-                :nudge-right="40"
-                transition="scale-transition"
-                offset-y
-                min-width="auto"
-              >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-text-field
-                    v-model="date"
-                    append-icon="fas fa-calendar-alt"
-                    readonly
-                    dense
-                    outlined
-                    v-bind="attrs"
-                    v-on="on"
-                  ></v-text-field>
-                </template>
-                <v-date-picker
-                  v-model="date"
-                  @input="menu2 = false"
-                  locale="pt PT"
-                  :min="new Date().toISOString().substr(0, 10)"
-                ></v-date-picker>
-              </v-menu>
+                  <v-menu
+                    v-model="menu2"
+                    :close-on-content-click="false"
+                    :nudge-right="40"
+                    transition="scale-transition"
+                    offset-y
+                    min-width="auto"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        v-model="date"
+                        append-icon="fas fa-calendar-alt"
+                        readonly
+                        dense
+                        outlined
+                        v-bind="attrs"
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker
+                      v-model="date"
+                      @input="menu2 = false"
+                      locale="pt PT"
+                      :min="new Date().toISOString().substr(0, 10)"
+                    ></v-date-picker>
+                  </v-menu>
                 </v-col>
 
                 <v-col cols="12" class="py-0">
@@ -310,8 +230,12 @@
                   >
                 </v-col>
                 <v-col cols="auto">
-                  <v-btn color="#2596be" small dark class="ml-3"
-                  @click="registaConsulta()"
+                  <v-btn
+                    color="#2596be"
+                    small
+                    dark
+                    class="ml-3"
+                    @click="registaConsulta()"
                     >Registar</v-btn
                   >
                 </v-col>
@@ -320,65 +244,31 @@
           </v-form>
         </v-card>
       </v-dialog>
-
-      <v-dialog v-model="cancelDialog" persistent width="100%" max-width="460">
-        <v-card>
-          <v-card-title class="justify-center cancel">
-            Cancelar agendamento da consulta
-          </v-card-title>
-          <v-card-text>
-            Tem a certeza que pretende cancelar o agendamento da consulta?
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn
-              depressed
-              large
-              width="50%"
-              dark
-              color="#BDBDBD"
-              @click="cancelDialog = false"
-            >
-              Não
-            </v-btn>
-            <v-btn
-              depressed
-              large
-              dark
-              color="#2596be"
-              width="50%"
-              @click="cancelDialog = false"
-            >
-              Sim
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
     </v-card>
   </div>
 </template>
 
 
 <script>
+import CancelarComDados from "@/components/Dialogs/CancelarComDados.vue";
 import axios from "axios";
 import store from "@/store.js";
 export default {
-  props:["animal"],
+  props: ["animal"],
   data: () => ({
     dialogNova: false,
-    cancelDialog: false,
     snackbar: false,
     color: "",
     done: false,
-    motivos:"",
+    motivos: "",
     motivo: [
       "Consulta anual/Vacinação",
       "Consulta extraordinária/Por doença",
       "Consulta de seguimento",
       "Procedimentos específicos",
     ],
-    descricao:"",
-desc: [
+    descricao: "",
+    desc: [
       { text: "Consulta anual/Vacinação", tipo: "Consulta anual/Vacinação" },
       {
         text: "Vómitos/Diarreia/Recusa em comer",
@@ -422,11 +312,11 @@ desc: [
       { text: "Desparasitação", tipo: "Procedimentos específicos" },
       { text: "Outros", tipo: "Procedimentos específicos" },
     ],
-    menu2:false,
-    date:new Date().toISOString().substr(0,10),
-    horaMarcacao:null,
-    medicos:[],
-    medico:"",
+    menu2: false,
+    date: new Date().toISOString().substr(0, 10),
+    horaMarcacao: null,
+    medicos: [],
+    medico: "",
     timeout: -1,
     hora: "10:00",
     text: "",
@@ -435,11 +325,11 @@ desc: [
         text: "Data de Marcação",
         align: "start",
         sortable: true,
-        value: "data",
+        value: "marcacao",
       },
       {
         text: "Médico Veterinário",
-        value: "medico",
+        value: "veterinario_nome",
         sortable: true,
         align: "start",
       },
@@ -462,12 +352,19 @@ desc: [
         align: "center",
       },
     ],
-    consultas: [
-      
-    ],
+    consultas: [],
     dialog: false,
-    cancelar: false,
+    cancelar: {
+      text:"consulta",
+      title:"o agendamento da consulta",
+
+    },
+    dialogs: {},
+    dados:{},
   }),
+  components:{
+    CancelarComDados
+  },
   methods: {
     allowedStep: (m) => m % 15 === 0,
     estadopedido(estado) {
@@ -476,28 +373,33 @@ desc: [
       else if (estado == "Pendente") return "#FFE082";
       else return "#9ae5ff";
     },
-
-    /*cancelar: async function () {
-      
-		 try {
-          var resposta = await axios.post("http://localhost:7777/cliente/cancelarConsulta", {
-            estado: "Cancelada"
-          });
-          console.log(JSON.stringify(resposta.data));
-          this.cancelar = false;
-          this.text = "Desparasitação confirmada com sucesso.";
-          this.color = "success";
-          this.snackbar = true;
-        } catch (e) {
-          console.log("erro: " + e);
-          this.cancelar = false;
-          this.text = "Ocorreu um erro, por favor tente mais tarde!";
-          this.color = "warning";
-          this.snackbar = true;
-        }
-		
-    },*/
-     registaConsulta: async function () {
+    cancelarConsulta: async function () {
+      try {
+        var resposta = await axios.post(
+          "http://localhost:7777/cliente/animal/cancelar/" + this.id,
+          {
+            estado: "Cancelada",
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + store.getters.token.toString(),
+            },
+          }
+        );
+        console.log(JSON.stringify(resposta.data));
+        this.cancelar = false;
+        this.text = "Desparasitação confirmada com sucesso.";
+        this.color = "success";
+        this.snackbar = true;
+      } catch (e) {
+        console.log("erro: " + e);
+        this.cancelar = false;
+        this.text = "Ocorreu um erro, por favor tente mais tarde!";
+        this.color = "warning";
+        this.snackbar = true;
+      }
+    },
+    registaConsulta: async function () {
       try {
         if (this.motivos == "Consulta anual/Vacinação")
           this.descricao = "Consulta anual/Vacinação";
@@ -527,17 +429,21 @@ desc: [
         console.log("erro: +" + e);
       }
     },
-  },
- 
-
-  created: async function () {
-
-
-    try {
+    registar(value){
+      this.snackbar=value.snackbar
+      this.color=value.color
+      this.text=value.text
+      this.timeout=value.timeout
+      this.atualiza()
+    },
+    atualiza: async function(){
+      this.consultas=[]
+      try {
       var response = await axios.post(
-        "http://localhost:7777/cliente/consultas",
+        "http://localhost:7777/cliente/animal/consultas",
         {
           cliente: this.$store.state.email,
+          animal: this.animal.id,
         },
         {
           headers: {
@@ -545,10 +451,11 @@ desc: [
           },
         }
       );
+      console.log(response);
       let response2 = await axios.get("http://localhost:7777/cliente/medicos", {
         headers: { Authorization: "Bearer " + store.getters.token },
       });
-      console.log(response2)
+      console.log(response2);
       for (var j = 0; j < response2.data.length; j++)
         this.medicos.push({
           nome: response2.data[j].nome,
@@ -557,13 +464,54 @@ desc: [
     } catch (e) {
       console.log("erro: +" + e);
     }
-
-
     for (var i = 0; i < response.data.length; i++) {
       this.consultas.push({
-        data: response.data[i].data,
-        animal: response.data[i].animal.nome,
-        medico: response.data[i].veterinario.nome,
+        idConsulta: response.data[i].id,
+        animal: response.data[i].animal,
+        marcacao: response.data[i].data + " " + response.data[i].hora,
+        utente: response.data[i].animal.nome,
+        veterinario_nome: response.data[i].veterinario.nome,
+        descricao: response.data[i].descricao,
+        estado: response.data[i].estado,
+      });
+    }
+    }
+  },
+
+  created: async function () {
+    try {
+      var response = await axios.post(
+        "http://localhost:7777/cliente/animal/consultas",
+        {
+          cliente: this.$store.state.email,
+          animal: this.animal.id,
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + store.getters.token.toString(),
+          },
+        }
+      );
+      console.log(response);
+      let response2 = await axios.get("http://localhost:7777/cliente/medicos", {
+        headers: { Authorization: "Bearer " + store.getters.token },
+      });
+      console.log(response2);
+      for (var j = 0; j < response2.data.length; j++)
+        this.medicos.push({
+          nome: response2.data[j].nome,
+          id: response2.data[j].id,
+        });
+    } catch (e) {
+      console.log("erro: +" + e);
+    }
+    for (var i = 0; i < response.data.length; i++) {
+      this.consultas.push({
+        idConsulta: response.data[i].id,
+        animal: response.data[i].animal,
+        marcacao: response.data[i].data + " " + response.data[i].hora,
+        utente: response.data[i].animal.nome,
+        veterinario_nome: response.data[i].veterinario.nome,
         descricao: response.data[i].descricao,
         estado: response.data[i].estado,
       });

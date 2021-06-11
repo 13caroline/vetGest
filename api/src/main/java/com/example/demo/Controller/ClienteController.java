@@ -239,8 +239,8 @@ public class ClienteController {
         //Atualizada
         //Administrada
 
-        String data_toma = imunizacao.getData_toma();
-        LocalDate date = LocalDate.parse(data_toma);
+        String data = imunizacao.getData();
+        LocalDate date = LocalDate.parse(data);
         //System.out.println(date);
 
         if(date.isAfter(LocalDate.now()))
@@ -319,35 +319,35 @@ public class ClienteController {
     @CrossOrigin
     @PostMapping("/cliente/consulta")
     public ResponseEntity<?> adicionarConsulta(@RequestBody String body) throws JsonProcessingException {
-       ObjectMapper mapper = new ObjectMapper();
-       JsonNode node = mapper.readTree(body);
-       Intervencao intervencao = mapper.convertValue(node.get("intervencao"),Intervencao.class);
-       //System.out.println(intervencao);
-       int animal_id =mapper.convertValue(node.get("animal"),Integer.class);
-       Animal animal = animalService.getAnimalById(animal_id);
-       int vetId = node.get("veterinario").asInt();
-       Veterinario vet = veterinarioService.getVetById(vetId);
-       String clienteEmail = node.get("cliente").asText();
-       Cliente cliente = clienteService.getClienteByEmail(clienteEmail);
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+        Intervencao intervencao = mapper.convertValue(node.get("intervencao"),Intervencao.class);
+        //System.out.println(intervencao);
+        int animal_id =mapper.convertValue(node.get("animal"),Integer.class);
+        Animal animal = animalService.getAnimalById(animal_id);
+        int vetId = node.get("veterinario").asInt();
+        Veterinario vet = veterinarioService.getVetById(vetId);
+        String clienteEmail = node.get("cliente").asText();
+        Cliente cliente = clienteService.getClienteByEmail(clienteEmail);
 
-       if(intervencao==null || animal==null|| vet==null || cliente==null){
-           return ResponseEntity.badRequest().body("Erro no agendamento de Consulta! Alguma das entidades nao existe!");
-       }
+        if(intervencao==null || animal==null|| vet==null || cliente==null){
+            return ResponseEntity.badRequest().body("Erro no agendamento de Consulta! Alguma das entidades nao existe!");
+        }
 
-       List<Animal> animais = cliente.getAnimais();
+        List<Animal> animais = cliente.getAnimais();
 
-       if(!animais.contains(animal)){
-           return ResponseEntity.badRequest().body("Erro a obter animal!");
-       }
+        if(!animais.contains(animal)){
+            return ResponseEntity.badRequest().body("Erro a obter animal!");
+        }
 
-       intervencao.setAnimal(animal);
-       intervencao.setVeterinario(vet);
-       intervencao.setEstado("Pendente");
-       intervencao.setTipo("Consulta");
-       intervencao.setData_pedido(LocalDateTime.now().toString().substring(0,16));
-       //System.out.println("\n\nAQUI:"+intervencao);
-       intervencaoService.saveIntervencao(intervencao);
-       return ResponseEntity.accepted().body("Consulta agendada!");
+        intervencao.setAnimal(animal);
+        intervencao.setVeterinario(vet);
+        intervencao.setEstado("Pendente");
+        intervencao.setTipo("Consulta");
+        intervencao.setData_pedido(LocalDateTime.now().toString().substring(0,16));
+        //System.out.println("\n\nAQUI:"+intervencao);
+        intervencaoService.saveIntervencao(intervencao);
+        return ResponseEntity.accepted().body("Consulta agendada!");
     }
 
     //Check
