@@ -265,8 +265,8 @@ export default {
         this.$store.state.tipo == "Clinica"
           ? "http://localhost:7777/clinica/intervencao/agendar"
           : "http://localhost:7777/medico/intervencao/agendar";
-      try {
-        await axios.post(
+      await axios
+        .post(
           route,
           {
             intervencao: {
@@ -284,23 +284,37 @@ export default {
             cliente: this.dados.cliente_email,
           },
           { headers: { Authorization: "Bearer " + store.getters.token } }
-        );
-        this.dialog = false;
-        this.$emit("clicked", {
-          text: "Consulta agendada com sucesso.",
-          color: "success",
-          snackbar: "true",
-          timeout: 4000,
+        )
+        .then((response) => {
+          console.log(response);
+          this.$emit("clicked", {
+            text: "Consulta agendada com sucesso.",
+            color: "success",
+            snackbar: "true",
+            timeout: 4000,
+          });
+          this.dialog = false;
+        })
+        .catch((error) => {
+          if (
+            error.response.data ==
+            "Erro no agendamento de Consulta! Horario Indisponivel!"
+          ) {
+            this.$emit("clicked", {
+              text: "Não é possível agendar uma consulta para o horário selecionado.",
+              color: "warning",
+              snackbar: "true",
+              timeout: 4000,
+            });
+          } else {
+            this.$emit("clicked", {
+              text: "Ocorreu um erro na marcação, por favor tente mais tarde!",
+              color: "warning",
+              snackbar: "true",
+              timeout: 4000,
+            });
+          }
         });
-      } catch (e) {
-        console.log("erro: " + e);
-        this.$emit("clicked", {
-          text: "Ocorreu um erro na marcação, por favor tente mais tarde!",
-          color: "warning",
-          snackbar: "true",
-          timeout: 4000,
-        });
-      }
     },
   },
   computed: {

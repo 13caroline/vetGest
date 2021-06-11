@@ -396,7 +396,7 @@ export default {
         console.log(e);
       }
     },
-      atualiza: async function () {
+    atualiza: async function () {
       try {
         this.events = [];
         let response2 = await axios.post(
