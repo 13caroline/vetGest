@@ -86,13 +86,8 @@ public class VeterinarioController {
     }
 
     @CrossOrigin
-    @PostMapping("/medico/utentes")
-    public ResponseEntity<?> getUtentes(@RequestBody Veterinario email){
-        Veterinario veterinario = veterinarioService.getVetByEmail(email.getEmail());
-        if(veterinario==null ){
-            return ResponseEntity.badRequest().body("Erro a obter veterinário!");
-        }
-
+    @GetMapping("/medico/utentes")
+    public ResponseEntity<?> getUtentes(){
         List<Cliente> clientes = clienteService.getClientes();
         if(clientes.size()==0){
             return ResponseEntity.badRequest().body("Não Existem Clientes Registados!");

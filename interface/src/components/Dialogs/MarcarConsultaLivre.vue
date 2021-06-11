@@ -22,7 +22,7 @@
     <v-card>
       <v-form>
         <v-card-title class="font-weight-regular text-uppercase">
-          Marcar uma nova consulta
+          Marcar uma nova consulta "livre"
         </v-card-title>
         <v-card-subtitle
           >Por favor preencha o seguinte formulário</v-card-subtitle
@@ -153,10 +153,18 @@
               </v-menu>
             </v-col>
 
-            <v-col cols="12" class="py-0">
+            <v-col
+              cols="12"
+              class="py-0"
+              v-if="this.$store.state.tipo == 'Clinica'"
+            >
               <p class="ma-0">Médico Veterinário</p>
             </v-col>
-            <v-col cols="12" class="py-0">
+            <v-col
+              cols="12"
+              class="py-0"
+              v-if="this.$store.state.tipo == 'Clinica'"
+            >
               <v-autocomplete
                 flat
                 color="#2596be"
@@ -325,55 +333,60 @@ export default {
       this.dialog = false;
     },
     registar: async function () {
-      if (store.state.tipo == "Clinica") {
-        await axios
-          .post(
-            "http://localhost:7777/clinica/intervencao/agendar",
-            {
-              intervencao: {
-                data: this.date,
-                hora: this.hora,
-                descricao: this.descricao,
-                motivo: this.motivos,
-                tipo: "Consulta",
-              },
-              animal: this.id,
-              veterinario: this.medico,
-              cliente: this.dono,
+      let route =
+        this.$store.state.tipo == "Clinica"
+          ? "http://localhost:7777/clinica/intervencao/agendar"
+          : "http://localhost:7777/medico/agendar/intervencao";
+      await axios
+        .post(
+          route,
+          {
+            intervencao: {
+              data: this.date,
+              hora: this.hora,
+              descricao: this.descricao,
+              motivo: this.motivos,
+              tipo: "Consulta",
             },
-            { headers: { Authorization: "Bearer " + store.getters.token } }
-          )
-          .then((response) => {
-            console.log(response);
+            animal: this.id,
+            veterinario:
+              this.$store.state.tipo == "Clinica"
+                ? this.medico
+                : this.$store.state.email,
+            cliente: this.dono,
+          },
+          { headers: { Authorization: "Bearer " + store.getters.token } }
+        )
+        .then((response) => {
+          console.log(response);
+          this.$emit("clicked", {
+            text: "Consulta agendada com sucesso.",
+            color: "success",
+            snackbar: "true",
+            timeout: 4000,
+          });
+          this.dialog = false;
+        })
+        .catch((error) => {
+          if (
+            error.response.data ==
+            "Erro no agendamento de Consulta! Horario Indisponivel!"
+          ) {
             this.$emit("clicked", {
-              text: "Consulta agendada com sucesso.",
-              color: "success",
+              text: "Não é possível agendar uma consulta para o horário selecionado.",
+              color: "warning",
               snackbar: "true",
               timeout: 4000,
             });
-            this.dialog = false;
-          })
-          .catch((error) => {
-            if (
-              error.response.data ==
-              "Erro no agendamento de Consulta! Horario Indisponivel!"
-            ) {
-              this.$emit("clicked", {
-                text: "Não é possível agendar uma consulta para o horário selecionado.",
-                color: "warning",
-                snackbar: "true",
-                timeout: 4000,
-              });
-            } else {
-              this.$emit("clicked", {
-                text: "Ocorreu um erro na marcação, por favor tente mais tarde!",
-                color: "warning",
-                snackbar: "true",
-                timeout: 4000,
-              });
-            }
-          });
-      }
+          } else {
+            this.$emit("clicked", {
+              text: "Ocorreu um erro na marcação, por favor tente mais tarde!",
+              color: "warning",
+              snackbar: "true",
+              timeout: 4000,
+            });
+          }
+        });
     },
   },
   computed: {
@@ -384,17 +397,27 @@ export default {
   },
   created: async function () {
     try {
-      let response = await axios.get("http://localhost:7777/clinica/medicos", {
-        headers: { Authorization: "Bearer " + store.getters.token },
-      });
+      let utentes_route = "";
+      if (store.state.tipo == "Clinica") {
+        utentes_route = "http://localhost:7777/clinica/utentes";
+        let response = await axios.get(
+          "http://localhost:7777/clinica/medicos",
+          {
+            headers: { Authorization: "Bearer " + store.getters.token },
+          }
+        );
 
-      for (var i = 0; i < response.data.length; i++) {
-        this.medicos.push({
-          nome: response.data[i].nome,
-          id: response.data[i].id,
-        });
+        for (var i = 0; i < response.data.length; i++) {
+          this.medicos.push({
+            nome: response.data[i].nome,
+            id: response.data[i].id,
+          });
+        }
+      } else {
+        utentes_route = "http://localhost:7777/medico/utentes";
       }
-      let response2 = await axios.get("http://localhost:7777/clinica/utentes", {
+
+      let response2 = await axios.get(utentes_route, {
         headers: { Authorization: "Bearer " + store.getters.token },
       });
       for (i = 0; i < response2.data.utentes.length; i++)
