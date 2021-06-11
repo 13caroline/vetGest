@@ -168,7 +168,7 @@ export default {
       this.$router.push("/cliente/inicio");
     },
     preferences: function () {
-      this.$router.push("/preferencias");
+      this.$router.push("/cliente/preferencias");
     },
   },
 };
