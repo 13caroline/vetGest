@@ -1,7 +1,9 @@
 package com.example.demo.Service;
 
 import com.example.demo.Entity.Animal;
+import com.example.demo.Entity.Historico;
 import com.example.demo.Repository.AnimalRepository;
+import com.example.demo.Repository.HistoricoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,10 @@ public class AnimalService {
 
     @Autowired
     private AnimalRepository repository;
+
+    @Autowired
+    private HistoricoRepository historicoRepository;
+
 
     public Animal saveAnimal (Animal animal){
         return repository.save(animal);
@@ -35,5 +41,9 @@ public class AnimalService {
 
     public Animal updateAnimal(Animal animal){
         return repository.save(animal);
+    }
+
+    public Historico saveHistorico(Historico historico){
+        return historicoRepository.save(historico);
     }
 }

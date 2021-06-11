@@ -239,8 +239,8 @@ public class ClienteController {
         //Atualizada
         //Administrada
 
-        String data_toma = imunizacao.getData_toma();
-        LocalDate date = LocalDate.parse(data_toma);
+        String data = imunizacao.getData();
+        LocalDate date = LocalDate.parse(data);
         //System.out.println(date);
 
         if(date.isAfter(LocalDate.now()))

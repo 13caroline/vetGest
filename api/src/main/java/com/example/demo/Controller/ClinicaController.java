@@ -405,6 +405,25 @@ public class ClinicaController {
     }
 
     @CrossOrigin
+    @PostMapping("/clinica/animal/historico")
+    public ResponseEntity<?> addHistorico(@RequestBody String body) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+        int animal_id = node.get("animal").asInt();
+        Animal animal = animalService.getAnimalById(animal_id);
+        Historico historico = mapper.convertValue(node.get("historico"),Historico.class);
+
+        if(historico==null || animal ==null){
+            return ResponseEntity.badRequest().body("Erro no Animal ou Historico!");
+        }
+
+        historico.setAnimal(animal);
+        animalService.saveHistorico(historico);
+
+        return ResponseEntity.accepted().body("Historico Adicionado!");
+    }
+
+    @CrossOrigin
     @GetMapping("/clinica/internamentos")
     public ResponseEntity<?> getInternamentos(){
         List<Internamento> internamentos = internamentoService.findAllByEstado("Internado");
