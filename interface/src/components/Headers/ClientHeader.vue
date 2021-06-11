@@ -41,7 +41,7 @@
           Clínica
         </v-btn>
 
-        <v-btn
+        <!--<v-btn
           tile
           depressed
           text
@@ -49,7 +49,7 @@
           to="/cliente/conselhos"
         >
           Conselhos Úteis
-        </v-btn>
+        </v-btn> -->
 
         <v-menu offset-y tile open-on-click>
           <template v-slot:activator="{ on, attrs }">

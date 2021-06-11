@@ -474,7 +474,7 @@ export default {
 
     try {
       var response = await axios.post(
-        "http://localhost:7777//cliente/cirurgia",
+        "http://localhost:7777/cliente/cirurgias",
         {
           cliente: this.$store.state.email,
         },
@@ -484,22 +484,14 @@ export default {
           },
         }
       );
-      let response2 = await axios.get("http://localhost:7777/cliente/medicos", {
-        headers: { Authorization: "Bearer " + store.getters.token },
-      });
-      console.log(response2)
-      for (var j = 0; j < response2.data.length; j++)
-        this.medicos.push({
-          nome: response2.data[j].nome,
-          id: response2.data[j].id,
-        });
+     
     } catch (e) {
       console.log("erro: +" + e);
     }
 
-
+ 
     for (var i = 0; i < response.data.length; i++) {
-      this.consultas.push({
+      this.cirurgias.push({
         data: response.data[i].data,
         animal: response.data[i].animal.nome,
         medico: response.data[i].veterinario.nome,
