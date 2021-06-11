@@ -137,7 +137,7 @@
           <v-img
             src="@/assets/animais/Rubi.jpg"
             aspect-ratio="1"
-            class="grey lighten-2 mx-2"
+            class="grey lighten-2 mx-2 rounded"
             cover
           >
             <template v-slot:placeholder>

@@ -5,19 +5,6 @@
         <v-col cols="auto">
           <span class="subtitle-1 head">{{animal.nome}}</span>
         </v-col>
-       <v-col cols="auto" class="ml-auto">
-          
-    <v-btn
-                class="body-2"
-                small
-                color="#2596be"
-                dark
-                @click="editar()"
-              >
-                Editar dados
-                <v-icon small class="ml-4">fas fa-pen</v-icon>
-              </v-btn>
-        </v-col>
       </v-row>
       <v-divider></v-divider>
 
@@ -71,9 +58,6 @@ export default {
     animal:{}
   }),
   methods: {
-    editar(){
-      this.$router.push("/cliente/animal/editar/"+this.id)
-    },
     estadopedido(estado) {
       if (estado == "Agendada") return "#C5E1A5";
       else return "#FFE082";

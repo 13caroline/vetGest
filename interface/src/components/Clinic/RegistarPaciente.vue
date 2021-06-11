@@ -149,11 +149,7 @@
 
               <v-col cols="6" md class="py-0">
                 <p class="ma-0">Sexo *</p>
-                <v-radio-group
-                  row
-                  class="ma-0"
-                  v-model="sexo"
-                >
+                <v-radio-group row class="ma-0" v-model="sexo">
                   <v-radio value="Macho" color="#2596be">
                     <template v-slot:label>
                       <div class="body-2">Macho</div>
@@ -170,11 +166,7 @@
 
               <v-col cols="6" md class="py-0">
                 <p class="ma-0">Castração *</p>
-                <v-radio-group
-                  row
-                  class="ma-0"
-                  v-model="castracao"
-                >
+                <v-radio-group row class="ma-0" v-model="castracao">
                   <v-radio :value="true" color="#2596be">
                     <template v-slot:label>
                       <div class="body-2">Sim</div>
@@ -357,10 +349,7 @@ export default {
       "Cerdosa",
     ],
     itemscauda: ["Comprida", "Curta", "Amputada"],
-    itemsespecie: [
-      "Canídeo",
-      "Felídeo",
-    ],
+    itemsespecie: ["Canídeo", "Felídeo"],
     itemsraca: ["Serra da Estrela"],
     search: "",
     headers: [

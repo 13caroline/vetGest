@@ -405,7 +405,7 @@ public class ClinicaController {
     }
 
     @CrossOrigin
-    @PostMapping("/clinica/animal/historico")
+    @PostMapping("/clinica/animal/historico/inserir")
     public ResponseEntity<?> addHistorico(@RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);
@@ -424,30 +424,19 @@ public class ClinicaController {
     }
 
     @CrossOrigin
-    @PostMapping("/clinica/animal/historico/alterar")
-    public ResponseEntity<?> editHistorico(@RequestBody String body) throws JsonProcessingException {
+    @PostMapping("/clinica/animal/historico")
+    public ResponseEntity<?> getHistorico(@RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);
         int animal_id = node.get("animal").asInt();
         Animal animal = animalService.getAnimalById(animal_id);
-        Historico historico = mapper.convertValue(node.get("historico"),Historico.class);
 
-        if(historico==null || animal ==null){
+        if(animal ==null){
             return ResponseEntity.badRequest().body("Erro no Animal ou Historico!");
         }
-        Historico historico1 = animalService.findByAnimalId(animal_id);
+        Historico historico = animalService.findByAnimalId(animal_id);
 
-        historico1.setAlergias(historico.getAlergias());
-        historico1.setTransfusoes(historico.getTransfusoes());
-        historico1.setTipo_alergias(historico.getTipo_alergias());
-        historico1.setHistoria_medica(historico.getHistoria_medica());
-        historico1.setHistoria_ginecologica(historico.getHistoria_ginecologica());
-        historico1.setMedicacao(historico.getMedicacao());
-        historico1.setAntecedentes(historico.getAntecedentes());
-
-        animalService.saveHistorico(historico1);
-
-        return ResponseEntity.accepted().body("Historico Alterado!");
+        return ResponseEntity.accepted().body(historico);
     }
 
     @CrossOrigin
