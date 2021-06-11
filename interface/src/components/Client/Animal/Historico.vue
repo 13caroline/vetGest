@@ -8,12 +8,6 @@
             Histórico Clínico
           </h3>
         </v-col>
-        <v-col cols="auto" class="ml-auto pl-0" v-if="this.$store.state.tipo == 'Veterinario'">
-          <EditaHistorico :dados="animal" @clicked="close()"></EditaHistorico>
-        </v-col>
-        <v-col cols="auto" class="pl-0">
-          <RegistaHistorico :dados="animal" @clicked="close"></RegistaHistorico>
-        </v-col>
       </v-row>
 
       <v-row class="w-100" align="stretch">
@@ -162,26 +156,7 @@ export default {
     format(data) {
       return moment(data).locale("pt").format("DD/MM/YYYY");
     },
-    close(value) {
-      this.snackbar = value.snackbar;
-      this.color = value.color;
-      this.text = value.text;
-      this.timeout = value.timeout;
-      this.atualiza();
-    },
-    atualiza: async function(){
-      this.historico = {}
-      let response = await axios.post(
-      "http://localhost:7777/clinica/animal/historico",
-      {
-        animal: this.animal.id,
-      },
-      {
-        headers: { Authorization: "Bearer " + store.getters.token },
-      }
-    );
-    this.historico = response.data;
-    }
+
   },
   components: {
     EditaHistorico,
@@ -189,9 +164,10 @@ export default {
   },
   created: async function () {
     let response = await axios.post(
-      "http://localhost:7777/clinica/animal/historico",
+      "http://localhost:7777/cliente/animal/historico",
       {
         animal: this.animal.id,
+        cliente: this.$store.state.email,
       },
       {
         headers: { Authorization: "Bearer " + store.getters.token },
