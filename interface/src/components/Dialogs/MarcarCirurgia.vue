@@ -264,7 +264,7 @@ export default {
       let route =
         this.$store.state.tipo == "Clinica"
           ? "http://localhost:7777/clinica/intervencao/agendar"
-          : "http://localhost:7777/medico/intervencao/agendar";
+          : "http://localhost:7777/medico/agendar/intervencao";
       await axios
         .post(
           route,

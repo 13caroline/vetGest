@@ -27,6 +27,16 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Client/EditData.vue')
   },
   {
+    path: '/cliente/preferencias',
+    name: 'Preferencias Cliente',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Client/Preferencias.vue')
+  },
+  {
+    path: '/cliente/prefencias/editar',
+    name: 'Editar preferencias Cliente',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Client/EditaCliente.vue')
+  },
+  {
     path: '/cliente/consultas/agendar',
     name: 'Agendar Consulta',
     component: () => import(/* webpackChunkName: "about" */ '../views/Client/AgendarConsulta.vue')

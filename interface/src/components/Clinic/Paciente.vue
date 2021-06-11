@@ -2,27 +2,8 @@
   <div>
     <v-container>
       <v-row justify="space-around" class="mt-2 py-2">
-        <v-col cols="auto">
+        <v-col>
           <span class="subtitle-1 head">Rubi</span>
-        </v-col>
-        <v-col cols="auto" class="ml-auto">
-          <v-tooltip top>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-               class="body-2 ml-2 mb-2"
-                small
-                color="#2596be"
-                v-bind="attrs"
-                v-on="on"
-                fab
-                dark
-                @click="editar()"
-              >
-                <v-icon small>fas fa-pen</v-icon>
-              </v-btn>
-            </template>
-            <span>Editar dados</span>
-          </v-tooltip>
         </v-col>
       </v-row>
       <v-divider></v-divider>
@@ -86,10 +67,6 @@ export default {
       if (estado == "Agendada") return "#C5E1A5";
       else return "#FFE082";
     },
-    editar(){
-      let route = this.$store.state.tipo == 'Clinica' ? "/clinica/editar/utente/" : "/medico/editar/utente/";
-      this.$router.push(route + this.id)
-    }
   },
   components:{
     PacienteVacinas, 

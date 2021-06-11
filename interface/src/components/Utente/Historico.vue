@@ -1,7 +1,19 @@
 <template>
   <div>
     <v-card flat color="#fafafa">
-      <v-row class="w-100 pt-5" align="stretch">
+      <v-row class="w-100 pt-9">
+        <v-col>
+          <h3 class="font-weight-regular text-uppercase">
+            <v-icon small>fas fa-notes-medical</v-icon>
+            Histórico Clínico
+          </h3>
+        </v-col>
+        <v-col cols="auto" class="ml-auto pl-0">
+          <EditaHistorico @clicked="close()"></EditaHistorico>
+        </v-col>
+      </v-row>
+
+      <v-row class="w-100" align="stretch">
         <v-col>
           <v-card class="h-100" outlined>
             <v-list-item>
@@ -103,14 +115,12 @@
           <v-card class="h-100" outlined>
             <v-list-item>
               <v-list-item-content>
-                <v-row>
-                  <v-col>
-                    <p class="infos">Antecedentes familiares</p>
-                  </v-col>
-                  <v-col>
-                    <p class="respos">Sem antecedentes familiares</p>
-                  </v-col>
-                </v-row>
+                <div>
+                  <p class="font-weight-bold">Antecedentes familiares</p>
+                </div>
+                <div>
+                  <p class="infos">Sem antecedentes familiares</p>
+                </div>
               </v-list-item-content>
             </v-list-item>
           </v-card>
@@ -136,6 +146,7 @@
 
 <script>
 import moment from "moment";
+import EditaHistorico from "@/components/Dialogs/EditaHistorico.vue";
 export default {
   props: ["animal"],
   data: () => ({}),
@@ -143,6 +154,9 @@ export default {
     format(data) {
       return moment(data).locale("pt").format("DD/MM/YYYY");
     },
+  },
+  components: {
+    EditaHistorico,
   },
 };
 </script>
@@ -154,21 +168,6 @@ export default {
 .respos {
   text-align: end;
   font-weight: bold;
-}
-
-.body-2 {
-  font-size: 0.8rem !important;
-}
-
-.head {
-  font-size: 2.75rem !important;
-}
-
-.font-weight-bold {
-  font-size: 15px;
-}
-.font-weight-regular {
-  font-size: 14px;
 }
 
 .font-weight-bold.col-sm-12.col-md-auto.col-auto {
