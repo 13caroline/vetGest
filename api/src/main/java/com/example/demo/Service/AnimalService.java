@@ -46,4 +46,9 @@ public class AnimalService {
     public Historico saveHistorico(Historico historico){
         return historicoRepository.save(historico);
     }
+
+    public Historico findByAnimalId(int animal_id){
+        return historicoRepository.findByAnimalId(animal_id);
+    }
+
 }
