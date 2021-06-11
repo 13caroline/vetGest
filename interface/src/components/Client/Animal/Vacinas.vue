@@ -1,21 +1,24 @@
 <template>
-    <div>
-        <v-card flat color="#fafafa">
-            <v-row>
+  <div>
+    <v-card flat color="#fafafa">
+      <v-row>
         <v-col>
           <v-row align="center" class="my-5">
             <v-col>
-          <h3 class="font-weight-regular text-uppercase ">
-            <v-icon small>fas fa-syringe</v-icon>
-            Vacinas e desparasitações
-          </h3>
-</v-col>
-          <v-col cols="auto" class="pl-0">
-              <NovaDesparasitacao :dados="idAnimal" @clicked="registar"></NovaDesparasitacao>
+              <h3 class="font-weight-regular text-uppercase">
+                <v-icon small>fas fa-syringe</v-icon>
+                Vacinas e desparasitações
+              </h3>
             </v-col>
-</v-row>
+            <v-col cols="auto" class="pl-0">
+              <NovaDesparasitacao
+                :dados="idAnimal"
+                @clicked="registar"
+              ></NovaDesparasitacao>
+            </v-col>
+          </v-row>
           <v-data-table
-          :page.sync="page"
+            :page.sync="page"
             :items-per-page="itemsPerPage"
             @page-count="pageCount = $event"
             :headers="headers"
@@ -34,7 +37,10 @@
                 fas fa-check-circle
               </v-icon>
               <v-btn
-                v-if="item.estado == 'Atualizada' || item.estado == 'Atrasada' && item.Tipo=='Desparasitacao' " 
+                v-if="
+                  item.estado == 'Atualizada' ||
+                  (item.estado == 'Atrasada' && item.Tipo == 'Desparasitacao')
+                "
                 small
                 outlined
                 rounded
@@ -55,8 +61,7 @@
               class="custom"
             ></v-pagination>
           </div>
-                  </v-col>
-
+        </v-col>
       </v-row>
       <v-dialog v-model="dialog" width="100%" max-width="700">
         <v-card>
@@ -173,8 +178,8 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-        </v-card>
-        <v-snackbar
+    </v-card>
+    <v-snackbar
       v-model="snackbar"
       :timeout="timeout"
       :color="color"
@@ -183,28 +188,28 @@
     >
       {{ text }}
     </v-snackbar>
-    </div>
+  </div>
 </template>
 
 <script>
-import axios from 'axios'
+import axios from "axios";
 import store from "@/store.js";
 import NovaDesparasitacao from "@/components/Dialogs/NovaDesparasitacao.vue";
 import moment from "moment";
 export default {
-  props:["animal"],
+  props: ["animal"],
   data: () => ({
     page: 1,
-      pageCount: 0,
-      itemsPerPage: 10,
+    pageCount: 0,
+    itemsPerPage: 10,
 
     idAnimal: {},
     dialog: false,
     dialogCancel: false,
     dataPrevista: "",
     dataToma: null,
-    tratamento: "", 
-    id:0,
+    tratamento: "",
+    id: 0,
     date: new Date().toISOString().substr(0, 10),
     snackbar: false,
     color: "",
@@ -256,47 +261,49 @@ export default {
         align: "center",
       },
     ],
-    items: [
-      
-    ],
+    items: [],
   }),
   methods: {
-    registar(value){
-      this.snackbar=value.snackbar
-      this.color=value.color
-      this.text=value.text
-      this.timeout=value.timeout
-      this.atualiza()
+    registar(value) {
+      this.snackbar = value.snackbar;
+      this.color = value.color;
+      this.text = value.text;
+      this.timeout = value.timeout;
+      this.atualiza();
     },
-    atualiza: async function(){
-      this.items=[];
+    atualiza: async function () {
+      this.items = [];
       try {
-      var response = await axios.post(
-        "http://localhost:7777/cliente/animal/"+this.animal.id+"/getvacinas",
-        {
-          email: this.$store.state.email,
-        },
-        {
-          headers: {
-            Authorization: "Bearer " + store.getters.token.toString(),
+        var response = await axios.post(
+          "http://localhost:7777/cliente/animal/" +
+            this.animal.id +
+            "/getvacinas",
+          {
+            email: this.$store.state.email,
           },
-        }
-      );
-    } catch (e) {
-      console.log("erro: +" + e);
-    }
-   for (var i = 0; i < response.data.length; i++) {
-     if(!response.data[i].veterinario) this.nomeMedico="Sem Referência"
-     else this.nomeMedico= response.data[i].veterinario.nome
-      this.items.push({
-        dataPrevista:  moment(response.data[i].data,"YYYY-MM-DD",true).locale("pt").format("DD/MM/YYYY"),
-        tipo: response.data[i].tipo,
-        tratamento: response.data[i].tratamento,
-        medico: this.nomeMedico,
-        estado: response.data[i].estado,
-        id: response.data[i].id
-      })
-    } 
+          {
+            headers: {
+              Authorization: "Bearer " + store.getters.token.toString(),
+            },
+          }
+        );
+      } catch (e) {
+        console.log("erro: +" + e);
+      }
+      for (var i = 0; i < response.data.length; i++) {
+        if (!response.data[i].veterinario) this.nomeMedico = "Sem Referência";
+        else this.nomeMedico = response.data[i].veterinario.nome;
+        this.items.push({
+          dataPrevista: moment(response.data[i].data, "YYYY-MM-DD", true)
+            .locale("pt")
+            .format("DD/MM/YYYY"),
+          tipo: response.data[i].tipo,
+          tratamento: response.data[i].tratamento,
+          medico: this.nomeMedico,
+          estado: response.data[i].estado,
+          id: response.data[i].id,
+        });
+      }
     },
     estadopedido(estado) {
       if (estado == "Administrada") return "#9AE5FF";
@@ -308,7 +315,7 @@ export default {
     },
     openDialog(item) {
       this.dataPrevista = item.dataPrevista;
-      console.log(item.id)
+      console.log(item.id);
       this.id = item.id;
       this.dialog = true;
     },
@@ -318,32 +325,36 @@ export default {
     },
     confirma: async function () {
       try {
-          var resposta = await axios.post("http://localhost:7777/cliente/animal/confirma/imunizacao", {
+        var resposta = await axios.post(
+          "http://localhost:7777/cliente/animal/confirma/imunizacao",
+          {
             id: this.id,
             data: this.dataToma,
             tratamento: this.tratamento,
-            dataProx:"1213123"
-          });
-          console.log(JSON.stringify(resposta.data));
-          this.dialog = false;
-          this.text = "Desparasitação confirmada com sucesso.";
-          this.color = "success";
-          this.snackbar = true;
-          this.atualiza();
-        } catch (e) {
-          console.log("erro: " + e);
-          this.dialog = false;
-          this.text = "Ocorreu um erro, por favor tente mais tarde!";
-          this.color = "warning";
-          this.snackbar = true;
-        }
-        
+            dataProx: "1213123",
+          }
+        );
+        console.log(JSON.stringify(resposta.data));
+        this.dialog = false;
+        this.text = "Desparasitação confirmada com sucesso.";
+        this.color = "success";
+        this.snackbar = true;
+        this.atualiza();
+      } catch (e) {
+        console.log("erro: " + e);
+        this.dialog = false;
+        this.text = "Ocorreu um erro, por favor tente mais tarde!";
+        this.color = "warning";
+        this.snackbar = true;
+      }
     },
   },
-created: async function () {
+  created: async function () {
     try {
       var response = await axios.post(
-        "http://localhost:7777/cliente/animal/"+this.animal.id+"/getvacinas",
+        "http://localhost:7777/cliente/animal/" +
+          this.animal.id +
+          "/getvacinas",
         {
           email: this.$store.state.email,
         },
@@ -356,27 +367,28 @@ created: async function () {
     } catch (e) {
       console.log("erro: +" + e);
     }
- 
-    if(response.data.length!=0){
-   for (var i = 0; i < response.data.length; i++) {
-     if(!response.data[i].veterinario) this.nomeMedico="Sem Referência"
-     else this.nomeMedico= response.data[i].veterinario.nome
-      this.items.push({
-        dataPrevista: moment(response.data[i].data,"YYYY-MM-DD",true).locale("pt").format("DD/MM/YYYY"),
-        tipo: response.data[i].tipo,
-        tratamento: response.data[i].tratamento,
-        medico: this.nomeMedico,
-        estado: response.data[i].estado,
-        id: response.data[i].id
-      })
-    } 
-          this.idAnimal= response.data[0].animal.id;
-    }
 
+    if (response.data.length != 0) {
+      for (var i = 0; i < response.data.length; i++) {
+        if (!response.data[i].veterinario) this.nomeMedico = "Sem Referência";
+        else this.nomeMedico = response.data[i].veterinario.nome;
+        this.items.push({
+          dataPrevista: moment(response.data[i].data, "YYYY-MM-DD", true)
+            .locale("pt")
+            .format("DD/MM/YYYY"),
+          tipo: response.data[i].tipo,
+          tratamento: response.data[i].tratamento,
+          medico: this.nomeMedico,
+          estado: response.data[i].estado,
+          id: response.data[i].id,
+        });
+      }
+      this.idAnimal = response.data[0].animal.id;
+    }
   },
   components: {
     NovaDesparasitacao,
-  }
+  },
 };
 </script>
 
@@ -404,5 +416,4 @@ created: async function () {
 .body-2 .v-icon.v-icon {
   font-size: 15px;
 }
-
 </style>
