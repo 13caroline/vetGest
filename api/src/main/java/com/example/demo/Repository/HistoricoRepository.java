@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface HistoricoRepository extends JpaRepository<Historico,Integer>{
-
+    Historico findByAnimalId(int animal_id);
 }
