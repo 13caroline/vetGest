@@ -152,7 +152,6 @@ export default {
      { headers: { Authorization: "Bearer " + this.$store.getters.token } });
 
     this.internamento = response.data;
-    console.log(this.internamento)
     
   },
 };

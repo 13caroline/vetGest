@@ -535,9 +535,10 @@ desc: [
 
     try {
       var response = await axios.post(
-        "http://localhost:7777/cliente/consultas",
+        "http://localhost:7777/cliente/animal/consultas",
         {
           cliente: this.$store.state.email,
+          animal: this.animal.id,
         },
         {
           headers: {
