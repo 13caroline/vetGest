@@ -452,7 +452,7 @@ public class VeterinarioController {
         if(internamento.getVeterinario().getEmail().equals(vet_email) && internamento.getAnimal().getId() == id_animal) {
 
             List<NotaInternamento> notaInternamentos = internamentoService.findAllByInternamento(internamento);
-
+            /*
             String nome = animal.getNome();
             String dataNascimento = animal.getDataNascimento();
 
@@ -461,7 +461,19 @@ public class VeterinarioController {
             response.put("nome", nome);
             response.put("dataNascimento", dataNascimento);
             response.put("notasInternamento", notaInternamentos);
-
+             */
+            JSONObject response = new JSONObject();
+            response.put("animal",animal);
+            notaInternamentos.forEach(notaInternamento -> {
+                try {
+                    JSONObject nota = new JSONObject();
+                    nota.put("descricao", notaInternamento.getDescricao());
+                    nota.put("data", notaInternamento.getData());
+                    response.accumulate("notas",nota);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            });
             return ResponseEntity.accepted().body(response.toString());
         }
 
@@ -487,6 +499,7 @@ public class VeterinarioController {
 
         NotaInternamento notaInternamento =  mapper.convertValue(node.get("notaInternamento"), NotaInternamento.class);
         notaInternamento.setInternamento(internamento);
+        notaInternamento.setData(LocalDateTime.now().toString().substring(0,16));
         internamentoService.saveNota(notaInternamento);
 
         System.out.println("\n\nAQUI: Sucesso");

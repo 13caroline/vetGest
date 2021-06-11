@@ -471,6 +471,18 @@ public class ClinicaController {
         Internamento internamento = internamentoService.findByAnimalIdAndEstado(id_animal,"Internado");
         List<NotaInternamento> notaInternamentos = internamentoService.findAllByInternamento(internamento);
 
-        return ResponseEntity.accepted().body(notaInternamentos);
+        JSONObject response = new JSONObject();
+        response.put("animal",animal);
+        notaInternamentos.forEach(notaInternamento -> {
+            try {
+                JSONObject nota = new JSONObject();
+                nota.put("descricao", notaInternamento.getDescricao());
+                nota.put("data", notaInternamento.getData());
+                response.accumulate("notas",nota);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
+        return ResponseEntity.accepted().body(response.toString());
     }
 }
