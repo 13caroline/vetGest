@@ -29,10 +29,10 @@
                 <div>
                   <v-row>
                     <v-col>
-                      <p class="infos">Transfusões</p>
+                      <p class="infos mb-0">Transfusões</p>
                     </v-col>
                     <v-col>
-                      <p class="respos">Não</p>
+                      <p class="respos mb-0">Não</p>
                     </v-col>
                   </v-row>
                 </div>
@@ -55,7 +55,7 @@
           </v-card>
         </v-col>
         <v-col cols="12">
-          <v-card class="h-100 mt-5" outlined>
+          <v-card class="h-100" outlined>
             <v-list-item>
               <v-list-item-content>
                 <div>
@@ -70,7 +70,7 @@
         </v-col>
 
         <v-col cols="12">
-          <v-card class="h-100 mt-5" outlined>
+          <v-card class="h-100" outlined>
             <v-list-item>
               <v-list-item-content>
                 <div>
@@ -85,7 +85,7 @@
         </v-col>
 
         <v-col cols="12">
-          <v-card class="h-100 mt-5" outlined>
+          <v-card class="h-100" outlined>
             <v-list-item>
               <v-list-item-content>
                 <div>
@@ -100,7 +100,7 @@
         </v-col>
 
         <v-col>
-          <v-card class="h-100 mt-5" outlined>
+          <v-card class="h-100" outlined>
             <v-list-item>
               <v-list-item-content>
                 <v-row>
@@ -116,7 +116,7 @@
           </v-card>
         </v-col>
         <v-col>
-          <v-card class="h-100 mt-5" outlined>
+          <v-card class="h-100" outlined>
             <v-list-item>
               <v-list-item-content>
                 <div>
