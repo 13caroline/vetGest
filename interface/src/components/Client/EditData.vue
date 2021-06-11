@@ -378,6 +378,11 @@ export default {
       "http://localhost:7777/cliente/animal/" + this.id,
       {
         email: store.state.email,
+      },
+       {
+        headers: {
+          Authorization: "Bearer " + store.getters.token.toString(),
+        },
       }
     );
     this.animal = response.data.animal;
