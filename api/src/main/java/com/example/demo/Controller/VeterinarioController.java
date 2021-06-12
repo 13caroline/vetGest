@@ -41,7 +41,7 @@ public class VeterinarioController {
         if(veterinario==null){
             return ResponseEntity.badRequest().body("Veterinário não encontrado!");
         }
-        List<Intervencao> intervencoes = intervencaoService.getIntervencoesVeterinario(veterinario.getId());
+        List<Intervencao> intervencoes = intervencaoService.findAllByVeterinarioIdAndEstadoOrEstado(veterinario.getId(),"Agendada", "A decorrer");
         return  ResponseEntity.accepted().body(intervencoes);
     }
 
