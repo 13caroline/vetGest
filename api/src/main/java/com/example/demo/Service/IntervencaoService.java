@@ -55,6 +55,8 @@ public class IntervencaoService {
     public  List<Intervencao> findAllByVeterinarioIdAndEstadoOrEstado(int vet_id, String estado, String estado1){
         return repository.findAllByVeterinarioIdAndEstadoOrEstado(vet_id, estado, estado1);
     };
-
+    public List<Intervencao> findAllByTipoAndEstado(String tipo,String estado){
+        return repository.findAllByTipoAndEstado(tipo,estado);
+    }
 
 }

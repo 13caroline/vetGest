@@ -266,6 +266,15 @@ public class ClinicaController {
     }
 
     @CrossOrigin
+    @GetMapping("/clinica/intervencoes")
+    public ResponseEntity<?> getIntervencoesPendentes(){
+        List<Intervencao> intervencoes = intervencaoService.findAllByTipoAndEstado("Consulta","Pendente");
+
+        return  ResponseEntity.badRequest().body(intervencoes);
+    }
+
+
+    @CrossOrigin
     @PostMapping("/clinica/intervencoes/medico")
     public ResponseEntity<?> getIntervencoesByMedico(@RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
