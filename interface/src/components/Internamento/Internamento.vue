@@ -33,8 +33,8 @@
                 </template>
                 <span class="caption">Dados do utente</span>
               </v-tooltip>
-              <span class="ml-1 blue--text">{{ item.utente }}</span>
-              <span>({{ item.especie }})</span>
+              <span class="ml-1 mr-1 blue--text">{{ item.animal.nome }}</span>
+              <span>({{ item.animal.especie }})</span>
             </template>
 
             <template v-slot:[`item.cliente`]="{ item }">
@@ -135,20 +135,12 @@ export default {
       ],
 
       agendamentos: [
-         {
-          utente: "Rubi",
-          localizacao: "C15",
-          data: "21/05/2021 15:00",
-          motivo: "Castração",
-          especie: 'Canídeo'
-        },
       ],
     };
   },
   methods: {
     more(item) {
-      this.$router.push("/medico/internamento/detalhes");
-      console.log(item);
+      this.$router.push("/medico/internamento/detalhes/" + item.id);
     },
     alta(item) {
       this.$router.push("/medico/internamento/alta");
@@ -159,8 +151,7 @@ export default {
       else return "#FFCCBC";
     },
     utente(item) {
-      this.$router.push("/medico/utente/");
-      console.log(item);
+      this.$router.push("/medico/utente/" + item.animal.id);
     },
   },
   created: async function() {
@@ -176,7 +167,7 @@ export default {
         }
       );
 
-      console.log(response);
+      this.agendamentos = response.data;
     } catch (e) {
       console.log(e);
     }
