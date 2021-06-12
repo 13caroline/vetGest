@@ -4,6 +4,18 @@
       <v-tooltip top>
         <template v-slot:activator="{ on }">
           <v-icon
+            v-if="dados.estado == 'A decorrer'"
+            disabled
+            color="#E57373"
+            v-bind="attrs"
+            v-on="{ ...on, ...diag }"
+            small
+            @click="dialog = true"
+          >
+            mdi-calendar-remove
+          </v-icon>
+          <v-icon
+            v-else
             color="#E57373"
             v-bind="attrs"
             v-on="{ ...on, ...diag }"
@@ -103,7 +115,6 @@ export default {
   methods: {
     confirmar: async function () {
       try {
-        
         if (store.state.tipo == "Clinica") {
           await axios.post(
             "http://localhost:7777/clinica/intervencao/alterar",
@@ -116,13 +127,13 @@ export default {
             }
           );
         }
-        if(store.state.tipo == "Cliente"){
-            await axios.post(
-            "http://localhost:7777/cliente/animal/cancelar/"+this.dados.idConsulta,
+        if (store.state.tipo == "Cliente") {
+          await axios.post(
+            "http://localhost:7777/cliente/animal/cancelar/" +
+              this.dados.idConsulta,
             {
               email: this.$store.state.email,
               animal: this.dados.animal.id,
-
             },
             {
               headers: { Authorization: "Bearer " + store.getters.token },

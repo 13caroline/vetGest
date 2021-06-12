@@ -48,6 +48,9 @@
         hide-default-footer
         no-data-text="Não existem clientes registados."
         no-results-text="Não foram encontrados resultados."
+        :page.sync="page"
+        :items-per-page="itemsPerPage"
+        @page-count="pageCount = $event"
       >
         <template v-slot:[`item.detalhes`]="{ item }">
           <v-tooltip right>
@@ -60,6 +63,16 @@
           </v-tooltip>
         </template>
       </v-data-table>
+      <div class="text-center pt-2">
+        <v-pagination
+          v-model="page"
+          :length="pageCount"
+          circle
+          :total-visible="4"
+          color="#2596be"
+          class="custom"
+        ></v-pagination>
+      </div>
 
       <v-dialog v-model="dialog" width="100%" max-width="460">
         <v-card>
@@ -195,6 +208,9 @@ export default {
   data() {
     return {
       dialog: false,
+      page: 1,
+      pageCount: 0,
+      itemsPerPage: 8,
       search: "",
       headers: [
         {
@@ -249,9 +265,9 @@ export default {
       this.utentes = item.animais;
       this.dialog = true;
     },
-    toUtente(value){
-      this.$router.push("/clinica/utente/" + value ) 
-    }
+    toUtente(value) {
+      this.$router.push("/clinica/utente/" + value);
+    },
   },
   created: async function () {
     try {
@@ -278,5 +294,25 @@ export default {
 
 .indication {
   color: #424242;
+}
+
+.custom {
+  width: auto;
+  margin-left: auto;
+}
+
+.custom .v-pagination__navigation {
+  height: 26px !important;
+  width: 26px !important;
+}
+
+.custom .v-pagination__navigation .v-icon {
+  font-size: 16px !important;
+}
+
+.custom .v-pagination__item {
+  height: 26px !important;
+  min-width: 26px !important;
+  font-size: 0.85rem !important;
 }
 </style>

@@ -47,6 +47,9 @@
         no-data-text="Não existem utentes registados."
         no-results-text="Não foram encontrados resultados."
         hide-default-footer
+        :page.sync="page"
+        :items-per-page="itemsPerPage"
+        @page-count="pageCount = $event"
       >
         <template v-slot:[`item.detalhes`]="{ item }">
           <v-tooltip right>
@@ -63,6 +66,16 @@
           <span class="ml-1">{{ format(item.dataNascimento) }}</span>
         </template>
       </v-data-table>
+      <div class="text-center pt-2">
+        <v-pagination
+          v-model="page"
+          :length="pageCount"
+          circle
+          :total-visible="4"
+          color="#2596be"
+          class="custom"
+        ></v-pagination>
+      </div>
     </v-container>
   </div>
 </template>
@@ -75,6 +88,9 @@ export default {
   data() {
     return {
       search: "",
+      page: 1,
+      pageCount: 0,
+      itemsPerPage: 8,
       headers: [
         {
           text: "UTENTE",
@@ -129,7 +145,7 @@ export default {
       let response = await axios.get("http://localhost:7777/clinica/utentes", {
         headers: { Authorization: "Bearer " + store.getters.token },
       });
-      for (var i = 0; i < response.data.utentes.length; i++) 
+      for (var i = 0; i < response.data.utentes.length; i++)
         this.utentes.push(response.data.utentes[i].animal);
     } catch (e) {
       console.log(e);
@@ -141,5 +157,25 @@ export default {
 <style>
 #no-background-hover::before {
   background-color: transparent !important;
+}
+
+.custom {
+  width: auto;
+  margin-left: auto;
+}
+
+.custom .v-pagination__navigation {
+  height: 26px !important;
+  width: 26px !important;
+}
+
+.custom .v-pagination__navigation .v-icon {
+  font-size: 16px !important;
+}
+
+.custom .v-pagination__item {
+  height: 26px !important;
+  min-width: 26px !important;
+  font-size: 0.85rem !important;
 }
 </style>

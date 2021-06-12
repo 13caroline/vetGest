@@ -57,11 +57,4 @@ public class Clinica extends Utilizador implements Serializable {
             name = "iban"
     )
     private String iban;
-
-    @OneToMany
-    private List<Cliente> clientes;
-
-    @OneToMany
-    private List<Veterinario> veterinarios;
-
 }

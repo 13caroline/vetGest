@@ -24,7 +24,7 @@
                 <v-icon>fas fa-scroll</v-icon>
               </v-btn>
             </template>
-            <span class="caption">Marcar consulta</span>
+            <span class="caption">Agendar consulta</span>
           </v-tooltip>
         </v-col>
         <v-col cols="auto" class="pl-0">
@@ -43,7 +43,7 @@
                 <v-icon>fas fa-band-aid</v-icon>
               </v-btn>
             </template>
-            <span class="caption">Marcar cirurgia</span>
+            <span class="caption">Agendar cirurgia</span>
           </v-tooltip>
         </v-col>
       </v-row>
@@ -398,7 +398,7 @@ export default {
       details_item: { animal: {} },
       page: 1,
       pageCount: 0,
-      itemsPerPage: 10,
+      itemsPerPage: 8,
       search: "",
       observacoes: "",
       motivo: "",

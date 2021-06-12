@@ -15,13 +15,13 @@
             <v-icon small> fas fa-scroll</v-icon>
           </v-btn>
         </template>
-        <span class="caption">Marcar consulta</span>
+        <span class="caption">Agendar consulta</span>
       </v-tooltip>
     </template>
     <v-card>
       <v-form>
         <v-card-title class="font-weight-regular text-uppercase">
-          Marcar consulta
+          Agendar consulta
         </v-card-title>
         <v-card-subtitle
           >Por favor preencha o seguinte formulário</v-card-subtitle
@@ -308,7 +308,7 @@ export default {
             });
           } else {
             this.$emit("clicked", {
-              text: "Ocorreu um erro na marcação, por favor tente mais tarde!",
+              text: "Ocorreu um erro no agendamento, por favor tente mais tarde!",
               color: "warning",
               snackbar: "true",
               timeout: 4000,

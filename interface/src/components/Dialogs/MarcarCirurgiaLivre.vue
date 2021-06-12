@@ -16,13 +16,13 @@
             <v-icon small> fas fa-band-aid</v-icon>
           </v-btn>
         </template>
-        <span class="caption">Marcar cirurgia</span>
+        <span class="caption">Agendar cirurgia</span>
       </v-tooltip>
     </template>
     <v-card>
       <v-form>
         <v-card-title class="font-weight-regular text-uppercase">
-          Marcar uma nova cirurgia
+          Agendar uma nova cirurgia
         </v-card-title>
         <v-card-subtitle
           >Por favor preencha o seguinte formulário</v-card-subtitle
@@ -377,7 +377,7 @@ export default {
             });
           } else {
             this.$emit("clicked", {
-              text: "Ocorreu um erro na marcação, por favor tente mais tarde!",
+              text: "Ocorreu um erro no agendamento, por favor tente mais tarde!",
               color: "warning",
               snackbar: "true",
               timeout: 4000,

@@ -4,7 +4,7 @@
       <v-tooltip top>
         <template v-slot:activator="{ on }">
           <v-icon
-            color="grey"
+            color="#52b9dd"
             v-bind="attrs"
             v-on="{ ...on, ...diag }"
             small

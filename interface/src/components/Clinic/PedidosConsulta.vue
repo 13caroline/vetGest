@@ -44,7 +44,7 @@
                 fas fa-calendar-times
               </v-icon>
             </template>
-            <span class="caption">Cancelar marcação</span>
+            <span class="caption">Cancelar agendamento</span>
           </v-tooltip>
         </template>
       </v-data-table>

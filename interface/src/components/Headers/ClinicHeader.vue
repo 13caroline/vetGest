@@ -125,9 +125,10 @@ export default {
   methods: {
      logout: async function () {
       try {
-        await axios.get("http://localhost:7777/terminar-sessao",{ 
-            headers: { Authorization: "Bearer " + store.getters.token } 
-        });
+        await axios.get(
+          "http://localhost:7777/terminar-sessao",
+          { headers: { Authorization: "Bearer " + store.getters.token } }
+        );
         this.$store.commit("limpaStore");
         this.$router.push("/");
       } catch (e) {

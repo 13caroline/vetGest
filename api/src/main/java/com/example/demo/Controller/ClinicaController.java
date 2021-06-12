@@ -46,6 +46,38 @@ public class ClinicaController {
     }
 
     @CrossOrigin
+    @PostMapping(path = "/clinica")
+    public ResponseEntity<?> getClinica(@RequestBody  Clinica clinica){
+        Clinica clinica1 = clinicaService.getClinicaByEmail(clinica.getEmail());
+        if(clinica1==null){
+            return ResponseEntity.badRequest().body("Utilizador Clinica não existe");
+        }
+        return  ResponseEntity.accepted().body(clinica1);
+    }
+
+    @CrossOrigin
+    @PostMapping(path = "/clinica/editar")
+    public ResponseEntity<?> editClinica(@RequestBody Clinica _clinica){
+        Clinica clinica = clinicaService.getClinicaByEmail(_clinica.getEmail());
+        if(clinica==null){
+            return ResponseEntity.badRequest().body("Clinica nao existe!");
+        }
+        clinica.setNome(_clinica.getNome());
+        clinica.setMorada(_clinica.getMorada());
+        clinica.setConcelho(_clinica.getConcelho());
+        clinica.setFreguesia(_clinica.getFreguesia());
+        clinica.setContacto(_clinica.getContacto());
+        clinica.setNif(_clinica.getNif());
+        clinica.setIban(_clinica.getIban());
+        if(!(_clinica.getPassword().equals(clinica.getPassword()))) {
+            clinica.setPassword(_clinica.getPassword());
+            clinicaService.saveClinica(clinica);
+        }else
+            clinicaService.updateClinica(clinica);
+        return  ResponseEntity.accepted().body("Utilizador registado com Sucesso");
+    }
+
+    @CrossOrigin
     @GetMapping("/clinica/consultas")
     public ResponseEntity<?> getConsultas(){
         List<Intervencao> intervencoes = intervencaoService.getAllConsultas();

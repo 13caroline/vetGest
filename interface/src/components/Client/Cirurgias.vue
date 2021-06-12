@@ -100,13 +100,13 @@ export default {
     detalhes: false,
     headers: [
       {
-        text: "Data de Marcação",
+        text: "Data de Agendamento",
         align: "start",
         sortable: true,
         value: "data",
       },
       {
-        text: "Paciente",
+        text: "Utente",
         value: "paciente",
         sortable: true,
         align: "start",
