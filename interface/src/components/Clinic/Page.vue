@@ -205,7 +205,7 @@ export default {
       },
       page: 1,
       pageCount: 0,
-      itemsPerPage: 10,
+      itemsPerPage: 8,
       search: "",
       headers: [
         {

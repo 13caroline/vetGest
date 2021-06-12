@@ -11,7 +11,10 @@
               </h3>
             </v-col>
             <v-col cols="auto" class="pl-0">
-              <MarcarConsulta :dados="animal" @clicked="registar"></MarcarConsulta>
+              <MarcarConsulta
+                :dados="animal"
+                @clicked="registar"
+              ></MarcarConsulta>
             </v-col>
           </v-row>
 
@@ -184,8 +187,8 @@ export default {
             id: this.animal.id,
           },
           {
-          headers: { Authorization: "Bearer " + store.getters.token },
-        }
+            headers: { Authorization: "Bearer " + store.getters.token },
+          }
         );
         for (var i = 0; i < response.data.length; i++) {
           var element = response.data[i];

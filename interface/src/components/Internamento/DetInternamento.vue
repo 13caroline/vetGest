@@ -28,8 +28,8 @@
               </v-img>
             </v-col>
             <v-col class="details my-auto">
-              <div class="text-uppercase font-weight-bold">Rubi</div>
-              <span class="text-uppercase body-2 text--secondary" >8 ANOS</span>
+              <div class="text-uppercase font-weight-bold">{{animal.nome}}</div>
+              <span class="text-uppercase body-2 text--secondary"> {{age(animal.dataNascimento)}}</span>
             </v-col>
           </v-row>
         </v-card>
@@ -38,119 +38,15 @@
       <v-row class="w-100">
         <v-col>
           <v-card class="h-100">
-            <v-card-text class="py-0">
+            <v-card-text class="py-0" v-for="(nota, index) in notas" :key="index">
               <v-timeline align-top dense>
-                <v-timeline-item color="pink" small>
+                <v-timeline-item color="#2596be" small>
                   <v-row class="pt-1">
                     <v-col cols="3">
-                      <strong>5pm</strong>
+                      <strong>{{nota.data}}</strong>
                     </v-col>
                     <v-col>
-                      <strong>New Icon</strong>
-                      <div class="text-caption">Mobile App</div>
-                    </v-col>
-                  </v-row>
-                </v-timeline-item>
-
-                <v-timeline-item color="pink" small>
-                  <v-row class="pt-1">
-                    <v-col cols="3">
-                      <strong>12pm</strong>
-                    </v-col>
-                    <v-col>
-                      <strong>Lunch break</strong>
-                    </v-col>
-                  </v-row>
-                </v-timeline-item>
-
-                <v-timeline-item color="teal lighten-3" small>
-                  <v-row class="pt-1">
-                    <v-col cols="3">
-                      <strong>21/05/2021 9-11am</strong>
-                    </v-col>
-                    <v-col>
-                      <strong>Finish Home Screen</strong>
-                      <div class="text-caption">Web App</div>
-                    </v-col>
-                  </v-row>
-                </v-timeline-item>
-
-                <v-timeline-item color="pink" small>
-                  <v-row class="pt-1">
-                    <v-col cols="3">
-                      <strong>12pm</strong>
-                    </v-col>
-                    <v-col>
-                      <strong>Lunch break</strong>
-                    </v-col>
-                  </v-row>
-                </v-timeline-item>
-
-                <v-timeline-item color="teal lighten-3" small>
-                  <v-row class="pt-1">
-                    <v-col cols="3">
-                      <strong>21/05/2021 9-11am</strong>
-                    </v-col>
-                    <v-col>
-                      <strong>Finish Home Screen</strong>
-                      <div class="text-caption">Web App</div>
-                    </v-col>
-                  </v-row>
-                </v-timeline-item>
-
-                <v-timeline-item color="pink" small>
-                  <v-row class="pt-1">
-                    <v-col cols="3">
-                      <strong>12pm</strong>
-                    </v-col>
-                    <v-col>
-                      <strong>Lunch break</strong>
-                    </v-col>
-                  </v-row>
-                </v-timeline-item>
-
-                <v-timeline-item color="teal lighten-3" small>
-                  <v-row class="pt-1">
-                    <v-col cols="3">
-                      <strong>21/05/2021 9-11am</strong>
-                    </v-col>
-                    <v-col>
-                      <strong>Finish Home Screen</strong>
-                      <div class="text-caption">Web App</div>
-                    </v-col>
-                  </v-row>
-                </v-timeline-item>
-
-                <v-timeline-item color="pink" small>
-                  <v-row class="pt-1">
-                    <v-col cols="3">
-                      <strong>12pm</strong>
-                    </v-col>
-                    <v-col>
-                      <strong>Lunch break</strong>
-                    </v-col>
-                  </v-row>
-                </v-timeline-item>
-
-                <v-timeline-item color="pink" small>
-                  <v-row class="pt-1">
-                    <v-col cols="3">
-                      <strong>12pm</strong>
-                    </v-col>
-                    <v-col>
-                      <strong>Lunch break</strong>
-                    </v-col>
-                  </v-row>
-                </v-timeline-item>
-
-                <v-timeline-item color="teal lighten-3" small>
-                  <v-row class="pt-1">
-                    <v-col cols="3">
-                      <strong>21/05/2021 9-11am</strong>
-                    </v-col>
-                    <v-col>
-                      <strong>Finish Home Screen</strong>
-                      <div class="text-caption">Web App</div>
+                      <span>{{nota.descricao}}</span>
                     </v-col>
                   </v-row>
                 </v-timeline-item>
@@ -159,10 +55,11 @@
           </v-card>
         </v-col>
 
-        <v-col>
+        <v-col v-if="this.$store.state.tipo == 'Veterinario'">
           <v-card class="h-100">
             <v-card-text class="pb-0">
-              <v-textarea color="#2596be" outlined rows="20" flat no-resize> </v-textarea>
+              <v-textarea color="#2596be" outlined rows="20" flat no-resize>
+              </v-textarea>
             </v-card-text>
             <v-card-actions class="pt-0"
               ><v-btn
@@ -183,24 +80,42 @@
 </template>
 
 <script>
-
+import axios from "axios"
+import store from "@/store.js"
+import moment from "moment"
 export default {
   props: ["id"],
   data() {
     return {
-
-    }
-
+      animal: {},
+      notas: []
+    };
   },
-  created: async function(){
-
+  created: async function () {
+    let response = await axios.post(
+      "http://localhost:7777/clinica/internamento/detalhes",
+      {
+        id: this.id,
+      },
+      {
+        headers: { Authorization: "Bearer " + store.getters.token },
+      }
+    );
+    this.animal = response.data.animal
+    this.notas = response.data.notas
+    console.log(response.data)
+  },
+  methods: {
+    age(data) {
+      return moment(data).locale("pt").toNow(true); // 4 years
+    },
   }
-}
+};
 </script>
 
 
 <style scoped>
-  .details{
-    text-align: left;
-  }
+.details {
+  text-align: left;
+}
 </style>
