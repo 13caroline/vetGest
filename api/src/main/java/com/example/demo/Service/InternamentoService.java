@@ -1,7 +1,9 @@
 package com.example.demo.Service;
 
+import com.example.demo.Entity.Alta;
 import com.example.demo.Entity.Internamento;
 import com.example.demo.Entity.NotaInternamento;
+import com.example.demo.Repository.AltaRepository;
 import com.example.demo.Repository.InternamentoRepository;
 import com.example.demo.Repository.NotaInternamentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,9 @@ public class InternamentoService {
 
     @Autowired
     private NotaInternamentoRepository repositoryNota;
+
+    @Autowired
+    private AltaRepository repositoryAlta;
 
     public List<Internamento> getAllInternamentosByVetId(int veterinario_id) {
         return repository.findAllByVeterinarioId(veterinario_id);
@@ -57,4 +62,7 @@ public class InternamentoService {
         return repository.findByAnimalIdAndEstado(id_animal, estado);
     };
 
+    public Alta saveAlta(Alta alta){
+        return repositoryAlta.save(alta);
+    }
 }
