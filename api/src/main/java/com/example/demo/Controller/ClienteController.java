@@ -497,6 +497,24 @@ public class ClienteController {
         return ResponseEntity.accepted().body("Intervenção cancelada!");
     }
 
+    @CrossOrigin
+    @PostMapping("/cliente/animal/historico")
+    public ResponseEntity<?> getHistorico(@RequestBody String body) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+        int animal_id = node.get("animal").asInt();
+        String clienteEmail = node.get("cliente").asText();
+        Cliente cliente = clienteService.getClienteByEmail(clienteEmail);
+
+        List<Animal> animais = cliente.getAnimais();
+        Animal animal = animalService.getAnimalById(animal_id);
+        if(animal ==null || !animais.contains(animal)){
+            return ResponseEntity.badRequest().body("Erro no Animal ou Historico!");
+        }
+        Historico historico = animalService.findByAnimalId(animal_id);
+
+        return ResponseEntity.accepted().body(historico);
+    }
     //Check
     @CrossOrigin
     @PostMapping("/cliente/getpreferencias")

@@ -12,17 +12,16 @@
             dark
             @click="dialog = true"
           >
-            <v-icon small> fas fa-pen</v-icon>
+            <v-icon small>fas fa-notes-medical</v-icon>
           </v-btn>
         </template>
-        <span class="caption">Editar histórico clínico</span>
+        <span class="caption">Registar histórico</span>
       </v-tooltip>
     </template>
-  
     <v-card>
       <v-form>
         <v-card-title class="font-weight-regular text-uppercase">
-          Editar histórico clínico
+          Registar histórico clínico
         </v-card-title>
         <v-card-subtitle
           >Por favor preencha o seguinte formulário</v-card-subtitle
@@ -140,8 +139,8 @@
               <Cancelar :dialogs="cancelar" @clicked="close()"></Cancelar>
             </v-col>
             <v-col cols="auto">
-              <v-btn color="#2596be" small dark @click="editar()"
-                >Confirmar</v-btn
+              <v-btn color="#2596be" small dark @click="registar()"
+                >Registar</v-btn
               >
             </v-col>
           </v-row>
@@ -161,8 +160,8 @@ export default {
   data: () => ({
     dialogs: {},
     cancelar: {
-      title: "edição de histórico clínico",
-      text: "a edição do histórico clínico",
+      title: "registo de histórico clínico",
+      text: "o registo de histórico clínico",
     },
     dialog: false,
     alergias: false,
@@ -177,8 +176,11 @@ export default {
     close() {
       this.dialog = false;
     },
-    editar: async function () {
-      let route = "http://localhost:7777/medico/animal/historico/alterar";
+    registar: async function () {
+      let route =
+        this.$store.state.tipo == "Clinica"
+          ? "http://localhost:7777/clinica/animal/historico/inserir"
+          : "http://localhost:7777/medico/agendar/intervencao";
       await axios
         .post(
           route,
@@ -222,18 +224,6 @@ export default {
       let motivo = this.motivos;
       return this.desc.filter((item) => item.tipo === motivo);
     },
-  },
-  created: async function(){
-    let response = await axios.post(
-      "http://localhost:7777/clinica/animal/historico",
-      {
-        animal: this.animal.id,
-      },
-      {
-        headers: { Authorization: "Bearer " + store.getters.token },
-      }
-    );
-    this.historico = response.data;
   },
   components: {
     Cancelar,

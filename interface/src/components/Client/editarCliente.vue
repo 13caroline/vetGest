@@ -1,130 +1,118 @@
 <template>
   <div>
-      <v-container>
-    <v-card flat color="#fafafa">
-<h3 class="pa-3">Dados de Acesso</h3>
-            <v-divider></v-divider>
+    <v-container>
+      <v-card flat color="#fafafa">
+        <h3 class="pa-3">Dados de Acesso</h3>
+        <v-divider></v-divider>
 
-      <v-row class="w-100" align="start">
-        <v-col>
-          <v-card class="h-100 mt-5" outlined>
+        <v-row class="w-100" align="start">
+          <v-col>
+            <v-card class="h-100 mt-5" outlined>
               <v-list-item>
-              <v-list-item-content>
-                <div>
-                  <v-row>
-                    <v-col>
-                      <p class="infos">E-mail</p>
-                    </v-col>
-                    <v-col>
-                      <p class="respos">{{utilizador.email}}</p>
-                    </v-col>
-                  </v-row>
-                </div>
-                <div>
-                  <v-row>
-                    <v-col>
-                      <p class="infos">Palavra-passe</p>
-                    </v-col>
-                    <v-col>
-                      <p class="respos">*****</p>
-                    </v-col>
-                  </v-row>
-                </div>
-                <div>
-                  
-                </div>
-              </v-list-item-content>
-            </v-list-item>
-          </v-card>
-        </v-col>
-      </v-row>
+                <v-list-item-content>
+                  <div>
+                      <v-col>
+                        <v-text-field
+                          label="Email"
+                          outlined
+                          dense
+                          disabled
+                        ></v-text-field>
+                      </v-col>
+                  </div>
+                  <div>
+                      <v-col>
+                        <v-text-field
+                          label="Pass"
+                          type="password"
+                          outlined
+                          dense
+                          v-model="pass"
+                        ></v-text-field>
+                      </v-col>
+                  </div>
+                  <div></div>
+                </v-list-item-content>
+              </v-list-item>
+            </v-card>
+          </v-col>
+        </v-row>
 
-<h3 class="pa-3">Dados Pessoais</h3>
-            <v-divider></v-divider>
-      <v-row class="w-100" align="start">
-        <v-col>
-          <v-card class="h-100 mt-5" outlined>
+        <h3 class="pa-3">Dados Pessoais</h3>
+        <v-divider></v-divider>
+        <v-row class="w-100" align="start">
+          <v-col>
+            <v-card class="h-100 mt-5" outlined>
               <v-list-item>
-              <v-list-item-content>
-                <div>
-                  <v-row>
-                    <v-col>
-                      <p class="infos">Nome</p>
-                    </v-col>
-                    <v-col>
-                      <p class="respos">{{utilizador.nome}}</p>
-                    </v-col>
-                  </v-row>
-                </div>
-                <div>
-                  <v-row>
-                    <v-col>
-                      <p class="infos">Morada</p>
-                    </v-col>
-                    <v-col>
-                      <p class="respos">{{utilizador.morada}}</p>
-                    </v-col>
-                  </v-row>
-                </div>
-                <div>
-                  <v-row>
-                    <v-col>
-                      <p class="infos mb-0">Freguesia</p>
-                    </v-col>
-                    <v-col>
-                      <p class="respos mb-0">{{utilizador.freguesia}}</p>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col>
-                      <p class="infos mb-0">Concelho</p>
-                    </v-col>
-                    <v-col>
-                      <p class="respos mb-0">{{utilizador.concelho}}</p>
-                    </v-col>
-                  </v-row>
-                </div>
-              </v-list-item-content>
-            </v-list-item>
-          </v-card>
-        </v-col>
-      </v-row>
+                <v-list-item-content>
+                  <div>
+                      <v-text-field
+                        label="Nome"
+                        outlined
+                        dense
+                        v-model="nome"
+                      ></v-text-field>
+                  </div>
+                  <div>
+                      <v-text-field
+                        label="Pass"
+                        outlined
+                        dense
+                        v-model="morada"
+                      ></v-text-field>
+                  </div>
+                  <div>
+                      <v-text-field
+                        label="Freguesia"
+                        outlined
+                        dense
+                        v-model="freguesia"
+                      ></v-text-field>
+                      <v-text-field
+                        label="Concelho"
+                        outlined
+                        dense
+                        v-model="concelho"
+                      ></v-text-field>
+                  </div>
+                </v-list-item-content>
+              </v-list-item>
+            </v-card>
+          </v-col>
+        </v-row>
 
-<h3 class="pa-3">Dados de Contacto</h3>
-            <v-divider></v-divider>
-      <v-row class="w-100" align="start">
-        <v-col>
-          <v-card class="h-100 mt-5"  outlined>
+        <h3 class="pa-3">Dados de Contacto</h3>
+        <v-divider></v-divider>
+        <v-row class="w-100" align="start">
+          <v-col>
+            <v-card class="h-100 mt-5" outlined>
               <v-list-item>
-              <v-list-item-content>
-                <div>
-                  <v-row>
-                    <v-col>
-                      <p class="infos">Número de telefone</p>
-                    </v-col>
-                    <v-col>
-                      <p class="respos">{{utilizador.contacto}}</p>
-                    </v-col>
-                  </v-row>
-                </div>
-                <div>
-                  <v-row>
-                    <v-col>
-                      <p class="infos">Número de identificação fiscal</p>
-                    </v-col>
-                    <v-col>
-                      <p class="respos">{{utilizador.nif}}</p>
-                    </v-col>
-                  </v-row>
-                </div>
-                <div>
-                </div>
-              </v-list-item-content>
-            </v-list-item>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-card>
+                <v-list-item-content>
+                  <div>
+                    
+                      <v-text-field
+                        label="Telefone"
+                        outlined
+                        dense
+                        v-model="telefone"
+                      ></v-text-field>
+                  </div>
+                  <div>
+                      <v-text-field
+                        label="NIF"
+                        outlined
+                        disabled
+                        dense
+                        v-model="nif"
+                      ></v-text-field>
+                  </div>
+                  <div></div>
+                </v-list-item-content>
+              </v-list-item>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-card>
     </v-container>
   </div>
 </template>
@@ -136,28 +124,33 @@ import store from "@/store.js";
 export default {
   props: ["animal"],
   data: () => ({
-      utilizador:{},
+    pass: "",
+    morada: "",
+    freguesia: "",
+    concelho: "",
+    telefone: "",
+    utilizador: {},
   }),
   methods: {
     format(data) {
       return moment(data).locale("pt").format("DD/MM/YYYY");
     },
   },
-   created: async function () {
+  created: async function () {
     let response = await axios.post(
-    "http://localhost:7777/cliente/getpreferencias",
-    {
+      "http://localhost:7777/cliente/getpreferencias",
+      {
         email: this.$store.state.email,
-    },
+      },
       {
         headers: {
           Authorization: "Bearer " + store.getters.token.toString(),
         },
       }
     );
-    console.log(response)
-   this.utilizador = response.data;
-   },
+    console.log(response);
+    this.utilizador = response.data;
+  },
 };
 </script>
 

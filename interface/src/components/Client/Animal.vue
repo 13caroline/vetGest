@@ -2,21 +2,8 @@
   <div>
     <v-container>
       <v-row justify="space-around" class="mt-2">
-        <v-col cols="auto">
+        <v-col>
           <span class="subtitle-1 head">{{animal.nome}}</span>
-        </v-col>
-       <v-col cols="auto" class="ml-auto">
-          
-    <v-btn
-                class="body-2"
-                small
-                color="#2596be"
-                dark
-                @click="editar()"
-              >
-                Editar dados
-                <v-icon small class="ml-4">fas fa-pen</v-icon>
-              </v-btn>
         </v-col>
       </v-row>
       <v-divider></v-divider>
@@ -43,6 +30,10 @@
         <v-tab-item>
           <Cirurgia></Cirurgia>
         </v-tab-item>
+
+        <v-tab-item>
+          <Historico :animal="animal"></Historico>
+        </v-tab-item>
       </v-tabs-items>
     </v-container>
   </div>
@@ -53,6 +44,7 @@ import PacienteVacinas from "@/components/Client/Animal/Vacinas.vue"
 import Consultas from "@/components/Client/Animal/Consultas.vue"
 import Cirurgia from "@/components/Client/Animal/Cirurgias.vue"
 import Dados from "@/components/Client/Animal/Dados.vue"
+import Historico from "@/components/Client/Animal/Historico.vue"
 import axios from "axios"
 import store from "@/store.js"
 
@@ -71,9 +63,6 @@ export default {
     animal:{}
   }),
   methods: {
-    editar(){
-      this.$router.push("/cliente/animal/editar/"+this.id)
-    },
     estadopedido(estado) {
       if (estado == "Agendada") return "#C5E1A5";
       else return "#FFE082";
@@ -83,7 +72,8 @@ export default {
     PacienteVacinas, 
     Consultas,
     Cirurgia,
-    Dados
+    Dados,
+    Historico
   },
   created: async function() {
     

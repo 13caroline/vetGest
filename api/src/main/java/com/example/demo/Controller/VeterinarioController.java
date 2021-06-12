@@ -350,7 +350,23 @@ public class VeterinarioController {
     }
 
     @CrossOrigin
-    @PostMapping("/medico/animal/historico")
+    @PostMapping("/meedico/animal/historico")
+    public ResponseEntity<?> getHistorico(@RequestBody String body) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+        int animal_id = node.get("animal").asInt();
+        Animal animal = animalService.getAnimalById(animal_id);
+
+        if(animal ==null){
+            return ResponseEntity.badRequest().body("Erro no Animal ou Historico!");
+        }
+        Historico historico = animalService.findByAnimalId(animal_id);
+
+        return ResponseEntity.accepted().body(historico);
+    }
+
+    @CrossOrigin
+    @PostMapping("/medico/animal/historico/inserir")
     public ResponseEntity<?> addHistorico(@RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);
