@@ -1,5 +1,6 @@
 package com.example.demo.Service;
 
+import com.example.demo.Entity.Cliente;
 import com.example.demo.Entity.Clinica;
 import com.example.demo.Repository.ClinicaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,5 +22,9 @@ public class ClinicaService {
 
     public Clinica getClinicaByEmail(String email){
         return repository.findByEmail(email);
+    }
+
+    public Clinica updateClinica(Clinica clinica){
+        return repository.save(clinica);
     }
 }
