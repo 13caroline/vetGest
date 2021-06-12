@@ -91,7 +91,6 @@
                     rows="2"
                     v-model="motivo"
                   ></v-textarea>
-                  
                 </v-col>
 
                 <v-col cols="12" class="py-0">
@@ -124,6 +123,7 @@
                   <Cancelar :dialogs="cancelar" @clicked="close()"></Cancelar>
                 </v-col>
                 <v-col cols="auto">
+                  <!-- @TODO: registar internamento -->
                   <v-btn color="#2596be" small dark>Admitir</v-btn>
                 </v-col>
               </v-row>
@@ -142,6 +142,7 @@ import Cirurgia from "@/components/Utente/Cirurgias.vue";
 import Dados from "@/components/Utente/Dados.vue";
 import Cancelar from "@/components/Dialogs/Cancel.vue";
 import axios from "axios";
+import store from "@/store.js";
 
 export default {
   props: ["id"],
@@ -185,9 +186,13 @@ export default {
   },
   created: async function () {
     try {
-      let response = await axios.post("http://localhost:7777/medico/utente", {
-        id: this.id,
-      });
+      let response = await axios.post(
+        "http://localhost:7777/medico/utente",
+        {
+          id: this.id,
+        },
+        { headers: { Authorization: "Bearer " + store.getters.token } }
+      );
       this.dados = response.data;
     } catch (e) {
       console.log(e);

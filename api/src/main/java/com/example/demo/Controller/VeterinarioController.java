@@ -402,7 +402,6 @@ public class VeterinarioController {
         if(internamentos.size()==0){
             return ResponseEntity.badRequest().body("Não tem internamentos efetuados!");
         }
-        System.out.println("\n\nAQUI: "+internamentos);
         return ResponseEntity.accepted().body(internamentos);
     }
 

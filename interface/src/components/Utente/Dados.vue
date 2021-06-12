@@ -32,108 +32,8 @@
     <v-divider class="my-3"></v-divider>
 
     <v-row class="w-100" align="stretch">
-      <v-col>
-        <v-card class="h-100" outlined>
-          <v-list-item>
-            <v-list-item-content>
-              <div>
-                <v-row>
-                  <v-col>
-                    <p class="infos">Nome</p>
-                  </v-col>
-                  <v-col>
-                    <p class="respos">{{ animal.nome }}</p>
-                  </v-col>
-                </v-row>
-              </div>
-              <div>
-                <v-row>
-                  <v-col>
-                    <p class="infos">Data de Nascimento</p>
-                  </v-col>
-                  <v-col>
-                    <p class="respos">
-                      {{ format(animal.dataNascimento) }}
-                    </p>
-                  </v-col>
-                </v-row>
-              </div>
-              <div>
-                <v-row>
-                  <v-col>
-                    <p class="infos">Sexo</p>
-                  </v-col>
-                  <v-col>
-                    <p class="respos">{{ animal.sexo }}</p>
-                  </v-col>
-                </v-row>
-              </div>
-              <div>
-                <v-row>
-                  <v-col>
-                    <p class="infos mb-0">Chip</p>
-                  </v-col>
-                  <v-col>
-                    <p class="respos mb-0">{{ animal.chip }}</p>
-                  </v-col>
-                </v-row>
-              </div>
-            </v-list-item-content>
-          </v-list-item>
-        </v-card>
-      </v-col>
-      <v-col>
-        <v-card class="h-100" outlined>
-          <v-list-item>
-            <v-list-item-content>
-              <div>
-                <v-row>
-                  <v-col>
-                    <p class="infos">Espécie</p>
-                  </v-col>
-                  <v-col>
-                    <p class="respos">{{ animal.especie }}</p>
-                  </v-col>
-                </v-row>
-              </div>
-              <div>
-                <v-row>
-                  <v-col>
-                    <p class="infos">Raça</p>
-                  </v-col>
-                  <v-col>
-                    <p class="respos">{{ animal.raca }}</p>
-                  </v-col>
-                </v-row>
-              </div>
-              <div>
-                <v-row>
-                  <v-col>
-                    <p class="infos">Esterilizado</p>
-                  </v-col>
-                  <v-col>
-                    <p v-if="animal.castracao === true" class="respos">Sim</p>
-                    <p v-else class="respos">Não</p>
-                  </v-col>
-                </v-row>
-              </div>
-              <div>
-                <v-row>
-                  <v-col>
-                    <p class="infos mb-0">Dono</p>
-                  </v-col>
-                  <v-col>
-                    <p class="respos mb-0">{{ animal.cliente_nome }}</p>
-                  </v-col>
-                </v-row>
-              </div>
-            </v-list-item-content>
-          </v-list-item>
-        </v-card>
-      </v-col>
-
-      <v-col cols="auto">
-        <div class="foto">
+      <v-col cols="12" md="auto">
+        <div class="foto mx-auto">
           <v-img
             src="@/assets/animais/Rubi.jpg"
             aspect-ratio="1"
@@ -151,19 +51,118 @@
           </v-img>
         </div>
       </v-col>
+      <v-col cols="12" sm>
+        <v-card class="h-100 d-flex flex-column" outlined>
+          <v-list-item class="my-auto">
+            <v-list-item-content>
+              <div>
+                <v-row>
+                  <v-col cols="auto">
+                    <p class="infos">Nome</p>
+                  </v-col>
+                  <v-col>
+                    <p class="respos">{{ animal.nome }}</p>
+                  </v-col>
+                </v-row>
+              </div>
+              <div>
+                <v-row>
+                  <v-col>
+                    <p class="infos">Data de Nascimento</p>
+                  </v-col>
+                  <v-col cols="auto">
+                    <p class="respos">
+                      {{ format(animal.dataNascimento) }}
+                    </p>
+                  </v-col>
+                </v-row>
+              </div>
+              <div>
+                <v-row>
+                  <v-col cols="auto">
+                    <p class="infos">Sexo</p>
+                  </v-col>
+                  <v-col>
+                    <p class="respos">{{ animal.sexo }}</p>
+                  </v-col>
+                </v-row>
+              </div>
+              <div>
+                <v-row>
+                  <v-col cols="auto">
+                    <p class="infos mb-0">Chip</p>
+                  </v-col>
+                  <v-col>
+                    <p class="respos mb-0">{{ animal.chip }}</p>
+                  </v-col>
+                </v-row>
+              </div>
+            </v-list-item-content>
+          </v-list-item>
+        </v-card>
+      </v-col>
+      <v-col cols="12" sm>
+        <v-card class="h-100 d-flex flex-column" outlined>
+          <v-list-item class="my-auto">
+            <v-list-item-content>
+              <div>
+                <v-row>
+                  <v-col cols="auto">
+                    <p class="infos">Espécie</p>
+                  </v-col>
+                  <v-col>
+                    <p class="respos">{{ animal.especie }}</p>
+                  </v-col>
+                </v-row>
+              </div>
+              <div>
+                <v-row>
+                  <v-col cols="auto">
+                    <p class="infos">Raça</p>
+                  </v-col>
+                  <v-col>
+                    <p class="respos">{{ animal.raca }}</p>
+                  </v-col>
+                </v-row>
+              </div>
+              <div>
+                <v-row>
+                  <v-col cols="auto">
+                    <p class="infos">Esterilizado</p>
+                  </v-col>
+                  <v-col>
+                    <p v-if="animal.castracao === true" class="respos">Sim</p>
+                    <p v-else class="respos">Não</p>
+                  </v-col>
+                </v-row>
+              </div>
+              <div>
+                <v-row>
+                  <v-col cols="auto">
+                    <p class="infos mb-0">Dono</p>
+                  </v-col>
+                  <v-col>
+                    <p class="respos mb-0">{{ animal.cliente_nome }}</p>
+                  </v-col>
+                </v-row>
+              </div>
+            </v-list-item-content>
+          </v-list-item>
+        </v-card>
+      </v-col>
     </v-row>
 
     <h3 class="mt-6">Características</h3>
     <v-divider class="my-3"></v-divider>
 
     <v-row class="w-100" align="stretch">
-      <v-col>
+      <v-col md="6">
         <v-card class="h-100" outlined>
           <v-list-item>
             <v-list-item-content>
               <div>
                 <v-row>
-                  <v-col>
+                  <v-col cols="auto">
                     <p class="infos">Altura</p>
                   </v-col>
                   <v-col>
@@ -174,7 +173,7 @@
 
               <div>
                 <v-row>
-                  <v-col>
+                  <v-col cols="auto">
                     <p class="infos">Pelagem</p>
                   </v-col>
                   <v-col>
@@ -185,7 +184,7 @@
 
               <div>
                 <v-row>
-                  <v-col>
+                  <v-col cols="auto">
                     <p class="infos">Cor</p>
                   </v-col>
                   <v-col>
@@ -196,7 +195,7 @@
 
               <div>
                 <v-row>
-                  <v-col>
+                  <v-col cols="auto">
                     <p class="infos">Cauda</p>
                   </v-col>
                   <v-col>

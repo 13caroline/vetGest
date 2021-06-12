@@ -11,7 +11,7 @@
         <v-col cols="12">
           <v-data-table
             :headers="headers"
-            :items="agendamento"
+            :items="agendamentos"
             class="elevation-1"
             hide-default-footer
             :page.sync="page"
@@ -64,7 +64,7 @@
               </v-btn>
             </template>
           </v-data-table>
-           <div class="text-center pt-2">
+          <div class="text-center pt-2">
             <v-pagination
               v-model="page"
               :length="pageCount"
@@ -82,6 +82,9 @@
 
 
 <script>
+import axios from "axios";
+import store from "@/store.js";
+
 export default {
   data() {
     return {
@@ -131,48 +134,13 @@ export default {
         },
       ],
 
-      agendamento: [
+      agendamentos: [
          {
           utente: "Rubi",
           localizacao: "C15",
           data: "21/05/2021 15:00",
           motivo: "Castração",
           especie: 'Canídeo'
-        },
-        {
-          utente: "Runa",
-          data: "05/05/2021 10:00",
-          localizacao: "C1",
-          motivo: "Esterilização",
-          especie: 'Canídeo'
-        },
-        {
-          utente: "Luna",
-          data: "07/05/2021 10:00",
-          localizacao: "B17",
-          motivo: "Remoção tumor",
-          especie: "Felídeo"
-        },
-         {
-          utente: "Rubi",
-          localizacao: "C15",
-          data: "21/05/2021 15:00",
-          motivo: "Castração",
-          especie: 'Canídeo'
-        },
-        {
-          utente: "Runa",
-          data: "05/05/2021 10:00",
-          localizacao: "C1",
-          motivo: "Esterilização",
-          especie: 'Canídeo'
-        },
-        {
-          utente: "Luna",
-          data: "07/05/2021 10:00",
-          localizacao: "B17",
-          motivo: "Remoção tumor",
-          especie: "Felídeo"
         },
       ],
     };
@@ -195,13 +163,23 @@ export default {
       console.log(item);
     },
   },
-  created() {
-    /*
-    let response = await axios.post("http://localhost:7777/clinica/getClientes", {
-      email: this.$store.state.user.email,
-    });
+  created: async function() {
+    this.$store.state.tipo == "Clinica";
+    try {
+      let response = await axios.post(
+        "http://localhost:7777/medico/internamentos",
+        {
+          email: this.$store.state.email,
+        },
+        {
+          headers: { Authorization: "Bearer " + store.getters.token },
+        }
+      );
 
-    */
+      console.log(response);
+    } catch (e) {
+      console.log(e);
+    }
   },
 };
 </script>

@@ -346,7 +346,10 @@ export default {
               tipo: "Cirurgia",
             },
             animal: this.id,
-            veterinario: this.medico,
+            veterinario:
+              this.$store.state.tipo == "Clinica"
+                ? this.medico
+                : this.$store.state.email,
             cliente: this.dono,
           },
           { headers: { Authorization: "Bearer " + store.getters.token } }

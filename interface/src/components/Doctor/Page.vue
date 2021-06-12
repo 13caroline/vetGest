@@ -74,17 +74,18 @@
                 </template>
                 <span class="caption">Dados do utente</span>
               </v-tooltip>
-              <span class="ml-2 mr-1 blue--text">{{ item.utente }}</span>
-              <span>({{ item.especie }})</span>
+              <span class="ml-2 mr-1 blue--text">{{ item.animal.nome }}</span>
+              <span>({{ item.animal.especie }})</span>
             </template>
 
+            <!-- @TODO: tirar coluna (ecras medios tabela parte) ou pedir ao backend para mandar o cliente tambem -->
             <template v-slot:[`item.cliente`]="{ item }">
               <span class="ml-1 blue--text">{{ item.cliente }}</span>
             </template>
 
             <template v-slot:[`item.servico`]="{ item }">
-              <v-chip :color="servico(item.servico)" small>
-                {{ item.servico }}
+              <v-chip :color="servico(item.tipo)" small>
+                {{ item.tipo }}
               </v-chip>
             </template>
 
@@ -182,8 +183,8 @@
               </v-col>
               <v-col class="pl-0 pb-0" cols="7">
                 <span class="black--text">
-                  <strong>Rubi</strong>
-                  (Serra da Estrela)
+                  <strong>{{ details_item.animal.nome }}</strong>
+                  ({{ details_item.animal.raca }})
                 </span>
               </v-col>
 
@@ -192,10 +193,10 @@
               </v-col>
               <v-col class="pl-0 pb-0" cols="7">
                 <span class="black--text">
-                  <strong>Vómito/Diarreia/Recusa a comer</strong>
+                  <strong>{{ details_item.motivo }}</strong>
                 </span>
                 <br />
-                <span>Consulta extraordinária/Por doença</span>
+                <span>{{ details_item.descricao }}</span>
               </v-col>
 
               <v-col class="pb-0" align="right" cols="5">
@@ -203,7 +204,9 @@
               </v-col>
               <v-col class="pl-0 pb-0" cols="7">
                 <span class="black--text">
-                  <strong>19/04/2021 15:30</strong>
+                  <strong>{{
+                    details_item.data + " " + details_item.hora
+                  }}</strong>
                 </span>
               </v-col>
             </v-row>
@@ -233,8 +236,8 @@
               </v-col>
               <v-col class="pl-0 pb-0" cols="7">
                 <span class="black--text">
-                  <strong>Rubi</strong>
-                  (Serra da Estrela)
+                  <strong>{{ details_item.animal.nome }}</strong>
+                  ({{ details_item.animal.raca }})
                 </span>
               </v-col>
 
@@ -243,10 +246,10 @@
               </v-col>
               <v-col class="pl-0 pb-0" cols="7">
                 <span class="black--text">
-                  <strong>Vómito/Diarreia/Recusa a comer</strong>
+                  <strong>{{ details_item.motivo }}</strong>
                 </span>
                 <br />
-                <span>Consulta extraordinária/Por doença</span>
+                <span>{{ details_item.descricao }}</span>
               </v-col>
 
               <v-col class="pb-0" align="right" cols="5">
@@ -254,16 +257,9 @@
               </v-col>
               <v-col class="pl-0 pb-0" cols="7">
                 <span class="black--text">
-                  <strong>19/04/2021 15:30</strong>
-                </span>
-              </v-col>
-
-              <v-col class="pb-0" align="right" cols="5">
-                <span class="text-uppercase">Médico</span>
-              </v-col>
-              <v-col class="pl-0 pb-0" cols="7">
-                <span class="black--text">
-                  <strong>Dr. José Vieira</strong>
+                  <strong>{{
+                    details_item.data + " " + details_item.hora
+                  }}</strong>
                 </span>
               </v-col>
             </v-row>
@@ -328,8 +324,8 @@
               </v-col>
               <v-col class="pl-0 pb-0" cols="7">
                 <span class="black--text">
-                  <strong>Rubi</strong>
-                  (Serra da Estrela)
+                  <strong>{{ details_item.animal.nome }}</strong>
+                  ({{ details_item.animal.raca }})
                 </span>
               </v-col>
 
@@ -338,10 +334,10 @@
               </v-col>
               <v-col class="pl-0 pb-0" cols="7">
                 <span class="black--text">
-                  <strong>Vómito/Diarreia/Recusa a comer</strong>
+                  <strong>{{ details_item.motivo }}</strong>
                 </span>
                 <br />
-                <span>Consulta extraordinária/Por doença</span>
+                <strong>{{ details_item.descricao }}</strong>
               </v-col>
 
               <v-col class="pb-0" align="right" cols="5">
@@ -349,16 +345,9 @@
               </v-col>
               <v-col class="pl-0 pb-0" cols="7">
                 <span class="black--text">
-                  <strong>21/05/2021 15:45</strong>
-                </span>
-              </v-col>
-
-              <v-col class="pb-0" align="right" cols="5">
-                <span class="text-uppercase">Médico</span>
-              </v-col>
-              <v-col class="pl-0 pb-0" cols="7">
-                <span class="black--text">
-                  <strong>Sem preferência</strong>
+                  <strong>{{
+                    details_item.data + " " + details_item.hora
+                  }}</strong>
                 </span>
               </v-col>
             </v-row>
@@ -383,7 +372,7 @@
               dark
               color="#2596be"
               width="50%"
-              @click="cancelar()"
+              @click="cancelarConsulta()"
             >
               Sim
             </v-btn>
@@ -404,6 +393,7 @@ export default {
       cancelar: false,
       detalhes: false,
       concluir: false,
+      details_item: { animal: {} },
       page: 1,
       pageCount: 0,
       itemsPerPage: 10,
@@ -459,15 +449,16 @@ export default {
   methods: {
     more(item) {
       this.detalhes = true;
-      console.log(item);
+      this.details_item = item;
     },
+    // @TODO: conclude
     conclude(item) {
       this.concluir = true;
-      console.log(item);
+      this.details_item = item;
     },
     cancela(item) {
       this.cancelar = true;
-      console.log(item);
+      this.details_item = item;
     },
     estado(item) {
       if (item == "Agendada") return "#C5E1A5";
@@ -478,8 +469,28 @@ export default {
       else return "#FFCCBC";
     },
     utente(item) {
-      this.$router.push("/medico/utente/");
-      console.log(item);
+      this.$router.push("/medico/utente/" + item.animal.id);
+    },
+    // @TODO: verificar pedido quando estiver no backend
+    cancelarConsulta: async function () {
+      try {
+        let res = await axios.post(
+          "http://localhost:7777/medico/intervencao/alterar",
+          {
+            id: this.details_item.id,
+            estado: "Cancelada",
+          },
+          {
+            headers: { Authorization: "Bearer " + store.getters.token },
+          }
+        );
+        if (res) {
+          this.cancelar = false;
+          this.created();
+        }
+      } catch (e) {
+        console.log(e);
+      }
     },
   },
   created: async function () {
@@ -491,9 +502,7 @@ export default {
           headers: { Authorization: "Bearer " + store.getters.token },
         }
       );
-      console.log(response);
-      if (typeof(response.data) == 'object')
-        this.agendamentos = response.data;
+      if (typeof response.data == "object") this.agendamentos = response.data;
     } catch (e) {
       console.log(e);
     }
