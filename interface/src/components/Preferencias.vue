@@ -20,7 +20,7 @@
                 v-on="on"
                 fab
                 dark
-                to="/clinica/clientes/registar"
+                to="/clinica/preferencias/editar"
               >
                 <v-icon small>fas fa-pen</v-icon>
               </v-btn>

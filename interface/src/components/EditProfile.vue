@@ -10,29 +10,26 @@
               <v-card class="h-100 mt-5" outlined>
                 <v-list-item>
                   <v-list-item-content>
-                    <div>
-                      Email
-                      <v-col>
-                        <v-text-field
-                          outlined
-                          dense
-                          :value="utilizador.email"
-                          disabled
-                        ></v-text-field>
-                      </v-col>
-                    </div>
-                    <div>
-                      <v-col>
-                        <v-text-field
-                          type="password"
-                          placeholder="*****"
-                          outlined
-                          dense
-                          v-model="utilizador.password"
-                        ></v-text-field>
-                      </v-col>
-                    </div>
-                    <div></div>
+                    <v-col>
+                      <p class="ma-0">Email</p>
+                      <v-text-field
+                        outlined
+                        dense
+                        :value="utilizador.email"
+                        disabled
+                      ></v-text-field>
+                    </v-col>
+
+                    <v-col>
+                      <p class="ma-0">Palavra-passe</p>
+                      <v-text-field
+                        type="password"
+                        placeholder="*****"
+                        outlined
+                        dense
+                        v-model="password"
+                      ></v-text-field>
+                    </v-col>
                   </v-list-item-content>
                 </v-list-item>
               </v-card>
@@ -46,32 +43,32 @@
               <v-card class="h-100 mt-5" outlined>
                 <v-list-item>
                   <v-list-item-content>
-                    <div>
-                      <v-text-field
-                        outlined
-                        dense
-                        v-model="utilizador.nome"
-                      ></v-text-field>
-                    </div>
-                    <div>
+                    <v-col>
+                      <p class="ma-0">Morada</p>
                       <v-text-field
                         outlined
                         dense
                         v-model="utilizador.morada"
                       ></v-text-field>
-                    </div>
-                    <div>
+                    </v-col>
+
+                    <v-col>
+                      <p class="ma-0">Freguesia</p>
                       <v-text-field
                         outlined
                         dense
                         v-model="utilizador.freguesia"
                       ></v-text-field>
+                    </v-col>
+
+                    <v-col>
+                      <p class="ma-0">Concelho</p>
                       <v-text-field
                         outlined
                         dense
                         v-model="utilizador.concelho"
                       ></v-text-field>
-                    </div>
+                    </v-col>
                   </v-list-item-content>
                 </v-list-item>
               </v-card>
@@ -85,22 +82,24 @@
               <v-card class="h-100 mt-5" outlined>
                 <v-list-item>
                   <v-list-item-content>
-                    <div>
+                    <v-col>
+                      <p class="ma-0">Contacto telefónico</p>
                       <v-text-field
                         outlined
                         dense
                         v-model="utilizador.contacto"
                       ></v-text-field>
-                    </div>
-                    <div>
+                    </v-col>
+
+                    <v-col>
+                      <p class="ma-0">Número de identificação fiscal</p>
                       <v-text-field
                         outlined
-                        disabled
                         dense
                         v-model="utilizador.nif"
+                        disabled
                       ></v-text-field>
-                    </div>
-                    <div></div>
+                    </v-col>
                   </v-list-item-content>
                 </v-list-item>
               </v-card>
@@ -108,13 +107,13 @@
           </v-row>
         </v-form>
       </v-card>
-      <v-row align="end" justify="end">
-        <v-col cols="auto">
-          <!-- <Cancelar :dialogs="cancelar" @clicked="close()"></Cancelar> -->
+      <v-row align="end" justify="end" class="w-100">
+        <v-col cols="auto" class="ml-auto">
+          <Cancelar :dialogs="cancelar" @clicked="close()"></Cancelar>
         </v-col>
         <v-col cols="auto">
           <v-btn color="#2596be" small dark @click="editarDados()"
-            >Registar</v-btn
+            >Confirmar</v-btn
           >
         </v-col>
       </v-row>
@@ -126,11 +125,20 @@
 import moment from "moment";
 import axios from "axios";
 import store from "@/store.js";
+import Cancelar from "@/components/Dialogs/Cancel.vue";
 export default {
-  props: ["animal"],
   data: () => ({
     utilizador: {},
+    password: "",
+    dialogs: {},
+    cancelar: {
+      text: "a edição de dados",
+      title: "edição de dados",
+    },
   }),
+  components: {
+    Cancelar,
+  },
   methods: {
     format(data) {
       return moment(data).locale("pt").format("DD/MM/YYYY");
@@ -139,8 +147,9 @@ export default {
     editarDados: async function () {
       if (this.$refs.form.validate()) {
         try {
+          if (this.password == "") this.password = this.utilizador.password;
           await axios.post(
-            "http://localhost:7777/cliente/preferencias",
+            "http://localhost:7777/clinica/editar",
             {
               email: store.state.email,
               nome: this.utilizador.nome,
@@ -148,7 +157,7 @@ export default {
               concelho: this.utilizador.concelho,
               freguesia: this.utilizador.freguesia,
               contacto: this.utilizador.contacto,
-              password: this.utilizador.password,
+              password: this.password,
             },
             {
               headers: {
@@ -159,7 +168,7 @@ export default {
           this.text = "Dados editados com sucesso.";
           this.color = "success";
           this.snackbar = true;
-          this.$router.push("/cliente/preferencias/");
+          this.$router.push("/clinica/preferencias/");
         } catch (e) {
           console.log("erro: " + e);
           this.text = "Ocorreu um erro no registo, por favor tente mais tarde!";
@@ -173,11 +182,14 @@ export default {
         this.done = false;
       }
     },
+    close() {
+      this.$router.push("/clinica/preferencias");
+    },
   },
 
   created: async function () {
     let response = await axios.post(
-      "http://localhost:7777/cliente/getpreferencias",
+      "http://localhost:7777/clinica",
       {
         email: this.$store.state.email,
       },
@@ -189,7 +201,6 @@ export default {
     );
 
     this.utilizador = response.data;
-    console.log(this.utilizador);
   },
 };
 </script>
