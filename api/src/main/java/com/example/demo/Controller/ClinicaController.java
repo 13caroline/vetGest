@@ -46,6 +46,16 @@ public class ClinicaController {
     }
 
     @CrossOrigin
+    @PostMapping(path = "/clinica")
+    public ResponseEntity<?> getClinica(@RequestBody  Clinica clinica){
+        Clinica clinica1 = clinicaService.getClinicaByEmail(clinica.getEmail());
+        if(clinica1==null){
+            return ResponseEntity.badRequest().body("Utilizador Clinica não existe");
+        }
+        return  ResponseEntity.accepted().body(clinica1);
+    }
+
+    @CrossOrigin
     @PostMapping(path = "/clinica/editar")
     public ResponseEntity<?> editClinica(@RequestBody Clinica _clinica){
         Clinica clinica = clinicaService.getClinicaByEmail(_clinica.getEmail());
