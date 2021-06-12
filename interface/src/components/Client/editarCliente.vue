@@ -11,11 +11,12 @@
               <v-list-item>
                 <v-list-item-content>
                   <div>
+                    Email
                       <v-col>
                         <v-text-field
-                          label="Email"
                           outlined
                           dense
+                          :value="utilizador.email"
                           disabled
                         ></v-text-field>
                       </v-col>
@@ -23,11 +24,11 @@
                   <div>
                       <v-col>
                         <v-text-field
-                          label="Pass"
                           type="password"
+                          placeholder="*****"
                           outlined
                           dense
-                          v-model="pass"
+                          v-model="password"
                         ></v-text-field>
                       </v-col>
                   </div>
@@ -47,32 +48,28 @@
                 <v-list-item-content>
                   <div>
                       <v-text-field
-                        label="Nome"
                         outlined
                         dense
-                        v-model="nome"
+                        v-model="utilizador.nome"
                       ></v-text-field>
                   </div>
                   <div>
                       <v-text-field
-                        label="Pass"
                         outlined
                         dense
-                        v-model="morada"
+                        v-model="utilizador.morada"
                       ></v-text-field>
                   </div>
                   <div>
                       <v-text-field
-                        label="Freguesia"
                         outlined
                         dense
-                        v-model="freguesia"
+                        v-model="utilizador.freguesia"
                       ></v-text-field>
                       <v-text-field
-                        label="Concelho"
                         outlined
                         dense
-                        v-model="concelho"
+                        v-model="utilizador.concelho"
                       ></v-text-field>
                   </div>
                 </v-list-item-content>
@@ -91,19 +88,17 @@
                   <div>
                     
                       <v-text-field
-                        label="Telefone"
                         outlined
                         dense
-                        v-model="telefone"
+                        v-model="utilizador.contacto"
                       ></v-text-field>
                   </div>
                   <div>
                       <v-text-field
-                        label="NIF"
                         outlined
                         disabled
                         dense
-                        v-model="nif"
+                        v-model="utilizador.nif"
                       ></v-text-field>
                   </div>
                   <div></div>
@@ -124,18 +119,60 @@ import store from "@/store.js";
 export default {
   props: ["animal"],
   data: () => ({
-    pass: "",
-    morada: "",
-    freguesia: "",
-    concelho: "",
-    telefone: "",
+    password: "",
+ 
     utilizador: {},
   }),
   methods: {
     format(data) {
       return moment(data).locale("pt").format("DD/MM/YYYY");
     },
+
+    /* editarDados: async function () {
+      if (this.$refs.form.validate()) {
+        try {
+          await axios.post(
+            "http://localhost:7777/cliente/preferencias" + this.id,
+            {
+              cliente: {
+                email: store.state.email,
+              },
+              animal: {
+                nome: this.animal.nome,
+                raca: this.animal.raca,
+                dataNascimento: this.animal.raca,
+                sexo: this.animal.sexo,
+                especie: this.animal.especie,
+                altura: this.animal.altura,
+                cor: this.cor.toString(),
+                pelagem: this.pelagem.toString(),
+                cauda: this.animal.cauda,
+                chip: this.animal.chip,
+                observacoes: this.animal.observacoes,
+                castracao: this.animal.castracao,
+              },
+            }
+          );
+          this.text = "Dados editados com sucesso.";
+          this.color = "success";
+          this.snackbar = true;
+          this.$router.push("/cliente/animal/"+this.id)
+        } catch (e) {
+          console.log("erro: " + e);
+          this.text = "Ocorreu um erro no registo, por favor tente mais tarde!";
+          this.color = "warning";
+          this.snackbar = true;
+        }
+      } else {
+        this.text = "Por favor preencha todos os campos.";
+        this.color = "error";
+        this.snackbar = true;
+        this.done = false;
+      }
+    },*/
+
   },
+
   created: async function () {
     let response = await axios.post(
       "http://localhost:7777/cliente/getpreferencias",
@@ -148,8 +185,9 @@ export default {
         },
       }
     );
-    console.log(response);
+    
     this.utilizador = response.data;
+    console.log(this.utilizador);
   },
 };
 </script>
