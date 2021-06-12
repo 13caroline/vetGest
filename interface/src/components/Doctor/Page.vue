@@ -78,11 +78,6 @@
               <span>({{ item.animal.especie }})</span>
             </template>
 
-            <!-- @TODO: tirar coluna (ecras medios tabela parte) ou pedir ao backend para mandar o cliente tambem -->
-            <template v-slot:[`item.cliente`]="{ item }">
-              <span class="ml-1 blue--text">{{ item.cliente }}</span>
-            </template>
-
             <template v-slot:[`item.servico`]="{ item }">
               <v-chip :color="servico(item.tipo)" small>
                 {{ item.tipo }}
@@ -404,12 +399,6 @@ export default {
           align: "start",
           sortable: true,
           value: "utente",
-        },
-        {
-          text: "CLIENTE",
-          align: "start",
-          sortable: true,
-          value: "cliente",
         },
         {
           text: "DATA",
