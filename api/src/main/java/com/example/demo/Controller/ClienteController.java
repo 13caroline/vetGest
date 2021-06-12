@@ -539,12 +539,12 @@ public class ClienteController {
         cliente.setConcelho(_cliente.getConcelho());
         cliente.setFreguesia(_cliente.getFreguesia());
         cliente.setContacto(_cliente.getContacto());
-        try {
+        if(!(_cliente.getPassword().equals(cliente.getPassword()))) {
+            cliente.setPassword(_cliente.getPassword());
+            clienteService.saveCliente(cliente);
+        }else
             clienteService.updateCliente(cliente);
-        }
-        catch (Exception e){
-            return ResponseEntity.badRequest().body("Erro a alterar dados!");
-        }
+
         return  ResponseEntity.accepted().body("Dados alterados com sucesso!");
     }
 
