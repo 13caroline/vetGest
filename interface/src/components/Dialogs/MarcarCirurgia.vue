@@ -15,13 +15,13 @@
             <v-icon small> fas fa-band-aid</v-icon>
           </v-btn>
         </template>
-        <span class="caption">Marcar cirurgia</span>
+        <span class="caption">Agendar cirurgia</span>
       </v-tooltip>
     </template>
     <v-card>
       <v-form>
         <v-card-title class="font-weight-regular text-uppercase">
-          Marcar cirurgia
+          Agendar cirurgia
         </v-card-title>
         <v-card-subtitle
           >Por favor preencha o seguinte formulário</v-card-subtitle

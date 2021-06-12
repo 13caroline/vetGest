@@ -15,13 +15,13 @@
             <v-icon small> fas fa-scroll</v-icon>
           </v-btn>
         </template>
-        <span class="caption">Marcar consulta</span>
+        <span class="caption">Agendar consulta</span>
       </v-tooltip>
     </template>
     <v-card>
       <v-form>
         <v-card-title class="font-weight-regular text-uppercase">
-          Marcar consulta
+          Agendar consulta
         </v-card-title>
         <v-card-subtitle
           >Por favor preencha o seguinte formulário</v-card-subtitle

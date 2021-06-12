@@ -146,7 +146,7 @@
         <v-card>
           <v-form>
             <v-card-title class="font-weight-regular text-uppercase">
-              Marcar cirurgia
+              Agendar cirurgia
             </v-card-title>
             <v-card-subtitle
               >Por favor preencha o seguinte formulário</v-card-subtitle

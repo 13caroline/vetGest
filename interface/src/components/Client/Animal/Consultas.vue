@@ -18,7 +18,7 @@
                 dark
                 @click="dialogNova = true"
               >
-                Marcar Consulta
+                Agendar Consulta
                 <v-icon class="calendar ml-4">far fa-calendar-check</v-icon>
               </v-btn>
             </v-col>
@@ -89,7 +89,7 @@
         <v-card>
           <v-form>
             <v-card-title class="font-weight-regular text-uppercase">
-              Marcar consulta
+              Agendar consulta
             </v-card-title>
             <v-card-subtitle
               >Por favor preencha o seguinte formulário</v-card-subtitle
