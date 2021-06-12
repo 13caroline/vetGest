@@ -19,6 +19,7 @@
           <v-tooltip top>
             <template v-slot:activator="{ on, attrs }">
               <v-icon
+                class="mx-1"
                 v-if="item.estado == 'Concluída'"
                 @click="dialog = true"
                 small
@@ -33,6 +34,7 @@
           <v-tooltip top>
             <template v-slot:activator="{ on, attrs }">
               <v-icon
+                class="mx-1"
                 v-if="item.estado == 'Agendada' || item.estado == 'Pendente'"
                 v-bind="attrs"
                 v-on="on"
