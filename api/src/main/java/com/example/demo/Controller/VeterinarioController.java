@@ -444,7 +444,8 @@ public class VeterinarioController {
     }
 
     @CrossOrigin
-    @PostMapping("/medico/internamento/detalhes")
+    @RequestMapping(value="/medico/internamento/detalhes", method = RequestMethod.POST,produces="application/json")
+    //@PostMapping("/medico/internamento/detalhes", produces="application/json")
     public ResponseEntity<?> getInternamento(@RequestBody String body) throws JsonProcessingException, JSONException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);
@@ -484,6 +485,7 @@ public class VeterinarioController {
                     e.printStackTrace();
                 }
             });
+
             return ResponseEntity.accepted().body(response.toString());
         }
 
