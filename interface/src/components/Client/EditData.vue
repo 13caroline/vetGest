@@ -352,7 +352,12 @@ export default {
                 observacoes: this.animal.observacoes,
                 castracao: this.animal.castracao,
               },
-            }
+            },
+             {
+        headers: {
+          Authorization: "Bearer " + store.getters.token.toString(),
+        },
+      }
           );
           this.text = "Dados editados com sucesso.";
           this.color = "success";

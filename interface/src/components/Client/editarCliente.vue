@@ -4,7 +4,7 @@
       <v-card flat color="#fafafa">
         <h3 class="pa-3">Dados de Acesso</h3>
         <v-divider></v-divider>
-
+<v-form ref="form" lazy-validation class="form">
         <v-row class="w-100" align="start">
           <v-col>
             <v-card class="h-100 mt-5" outlined>
@@ -28,7 +28,7 @@
                           placeholder="*****"
                           outlined
                           dense
-                          v-model="password"
+                          v-model="utilizador.password"
                         ></v-text-field>
                       </v-col>
                   </div>
@@ -107,7 +107,18 @@
             </v-card>
           </v-col>
         </v-row>
+</v-form>
       </v-card>
+      <v-row align="end" justify="end">
+            <v-col cols="auto">
+              <!-- <Cancelar :dialogs="cancelar" @clicked="close()"></Cancelar> -->
+            </v-col>
+            <v-col cols="auto">
+              <v-btn color="#2596be" small dark @click="editarDados()"
+                >Registar</v-btn
+              >
+            </v-col>
+          </v-row>
     </v-container>
   </div>
 </template>
@@ -119,7 +130,6 @@ import store from "@/store.js";
 export default {
   props: ["animal"],
   data: () => ({
-    password: "",
  
     utilizador: {},
   }),
@@ -128,35 +138,32 @@ export default {
       return moment(data).locale("pt").format("DD/MM/YYYY");
     },
 
-    /* editarDados: async function () {
+    editarDados: async function () {
       if (this.$refs.form.validate()) {
         try {
           await axios.post(
-            "http://localhost:7777/cliente/preferencias" + this.id,
+            "http://localhost:7777/cliente/preferencias",
             {
-              cliente: {
+
                 email: store.state.email,
-              },
-              animal: {
-                nome: this.animal.nome,
-                raca: this.animal.raca,
-                dataNascimento: this.animal.raca,
-                sexo: this.animal.sexo,
-                especie: this.animal.especie,
-                altura: this.animal.altura,
-                cor: this.cor.toString(),
-                pelagem: this.pelagem.toString(),
-                cauda: this.animal.cauda,
-                chip: this.animal.chip,
-                observacoes: this.animal.observacoes,
-                castracao: this.animal.castracao,
-              },
-            }
+                nome: this.utilizador.nome,
+                morada: this.utilizador.morada,
+                concelho: this.utilizador.concelho,
+                freguesia: this.utilizador.freguesia,
+                contacto: this.utilizador.contacto,
+                password:this.utilizador.password,
+
+            },
+             {
+        headers: {
+          Authorization: "Bearer " + store.getters.token.toString(),
+        },
+      }
           );
           this.text = "Dados editados com sucesso.";
           this.color = "success";
           this.snackbar = true;
-          this.$router.push("/cliente/animal/"+this.id)
+          this.$router.push("/cliente/preferencias/")
         } catch (e) {
           console.log("erro: " + e);
           this.text = "Ocorreu um erro no registo, por favor tente mais tarde!";
@@ -169,7 +176,7 @@ export default {
         this.snackbar = true;
         this.done = false;
       }
-    },*/
+    },
 
   },
 
