@@ -125,6 +125,29 @@ public class VeterinarioController {
     }
 
     @CrossOrigin
+    @PostMapping("/medico/intervencao/alterar")
+    public ResponseEntity<?> cancelarIntervencao(@RequestBody String body) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+
+        int id_intervencao = node.get("id").asInt();
+        String estado = node.get("estado").asText();
+        String observacoes = node.get("observacoes").asText();
+
+        Intervencao intervencao = intervencaoService.getIntervencao(id_intervencao);
+
+        if(intervencao==null){
+            return ResponseEntity.badRequest().body("Erro a obter intervencao");
+        }
+        if(!(observacoes==null))
+            intervencao.setObservacoes(observacoes);
+
+        intervencao.setEstado(estado);
+        intervencaoService.saveIntervencao(intervencao);
+        return ResponseEntity.accepted().body("Intervenção Alterada");
+    }
+
+    @CrossOrigin
     @PostMapping("/medico/consultas")
     public ResponseEntity<?> getConsultas(@RequestBody Veterinario email){
         Veterinario veterinario = veterinarioService.getVetByEmail(email.getEmail());
@@ -445,7 +468,6 @@ public class VeterinarioController {
 
     @CrossOrigin
     @RequestMapping(value="/medico/internamento/detalhes", method = RequestMethod.POST,produces="application/json")
-    //@PostMapping("/medico/internamento/detalhes", produces="application/json")
     public ResponseEntity<?> getInternamento(@RequestBody String body) throws JsonProcessingException, JSONException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);
@@ -463,16 +485,6 @@ public class VeterinarioController {
         if(internamento.getVeterinario().getEmail().equals(vet_email) && internamento.getAnimal().getId() == id_animal) {
 
             List<NotaInternamento> notaInternamentos = internamentoService.findAllByInternamento(internamento);
-            /*
-            String nome = animal.getNome();
-            String dataNascimento = animal.getDataNascimento();
-
-            System.out.println("Aqui");
-            JSONObject response = new JSONObject();
-            response.put("nome", nome);
-            response.put("dataNascimento", dataNascimento);
-            response.put("notasInternamento", notaInternamentos);
-             */
             JSONObject response = new JSONObject();
             JSONObject animal1 = new JSONObject();
             animal1.put("id",animal.getId());
