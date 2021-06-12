@@ -22,7 +22,7 @@
     <v-card>
       <v-form>
         <v-card-title class="font-weight-regular text-uppercase">
-          Marcar uma nova consulta "livre"
+          Marcar uma nova consulta
         </v-card-title>
         <v-card-subtitle
           >Por favor preencha o seguinte formulário</v-card-subtitle

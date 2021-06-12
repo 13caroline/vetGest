@@ -92,32 +92,13 @@
             <template v-slot:[`item.detalhes`]="{ item }">
               <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
-                  <v-icon v-bind="attrs" v-on="on" small @click="more(item)">
-                    mdi-plus-circle
-                  </v-icon>
-                </template>
-                <span class="caption">Mais detalhes</span>
-              </v-tooltip>
-              <v-tooltip top>
-                <template v-slot:activator="{ on, attrs }">
                   <v-icon
+                    class="mx-1"
                     color="#66BB6A"
                     v-bind="attrs"
                     v-on="on"
                     small
-                    v-if="item.estado != 'A decorrer'"
-                    disabled
-                    @click="conclude(item)"
-                  >
-                    mdi-clipboard-check-outline
-                  </v-icon>
-                  <v-icon
-                    color="#66BB6A"
-                    v-bind="attrs"
-                    v-on="on"
-                    small
-                    v-else
-                    @click="conclude(item)"
+                    :disabled="item.estado != 'A decorrer'"
                   >
                     mdi-clipboard-check-outline
                   </v-icon>
@@ -127,25 +108,31 @@
                 >
                 <span v-else class="caption">Concluir cirurgia</span>
               </v-tooltip>
+
               <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
                   <v-icon
+                    class="mx-1"
                     color="#E57373"
                     v-bind="attrs"
                     v-on="on"
                     small
-                    v-if="item.estado == 'A decorrer'"
-                    disabled
-                    @click="cancela(item)"
+                    @click="abrirInternamento(item)"
+                    >fas fa-procedures</v-icon
                   >
-                    mdi-close-circle
-                  </v-icon>
+                </template>
+                <span>Admitir em internamento</span>
+              </v-tooltip>
+
+              <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
                   <v-icon
+                    class="mx-1"
                     color="#E57373"
                     v-bind="attrs"
                     v-on="on"
                     small
-                    v-else
+                    :disabled="item.estado == 'A decorrer'"
                     @click="cancela(item)"
                   >
                     mdi-close-circle
@@ -167,59 +154,6 @@
           </div>
         </v-col>
       </v-row>
-
-      <v-dialog v-model="detalhes" persistent width="100%" max-width="460">
-        <v-card>
-          <v-card-title class="cancel">Consulta agendada</v-card-title>
-          <v-card-text>
-            <v-row class="mt-2">
-              <v-col class="pb-0" align="right" cols="5">
-                <span class="text-uppercase">Nome do Animal</span>
-              </v-col>
-              <v-col class="pl-0 pb-0" cols="7">
-                <span class="black--text">
-                  <strong>{{ details_item.animal.nome }}</strong>
-                  ({{ details_item.animal.raca }})
-                </span>
-              </v-col>
-
-              <v-col class="pb-0" align="right" cols="5">
-                <span class="text-uppercase">Motivo da Consulta</span>
-              </v-col>
-              <v-col class="pl-0 pb-0" cols="7">
-                <span class="black--text">
-                  <strong>{{ details_item.motivo }}</strong>
-                </span>
-                <br />
-                <span>{{ details_item.descricao }}</span>
-              </v-col>
-
-              <v-col class="pb-0" align="right" cols="5">
-                <span class="text-uppercase">Data</span>
-              </v-col>
-              <v-col class="pl-0 pb-0" cols="7">
-                <span class="black--text">
-                  <strong>{{
-                    details_item.data + " " + details_item.hora
-                  }}</strong>
-                </span>
-              </v-col>
-            </v-row>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn
-              depressed
-              small
-              dark
-              color="#2596be"
-              @click="detalhes = false"
-            >
-              Fechar
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
 
       <v-dialog v-model="concluir" persistent width="100%" max-width="460">
         <v-card>
@@ -278,6 +212,7 @@
                       outlined
                       color="#2596be"
                       no-resize
+                      v-model="observacoes"
                     ></v-textarea>
                   </v-col>
                 </v-row>
@@ -301,7 +236,7 @@
               dark
               color="#2596be"
               width="50%"
-              @click="concluir = false"
+              @click="updateStatus('Concluída')"
             >
               Admitir
             </v-btn>
@@ -311,7 +246,7 @@
 
       <v-dialog v-model="cancelar" persistent width="100%" max-width="460">
         <v-card>
-          <v-card-title class="cancel"> Cancelar consulta </v-card-title>
+          <v-card-title class="cancel"> Cancelar agendamento </v-card-title>
           <v-card-text>
             <v-row class="mt-2">
               <v-col class="pb-0" align="right" cols="5">
@@ -367,11 +302,82 @@
               dark
               color="#2596be"
               width="50%"
-              @click="cancelarConsulta()"
+              @click="updateStatus('Cancelada')"
             >
               Sim
             </v-btn>
           </v-card-actions>
+        </v-card>
+      </v-dialog>
+
+      <v-dialog v-model="internamento" width="100%" max-width="500" persistent>
+        <v-card>
+          <v-form>
+            <v-card-title class="font-weight-regular text-uppercase">
+              Admitir em internamento
+            </v-card-title>
+            <v-card-subtitle
+              >Por favor preencha o seguinte formulário</v-card-subtitle
+            >
+            <v-card-text>
+              <v-row align="center">
+                <v-col cols="12" class="pb-0">
+                  <p class="ma-0">Motivo de internamento</p>
+                  <v-textarea
+                    no-resize
+                    dense
+                    color="#2596be"
+                    flat
+                    outlined
+                    rows="2"
+                    v-model="motivo"
+                  ></v-textarea>
+                </v-col>
+
+                <v-col cols="12" class="py-0">
+                  <p class="ma-0">Nota de admissão</p>
+                  <v-textarea
+                    color="#2596be"
+                    flat
+                    outlined
+                    rows="5"
+                    no-resize
+                    v-model="nota"
+                  ></v-textarea>
+                </v-col>
+
+                <v-col cols="12" class="py-0">
+                  <p class="ma-0">Localização</p>
+                  <v-text-field
+                    color="#2596be"
+                    flat
+                    outlined
+                    dense
+                    no-resize
+                    v-model="localizacao"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+
+              <v-row align="end" justify="end">
+                <v-col cols="auto">
+                  <Cancelar
+                    :dialogs="cancelar"
+                    @clicked="internamento = false"
+                  ></Cancelar>
+                </v-col>
+                <v-col cols="auto">
+                  <v-btn
+                    color="#2596be"
+                    small
+                    dark
+                    @click="admitirInternamento()"
+                    >Admitir</v-btn
+                  >
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-form>
         </v-card>
       </v-dialog>
     </v-container>
@@ -382,17 +388,22 @@
 <script>
 import axios from "axios";
 import store from "@/store.js";
+import Cancelar from "@/components/Dialogs/Cancel.vue";
 export default {
   data() {
     return {
       cancelar: false,
-      detalhes: false,
       concluir: false,
+      internamento: false,
       details_item: { animal: {} },
       page: 1,
       pageCount: 0,
       itemsPerPage: 10,
       search: "",
+      observacoes: "",
+      motivo: "",
+      nota: "",
+      localizacao: "",
       headers: [
         {
           text: "UTENTE",
@@ -436,17 +447,16 @@ export default {
     };
   },
   methods: {
-    more(item) {
-      this.detalhes = true;
-      this.details_item = item;
-    },
-    // @TODO: conclude
     conclude(item) {
       this.concluir = true;
       this.details_item = item;
     },
     cancela(item) {
       this.cancelar = true;
+      this.details_item = item;
+    },
+    abrirInternamento(item) {
+      this.internamento = true;
       this.details_item = item;
     },
     estado(item) {
@@ -460,14 +470,40 @@ export default {
     utente(item) {
       this.$router.push("/medico/utente/" + item.animal.id);
     },
-    // @TODO: verificar pedido quando estiver no backend
-    cancelarConsulta: async function () {
+    admitirInternamento: async function () {
+      try {
+        let res = await axios.post(
+          "http://localhost:7777/medico/internar",
+          {
+            email: this.$store.state.email,
+            intervencao: this.details_item.id,
+            animal: this.details_item.animal.id,
+            internamento: {
+              motivo: this.motivo,
+              nota: this.nota,
+              localizacao: this.localizacao,
+            },
+          },
+          {
+            headers: { Authorization: "Bearer " + store.getters.token },
+          }
+        );
+
+        if (res) {
+          this.internamento = false;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    updateStatus: async function (status) {
       try {
         let res = await axios.post(
           "http://localhost:7777/medico/intervencao/alterar",
           {
             id: this.details_item.id,
-            estado: "Cancelada",
+            estado: status,
+            observacoes: status !== "Concluída" ? null : this.observacoes,
           },
           {
             headers: { Authorization: "Bearer " + store.getters.token },
@@ -475,12 +511,16 @@ export default {
         );
         if (res) {
           this.cancelar = false;
+          this.concluir = false;
           this.created();
         }
       } catch (e) {
         console.log(e);
       }
     },
+  },
+  components: {
+    Cancelar,
   },
   created: async function () {
     try {

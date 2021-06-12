@@ -28,6 +28,7 @@
               <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
                   <v-icon
+                    class="mx-1"
                     v-if="item.estado == 'Concluída'"
                     @click="detalhes = true"
                     small
@@ -42,6 +43,7 @@
               <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
                   <v-icon
+                    class="mx-1"
                     v-if="item.estado == 'Agendada'"
                     v-bind="attrs"
                     v-on="on"
@@ -344,7 +346,7 @@ export default {
     dialog: false,
     detalhes: false,
     cancelar: false,
-     motivo: [
+    motivo: [
       "Consulta anual/Vacinação",
       "Consulta extraordinária/Por doença",
       "Consulta de seguimento",
@@ -448,7 +450,7 @@ export default {
     more(item) {
       console.log(item.data);
     },
-   /* cancelar: async function () {
+    /* cancelar: async function () {
       
 		 try {
           var resposta = await axios.post("http://localhost:7777/cliente/cancelarCirurgia", {
@@ -469,9 +471,7 @@ export default {
 		
     },*/
   },
-   created: async function () {
-
-
+  created: async function () {
     try {
       var response = await axios.post(
         "http://localhost:7777/cliente/cirurgias",
@@ -484,12 +484,10 @@ export default {
           },
         }
       );
-     
     } catch (e) {
       console.log("erro: +" + e);
     }
 
- 
     for (var i = 0; i < response.data.length; i++) {
       this.cirurgias.push({
         data: response.data[i].data,
@@ -500,7 +498,7 @@ export default {
       });
     }
   },
-    computed: {
+  computed: {
     filteredData() {
       let motivo = this.motivos;
       return this.desc.filter((item) => item.tipo === motivo);

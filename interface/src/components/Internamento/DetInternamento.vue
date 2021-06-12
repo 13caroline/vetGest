@@ -193,7 +193,7 @@ export default {
 
   },
   created: async function(){
-
+      console.log(this.id);
   }
 }
 </script>
