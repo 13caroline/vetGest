@@ -6,7 +6,7 @@
           <v-row class="w-100">
             <h3 class="font-weight-regular text-uppercase mb-4 mt-10 ml-3">
               <v-icon class="mr-2">fas fa-scroll</v-icon>
-              Marcação de Consultas
+              Agendamento de Consultas
             </h3>
             <v-row justify="end">
               <v-col cols="auto">

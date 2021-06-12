@@ -175,7 +175,7 @@ export default {
           align: "start",
         },
         {
-          text: "Data de Marcação",
+          text: "Data de Agendamento",
           value: "marcacao",
           sortable: true,
           align: "start",

@@ -396,7 +396,7 @@ export default {
     ],
     headers: [
       {
-        text: "Data de Marcação",
+        text: "Data de Agendamento",
         align: "start",
         sortable: true,
         value: "data",

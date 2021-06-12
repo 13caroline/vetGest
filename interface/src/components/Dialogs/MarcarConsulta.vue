@@ -308,7 +308,7 @@ export default {
             });
           } else {
             this.$emit("clicked", {
-              text: "Ocorreu um erro na marcação, por favor tente mais tarde!",
+              text: "Ocorreu um erro no agendamento, por favor tente mais tarde!",
               color: "warning",
               snackbar: "true",
               timeout: 4000,
