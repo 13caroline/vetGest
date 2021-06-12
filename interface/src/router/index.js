@@ -165,6 +165,18 @@ const routes = [
     name: 'Clínica Internamento Detalhes',
     component: () => import(/* webpackChunkName: "about" */ '../views/Internamento/DetInternamento.vue')
   },
+   // Preferências Clínica
+   {
+    path: '/clinica/preferencias',
+    name: 'Preferências Clínica',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/Preferencias.vue')
+  },
+  // Preferências Clínica Editar
+  {
+    path: '/clinica/preferencias/editar',
+    name: 'Preferências Clínica Editar',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Clinic/EditProfile.vue')
+  },
   //------------------------------------- Médico -------------------------------------
 
   //Página inicial médico

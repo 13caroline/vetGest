@@ -153,7 +153,7 @@
               required
             />
           </v-form>
-          <span class="ma-0">* Campos obrigatórios</span>
+          <span class="ma-0 caption">* Campos obrigatórios</span>
           <v-row align="end" justify="end">
             <v-col cols="auto" class="pr-0">
               <Cancelar :dialogs="cancelar" @clicked="close()"></Cancelar>

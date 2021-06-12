@@ -12,7 +12,7 @@
                 dense
                 single-line
                 color="#2596be"
-                placeholder="E-mail"
+                placeholder="E-mail *"
                 name="email"
                 v-model="email"
                 required
@@ -30,7 +30,7 @@
                 name="password"
                 v-model="password"
                 :rules="passwordRules"
-                placeholder="Palavra-Passe"
+                placeholder="Palavra-Passe *"
                 required
               />
 
@@ -43,7 +43,7 @@
                 single-line
                 :rules="nameRules"
                 color="#2596be"
-                placeholder="Nome"
+                placeholder="Nome *"
                 v-model="nome"
                 name="nome"
                 required
@@ -58,7 +58,7 @@
                 :rules="ruaRules"
                 color="#2596be"
                 name="rua"
-                placeholder="Morada"
+                placeholder="Morada *"
                 required
               />
 
@@ -73,7 +73,7 @@
                     :rules="freguesiaRules"
                     color="#2596be"
                     name="freguesia"
-                    placeholder="Freguesia"
+                    placeholder="Freguesia *"
                     required
                   />
                 </v-col>
@@ -87,7 +87,7 @@
                     color="#2596be"
                     :rules="concelhoRules"
                     name="concelho"
-                    placeholder="Concelho"
+                    placeholder="Concelho *"
                     v-model="concelho"
                     required
                   />
@@ -117,7 +117,7 @@
                     dense
                     single-line
                     color="#2596be"
-                    placeholder="Contacto telefónico"
+                    placeholder="Contacto telefónico *"
                     name="contacto"
                     v-model="contacto"
                     maxlength="9"
@@ -138,6 +138,7 @@
                 required
               />
             </v-form>
+            <span class="ma-0 caption">* Campos obrigatórios</span>
             <v-row justify="end">
               <v-btn
                 class="mr-3 mb-2"
@@ -189,7 +190,16 @@
           >
             Não
           </v-btn>
-          <v-btn depressed large dark color="#2596be" width="50%"> Sim </v-btn>
+          <v-btn
+            depressed
+            large
+            dark
+            color="#2596be"
+            width="50%"
+            @click="close()"
+          >
+            Sim
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -230,7 +240,8 @@ export default {
       emailRules: [
         (value) => !!value || "E-mail inválido",
         (value) => {
-          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          const pattern =
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
           return pattern.test(value) || "E-mail inválido";
         },
       ],
@@ -253,6 +264,9 @@ export default {
     openDialog() {
       this.dialog = true;
     },
+    close() {
+      (this.dialog = false), this.$emit("clicked", "cancel");
+    },
     reset() {
       this.$refs.form.reset();
       this.dialog = false;
@@ -260,7 +274,7 @@ export default {
     registUser: async function () {
       if (this.$refs.form.validate()) {
         try {
-          var resposta = await axios.post("http://localhost:7777/cliente/registar", {
+          await axios.post("http://localhost:7777/cliente/registar", {
             email: this.email,
             password: this.password,
             concelho: this.concelho,
@@ -270,10 +284,13 @@ export default {
             nif: this.nif,
             nome: this.nome,
           });
-          console.log(JSON.stringify(resposta.data));
-          this.text = "Utilizador criado com sucesso.";
-          this.color = "success";
-          this.snackbar = true;
+
+          this.$emit("registado", {
+            text: "Utilizador criado com sucesso.",
+            color: "success",
+            snackbar: true,
+            timeout: 4000
+          });
         } catch (e) {
           console.log("erro: " + e);
           this.text = "Ocorreu um erro no registo, por favor tente mais tarde!";

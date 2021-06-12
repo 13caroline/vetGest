@@ -139,13 +139,18 @@
               </v-col>
             </v-row>
           </v-form>
-          <span class="ma-0">* Campos obrigatórios</span>
+          <span class="ma-0 caption">* Campos obrigatórios</span>
           <v-row align="end" justify="end">
             <v-col cols="auto" class="pr-0">
               <Cancelar :dialogs="cancelar" @clicked="close()"></Cancelar>
             </v-col>
             <v-col cols="auto">
-              <v-btn color="#2596be" class="white--text" small :disabled="!valid" @click="registarCliente()"
+              <v-btn
+                color="#2596be"
+                class="white--text"
+                small
+                :disabled="!valid"
+                @click="registarCliente()"
                 >Registar</v-btn
               >
             </v-col>
@@ -153,12 +158,21 @@
         </v-col>
       </v-row>
     </v-container>
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="timeout"
+      :color="color"
+      :top="true"
+      class="headline"
+    >
+      {{ text }}
+    </v-snackbar>
   </div>
 </template>
 
 <script>
 //import moment from 'moment';
-import axios from 'axios';
+import axios from "axios";
 import store from "@/store.js";
 import Cancelar from "@/components/Dialogs/Cancel.vue";
 export default {
@@ -173,6 +187,10 @@ export default {
     concelho: "",
     contacto: "",
     nif: "",
+    snackbar: false,
+    text: "",
+    timeout: -1,
+    color: "",
     emailRules: [
       (value) => !!value || "Insira um endereço eletrónico.",
       (value) => {
@@ -220,28 +238,35 @@ export default {
     registarCliente: async function () {
       if (this.$refs.form.validate()) {
         try {
-          await axios.post("http://localhost:7777/clinica/clientes/registar", {
-            email: this.email,
-            password: "1234",
-            concelho: this.concelho,
-            contacto: this.contacto,
-            freguesia: this.freguesia,
-            morada: this.rua,
-            nif: this.nif,
-            nome: this.nome,
-          },
-          { headers: 
-                { "Authorization": 'Bearer ' + store.getters.token }
-            });
+          await axios.post(
+            "http://localhost:7777/clinica/clientes/registar",
+            {
+              email: this.email,
+              password: "1234",
+              concelho: this.concelho,
+              contacto: this.contacto,
+              freguesia: this.freguesia,
+              morada: this.rua,
+              nif: this.nif,
+              nome: this.nome,
+            },
+            { headers: { Authorization: "Bearer " + store.getters.token } }
+          );
           this.text = "Utilizador criado com sucesso.";
           this.color = "success";
           this.snackbar = true;
           this.$router.push("/clinica/clientes");
-        } catch (e) {
-          console.log("erro: " + e);
-          this.text = "Ocorreu um erro no registo, por favor tente mais tarde!";
-          this.color = "warning";
-          this.snackbar = true;
+        } catch (error) {
+          if (error.response.data == "Email já se encontra registado") {
+            this.text = "Este email já se encontra registado!";
+            this.color = "warning";
+            this.snackbar = true;
+          } else {
+            this.text =
+              "Ocorreu um erro no registo, por favor tente mais tarde!";
+            this.color = "warning";
+            this.snackbar = true;
+          }
         }
       } else {
         this.text = "Por favor preencha todos os campos.";

@@ -401,7 +401,7 @@ export default {
         }
         this.selectedOpen = false;
         this.atualiza();
-        if(estado == 'Cancelada'){
+        if(estado == 'A decorrer'){
           this.text = "Utente admitido com sucesso.",
           this.color = "success" 
         }

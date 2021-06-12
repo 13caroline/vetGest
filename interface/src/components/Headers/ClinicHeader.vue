@@ -57,7 +57,7 @@
           </v-list>
           <template v-slot:append>
             <div class="pa-2">
-              <v-btn text class="caption" @click="preferencias()">
+              <v-btn text class="caption" @click="preferences()">
                 <v-icon left>fas fa-cog</v-icon>Preferências
               </v-btn>
             </div>
@@ -137,10 +137,10 @@ export default {
       }
     },
     toMainPage: function () {
-      this.$router.push("/cliente/inicio");
+      this.$router.push("/clinica/inicio");
     },
     preferences: function () {
-      this.$router.push("/preferencias");
+      this.$router.push("/clinica/preferencias");
     },
     home: function () {
       this.$router.push("/menu");

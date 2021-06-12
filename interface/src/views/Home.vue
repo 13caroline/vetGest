@@ -1,5 +1,5 @@
 <template>
-  <div style="min-height:100vh">
+  <div style="min-height: 100vh">
     <v-app-bar absolute color="#FFFFFF" height="180" flat>
       <v-row>
         <v-col class="d-flex justify-space-around">
@@ -16,7 +16,6 @@
     </v-app-bar>
 
     <v-card height="180" flat></v-card>
-
     <v-tabs
       v-model="tab"
       background-color="transparent"
@@ -32,14 +31,22 @@
       </v-tab-item>
 
       <v-tab-item>
-        <Registar></Registar>
+        <Registar @clicked="cancel" @registado="register"></Registar>
       </v-tab-item>
 
       <v-tab-item>
         <Login></Login>
       </v-tab-item>
     </v-tabs>
-
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="timeout"
+      :color="color"
+      :top="true"
+      class="headline"
+    >
+      {{ text }}
+    </v-snackbar>
     <Footer></Footer>
   </div>
 </template>
@@ -55,6 +62,10 @@ export default {
     return {
       tab: null,
       items: ["Sobre", "Registar", "Iniciar Sessão"],
+      snackbar: false, 
+      timeout: -1, 
+      color: "", 
+      text: "", 
     };
   },
   components: {
@@ -62,6 +73,18 @@ export default {
     Login,
     Registar,
     Footer,
+  },
+  methods: {
+    cancel() {
+      this.tab = 0;
+    },
+    register(value){
+      this.text = value.text; 
+      this.color = value.color; 
+      this.timeout = value.timeout; 
+      this.snackbar = value.snackbar; 
+      this.tab = 0;
+    }
   },
 };
 </script>

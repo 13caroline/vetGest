@@ -15,7 +15,7 @@
                 dense
                 single-line
                 color="black"
-                placeholder="E-mail"
+                placeholder="Email"
                 type="email"
                 name="email"
                 v-model="email"
@@ -71,20 +71,19 @@
               </v-row>
             </v-col>
           </v-card-actions>
-
-         <!-- <v-snackbar
-            v-model="snackbar1"
-            :timeout="timeout"
-            :color="color"
-            :top="true"
-            class="headline"
-          >
-            {{ text }}
-          </v-snackbar>-->
         </v-card>
       </v-row>
     </v-container>
     </v-img>
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="timeout"
+      :color="color"
+      :top="true"
+      class="headline"
+    >
+      {{ text }}
+    </v-snackbar>
   </div>
 </template>
 
@@ -96,6 +95,10 @@ export default {
     return {
       email: "",
       password: "",
+      snackbar: false, 
+      text:"", 
+      timeout: -1,
+      color: "", 
     };
   },
   methods: {
@@ -106,7 +109,6 @@ export default {
             username: this.email,
             password: this.password
           })
-          console.log(res)
           if(res.data.jwt != undefined){
             this.$store.commit("guardaTokenUtilizador",res.data.jwt);
             this.$store.commit("guardaTipoUtilizador",res.data.dtype)
@@ -123,8 +125,22 @@ export default {
             
           }
         }
-        catch(e){
-          console.log(e)
+        catch(error){
+          if (
+            error.response.data ==
+            "Email ou password estão errados"
+          ){
+            this.text = "O email ou palavra-passe introduzidos estão errados."
+            this.color = "error"
+            this.timeout = 4000
+            this.snackbar = true
+          }
+          else {
+            this.text = "Ocorreu um erro. Por favor tente mais tarde!"
+            this.color = "warning"
+            this.timeout = 4000
+            this.snackbar = true
+          }
         }
       }
     }
