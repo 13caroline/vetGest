@@ -17,6 +17,9 @@
             :items="cirurgias"
             class="elevation-1"
             hide-default-footer
+            :page.sync="page"
+            :items-per-page="itemsPerPage"
+            @page-count="pageCount = $event"
           >
             <template v-slot:[`item.estado`]="{ item }">
               <v-chip :color="estadopedido(item.estado)" small>
@@ -51,6 +54,16 @@
               </div>
             </template>
           </v-data-table>
+          <div class="text-center pt-2">
+            <v-pagination
+              v-model="page"
+              :length="pageCount"
+              circle
+              :total-visible="4"
+              color="#2596be"
+              class="custom"
+            ></v-pagination>
+          </div>
         </v-col>
       </v-row>
       <v-dialog v-model="detalhes" width="100%" max-width="700">
@@ -65,11 +78,10 @@
           <v-card-text class="black--text">
             <exemplo></exemplo>
           </v-card-text>
-          
         </v-card>
       </v-dialog>
     </v-container>
-   <!--<v-snackbar
+    <!--<v-snackbar
       v-model="snackbar"
       :timeout="timeout"
       :color="color"
@@ -87,16 +99,19 @@ import exemplo from "@/components/Client/exemploCirurgia.vue";
 import CancelarComDados from "@/components/Dialogs/CancelarComDados.vue";
 import axios from "axios";
 import store from "@/store.js";
-import moment from "moment"
+import moment from "moment";
 
 export default {
   data: () => ({
-        timeout: -1,
+    timeout: -1,
     dados: {},
     dialogs: {},
     cancelar: {
       title: "cirurgia",
     },
+    page: 1,
+    pageCount: 0,
+    itemsPerPage: 8,
     detalhes: false,
     headers: [
       {
@@ -136,33 +151,7 @@ export default {
         align: "center",
       },
     ],
-    cirurgias: [
-      /*
-      {
-        data: "05/04/2021 10:15",
-        medico: "Drº José Vieira",
-        descricao: "Cirurgia",
-        estado: "Concluída",
-      },
-      {
-        data: "19/04/2021 15:30",
-        medico: "Drº José Vieira",
-        descricao: "Cirurgia",
-        estado: "Agendada",
-      },
-      {
-        data: "26/04/2021 14:30",
-        medico: "Drº José Vieira",
-        descricao: "Cirurgia",
-        estado: "Agendada",
-      },
-      {
-        data: "26/04/2021 15:00",
-        medico: "Drº José Vieira",
-        descricao: "Cirurgia",
-        estado: "Agendada",
-      },*/
-    ],
+    cirurgias: [],
   }),
   components: {
     exemplo,
@@ -173,14 +162,13 @@ export default {
       if (estado == "Agendada") return "#C5E1A5";
       if (estado == "A decorrer") return "#FFECB3";
       if (estado == "Concluída") return "#9AE5FF";
-      else return "#EF9A9A"
+      else return "#EF9A9A";
     },
     format(data) {
       return moment(data).locale("pt").format("DD/MM/YYYY");
     },
-    //confirmaImunizacao: async
   },
-   created: async function () {
+  created: async function () {
     try {
       var response = await axios.post(
         "http://localhost:7777/cliente/cirurgias",
@@ -196,7 +184,7 @@ export default {
     } catch (e) {
       console.log("erro: +" + e);
     }
-    console.log(response)
+    console.log(response);
     for (var i = 0; i < response.data.length; i++) {
       this.cirurgias.push({
         data: response.data[i].data,
@@ -205,8 +193,30 @@ export default {
         descricao: response.data[i].descricao,
         estado: response.data[i].estado,
         detalhes: response.data[i].observacoes,
-      })
-    }    
+      });
+    }
   },
 };
 </script>
+
+<style>
+.custom {
+  width: auto;
+  margin-left: auto;
+}
+
+.custom .v-pagination__navigation {
+  height: 26px !important;
+  width: 26px !important;
+}
+
+.custom .v-pagination__navigation .v-icon {
+  font-size: 16px !important;
+}
+
+.custom .v-pagination__item {
+  height: 26px !important;
+  min-width: 26px !important;
+  font-size: 0.85rem !important;
+}
+</style>

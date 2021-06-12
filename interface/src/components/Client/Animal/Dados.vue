@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-color">
+  <div class="dadosback">
     <v-row align="center" class="py-3">
       <v-col>
         <h3 class="font-weight-regular text-uppercase">
@@ -214,6 +214,10 @@ export default {
 </script>
 
 <style scoped>
+.dadosback{
+  background-color: #fafafa;
+}
+
 .foto {
   width: 200px;
 }

@@ -16,8 +16,9 @@
                 dark
                 to="/cliente/registar/animal"
               >
-                <v-icon small class="mr-2">far fa-plus-square</v-icon>
-                Registar Animal
+              Registar Animal
+                <v-icon small class="ml-2">far fa-plus-square</v-icon>
+                
               </v-btn>
             </v-col>
           </v-row>
@@ -90,8 +91,9 @@
                 dark
                 to="/cliente/consultas/agendar"
               >
-                <v-icon small class="mr-2">far fa-calendar-alt</v-icon>
-                Agendar Consulta
+              Agendar Consulta
+                <v-icon small class="ml-2">far fa-calendar-alt</v-icon>
+                
               </v-btn>
             </v-col>
           </v-row>
@@ -102,6 +104,9 @@
             class="elevation-1"
             hide-default-footer
             v-if="consultas.length"
+            :page.sync="page"
+            :items-per-page="itemsPerPage"
+            @page-count="pageCount = $event"
           >
             <template v-slot:[`item.estado`]="{ item }">
               <v-chip :color="estadopedido(item.estado)" small>
@@ -116,10 +121,20 @@
                 :dados="item"
                 @clicked="registar"
               ></CancelarConsulta>
-             
             </template>
           </v-data-table>
           <small v-else> <em> sem consultas agendadas </em></small>
+          <div class="text-center pt-2">
+            <v-pagination
+              v-if="consultas.length"
+              v-model="page"
+              :length="pageCount"
+              circle
+              :total-visible="4"
+              color="#2596be"
+              class="custom"
+            ></v-pagination>
+          </div>
         </v-col>
       </v-row>
     </v-container>
@@ -139,8 +154,14 @@
         </v-sheet>
       </v-carousel-item>
     </v-carousel>
-    <v-snackbar v-model="snackbar" :timeout="timeout" :color="color" :top="true" class="headline">
-      {{text}}
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="timeout"
+      :color="color"
+      :top="true"
+      class="headline"
+    >
+      {{ text }}
     </v-snackbar>
   </div>
 </template>
@@ -152,7 +173,9 @@ import CancelarConsulta from "@/components/Dialogs/CancelarComDados.vue";
 export default {
   data() {
     return {
-
+      page: 1,
+      pageCount: 0,
+      itemsPerPage: 8,
       snackbar: false,
       color: "",
       text: "",
@@ -203,50 +226,50 @@ export default {
     CancelarConsulta,
   },
   methods: {
-    registar(value){
-      this.snackbar=value.snackbar,
-      this.color=value.color,
-      this.text=value.text,
-      this.timeout=value.timeout,
-      this.atualiza()
+    registar(value) {
+      (this.snackbar = value.snackbar),
+        (this.color = value.color),
+        (this.text = value.text),
+        (this.timeout = value.timeout),
+        this.atualiza();
     },
-    atualiza: async function(){
-      this.consultas=[]
+    atualiza: async function () {
+      this.consultas = [];
       let response = await axios.post(
-      "http://localhost:7777/cliente",
-      {
-        email: this.$store.state.email,
-      },
-      {
-        headers: {
-          Authorization: "Bearer " + store.getters.token.toString(),
+        "http://localhost:7777/cliente",
+        {
+          email: this.$store.state.email,
         },
-      }
-    );
-    let response2 = await axios.post(
-      "http://localhost:7777/cliente/intervencoes",
-      {
-        cliente: this.$store.state.email,
-      },
-      {
-        headers: {
-          Authorization: "Bearer " + store.getters.token.toString(),
+        {
+          headers: {
+            Authorization: "Bearer " + store.getters.token.toString(),
+          },
+        }
+      );
+      let response2 = await axios.post(
+        "http://localhost:7777/cliente/intervencoes",
+        {
+          cliente: this.$store.state.email,
         },
+        {
+          headers: {
+            Authorization: "Bearer " + store.getters.token.toString(),
+          },
+        }
+      );
+      for (var i = 0; i < response2.data.length; i++) {
+        this.consultas.push({
+          idConsulta: response2.data[i].id,
+          utente: response2.data[i].animal.nome,
+          veterinario_nome: response2.data[i].veterinario.nome,
+          marcacao: response2.data[i].data + " " + response2.data[i].hora,
+          estado: response2.data[i].estado,
+          descricao: response2.data[i].descricao,
+          motivo: response2.data[i].motivo,
+          animal: response2.data[i].animal,
+        });
       }
-    );
-    for (var i = 0; i < response2.data.length; i++) {
-      this.consultas.push({
-        idConsulta: response2.data[i].id,
-        utente: response2.data[i].animal.nome,
-        veterinario_nome: response2.data[i].veterinario.nome,
-        marcacao: response2.data[i].data +" " + response2.data[i].hora,
-        estado: response2.data[i].estado,
-        descricao: response2.data[i].descricao,
-        motivo: response2.data[i].motivo,
-        animal: response2.data[i].animal,
-      });
-    }
-    this.animals = response.data.cliente.animais;
+      this.animals = response.data.cliente.animais;
     },
     estadopedido(estado) {
       if (estado == "Agendada") return "#C5E1A5";
@@ -258,7 +281,9 @@ export default {
   },
   computed: {
     filteredData() {
-      return this.consultas.filter((item) => item.estado === "Agendada" || item.estado === "Pendente");
+      return this.consultas.filter(
+        (item) => item.estado === "Agendada" || item.estado === "Pendente"
+      );
     },
   },
   created: async function () {
@@ -289,7 +314,7 @@ export default {
         idConsulta: response2.data[i].id,
         utente: response2.data[i].animal.nome,
         veterinario_nome: response2.data[i].veterinario.nome,
-        marcacao: response2.data[i].data +" " + response2.data[i].hora,
+        marcacao: response2.data[i].data + " " + response2.data[i].hora,
         estado: response2.data[i].estado,
         descricao: response2.data[i].descricao,
         motivo: response2.data[i].motivo,
@@ -316,5 +341,27 @@ export default {
 .animal {
   width: 100%;
   max-width: 250px;
+}
+</style>
+
+<style>
+.custom {
+  width: auto;
+  margin-left: auto;
+}
+
+.custom .v-pagination__navigation {
+  height: 26px !important;
+  width: 26px !important;
+}
+
+.custom .v-pagination__navigation .v-icon {
+  font-size: 16px !important;
+}
+
+.custom .v-pagination__item {
+  height: 26px !important;
+  min-width: 26px !important;
+  font-size: 0.85rem !important;
 }
 </style>

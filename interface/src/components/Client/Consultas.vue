@@ -18,8 +18,11 @@
                 dark
                 to="/cliente/consultas/agendar"
               >
-                Agendar Consulta
-                <v-icon class="calendar ml-4">far fa-calendar-check</v-icon>
+              Agendar Consulta
+                <v-icon small class="calendar ml-2"
+                  >far fa-calendar-check</v-icon
+                >
+                
               </v-btn>
             </v-col>
           </v-row>
@@ -29,6 +32,9 @@
             :items="consultas"
             class="elevation-1"
             hide-default-footer
+            :page.sync="page"
+            :items-per-page="itemsPerPage"
+            @page-count="pageCount = $event"
           >
             <template v-slot:[`item.estado`]="{ item }">
               <v-chip :color="estadopedido(item.estado)" small>
@@ -62,6 +68,16 @@
               </div>
             </template>
           </v-data-table>
+          <div class="text-center pt-2">
+            <v-pagination
+              v-model="page"
+              :length="pageCount"
+              circle
+              :total-visible="4"
+              color="#2596be"
+              class="custom"
+            ></v-pagination>
+          </div>
         </v-col>
       </v-row>
 
@@ -107,13 +123,16 @@ export default {
     dialogs: {},
     cancelar: {
       text: "consulta",
-      title: "o agendamento da consulta"
+      title: "o agendamento da consulta",
     },
     snackbar: false,
     color: "",
     done: false,
     timeout: -1,
     text: "",
+    page: 1,
+    pageCount: 0,
+    itemsPerPage: 8,
     headers: [
       {
         text: "Data de Agendamento",
@@ -152,49 +171,48 @@ export default {
         align: "center",
       },
     ],
-    consultas: [
-    ],
+    consultas: [],
     dialog: false,
   }),
   components: {
     CancelarComDados,
   },
   methods: {
-    atualiza: async function(){
-      this.consultas=[]
+    atualiza: async function () {
+      this.consultas = [];
       try {
-      var response = await axios.post(
-        "http://localhost:7777/cliente/consultas",
-        {
-          cliente: this.$store.state.email,
-        },
-        {
-          headers: {
-            Authorization: "Bearer " + store.getters.token.toString(),
+        var response = await axios.post(
+          "http://localhost:7777/cliente/consultas",
+          {
+            cliente: this.$store.state.email,
           },
-        }
-      );
-    } catch (e) {
-      console.log("erro: +" + e);
-    }
-    for (var i = 0; i < response.data.length; i++) {
-      this.consultas.push({
-        idConsulta: response.data[i].id,
-        animal: response.data[i].animal,
-        marcacao: response.data[i].data +" "+response.data[i].hora,
-        utente: response.data[i].animal.nome,
-        veterinario_nome: response.data[i].veterinario.nome,
-        descricao: response.data[i].descricao,
-        estado: response.data[i].estado,
-      })
-    }   
+          {
+            headers: {
+              Authorization: "Bearer " + store.getters.token.toString(),
+            },
+          }
+        );
+      } catch (e) {
+        console.log("erro: +" + e);
+      }
+      for (var i = 0; i < response.data.length; i++) {
+        this.consultas.push({
+          idConsulta: response.data[i].id,
+          animal: response.data[i].animal,
+          marcacao: response.data[i].data + " " + response.data[i].hora,
+          utente: response.data[i].animal.nome,
+          veterinario_nome: response.data[i].veterinario.nome,
+          descricao: response.data[i].descricao,
+          estado: response.data[i].estado,
+        });
+      }
     },
-    registar(value){
-      this.snackbar=value.snackbar
-      this.color=value.color
-      this.text=value.text
-      this.timeout=value.timeout
-      this.atualiza()
+    registar(value) {
+      this.snackbar = value.snackbar;
+      this.color = value.color;
+      this.text = value.text;
+      this.timeout = value.timeout;
+      this.atualiza();
     },
     estadopedido(estado) {
       if (estado == "Agendada") return "#C5E1A5";
@@ -223,19 +241,39 @@ export default {
       this.consultas.push({
         idConsulta: response.data[i].id,
         animal: response.data[i].animal,
-        marcacao: response.data[i].data +" "+response.data[i].hora,
+        marcacao: response.data[i].data + " " + response.data[i].hora,
         utente: response.data[i].animal.nome,
         veterinario_nome: response.data[i].veterinario.nome,
         descricao: response.data[i].descricao,
         estado: response.data[i].estado,
-      })
-    }    
+      });
+    }
   },
 };
 </script>
 
-<style scoped>
+<style>
 .calendar {
   font-size: 16px;
+}
+
+.custom {
+  width: auto;
+  margin-left: auto;
+}
+
+.custom .v-pagination__navigation {
+  height: 26px !important;
+  width: 26px !important;
+}
+
+.custom .v-pagination__navigation .v-icon {
+  font-size: 16px !important;
+}
+
+.custom .v-pagination__item {
+  height: 26px !important;
+  min-width: 26px !important;
+  font-size: 0.85rem !important;
 }
 </style>
