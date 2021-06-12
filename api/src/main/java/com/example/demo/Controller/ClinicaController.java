@@ -266,7 +266,7 @@ public class ClinicaController {
     }
 
     @CrossOrigin
-    @GetMapping("/clinica/intervencoes")
+    @GetMapping("/clinica/intervencoes/pedidos")
     public ResponseEntity<?> getIntervencoesPendentes(){
         List<Intervencao> intervencoes = intervencaoService.findAllByTipoAndEstado("Consulta","Pendente");
 
