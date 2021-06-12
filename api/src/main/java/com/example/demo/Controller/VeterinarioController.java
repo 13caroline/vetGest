@@ -444,7 +444,8 @@ public class VeterinarioController {
     }
 
     @CrossOrigin
-    @PostMapping("/medico/internamento/detalhes")
+    @RequestMapping(value="/medico/internamento/detalhes", method = RequestMethod.POST,produces="application/json")
+    //@PostMapping("/medico/internamento/detalhes", produces="application/json")
     public ResponseEntity<?> getInternamento(@RequestBody String body) throws JsonProcessingException, JSONException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);
@@ -473,7 +474,21 @@ public class VeterinarioController {
             response.put("notasInternamento", notaInternamentos);
              */
             JSONObject response = new JSONObject();
-            response.put("animal",animal);
+            JSONObject animal1 = new JSONObject();
+            animal1.put("id",animal.getId());
+            animal1.put("nome",animal.getNome());
+            animal1.put("raca",animal.getRaca());
+            animal1.put("dataNascimento",animal.getDataNascimento());
+            animal1.put("sexo",animal.getSexo());
+            animal1.put("especie",animal.getEspecie());
+            animal1.put("cor",animal.getCor());
+            animal1.put("cauda",animal.getCauda());
+            animal1.put("pelagem",animal.getPelagem());
+            animal1.put("altura",animal.getAltura());
+            animal1.put("chip",animal.getChip());
+            animal1.put("castracao",animal.isCastracao());
+            animal1.put("observacoes",animal.getObservacoes());
+            response.put("animal",animal1);
             notaInternamentos.forEach(notaInternamento -> {
                 try {
                     JSONObject nota = new JSONObject();
@@ -484,6 +499,7 @@ public class VeterinarioController {
                     e.printStackTrace();
                 }
             });
+
             return ResponseEntity.accepted().body(response.toString());
         }
 
@@ -500,7 +516,7 @@ public class VeterinarioController {
         Animal animal = animalService.getAnimalById(id_animal);
         String vet_email = node.get("email").asText();
         Veterinario vet = veterinarioService.getVetByEmail(vet_email);
-        int id = node.get("id").asInt();
+        int id = node.get("internamentoId").asInt();
         Internamento internamento = internamentoService.findById(id);
 
         if(animal==null || vet == null || internamento == null){
@@ -516,7 +532,7 @@ public class VeterinarioController {
         return ResponseEntity.accepted().body("Nota de Internamento adicionada com sucesso!");
     }
 
-    /*
+
     @CrossOrigin
     @PostMapping("/medico/internamento/alta")
     public ResponseEntity<?> getAlta(@RequestBody String body) throws JsonProcessingException, JSONException {
@@ -526,19 +542,39 @@ public class VeterinarioController {
         Animal animal = animalService.getAnimalById(id_animal);
         String vet_email = node.get("email").asText();
         Veterinario vet = veterinarioService.getVetByEmail(vet_email);
-        int id = node.get("id").asInt();
-        Internamento internamento = internamentoService.findById(id);
+
+        Internamento internamento = internamentoService.findByAnimalIdAndEstado(id_animal, "Internado");
 
         if(animal==null || vet == null || internamento == null){
             return ResponseEntity.badRequest().body("Alguma das Entidades nao existe!");
         }
 
-        NotaInternamento notaInternamento =  mapper.convertValue(node.get("notaInternamento"), NotaInternamento.class);
-        notaInternamento.setInternamento(internamento);
-        internamentoService.saveNota(notaInternamento);
+        System.out.println("\n\nAQUI: Sucesso" + internamento);
+        return ResponseEntity.accepted().body(internamento);
+    }
 
-        System.out.println("\n\nAQUI: Sucesso");
-        return ResponseEntity.accepted().body("Nota de Internamento adicionada com sucesso!");
-    }*/
+    @CrossOrigin
+    @PostMapping("/medico/internamento/alta/confirma")
+    public ResponseEntity<?> registaAlta(@RequestBody String body) throws JsonProcessingException, JSONException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+        int id_animal = node.get("animal").asInt();
+        Animal animal = animalService.getAnimalById(id_animal);
+        String vet_email = node.get("email").asText();
+        Veterinario vet = veterinarioService.getVetByEmail(vet_email);
+        Internamento internamento = internamentoService.findByAnimalIdAndEstado(id_animal, "Internado");
+
+        Alta alta = mapper.convertValue(node.get("alta"), Alta.class);
+
+        if(animal==null || vet == null || internamento == null || alta==null){
+            return ResponseEntity.badRequest().body("Alguma das Entidades nao existe!");
+        }
+
+        internamento.setEstado("Alta");
+        alta.setInternamento(internamento);
+        internamentoService.saveAlta(alta);
+        System.out.println(alta);
+        return ResponseEntity.accepted().body("Alta com Sucesso");
+    }
 }
 

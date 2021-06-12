@@ -447,7 +447,7 @@ public class ClinicaController {
     }
 
     @CrossOrigin
-    @PostMapping("/clinica/internamento/detalhes")
+    @RequestMapping(value="/clinica/internamento/detalhes", method = RequestMethod.POST,produces="application/json")
     public ResponseEntity<?> getInternamentosByAnimal(@RequestBody String body) throws JsonProcessingException, JSONException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);
@@ -460,8 +460,25 @@ public class ClinicaController {
         Internamento internamento = internamentoService.findByAnimalIdAndEstado(id_animal,"Internado");
         List<NotaInternamento> notaInternamentos = internamentoService.findAllByInternamento(internamento);
 
+        System.out.println(notaInternamentos);
+
         JSONObject response = new JSONObject();
-        response.put("animal",animal);
+        JSONObject animal1 = new JSONObject();
+        animal1.put("id",animal.getId());
+        animal1.put("nome",animal.getNome());
+        animal1.put("raca",animal.getRaca());
+        animal1.put("dataNascimento",animal.getDataNascimento());
+        animal1.put("sexo",animal.getSexo());
+        animal1.put("especie",animal.getEspecie());
+        animal1.put("cor",animal.getCor());
+        animal1.put("cauda",animal.getCauda());
+        animal1.put("pelagem",animal.getPelagem());
+        animal1.put("altura",animal.getAltura());
+        animal1.put("chip",animal.getChip());
+        animal1.put("castracao",animal.isCastracao());
+        animal1.put("observacoes",animal.getObservacoes());
+
+        response.put("animal",animal1);
         notaInternamentos.forEach(notaInternamento -> {
             try {
                 JSONObject nota = new JSONObject();
