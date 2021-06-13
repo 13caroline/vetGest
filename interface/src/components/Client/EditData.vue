@@ -256,7 +256,7 @@
             dark
             color="#2596be"
             width="50%"
-            to="/cliente/animal"
+            @click="cancelar()"
           >
             Sim
           </v-btn>
@@ -362,7 +362,7 @@ export default {
           this.text = "Dados editados com sucesso.";
           this.color = "success";
           this.snackbar = true;
-          this.$router.push("/cliente/animal/"+this.id)
+          this.$router.push("/cliente/animal/" + this.id)
         } catch (e) {
           console.log("erro: " + e);
           this.text = "Ocorreu um erro no registo, por favor tente mais tarde!";
@@ -376,7 +376,9 @@ export default {
         this.done = false;
       }
     },
-
+    cancelar(){
+      this.$router.push("/cliente/animal/" + this.id)
+    }
   },
   created: async function () {
     let response = await axios.post(

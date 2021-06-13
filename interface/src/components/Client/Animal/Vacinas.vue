@@ -409,7 +409,6 @@ export default {
       console.log("erro: +" + e);
     }
 
-    if (response.data.length != 0) {
       for (var i = 0; i < response.data.length; i++) {
         if (!response.data[i].veterinario) this.nomeMedico = "Sem Referência";
         else this.nomeMedico = response.data[i].veterinario.nome;
@@ -425,8 +424,7 @@ export default {
           dataToma: response.data[i].data_toma,
         });
       }
-      this.idAnimal = response.data[0].animal.id;
-    }
+      this.idAnimal = this.animal.id;
   },
   components: {
     NovaDesparasitacao,

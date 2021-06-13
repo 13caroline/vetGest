@@ -46,7 +46,7 @@
                     v-on="on"
                     v-bind="attrs"
                   >
-                    fas fa-info-circle
+                     mdi-plus-circle
                   </v-icon>
                 </template>
                 <span class="caption">Ver detalhes</span>
@@ -110,31 +110,31 @@ export default {
     },
     headers: [
       {
-        text: "Data de Agendamento",
+        text: "DATA DE AGENDAMENTO",
         align: "start",
         sortable: true,
         value: "marcacao",
       },
       {
-        text: "Médico Veterinário",
+        text: "MÉDICO VETERINÁRIO",
         value: "veterinario_nome",
         sortable: true,
         align: "start",
       },
       {
-        text: "Descrição",
+        text: "DESCRIÇÃO",
         value: "descricao",
         sortable: true,
         align: "start",
       },
       {
-        text: "Estado",
+        text: "ESTADO",
         value: "estado",
         sortable: true,
         align: "center",
       },
       {
-        text: "Mais detalhes",
+        text: "AÇÕES",
         value: "detalhes",
         sortable: false,
         align: "center",
