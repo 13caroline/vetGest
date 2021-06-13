@@ -1,24 +1,26 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Entity.*;
+import com.example.demo.Security.Utils;
 import com.example.demo.Service.*;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-public class ClinicaController {
+public class ClinicaController<RandomStringUtils, RandomStringGenerator> {
     @Autowired
     private ClinicaService clinicaService;
     @Autowired
@@ -33,6 +35,10 @@ public class ClinicaController {
     private ImunizacaoService imunizacaoService;
     @Autowired
     private InternamentoService internamentoService;
+    @Autowired
+    private MailService mailSender;
+    @Autowired
+    private Utils utils;
 
     @CrossOrigin
     @PostMapping(path = "/clinica/adicionarClinica")
@@ -307,7 +313,14 @@ public class ClinicaController {
         if(existingclient!=null){
             return ResponseEntity.badRequest().body("Email já se encontra registado");
         }
+        String pass = utils.randomString(8);
+        cliente.setPassword(pass);
         clienteService.saveCliente(cliente);
+
+        SimpleMailMessage msg = mailSender.sendEmailregister(cliente.getEmail(),pass,cliente.getNome());
+        JavaMailSender js = mailSender.getJavaMailSender();
+        js.send(msg);
+
         return  ResponseEntity.accepted().body("Cliente Registado com sucesso");
     }
 
@@ -391,10 +404,24 @@ public class ClinicaController {
         if(intervencao==null){
             return ResponseEntity.badRequest().body("Erro a cancelar intervenção! Intervençao nao existe!");
         }
+        String tipo = intervencao.getTipo();
+        String mail = clienteService.findClienteByAnimais(intervencao.getAnimal()).getEmail();
+        String nome = intervencao.getAnimal().getNome();
+
+        if(estado.equals("Cancelada")) {
+            SimpleMailMessage msg = mailSender.sendEmailCancelada(mail,tipo,nome,intervencao.getHora(),intervencao.getData());
+            JavaMailSender js = mailSender.getJavaMailSender();
+            js.send(msg);
+        }
+        else {
+            SimpleMailMessage msg = mailSender.sendEmailConsulta(mail,tipo,nome,intervencao.getHora(),intervencao.getData());
+            JavaMailSender js = mailSender.getJavaMailSender();
+            js.send(msg);
+        }
 
         intervencao.setEstado(estado);
         intervencaoService.saveIntervencao(intervencao);
-        return ResponseEntity.accepted().body("Intervenção cancelada!");
+        return ResponseEntity.accepted().body("Intervenção Alterada!");
     }
 
     @CrossOrigin
