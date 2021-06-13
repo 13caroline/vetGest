@@ -105,6 +105,7 @@
               :close-on-content-click="false"
               :activator="selectedElement"
               offset-x
+              max-width="500px"
             >
               <v-card color="grey lighten-4" max-width="500px" flat>
                 <v-card-text>
@@ -164,10 +165,9 @@
 
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-tooltip top>
+                  <v-tooltip top v-if="selectedEvent.state == 'Pendente'">
                     <template v-slot:activator="{ on, attrs }">
                       <v-icon
-                        v-if="selectedEvent.state == 'Pendente'"
                         color="#28a428"
                         v-bind="attrs"
                         v-on="{ on }"
@@ -178,11 +178,9 @@
                     </template>
                     <span class="caption">Confirmar consulta</span>
                   </v-tooltip>
-
-                  <v-tooltip top>
+                  <v-tooltip top v-if="selectedEvent.state == 'Agendada'">
                     <template v-slot:activator="{ on, attrs }">
                       <v-icon
-                        v-if="selectedEvent.state == 'Agendada'"
                         color="#66BB6A"
                         v-bind="attrs"
                         v-on="{ on }"
@@ -194,13 +192,15 @@
                     <span class="caption">Admitir utente</span>
                   </v-tooltip>
 
-                  <v-tooltip top>
+                  <v-tooltip
+                    top
+                    v-if="
+                      selectedEvent.state == 'Agendada' ||
+                      selectedEvent.state == 'Pendente'
+                    "
+                  >
                     <template v-slot:activator="{ on, attrs }">
                       <v-icon
-                        v-if="
-                          selectedEvent.state == 'Agendada' ||
-                          selectedEvent.state == 'Pendente'
-                        "
                         color="#E57373"
                         v-bind="attrs"
                         v-on="{ on }"
