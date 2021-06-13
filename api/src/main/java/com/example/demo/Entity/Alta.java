@@ -53,10 +53,4 @@ public class Alta {
 
     @OneToOne(cascade = {CascadeType.ALL})
     private Internamento internamento;
-
-    @ManyToOne(cascade = {CascadeType.ALL})
-    private Animal animal;
-
-    @ManyToOne(cascade = {CascadeType.ALL})
-    private Veterinario veterinario;
 }

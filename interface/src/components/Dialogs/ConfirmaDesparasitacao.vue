@@ -104,7 +104,6 @@ export default {
       this.dialog = false;
     },
     confirma: async function () {
-        console.log(this.id);
       try {
         await axios.post(
           "http://localhost:7777/medico/animal/confirma/imunizacao",

@@ -349,7 +349,7 @@ public class VeterinarioController {
         int id_animal = node.get("id").asInt();
         Animal animal = animalService.getAnimalById(id_animal);
 
-        if(animal == null){
+        if(animal == null){ 
             return ResponseEntity.badRequest().body("Animal nao existe");
         }
         Animal animalNew = mapper.convertValue(node.get("animal"),Animal.class);
@@ -584,8 +584,6 @@ public class VeterinarioController {
 
         internamento.setEstado("Alta");
         alta.setInternamento(internamento);
-        alta.setVeterinario(vet);
-        alta.setAnimal(animal);
         internamentoService.saveAlta(alta);
         System.out.println(alta);
         return ResponseEntity.accepted().body("Alta com Sucesso");
