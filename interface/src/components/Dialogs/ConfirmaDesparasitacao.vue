@@ -2,14 +2,7 @@
   <div>
     <v-dialog v-model="dialog" width="100%" max-width="700" persistent>
       <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          v-bind="attrs"
-          v-on="on"
-          small
-          outlined
-          rounded
-          color="#2596be"
-        >
+        <v-btn v-bind="attrs" v-on="on" small outlined rounded color="#2596be">
           Confirmar
         </v-btn>
       </template>
@@ -74,12 +67,7 @@
               <Cancelar :dialogs="cancelar" @clicked="close()"></Cancelar>
             </v-col>
             <v-col cols="auto">
-              <v-btn
-                color="#2596be"
-                small
-                dark
-                @click="confirma()"
-              >
+              <v-btn color="#2596be" small dark @click="confirma()">
                 Confirmar
               </v-btn>
             </v-col>
@@ -91,48 +79,60 @@
 </template>
 
 <script>
-// import axios from 'axios'
-import Cancelar from "@/components/Dialogs/Cancel.vue"
+import axios from "axios";
+import Cancelar from "@/components/Dialogs/Cancel.vue";
+import store from "@/store.js";
 
 export default {
-  props:["dataPrev"],
+  props: ["dataPrev", "id"],
   data: () => ({
-      dialog: false, 
-      dialogs: {},
-      cancelar: {title: "confirmação de desparasitação", text: "a confirmação de desparasitação"},
-      menu4: false, 
-      tratamento: "", 
-      date1: new Date().toISOString().substr(0, 10),
+    dialog: false,
+    dialogs: {},
+    tratamento: "",
+    cancelar: {
+      title: "confirmação de desparasitação",
+      text: "a confirmação de desparasitação",
+    },
+    menu4: false,
+    date1: new Date().toISOString().substr(0, 10),
   }),
   components: {
-      Cancelar
+    Cancelar,
   },
   methods: {
-      close() {
+    close() {
       this.dialog = false;
     },
     confirma: async function () {
-      /*
+        console.log(this.id);
       try {
-          var resposta = await axios.post("http://localhost:7777/cliente/confirmaDesparasitacao", {
-            idVacina: this.idVacina @TODO Adicionar idVacina
-            dataToma: this.dataToma,
+        await axios.post(
+          "http://localhost:7777/medico/animal/confirma/imunizacao",
+          {
+            id: this.id,
+            data: this.date1,
             tratamento: this.tratamento,
-          });
-          console.log(JSON.stringify(resposta.data));
-          this.dialog = false;
-          this.text = "Desparasitação confirmada com sucesso.";
-          this.color = "success";
-          this.snackbar = true;
-        } catch (e) {
-          console.log("erro: " + e);
-          this.dialog = false;
-          this.text = "Ocorreu um erro, por favor tente mais tarde!";
-          this.color = "warning";
-          this.snackbar = true;
-        }
-      */
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + store.getters.token.toString(),
+            },
+          }
+        );
+        this.$emit("clicked", {
+          text: "Desparasitação confirmada com sucesso.",
+          color: "success",
+          snackbar: "true",
+          timeout: 4000,
+        });
+        this.dialog = false;
+      } catch (e) {
+        this.dialog = false;
+        this.text = "Ocorreu um erro, por favor tente mais tarde!";
+        this.color = "warning";
+        this.snackbar = true;
+      }
     },
-  }
-}
+  },
+};
 </script>

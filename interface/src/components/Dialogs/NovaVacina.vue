@@ -47,7 +47,6 @@
               v-model="dateVac"
               @input="menu1 = false"
               locale="pt PT"
-              :min="new Date().toISOString().substr(0, 10)"
             ></v-date-picker>
           </v-menu>
         </div>
@@ -189,11 +188,11 @@ export default {
     adicionaVacina: async function () {
       try {
         await axios.post(
-            // @TODO: Validar backend
           "http://localhost:7777/medico/animal/adiciona/imunizacao",
           {
             animal: this.animal.id,
             imunizacao: {
+              tipo: "Vacina",
               data_toma: this.dateVac,
               observacoes: this.observacoes,
               data: this.dateVac,
@@ -203,7 +202,7 @@ export default {
               proxImunizacao: this.enabled ? this.dateProx : null,
               tratamento: this.tratamento,
             },
-            veterinario: this.$store.state.email,
+            email: this.$store.state.email,
           },
           {
             headers: {
@@ -211,6 +210,22 @@ export default {
             },
           }
         );
+        this.dateVac = new Date().toISOString().substr(0, 10);
+        this.dateProx = new Date().toISOString().substr(0, 10);
+        this.menu1 = false;
+        this.menu = false;
+        this.vaccontra = "";
+        this.vaccontraOutro = "";
+        this.enabled = false;
+        this.tratamento = "";
+        this.observacoes = "";
+        this.$emit("clicked", {
+          text: "Vacina adicionada com sucesso.",
+          color: "success",
+          snackbar: "true",
+          timeout: 4000,
+        });
+        this.dialog = false;
       } catch (e) {
         console.log(e);
       }

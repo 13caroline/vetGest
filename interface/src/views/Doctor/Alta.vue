@@ -1,7 +1,7 @@
 <template>
   <div class="extra-padding" id="page">
     <Header />
-    <Alta />
+    <Alta :id="$route.params.id"/>
     <Footer />
   </div>
 </template>

@@ -147,18 +147,19 @@ export default {
     },
     adicionaDesparasitacao: async function () {
       try {
-        // @TODO: Validar rota backend para medico
         let route =
           store.state.tipo == "Cliente"
             ? "http://localhost:7777/cliente/animal/" + this.dados + "/vacinas"
-            : "http://localhost:7777/cliente/animal/" + this.dados + "/vacinas";
+            : "http://localhost:7777/medico/animal/adiciona/imunizacao";
 
         if (this.proxImunizacao == "1 mês") this.timeskip = 1;
         else this.timeskip = 3;
         await axios.post(
           route,
           {
+            animal: this.dados,
             imunizacao: {
+              tipo: "Desparazitação",
               data_toma: this.dateToma,
               observacoes: this.motivo,
               data: this.dateToma,

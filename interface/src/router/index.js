@@ -234,7 +234,7 @@ const routes = [
   },
   // Criação de alta
   {
-    path: '/medico/internamento/alta',
+    path: '/medico/internamento/alta/:id',
     name: 'Médico Internamento Alta',
     component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/Alta.vue')
   },

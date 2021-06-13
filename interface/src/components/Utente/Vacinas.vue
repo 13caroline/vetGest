@@ -15,7 +15,10 @@
               class="ml-auto pl-0"
               v-if="this.$store.state.tipo == 'Veterinario'"
             >
-              <NovaVacina :animal="animal" @clicked="close()"></NovaVacina>
+              <NovaVacina
+                :animal="animal"
+                @clicked="imunizacao_adicionada"
+              ></NovaVacina>
             </v-col>
             <v-col
               cols="auto"
@@ -24,7 +27,7 @@
             >
               <NovaDesparasitacao
                 :dados="animal.id"
-                @clicked="close()"
+                @clicked="imunizacao_adicionada"
               ></NovaDesparasitacao>
             </v-col>
           </v-row>
@@ -62,13 +65,16 @@
 
               <div
                 v-if="
-                  (item.estado == 'Atualizada' || item.estado == 'Atrasada') &&
+                  (item.estado == 'Atualizada' ||
+                    item.estado == 'Atrasada' ||
+                    item.estado == 'Agendada') &&
                   $store.state.tipo == 'Veterinario'
                 "
               >
                 <ConfirmaDespar
                   :dataPrev="item.dataPrev"
-                  @clicked="close()"
+                  :id="item.id"
+                  @clicked="imunizacao_adicionada"
                 ></ConfirmaDespar>
               </div>
             </template>
@@ -76,6 +82,15 @@
         </v-col>
       </v-row>
     </v-card>
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="timeout"
+      :color="color"
+      :top="true"
+      class="headline"
+    >
+      {{ text }}
+    </v-snackbar>
   </div>
 </template>
 
@@ -166,27 +181,39 @@ export default {
     format(data) {
       if (data) return moment(data).locale("pt").format("DD/MM/YYYY");
     },
-  },
-  created: async function () {
-    let route =
-      this.$store.state.tipo == "Veterinario"
-        ? "http://localhost:7777/medico/imunizacao"
-        : "http://localhost:7777/clinica/imunizacao";
 
-    try {
-      let response = await axios.post(
-        route,
-        {
-          id: this.animal.id,
-        },
-        {
-          headers: { Authorization: "Bearer " + store.getters.token },
-        }
-      );
-      this.items = response.data;
-    } catch (e) {
-      console.log(e);
-    }
+    imunizacao_adicionada(value) {
+      this.snackbar = value.snackbar;
+      this.color = value.color;
+      this.text = value.text;
+      this.timeout = value.timeout;
+      this.loadData();
+    },
+
+    loadData: async function () {
+      let route =
+        this.$store.state.tipo == "Veterinario"
+          ? "http://localhost:7777/medico/imunizacao"
+          : "http://localhost:7777/clinica/imunizacao";
+
+      try {
+        let response = await axios.post(
+          route,
+          {
+            id: this.animal.id,
+          },
+          {
+            headers: { Authorization: "Bearer " + store.getters.token },
+          }
+        );
+        this.items = response.data;
+      } catch (e) {
+        console.log(e);
+      }
+    },
+  },
+  created() {
+    this.loadData();
   },
 };
 </script>

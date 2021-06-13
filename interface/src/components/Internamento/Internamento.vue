@@ -41,6 +41,10 @@
               <span class="ml-1 blue--text">{{ item.cliente }}</span>
             </template>
 
+            <template v-slot:[`item.data`]="{ item }">
+              <span>{{ format(item.data) }}</span>
+            </template>
+
             <template v-slot:[`item.servico`]="{ item }">
               <v-chip :color="servico(item.servico)" small>
                 {{ item.servico }}
@@ -84,6 +88,7 @@
 <script>
 import axios from "axios";
 import store from "@/store.js";
+import moment from "moment";
 
 export default {
   data() {
@@ -134,17 +139,18 @@ export default {
         },
       ],
 
-      agendamentos: [
-      ],
+      agendamentos: [],
     };
   },
   methods: {
+    format(data) {
+      return moment(data).locale("pt").format("DD/MM/YYYY");
+    },
     more(item) {
       this.$router.push("/medico/internamento/detalhes/" + item.animal.id);
     },
     alta(item) {
-      this.$router.push("/medico/internamento/alta");
-      console.log(item);
+      this.$router.push("/medico/internamento/alta/" + item.animal.id);
     },
     servico(item) {
       if (item == "Consulta") return "#B2DFDB";
@@ -154,7 +160,7 @@ export default {
       this.$router.push("/medico/utente/" + item.animal.id);
     },
   },
-  created: async function() {
+  created: async function () {
     this.$store.state.tipo == "Clinica";
     try {
       let response = await axios.post(

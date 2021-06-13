@@ -40,7 +40,7 @@
       </v-row>
 
       <v-row class="w-100">
-        <v-col cols="12" md="6">
+        <v-col>
           <v-card class="h-100 custom">
             <v-card-text
               class="py-0"
@@ -50,8 +50,8 @@
               <v-timeline align-top dense>
                 <v-timeline-item color="#2596be" small>
                   <v-row class="pt-1">
-                    <v-col cols="3">
-                      <strong>{{ nota.data }}</strong>
+                    <v-col cols="3" class="px-0">
+                      <strong>{{ format(nota.data) }}</strong>
                     </v-col>
                     <v-col>
                       <span>{{ nota.descricao }}</span>
@@ -66,7 +66,7 @@
           </v-card>
         </v-col>
 
-        <v-col v-if="this.$store.state.tipo == 'Veterinario'">
+        <v-col cols="12" md="6" v-if="this.$store.state.tipo == 'Veterinario'">
           <v-card class="h-100">
             <v-card-text class="pb-0">
               <v-textarea
@@ -110,28 +110,31 @@ export default {
       notas: [],
     };
   },
-  created: async function () {
-    let route =
-      this.$store.state.tipo == "Clinica"
-        ? "http://localhost:7777/clinica/internamento/detalhes"
-        : "http://localhost:7777/medico/internamento/detalhes";
-    let response = await axios.post(
-      route,
-      {
-        id: this.id,
-      },
-      {
-        headers: { Authorization: "Bearer " + store.getters.token },
-      }
-    );
-    this.animal = response.data.animal;
-    this.notas = Array.isArray(response.data.notas)
-      ? response.data.notas
-      : [response.data.notas];
-  },
   methods: {
     age(data) {
       return moment(data).locale("pt").toNow(true); // 4 years
+    },
+    format(data) {
+      return moment(data).locale("pt").format("DD/MM/YYYY");
+    },
+    loadData: async function () {
+      let route =
+        this.$store.state.tipo == "Clinica"
+          ? "http://localhost:7777/clinica/internamento/detalhes"
+          : "http://localhost:7777/medico/internamento/detalhes";
+      let response = await axios.post(
+        route,
+        {
+          id: this.id,
+        },
+        {
+          headers: { Authorization: "Bearer " + store.getters.token },
+        }
+      );
+      this.animal = response.data.animal;
+      this.notas = Array.isArray(response.data.notas)
+        ? response.data.notas
+        : [response.data.notas];
     },
     adicionarNota: async function () {
       let response = await axios.post(
@@ -148,9 +151,13 @@ export default {
         }
       );
       if (response) {
-        this.created();
+        this.loadData();
+        this.descricao = "";
       }
     },
+  },
+  created() {
+    this.loadData();
   },
 };
 </script>

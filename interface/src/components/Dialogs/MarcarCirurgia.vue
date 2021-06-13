@@ -5,6 +5,7 @@
         <template v-slot:activator="{ on }">
           <v-btn
             color="#2596be"
+            class="mr-2"
             v-bind="attrs"
             v-on="{ ...on, ...diag }"
             small

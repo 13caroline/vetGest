@@ -89,6 +89,10 @@
                 {{ item.estado }}
               </v-chip>
             </template>
+
+            <template v-slot:[`item.data`]="{ item }">
+              {{ item.data + " " + item.hora }}
+            </template>
             <template v-slot:[`item.detalhes`]="{ item }">
               <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
