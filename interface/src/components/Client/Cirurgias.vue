@@ -35,21 +35,36 @@
               <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
                   <v-icon
+                    class="mx-1"
                     v-if="item.estado == 'Concluída'"
                     @click="detalhes = true"
                     small
                     v-on="on"
                     v-bind="attrs"
                   >
-                    fas fa-info-circle
+                    mdi-plus-circle
+                  </v-icon>
+                  <v-icon
+                    class="mx-1"
+                    v-if="item.estado == 'Cancelada' || item.estado == 'A decorrer'"
+                    @click="detalhes = true"
+                    small
+                    v-on="on"
+                    v-bind="attrs"
+                    disabled
+                  >
+                    mdi-plus-circle
                   </v-icon>
                 </template>
                 <span class="caption">Ver detalhes</span>
               </v-tooltip>
-              <div v-if="item.estado == 'Agendada'">
+              <div
+                v-if="item.estado == 'Agendada'"
+              >
                 <CancelarComDados
                   :dialogs="cancelar"
                   :dados="item"
+                  @clicked="registar"
                 ></CancelarComDados>
               </div>
             </template>
@@ -81,7 +96,7 @@
         </v-card>
       </v-dialog>
     </v-container>
-    <!--<v-snackbar
+    <v-snackbar
       v-model="snackbar"
       :timeout="timeout"
       :color="color"
@@ -89,12 +104,11 @@
       class="headline"
     >
       {{ text }}
-    </v-snackbar> -->
+    </v-snackbar>
   </div>
 </template>
 
 <script>
-// import axios from 'axios'
 import exemplo from "@/components/Client/exemploCirurgia.vue";
 import CancelarComDados from "@/components/Dialogs/CancelarComDados.vue";
 import axios from "axios";
@@ -104,10 +118,14 @@ import moment from "moment";
 export default {
   data: () => ({
     timeout: -1,
+    snackbar: false,
+    color: "",
+    text: "", 
     dados: {},
     dialogs: {},
     cancelar: {
-      title: "cirurgia",
+      title: "o agendamento da cirurgia",
+      text: "cirurgia"
     },
     page: 1,
     pageCount: 0,
@@ -115,37 +133,37 @@ export default {
     detalhes: false,
     headers: [
       {
-        text: "Data de Agendamento",
+        text: "DATA DE AGENDAMENTO",
         align: "start",
         sortable: true,
-        value: "data",
+        value: "marcacao",
       },
       {
-        text: "Utente",
-        value: "paciente",
-        sortable: true,
-        align: "start",
-      },
-      {
-        text: "Médico Veterinário",
-        value: "medico",
+        text: "UTENTE",
+        value: "utente",
         sortable: true,
         align: "start",
       },
       {
-        text: "Descrição",
+        text: "MÉDICO VETERINÁRIO",
+        value: "veterinario_nome",
+        sortable: true,
+        align: "start",
+      },
+      {
+        text: "DESCRIÇÃO",
         value: "descricao",
         sortable: true,
         align: "start",
       },
       {
-        text: "Estado",
+        text: "ESTADO",
         value: "estado",
         sortable: true,
         align: "center",
       },
       {
-        text: "Mais detalhes",
+        text: "AÇÕES",
         value: "detalhes",
         sortable: false,
         align: "center",
@@ -160,13 +178,47 @@ export default {
   methods: {
     estadopedido(estado) {
       if (estado == "Agendada") return "#C5E1A5";
-      if (estado == "A decorrer") return "#FFECB3";
-      if (estado == "Concluída") return "#9AE5FF";
-      else return "#EF9A9A";
+      else if (estado == "Cancelada") return "#EF9A9A";
+      else return "#FFECB3";
     },
     format(data) {
       return moment(data).locale("pt").format("DD/MM/YYYY");
     },
+    registar(value) {
+      this.snackbar = value.snackbar;
+      this.color = value.color;
+      this.text = value.text;
+      this.timeout = value.timeout;
+      this.atualiza();
+    },
+    atualiza: async function () {
+    try {
+      var response = await axios.post(
+        "http://localhost:7777/cliente/cirurgias",
+        {
+          cliente: this.$store.state.email,
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + store.getters.token.toString(),
+          },
+        }
+      );
+    } catch (e) {
+      console.log("erro: +" + e);
+    }
+    for (var i = 0; i < response.data.length; i++) {
+      this.cirurgias.push({
+        idConsulta: response.data[i].id,
+          animal: response.data[i].animal,
+          marcacao: response.data[i].data + " " + response.data[i].hora,
+          utente: response.data[i].animal.nome,
+          veterinario_nome: response.data[i].veterinario.nome,
+          descricao: response.data[i].descricao,
+          estado: response.data[i].estado,
+      });
+    }
+  },
   },
   created: async function () {
     try {
@@ -184,15 +236,15 @@ export default {
     } catch (e) {
       console.log("erro: +" + e);
     }
-    console.log(response);
     for (var i = 0; i < response.data.length; i++) {
       this.cirurgias.push({
-        data: response.data[i].data,
-        paciente: response.data[i].animal.nome,
-        medico: response.data[i].veterinario.nome,
-        descricao: response.data[i].descricao,
-        estado: response.data[i].estado,
-        detalhes: response.data[i].observacoes,
+        idConsulta: response.data[i].id,
+          animal: response.data[i].animal,
+          marcacao: response.data[i].data + " " + response.data[i].hora,
+          utente: response.data[i].animal.nome,
+          veterinario_nome: response.data[i].veterinario.nome,
+          descricao: response.data[i].descricao,
+          estado: response.data[i].estado,
       });
     }
   },

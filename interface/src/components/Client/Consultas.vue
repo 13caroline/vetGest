@@ -45,14 +45,23 @@
             <template v-slot:[`item.detalhes`]="{ item }">
               <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
-                  <v-icon
+                   <v-icon
                     v-if="item.estado == 'Concluída'"
                     @click="dialog = true"
                     small
                     v-on="on"
                     v-bind="attrs"
                   >
-                    fas fa-info-circle
+                    mdi-plus-circle
+                  </v-icon>
+                  <v-icon
+                    v-if="item.estado == 'Cancelada' || item.estado == 'A decorrer'"
+                    small
+                    disabled
+                    v-on="on"
+                    v-bind="attrs"
+                  >
+                    mdi-plus-circle
                   </v-icon>
                 </template>
                 <span class="caption">Ver detalhes</span>

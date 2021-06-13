@@ -29,6 +29,9 @@
             :items="consultas"
             class="elevation-1"
             hide-default-footer
+            :page.sync="page"
+            :items-per-page="itemsPerPage"
+            @page-count="pageCount = $event"
           >
             <template v-slot:[`item.estado`]="{ item }">
               <v-chip :color="estadopedido(item.estado)" small>
@@ -46,7 +49,16 @@
                     v-on="on"
                     v-bind="attrs"
                   >
-                    fas fa-info-circle
+                    mdi-plus-circle
+                  </v-icon>
+                  <v-icon
+                    v-if="item.estado == 'Cancelada' || item.estado == 'A decorrer'"
+                    small
+                    disabled
+                    v-on="on"
+                    v-bind="attrs"
+                  >
+                    mdi-plus-circle
                   </v-icon>
                 </template>
                 <span class="caption">Ver detalhes</span>
@@ -62,6 +74,16 @@
               </div>
             </template>
           </v-data-table>
+          <div class="text-center pt-2">
+            <v-pagination
+              v-model="page"
+              :length="pageCount"
+              circle
+              :total-visible="4"
+              color="#2596be"
+              class="custom"
+            ></v-pagination>
+          </div>
         </v-col>
       </v-row>
 
@@ -85,7 +107,7 @@
         </v-card>
       </v-dialog>
 
-      <v-dialog v-model="dialogNova" width="100%" max-width="500">
+      <v-dialog v-model="dialogNova" persistent width="100%" max-width="500">
         <v-card>
           <v-form>
             <v-card-title class="font-weight-regular text-uppercase">
@@ -225,16 +247,13 @@
 
               <v-row align="end" justify="end">
                 <v-col cols="auto">
-                  <v-btn color="#BDBDBD" small dark @click="cancelDialog = true"
-                    >Cancelar</v-btn
-                  >
+                  <Cancelar :dialogs="cancelarC" @clicked="confirma"></Cancelar>
                 </v-col>
                 <v-col cols="auto">
                   <v-btn
                     color="#2596be"
                     small
                     dark
-                    class="ml-3"
                     @click="registaConsulta()"
                     >Registar</v-btn
                   >
@@ -251,6 +270,7 @@
 
 <script>
 import CancelarComDados from "@/components/Dialogs/CancelarComDados.vue";
+import Cancelar from "@/components/Dialogs/Cancel.vue"
 import axios from "axios";
 import store from "@/store.js";
 export default {
@@ -260,6 +280,9 @@ export default {
     snackbar: false,
     color: "",
     done: false,
+    page: 1,
+    pageCount: 0,
+    itemsPerPage: 8,
     motivos: "",
     motivo: [
       "Consulta anual/Vacinação",
@@ -355,23 +378,27 @@ export default {
     consultas: [],
     dialog: false,
     cancelar: {
-      text:"consulta",
-      title:"o agendamento da consulta",
-
+      text: "consulta",
+      title: "o agendamento da consulta",
+    },
+    cancelarC: {
+      text: "o agendamento da consulta",
+      title: "o agendamento da consulta",
     },
     dialogs: {},
-    dados:{},
+    dados: {},
   }),
-  components:{
-    CancelarComDados
+  components: {
+    CancelarComDados,
+    Cancelar
   },
   methods: {
     allowedStep: (m) => m % 15 === 0,
     estadopedido(estado) {
       if (estado == "Agendada") return "#C5E1A5";
       else if (estado == "Cancelada") return "#EF9A9A";
-      else if (estado == "Pendente") return "#FFE082";
-      else return "#9ae5ff";
+      else if (estado == "Pendente") return "#FCCEA2";
+      else return "#FFECB3";
     },
     cancelarConsulta: async function () {
       try {
@@ -429,52 +456,58 @@ export default {
         console.log("erro: +" + e);
       }
     },
-    registar(value){
-      this.snackbar=value.snackbar
-      this.color=value.color
-      this.text=value.text
-      this.timeout=value.timeout
-      this.atualiza()
+    registar(value) {
+      this.snackbar = value.snackbar;
+      this.color = value.color;
+      this.text = value.text;
+      this.timeout = value.timeout;
+      this.atualiza();
     },
-    atualiza: async function(){
-      this.consultas=[]
+    atualiza: async function () {
+      this.consultas = [];
       try {
-      var response = await axios.post(
-        "http://localhost:7777/cliente/animal/consultas",
-        {
-          cliente: this.$store.state.email,
-          animal: this.animal.id,
-        },
-        {
-          headers: {
-            Authorization: "Bearer " + store.getters.token.toString(),
+        var response = await axios.post(
+          "http://localhost:7777/cliente/animal/consultas",
+          {
+            cliente: this.$store.state.email,
+            animal: this.animal.id,
           },
-        }
-      );
-      console.log(response);
-      let response2 = await axios.get("http://localhost:7777/cliente/medicos", {
-        headers: { Authorization: "Bearer " + store.getters.token },
-      });
-      console.log(response2);
-      for (var j = 0; j < response2.data.length; j++)
-        this.medicos.push({
-          nome: response2.data[j].nome,
-          id: response2.data[j].id,
+          {
+            headers: {
+              Authorization: "Bearer " + store.getters.token.toString(),
+            },
+          }
+        );
+        console.log(response);
+        let response2 = await axios.get(
+          "http://localhost:7777/cliente/medicos",
+          {
+            headers: { Authorization: "Bearer " + store.getters.token },
+          }
+        );
+        console.log(response2);
+        for (var j = 0; j < response2.data.length; j++)
+          this.medicos.push({
+            nome: response2.data[j].nome,
+            id: response2.data[j].id,
+          });
+      } catch (e) {
+        console.log("erro: +" + e);
+      }
+      for (var i = 0; i < response.data.length; i++) {
+        this.consultas.push({
+          idConsulta: response.data[i].id,
+          animal: response.data[i].animal,
+          marcacao: response.data[i].data + " " + response.data[i].hora,
+          utente: response.data[i].animal.nome,
+          veterinario_nome: response.data[i].veterinario.nome,
+          descricao: response.data[i].descricao,
+          estado: response.data[i].estado,
         });
-    } catch (e) {
-      console.log("erro: +" + e);
-    }
-    for (var i = 0; i < response.data.length; i++) {
-      this.consultas.push({
-        idConsulta: response.data[i].id,
-        animal: response.data[i].animal,
-        marcacao: response.data[i].data + " " + response.data[i].hora,
-        utente: response.data[i].animal.nome,
-        veterinario_nome: response.data[i].veterinario.nome,
-        descricao: response.data[i].descricao,
-        estado: response.data[i].estado,
-      });
-    }
+      }
+    },
+    confirma(){
+      this.dialogNova = false;
     }
   },
 
@@ -529,5 +562,27 @@ export default {
 <style scoped>
 .calendar {
   font-size: 16px;
+}
+</style>
+
+<style>
+.custom {
+  width: auto;
+  margin-left: auto;
+}
+
+.custom .v-pagination__navigation {
+  height: 26px !important;
+  width: 26px !important;
+}
+
+.custom .v-pagination__navigation .v-icon {
+  font-size: 16px !important;
+}
+
+.custom .v-pagination__item {
+  height: 26px !important;
+  min-width: 26px !important;
+  font-size: 0.85rem !important;
 }
 </style>

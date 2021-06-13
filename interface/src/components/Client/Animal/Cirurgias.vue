@@ -17,6 +17,9 @@
             :items="cirurgias"
             class="elevation-1"
             hide-default-footer
+            :page.sync="page"
+            :items-per-page="itemsPerPage"
+            @page-count="pageCount = $event"
           >
             <template v-slot:[`item.estado`]="{ item }">
               <v-chip :color="estadopedido(item.estado)" small>
@@ -35,28 +38,43 @@
                     v-on="on"
                     v-bind="attrs"
                   >
-                    fas fa-info-circle
+                    mdi-plus-circle
+                  </v-icon>
+                  <v-icon
+                    class="mx-1"
+                    v-if="item.estado == 'Cancelada' || item.estado == 'A decorrer'"
+                    @click="detalhes = true"
+                    small
+                    v-on="on"
+                    v-bind="attrs"
+                    disabled
+                  >
+                    mdi-plus-circle
                   </v-icon>
                 </template>
                 <span class="caption">Ver detalhes</span>
               </v-tooltip>
-              <v-tooltip top>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-icon
-                    class="mx-1"
-                    v-if="item.estado == 'Agendada'"
-                    v-bind="attrs"
-                    v-on="on"
-                    small
-                    @click="cancelar = true"
-                  >
-                    fas fa-calendar-times
-                  </v-icon>
-                </template>
-                <span class="caption">Cancelar cirurgia</span>
-              </v-tooltip>
+              <div
+                v-if="item.estado == 'Agendada'"
+              >
+                <CancelarComDados
+                  :dialogs="cancelar"
+                  :dados="item"
+                  @clicked="registar"
+                ></CancelarComDados>
+              </div>
             </template>
           </v-data-table>
+          <div class="text-center pt-2">
+            <v-pagination
+              v-model="page"
+              :length="pageCount"
+              circle
+              :total-visible="4"
+              color="#2596be"
+              class="custom"
+            ></v-pagination>
+          </div>
         </v-col>
       </v-row>
       <v-dialog v-model="detalhes" width="100%" max-width="700">
@@ -71,76 +89,6 @@
           <v-card-text class="black--text">
             <exemplo></exemplo>
           </v-card-text>
-        </v-card>
-      </v-dialog>
-      <v-dialog v-model="cancelar" persistent width="100%" max-width="460">
-        <v-card>
-          <v-card-title class="cancel"> Cancelar cirurgia </v-card-title>
-          <v-card-text>
-            <v-row class="mt-2">
-              <v-col class="pb-0" align="right" cols="5">
-                <span class="text-uppercase">Nome do Animal</span>
-              </v-col>
-              <v-col class="pl-0 pb-0" cols="7">
-                <span class="black--text">
-                  <strong>Rubi</strong>
-                  (Serra da Estrela)
-                </span>
-              </v-col>
-
-              <v-col class="pb-0" align="right" cols="5">
-                <span class="text-uppercase">Motivo da Cirurgia</span>
-              </v-col>
-              <v-col class="pl-0 pb-0" cols="7">
-                <span class="black--text">
-                  <strong>Castração</strong>
-                </span>
-              </v-col>
-
-              <v-col class="pb-0" align="right" cols="5">
-                <span class="text-uppercase">Data</span>
-              </v-col>
-              <v-col class="pl-0 pb-0" cols="7">
-                <span class="black--text">
-                  <strong>19/04/2021 15:30</strong>
-                </span>
-              </v-col>
-
-              <v-col class="pb-0" align="right" cols="5">
-                <span class="text-uppercase">Médico</span>
-              </v-col>
-              <v-col class="pl-0 pb-0" cols="7">
-                <span class="black--text">
-                  <strong>Drº José Vieira</strong>
-                </span>
-              </v-col>
-            </v-row>
-
-            <p class="mt-12">Tem a certeza que pretende cancelar a cirurgia?</p>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn
-              depressed
-              large
-              width="50%"
-              dark
-              color="#BDBDBD"
-              @click="cancelar = false"
-            >
-              Não
-            </v-btn>
-            <v-btn
-              depressed
-              large
-              dark
-              color="#2596be"
-              width="50%"
-              @click="cancelar()"
-            >
-              Sim
-            </v-btn>
-          </v-card-actions>
         </v-card>
       </v-dialog>
 
@@ -337,6 +285,7 @@
 
 <script>
 // import axios from 'axios'
+import CancelarComDados from "@/components/Dialogs/CancelarComDados.vue"
 import exemplo from "@/components/Client/exemploCirurgia.vue";
 import axios from "axios";
 import store from "@/store.js";
@@ -345,7 +294,15 @@ export default {
     cancelDialog: false,
     dialog: false,
     detalhes: false,
-    cancelar: false,
+    cancelar: {
+      text: "cirurgia",
+      title: "o agendamento da cirurgia",
+    },
+    dialogs: {},
+    dados: {},
+    page: 1,
+    pageCount: 0,
+    itemsPerPage: 8,
     motivo: [
       "Consulta anual/Vacinação",
       "Consulta extraordinária/Por doença",
@@ -398,31 +355,31 @@ export default {
     ],
     headers: [
       {
-        text: "Data de Agendamento",
+        text: "DATA DE AGENDAMENTO",
         align: "start",
         sortable: true,
-        value: "data",
+        value: "marcacao",
       },
       {
-        text: "Médico Veterinário",
-        value: "medico",
+        text: "MÉDICO VETERINÁRIO",
+        value: "veterinario_nome",
         sortable: true,
         align: "start",
       },
       {
-        text: "Descrição",
+        text: "DESCRIÇÃO",
         value: "descricao",
         sortable: true,
         align: "start",
       },
       {
-        text: "Estado",
+        text: "ESTADO",
         value: "estado",
         sortable: true,
         align: "center",
       },
       {
-        text: "Mais detalhes",
+        text: "AÇÕES",
         value: "detalhes",
         sortable: false,
         align: "center",
@@ -440,12 +397,21 @@ export default {
   }),
   components: {
     exemplo,
+    CancelarComDados
   },
   methods: {
     allowedStep: (m) => m % 15 === 0,
     estadopedido(estado) {
       if (estado == "Agendada") return "#C5E1A5";
-      else return "#FFE082";
+      else if (estado == "Cancelada") return "#EF9A9A";
+      else return "#FFECB3";
+    },
+    registar(value) {
+      this.snackbar = value.snackbar;
+      this.color = value.color;
+      this.text = value.text;
+      this.timeout = value.timeout;
+      this.atualiza();
     },
     more(item) {
       console.log(item.data);
@@ -490,11 +456,13 @@ export default {
 
     for (var i = 0; i < response.data.length; i++) {
       this.cirurgias.push({
-        data: response.data[i].data,
-        animal: response.data[i].animal.nome,
-        medico: response.data[i].veterinario.nome,
-        descricao: response.data[i].descricao,
-        estado: response.data[i].estado,
+          idConsulta: response.data[i].id,
+          animal: response.data[i].animal,
+          marcacao: response.data[i].data + " " + response.data[i].hora,
+          utente: response.data[i].animal.nome,
+          veterinario_nome: response.data[i].veterinario.nome,
+          descricao: response.data[i].descricao,
+          estado: response.data[i].estado,
       });
     }
   },
@@ -506,3 +474,25 @@ export default {
   },
 };
 </script>
+
+<style>
+.custom {
+  width: auto;
+  margin-left: auto;
+}
+
+.custom .v-pagination__navigation {
+  height: 26px !important;
+  width: 26px !important;
+}
+
+.custom .v-pagination__navigation .v-icon {
+  font-size: 16px !important;
+}
+
+.custom .v-pagination__item {
+  height: 26px !important;
+  min-width: 26px !important;
+  font-size: 0.85rem !important;
+}
+</style>
