@@ -124,11 +124,7 @@ export default {
       title: "o agendamento da consulta",
       text: "consulta",
     },
-    snackbar: false,
-    color: "",
     done: false,
-    timeout: -1,
-    text: "",
     headers: [
       {
         text: "Data de Agendamento",

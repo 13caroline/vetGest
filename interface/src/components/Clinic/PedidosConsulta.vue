@@ -225,13 +225,13 @@ export default {
             headers: { Authorization: "Bearer " + store.getters.token },
           }
         );
+        this.atualiza();
         this.$snackbar.showMessage({
           show: true,
           color: "success",
           text: "Consulta confirmada com sucesso",
           timeout: 4000,
         });
-        this.atualiza();
       } catch (e) {
         this.$snackbar.showMessage({
           show: true,
@@ -253,14 +253,13 @@ export default {
             headers: { Authorization: "Bearer " + store.getters.token },
           }
         );
-
+        this.atualiza();
         this.$snackbar.showMessage({
           show: true,
           color: "success",
           text: "Consulta cancelada com sucesso",
           timeout: 4000,
         });
-        this.atualiza();
       } catch (e) {
         this.$snackbar.showMessage({
           show: true,
@@ -290,7 +289,6 @@ export default {
       this.nome = item.animal.nome;
       this.raca = item.animal.raca;
       this.veterinario = item.veterinario.nome;
-      console.log(this.dados);
       this.dialog = true;
     },
   },

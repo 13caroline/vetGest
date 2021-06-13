@@ -4,14 +4,14 @@
       <v-card flat color="#fafafa">
         <h3 class="pa-3">Dados de Acesso</h3>
         <v-divider></v-divider>
-<v-form ref="form" lazy-validation class="form">
-        <v-row class="w-100" align="start">
-          <v-col>
-            <v-card class="h-100 mt-5" outlined>
-              <v-list-item>
-                <v-list-item-content>
-                  <div>
-                    Email
+        <v-form ref="form" lazy-validation class="form">
+          <v-row class="w-100" align="start">
+            <v-col>
+              <v-card class="h-100 mt-5" outlined>
+                <v-list-item>
+                  <v-list-item-content>
+                    <div>
+                      Email
                       <v-col>
                         <v-text-field
                           outlined
@@ -20,8 +20,8 @@
                           disabled
                         ></v-text-field>
                       </v-col>
-                  </div>
-                  <div>
+                    </div>
+                    <div>
                       <v-col>
                         <v-text-field
                           type="password"
@@ -31,36 +31,36 @@
                           v-model="utilizador.password"
                         ></v-text-field>
                       </v-col>
-                  </div>
-                  <div></div>
-                </v-list-item-content>
-              </v-list-item>
-            </v-card>
-          </v-col>
-        </v-row>
+                    </div>
+                    <div></div>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-card>
+            </v-col>
+          </v-row>
 
-        <h3 class="pa-3">Dados Pessoais</h3>
-        <v-divider></v-divider>
-        <v-row class="w-100" align="start">
-          <v-col>
-            <v-card class="h-100 mt-5" outlined>
-              <v-list-item>
-                <v-list-item-content>
-                  <div>
+          <h3 class="pa-3">Dados Pessoais</h3>
+          <v-divider></v-divider>
+          <v-row class="w-100" align="start">
+            <v-col>
+              <v-card class="h-100 mt-5" outlined>
+                <v-list-item>
+                  <v-list-item-content>
+                    <div>
                       <v-text-field
                         outlined
                         dense
                         v-model="utilizador.nome"
                       ></v-text-field>
-                  </div>
-                  <div>
+                    </div>
+                    <div>
                       <v-text-field
                         outlined
                         dense
                         v-model="utilizador.morada"
                       ></v-text-field>
-                  </div>
-                  <div>
+                    </div>
+                    <div>
                       <v-text-field
                         outlined
                         dense
@@ -71,54 +71,53 @@
                         dense
                         v-model="utilizador.concelho"
                       ></v-text-field>
-                  </div>
-                </v-list-item-content>
-              </v-list-item>
-            </v-card>
-          </v-col>
-        </v-row>
+                    </div>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-card>
+            </v-col>
+          </v-row>
 
-        <h3 class="pa-3">Dados de Contacto</h3>
-        <v-divider></v-divider>
-        <v-row class="w-100" align="start">
-          <v-col>
-            <v-card class="h-100 mt-5" outlined>
-              <v-list-item>
-                <v-list-item-content>
-                  <div>
-                    
+          <h3 class="pa-3">Dados de Contacto</h3>
+          <v-divider></v-divider>
+          <v-row class="w-100" align="start">
+            <v-col>
+              <v-card class="h-100 mt-5" outlined>
+                <v-list-item>
+                  <v-list-item-content>
+                    <div>
                       <v-text-field
                         outlined
                         dense
                         v-model="utilizador.contacto"
                       ></v-text-field>
-                  </div>
-                  <div>
+                    </div>
+                    <div>
                       <v-text-field
                         outlined
                         disabled
                         dense
                         v-model="utilizador.nif"
                       ></v-text-field>
-                  </div>
-                  <div></div>
-                </v-list-item-content>
-              </v-list-item>
-            </v-card>
-          </v-col>
-        </v-row>
-</v-form>
-      </v-card>
-      <v-row align="end" justify="end">
-            <v-col cols="auto">
-              <!-- <Cancelar :dialogs="cancelar" @clicked="close()"></Cancelar> -->
-            </v-col>
-            <v-col cols="auto">
-              <v-btn color="#2596be" small dark @click="editarDados()"
-                >Registar</v-btn
-              >
+                    </div>
+                    <div></div>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-card>
             </v-col>
           </v-row>
+        </v-form>
+      </v-card>
+      <v-row align="end" justify="end">
+        <v-col cols="auto">
+          <!-- <Cancelar :dialogs="cancelar" @clicked="close()"></Cancelar> -->
+        </v-col>
+        <v-col cols="auto">
+          <v-btn color="#2596be" small dark @click="editarDados()"
+            >Registar</v-btn
+          >
+        </v-col>
+      </v-row>
     </v-container>
   </div>
 </template>
@@ -130,7 +129,6 @@ import store from "@/store.js";
 export default {
   props: ["animal"],
   data: () => ({
- 
     utilizador: {},
   }),
   methods: {
@@ -144,40 +142,46 @@ export default {
           await axios.post(
             "http://localhost:7777/cliente/preferencias",
             {
-
-                email: store.state.email,
-                nome: this.utilizador.nome,
-                morada: this.utilizador.morada,
-                concelho: this.utilizador.concelho,
-                freguesia: this.utilizador.freguesia,
-                contacto: this.utilizador.contacto,
-                password:this.utilizador.password,
-
+              email: store.state.email,
+              nome: this.utilizador.nome,
+              morada: this.utilizador.morada,
+              concelho: this.utilizador.concelho,
+              freguesia: this.utilizador.freguesia,
+              contacto: this.utilizador.contacto,
+              password: this.utilizador.password,
             },
-             {
-        headers: {
-          Authorization: "Bearer " + store.getters.token.toString(),
-        },
-      }
+            {
+              headers: {
+                Authorization: "Bearer " + store.getters.token.toString(),
+              },
+            }
           );
-          this.text = "Dados editados com sucesso.";
-          this.color = "success";
-          this.snackbar = true;
-          this.$router.push("/cliente/preferencias/")
+          this.$router.push("/cliente/preferencias/");
+          this.$snackbar.showMessage({
+            show: true,
+            color: "success",
+            text: "Dados editados com sucesso.",
+            timeout: 4000,
+          });
         } catch (e) {
           console.log("erro: " + e);
-          this.text = "Ocorreu um erro no registo, por favor tente mais tarde!";
-          this.color = "warning";
-          this.snackbar = true;
+          this.$snackbar.showMessage({
+            show: true,
+            color: "warning",
+            text: "Ocorreu um erro no registo, por favor tente mais tarde!",
+            timeout: 4000,
+          });
         }
       } else {
-        this.text = "Por favor preencha todos os campos.";
-        this.color = "error";
-        this.snackbar = true;
         this.done = false;
+        this.$snackbar.showMessage({
+          show: true,
+          color: "error",
+          text: "Por favor preencha todos os campos.",
+          timeout: 4000,
+        });
       }
     },
-
   },
 
   created: async function () {
@@ -192,9 +196,8 @@ export default {
         },
       }
     );
-    
+
     this.utilizador = response.data;
-    console.log(this.utilizador);
   },
 };
 </script>

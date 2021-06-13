@@ -165,21 +165,30 @@ export default {
               },
             }
           );
-          this.text = "Dados editados com sucesso.";
-          this.color = "success";
-          this.snackbar = true;
           this.$router.push("/clinica/preferencias/");
+          this.$snackbar.showMessage({
+            show: true,
+            color: "success",
+            text: "Dados editados com sucesso.",
+            timeout: 4000,
+          });
         } catch (e) {
           console.log("erro: " + e);
-          this.text = "Ocorreu um erro no registo, por favor tente mais tarde!";
-          this.color = "warning";
-          this.snackbar = true;
+          this.$snackbar.showMessage({
+            show: true,
+            color: "warning",
+            text: "Ocorreu um erro no registo, por favor tente mais tarde!",
+            timeout: 4000,
+          });
         }
       } else {
-        this.text = "Por favor preencha todos os campos.";
-        this.color = "error";
-        this.snackbar = true;
         this.done = false;
+        this.$snackbar.showMessage({
+          show: true,
+          color: "error",
+          text: "Por favor preencha todos os campos.",
+          timeout: 4000,
+        });
       }
     },
     close() {

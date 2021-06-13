@@ -333,7 +333,6 @@ export default {
     },
     openDialog(item) {
       this.dataPrevista = item.dataPrevista;
-      console.log(item.id);
       this.id = item.id;
       this.dialog = true;
     },
@@ -373,7 +372,6 @@ export default {
       } catch (e) {
         console.log("erro: " + e);
         this.dialog = false;
-
         this.$snackbar.showMessage({
           show: true,
           color: "warning",

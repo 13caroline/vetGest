@@ -364,10 +364,12 @@ export default {
     },
     registar(value) {
       this.atualiza();
-      this.snackbar = value.snackbar;
-      this.color = value.color;
-      this.text = value.text;
-      this.timeout = value.timeout;
+      this.$snackbar.showMessage({
+        show: true,
+        color: value.color,
+        text: value.text,
+        timeout: 4000,
+      });
     },
     format(data) {
       return moment(data).locale("pt").format("DD/MM/YYYY HH:mm");
