@@ -102,6 +102,7 @@
                     v-bind="attrs"
                     v-on="on"
                     small
+                    @click="conclude(item)"
                     :disabled="item.estado != 'A decorrer'"
                   >
                     mdi-clipboard-check-outline
@@ -446,22 +447,21 @@ export default {
           align: "start",
         },
       ],
-
       agendamentos: [],
     };
   },
   methods: {
     conclude(item) {
-      this.concluir = true;
       this.details_item = item;
+      this.concluir = true;
     },
     cancela(item) {
-      this.cancelar = true;
       this.details_item = item;
+      this.cancelar = true;
     },
     abrirInternamento(item) {
-      this.internamento = true;
       this.details_item = item;
+      this.internamento = true;
     },
     estado(item) {
       if (item == "Agendada") return "#C5E1A5";
@@ -521,8 +521,33 @@ export default {
         if (res) {
           this.cancelar = false;
           this.concluir = false;
-          this.created();
+          this.$snackbar.showMessage({
+            show: true,
+            color: "success",
+            text: "Intervenção terminada com sucesso.",
+            timeout: 4000,
+          });
+          this.atualiza();
         }
+      } catch (e) {
+        this.$snackbar.showMessage({
+          show: true,
+          color: "error",
+          text: "Ocorreu um erro. Por favor tente mais tarde!",
+          timeout: 4000,
+        });
+      }
+    },
+    atualiza: async function () {
+      try {
+        let response = await axios.post(
+          "http://localhost:7777/medico/intervencoes",
+          { email: this.$store.state.email },
+          {
+            headers: { Authorization: "Bearer " + store.getters.token },
+          }
+        );
+        if (typeof response.data == "object") this.agendamentos = response.data;
       } catch (e) {
         this.$snackbar.showMessage({
           show: true,

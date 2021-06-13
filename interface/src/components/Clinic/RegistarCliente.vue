@@ -229,7 +229,6 @@ export default {
             "http://localhost:7777/clinica/clientes/registar",
             {
               email: this.email,
-              password: "1234",
               concelho: this.concelho,
               contacto: this.contacto,
               freguesia: this.freguesia,
@@ -239,16 +238,12 @@ export default {
             },
             { headers: { Authorization: "Bearer " + store.getters.token } }
           );
-          this.text = "Utilizador criado com sucesso.";
-          this.color = "success";
-
           this.$snackbar.showMessage({
             show: true,
-            color: "warning",
-            text: "Ocorreu um erro, por favor tente mais tarde!",
+            color: "success",
+            text: "Utilizador criado com sucesso.",
             timeout: 4000,
           });
-
           this.$router.push("/clinica/clientes");
         } catch (error) {
           if (error.response.data == "Email já se encontra registado") {
