@@ -15,14 +15,17 @@
               class="ml-auto pl-0"
               v-if="this.$store.state.tipo == 'Veterinario'"
             >
-              <NovaVacina @clicked="close()"></NovaVacina>
+              <NovaVacina :animal="animal" @clicked="close()"></NovaVacina>
             </v-col>
             <v-col
               cols="auto"
               class="pl-0"
               v-if="this.$store.state.tipo == 'Veterinario'"
             >
-              <NovaDesparasitacao @clicked="close()"></NovaDesparasitacao>
+              <NovaDesparasitacao
+                :dados="animal.id"
+                @clicked="close()"
+              ></NovaDesparasitacao>
             </v-col>
           </v-row>
 
@@ -82,7 +85,7 @@ import ConfirmaDespar from "@/components/Dialogs/ConfirmaDesparasitacao.vue";
 import NovaVacina from "@/components/Dialogs/NovaVacina.vue";
 import NovaDesparasitacao from "@/components/Dialogs/NovaDesparasitacao.vue";
 import moment from "moment";
-import store from "@/store.js"
+import store from "@/store.js";
 export default {
   props: ["animal"],
   data: () => ({
@@ -165,7 +168,10 @@ export default {
     },
   },
   created: async function () {
-    let route = this.$store.state.tipo == 'Veterinario' ? "http://localhost:7777/medico/imunizacao" : "http://localhost:7777/clinica/imunizacao";
+    let route =
+      this.$store.state.tipo == "Veterinario"
+        ? "http://localhost:7777/medico/imunizacao"
+        : "http://localhost:7777/clinica/imunizacao";
 
     try {
       let response = await axios.post(

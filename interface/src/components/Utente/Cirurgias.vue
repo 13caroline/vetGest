@@ -11,7 +11,10 @@
               </h3>
             </v-col>
             <v-col cols="auto">
-              <MarcarCirurgia :dados="animal" @clicked="registar"></MarcarCirurgia>
+              <MarcarCirurgia
+                :dados="animal"
+                @clicked="registar"
+              ></MarcarCirurgia>
             </v-col>
           </v-row>
 
@@ -21,10 +24,9 @@
             class="elevation-1"
             hide-default-footer
             no-data-text="Não existe histórico de cirurgias."
-          no-results-text="Não foram encontrados resultados."
+            no-results-text="Não foram encontrados resultados."
           >
-
-          <template v-slot:[`item.marcacao`]="{ item }">
+            <template v-slot:[`item.marcacao`]="{ item }">
               {{ format(item.marcacao) }}
             </template>
 
@@ -46,7 +48,7 @@
                     v-on="on"
                     v-bind="attrs"
                   >
-                     mdi-plus-circle
+                    mdi-plus-circle
                   </v-icon>
                 </template>
                 <span class="caption">Ver detalhes</span>
@@ -175,28 +177,12 @@ export default {
     },
     atualiza: async function () {
       this.cirurgias = [];
+      let route =
+        store.state.tipo == "Clinica"
+          ? "http://localhost:7777/clinica/intervencao"
+          : "http://localhost:7777/medico/intervencao";
       let response = await axios.post(
-        "http://localhost:7777/clinica/intervencao",
-        {
-          id: this.animal.id,
-        }, 
-        {
-          headers: { Authorization: "Bearer " + store.getters.token },
-        }
-      );
-      for (var i = 0; i < response.data.length; i++) {
-        var element = response.data[i];
-        element.veterinario_nome = response.data[i].veterinario.nome;
-        element.utente = response.data[i].animal.nome;
-        element.marcacao = response.data[i].data + " " + response.data[i].hora;
-        this.cirurgias.push(element);
-      }
-    },
-  },
-  created: async function () {
-     if (store.state.tipo == "Clinica") {
-      let response = await axios.post(
-        "http://localhost:7777/clinica/intervencao",
+        route,
         {
           id: this.animal.id,
         },
@@ -211,12 +197,34 @@ export default {
         element.marcacao = response.data[i].data + " " + response.data[i].hora;
         this.cirurgias.push(element);
       }
-     }
     },
-    computed: {
-      filteredData() {
-        return this.cirurgias.filter((item) => item.tipo === "Cirurgia");
+  },
+  created: async function () {
+    let route =
+      store.state.tipo == "Clinica"
+        ? "http://localhost:7777/clinica/intervencao"
+        : "http://localhost:7777/medico/intervencao";
+    let response = await axios.post(
+      route,
+      {
+        id: this.animal.id,
       },
+      {
+        headers: { Authorization: "Bearer " + store.getters.token },
+      }
+    );
+    for (var i = 0; i < response.data.length; i++) {
+      var element = response.data[i];
+      element.veterinario_nome = response.data[i].veterinario.nome;
+      element.utente = response.data[i].animal.nome;
+      element.marcacao = response.data[i].data + " " + response.data[i].hora;
+      this.cirurgias.push(element);
+    }
+  },
+  computed: {
+    filteredData() {
+      return this.cirurgias.filter((item) => item.tipo === "Cirurgia");
     },
+  },
 };
 </script>

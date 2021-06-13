@@ -26,6 +26,9 @@
         :search="search"
         class="elevation-1"
         hide-default-footer
+        :page.sync="page"
+        :items-per-page="itemsPerPage"
+        @page-count="pageCount = $event"
       >
         <template v-slot:[`item.detalhes`]="{ item }">
           <v-tooltip right>
@@ -38,6 +41,16 @@
           </v-tooltip>
         </template>
       </v-data-table>
+      <div class="text-center pt-2">
+        <v-pagination
+          v-model="page"
+          :length="pageCount"
+          circle
+          :total-visible="4"
+          color="#2596be"
+          class="custom"
+        ></v-pagination>
+      </div>
     </v-container>
 
     <Footer class="mt-auto" />
@@ -54,6 +67,9 @@ export default {
   data() {
     return {
       search: "",
+      page: 1,
+      pageCount: 0,
+      itemsPerPage: 8,
       headers: [
         {
           text: "UTENTE",
@@ -107,12 +123,9 @@ export default {
   },
   created: async function () {
     try {
-      let response = await axios.get(
-        "http://localhost:7777/medico/utentes",
-        {
-          headers: { Authorization: "Bearer " + store.getters.token },
-        }
-      );
+      let response = await axios.get("http://localhost:7777/medico/utentes", {
+        headers: { Authorization: "Bearer " + store.getters.token },
+      });
       console.log(response);
       this.utentes = response.data.utentes.map((ut) => {
         return ut.animal;

@@ -140,7 +140,7 @@ export default {
   },
   methods: {
     more(item) {
-      this.$router.push("/medico/internamento/detalhes/" + item.id);
+      this.$router.push("/medico/internamento/detalhes/" + item.animal.id);
     },
     alta(item) {
       this.$router.push("/medico/internamento/alta");

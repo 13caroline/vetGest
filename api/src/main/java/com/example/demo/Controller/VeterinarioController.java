@@ -44,6 +44,22 @@ public class VeterinarioController {
         List<Intervencao> intervencoes = intervencaoService.findAllByVeterinarioIdAndEstadoOrEstado(veterinario.getId(),"Agendada", "A decorrer");
         return  ResponseEntity.accepted().body(intervencoes);
     }
+    
+    @CrossOrigin
+    @PostMapping("/medico/intervencao")
+    public ResponseEntity<?> getIntervencao(@RequestBody String body) throws JSONException, JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+        Animal a = animalService.getAnimalById(node.get("id").asInt());
+        if(a==null){
+            return ResponseEntity.badRequest().body("Utente não encontrado!");
+        }
+        List<Intervencao> intervencoes = intervencaoService.getIntervencoesAnimal(a.getId());
+        if(intervencoes.size()==0){
+            return ResponseEntity.badRequest().body("Não foi possível obter intervencões!");
+        }
+        return  ResponseEntity.accepted().body(intervencoes);
+    }
 
     @CrossOrigin
     @PostMapping("/medico/agendar/intervencao")

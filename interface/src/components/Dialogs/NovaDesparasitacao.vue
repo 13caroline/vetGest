@@ -18,7 +18,7 @@
           </v-btn>
           <v-btn
             v-else
-            class="body-2"
+            class="body-2 mr-2"
             small
             v-bind="attrs"
             fab
@@ -27,7 +27,7 @@
             dark
             @click="dialog = true"
           >
-            <v-icon small class="ml-4">fas fa-spider</v-icon>
+            <v-icon small>fas fa-spider</v-icon>
           </v-btn>
         </template>
         <span class="caption">Adicionar desparasitação</span>
@@ -121,7 +121,7 @@ import store from "@/store.js";
 import moment from "moment";
 
 export default {
-  props: ["dados"],
+  props: ["dados"], // id animal
   data: () => ({
     dialog: false,
     dialogs: {},
@@ -147,31 +147,35 @@ export default {
     },
     adicionaDesparasitacao: async function () {
       try {
-        if (store.state.tipo == "Cliente") {
-          if (this.proxImunizacao == "1 mês") this.timeskip = 1;
-          else this.timeskip = 3;
-          await axios.post(
-            "http://localhost:7777/cliente/animal/" + this.dados + "/vacinas",
-            {
-              imunizacao: {
-                data_toma: this.dateToma,
-                observacoes: this.motivo,
-                data: this.dateToma,
+        // @TODO: Validar rota backend para medico
+        let route =
+          store.state.tipo == "Cliente"
+            ? "http://localhost:7777/cliente/animal/" + this.dados + "/vacinas"
+            : "http://localhost:7777/cliente/animal/" + this.dados + "/vacinas";
 
-                proxImunizacao: moment(this.data)
-                  .add(this.timeskip, "months")
-                  .format("YYYY-MM-DD"),
-                tratamento: this.tratamento,
-              },
-              email: this.$store.state.email,
+        if (this.proxImunizacao == "1 mês") this.timeskip = 1;
+        else this.timeskip = 3;
+        await axios.post(
+          route,
+          {
+            imunizacao: {
+              data_toma: this.dateToma,
+              observacoes: this.motivo,
+              data: this.dateToma,
+
+              proxImunizacao: moment(this.data)
+                .add(this.timeskip, "months")
+                .format("YYYY-MM-DD"),
+              tratamento: this.tratamento,
             },
-            {
-              headers: {
-                Authorization: "Bearer " + store.getters.token.toString(),
-              },
-            }
-          );
-        }
+            email: this.$store.state.email,
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + store.getters.token.toString(),
+            },
+          }
+        );
         this.dialog = false;
         this.$emit("clicked", {
           text: "Desparasitação registada com sucesso.",
