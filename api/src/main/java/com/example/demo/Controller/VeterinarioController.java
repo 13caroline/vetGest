@@ -82,7 +82,7 @@ public class VeterinarioController {
         String data = intervencao.getData();
         String hora = intervencao.getHora();
 
-        List<Intervencao> intervencoes = intervencaoService.findAllByVeterinarioIdAndEstadoEquals(veterinario.getId(),"Agendada");
+        List<Intervencao> intervencoes = intervencaoService.findAllByVeterinarioIdAndEstadoOrEstado(veterinario.getId(),"Agendada","A decorrer");
         List<Intervencao> temp = new ArrayList<>();
         intervencoes.forEach(intervencao1 -> {
             if (intervencao1.getData().equals(data) && intervencao1.getHora().equals(hora)) {
