@@ -263,15 +263,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-snackbar
-      v-model="snackbar"
-      :timeout="timeout"
-      :color="color"
-      :top="true"
-      class="headline"
-    >
-      {{ text }}
-    </v-snackbar>
   </div>
 </template>
 
@@ -310,11 +301,7 @@ export default {
     ],
     itemscauda: ["Comprida", "Curta", "Amputada"],
     valid: true,
-    snackbar: false,
-    color: "",
     done: false,
-    timeout: -1,
-    text: "",
     nomeRules: [
       (value) => {
         const pattern = /^([a-zA-Z]+)$/;
@@ -353,32 +340,41 @@ export default {
                 castracao: this.animal.castracao,
               },
             },
-             {
-        headers: {
-          Authorization: "Bearer " + store.getters.token.toString(),
-        },
-      }
+            {
+              headers: {
+                Authorization: "Bearer " + store.getters.token.toString(),
+              },
+            }
           );
-          this.text = "Dados editados com sucesso.";
-          this.color = "success";
-          this.snackbar = true;
-          this.$router.push("/cliente/animal/" + this.id)
+
+          this.$snackbar.showMessage({
+            show: true,
+            color: "success",
+            text: "Dados editados com sucesso.",
+            timeout: 4000,
+          });
+          this.$router.push("/cliente/animal/" + this.id);
         } catch (e) {
-          console.log("erro: " + e);
-          this.text = "Ocorreu um erro no registo, por favor tente mais tarde!";
-          this.color = "warning";
-          this.snackbar = true;
+          this.$snackbar.showMessage({
+            show: true,
+            color: "warning",
+            text: "Ocorreu um erro no registo, por favor tente mais tarde!",
+            timeout: 4000,
+          });
         }
       } else {
-        this.text = "Por favor preencha todos os campos.";
-        this.color = "error";
-        this.snackbar = true;
+        this.$snackbar.showMessage({
+          show: true,
+          color: "error",
+          text: "Por favor preencha todos os campos.",
+          timeout: 4000,
+        });
         this.done = false;
       }
     },
-    cancelar(){
-      this.$router.push("/cliente/animal/" + this.id)
-    }
+    cancelar() {
+      this.$router.push("/cliente/animal/" + this.id);
+    },
   },
   created: async function () {
     let response = await axios.post(
@@ -386,7 +382,7 @@ export default {
       {
         email: store.state.email,
       },
-       {
+      {
         headers: {
           Authorization: "Bearer " + store.getters.token.toString(),
         },

@@ -203,16 +203,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-
-    <v-snackbar
-      v-model="snackbar"
-      :timeout="timeout"
-      :color="color"
-      :top="true"
-      class="headline"
-    >
-      {{ text }}
-    </v-snackbar>
   </div>
 </template>
 
@@ -224,11 +214,7 @@ export default {
     return {
       valid: true,
       dialog: false,
-      snackbar: false,
-      color: "",
       done: false,
-      timeout: -1,
-      text: "",
       email: "",
       password: "",
       nome: "",
@@ -289,19 +275,24 @@ export default {
             text: "Utilizador criado com sucesso.",
             color: "success",
             snackbar: true,
-            timeout: 4000
+            timeout: 4000,
           });
         } catch (e) {
-          console.log("erro: " + e);
-          this.text = "Ocorreu um erro no registo, por favor tente mais tarde!";
-          this.color = "warning";
-          this.snackbar = true;
+          this.$snackbar.showMessage({
+            show: true,
+            color: "warning",
+            text: "Ocorreu um erro no registo, por favor tente mais tarde!",
+            timeout: 4000,
+          });
         }
       } else {
-        this.text = "Por favor preencha todos os campos.";
-        this.color = "error";
-        this.snackbar = true;
         this.done = false;
+        this.$snackbar.showMessage({
+          show: true,
+          color: "error",
+          text: "Por favor preencha todos os campos.",
+          timeout: 4000,
+        });
       }
     },
   },

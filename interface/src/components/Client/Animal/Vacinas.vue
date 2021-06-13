@@ -203,15 +203,6 @@
         </v-card>
       </v-dialog>
     </v-card>
-    <v-snackbar
-      v-model="snackbar"
-      :timeout="timeout"
-      :color="color"
-      :top="true"
-      class="headline"
-    >
-      {{ text }}
-    </v-snackbar>
   </div>
 </template>
 
@@ -239,12 +230,8 @@ export default {
     timeskip: 0,
     id: 0,
     date: new Date().toISOString().substr(0, 10),
-    snackbar: false,
-    color: "",
     nomeMedico: "",
     done: false,
-    timeout: -1,
-    text: "",
     headers: [
       {
         text: "Data Prevista",
@@ -293,10 +280,12 @@ export default {
   }),
   methods: {
     registar(value) {
-      this.snackbar = value.snackbar;
-      this.color = value.color;
-      this.text = value.text;
-      this.timeout = value.timeout;
+      this.$snackbar.showMessage({
+        show: true,
+        color: value.color,
+        text: value.text,
+        timeout: value.timeout,
+      });
       this.atualiza();
     },
     atualiza: async function () {
@@ -373,16 +362,24 @@ export default {
           }
         );
         this.dialog = false;
-        this.text = "Desparasitação confirmada com sucesso.";
-        this.color = "success";
-        this.snackbar = true;
+
+        this.$snackbar.showMessage({
+          show: true,
+          color: "success",
+          text: "Desparasitação confirmada com sucesso.",
+          timeout: 4000,
+        });
         this.atualiza();
       } catch (e) {
         console.log("erro: " + e);
         this.dialog = false;
-        this.text = "Ocorreu um erro, por favor tente mais tarde!";
-        this.color = "warning";
-        this.snackbar = true;
+
+        this.$snackbar.showMessage({
+          show: true,
+          color: "warning",
+          text: "Ocorreu um erro, por favor tente mais tarde!",
+          timeout: 4000,
+        });
       }
     },
     format(data) {

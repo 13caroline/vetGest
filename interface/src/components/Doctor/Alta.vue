@@ -206,44 +206,62 @@ export default {
       return moment(data).locale("pt").format("DD/MM/YYYY");
     },
     darAlta: async function () {
-      let response = await axios.post(
-        "http://localhost:7777/medico/internamento/alta/confirma",
-        {
-          alta: {
-            data: moment().format(),
-            motivo: this.motivo,
-            historia_medica: this.historia_medica,
-            evolucao: this.evolucao,
-            proposta_terapeutica: this.proposta_terapeutica,
-            orientacao: this.orientacao,
+      try {
+        let response = await axios.post(
+          "http://localhost:7777/medico/internamento/alta/confirma",
+          {
+            alta: {
+              data: moment().format(),
+              motivo: this.motivo,
+              historia_medica: this.historia_medica,
+              evolucao: this.evolucao,
+              proposta_terapeutica: this.proposta_terapeutica,
+              orientacao: this.orientacao,
+            },
+            email: this.$store.state.email,
+            animal: this.id,
           },
-          email: this.$store.state.email,
-          animal: this.id,
-        },
-        {
-          headers: { Authorization: "Bearer " + store.getters.token },
+          {
+            headers: { Authorization: "Bearer " + store.getters.token },
+          }
+        );
+        if (response) {
+          this.$router.push("/medico/internamento");
         }
-      );
-      if (response) {
-        this.$router.push("/medico/internamento");
+      } catch (e) {
+        this.$snackbar.showMessage({
+          show: true,
+          color: "error",
+          text: "Ocorreu um erro. Por favor tente mais tarde!",
+          timeout: 4000,
+        });
       }
     },
   },
   created: async function () {
     let route = "http://localhost:7777/medico/internamento/detalhes";
-    let response = await axios.post(
-      route,
-      {
-        id: this.id,
-      },
-      {
-        headers: { Authorization: "Bearer " + store.getters.token },
-      }
-    );
-    this.animal = response.data.animal;
-    this.notas = Array.isArray(response.data.notas)
-      ? response.data.notas
-      : [response.data.notas];
+    try {
+      let response = await axios.post(
+        route,
+        {
+          id: this.id,
+        },
+        {
+          headers: { Authorization: "Bearer " + store.getters.token },
+        }
+      );
+      this.animal = response.data.animal;
+      this.notas = Array.isArray(response.data.notas)
+        ? response.data.notas
+        : [response.data.notas];
+    } catch (e) {
+      this.$snackbar.showMessage({
+        show: true,
+        color: "error",
+        text: "Ocorreu um erro. Por favor tente mais tarde!",
+        timeout: 4000,
+      });
+    }
   },
 };
 </script>

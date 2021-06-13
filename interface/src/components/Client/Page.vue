@@ -154,15 +154,6 @@
         </v-sheet>
       </v-carousel-item>
     </v-carousel>
-    <v-snackbar
-      v-model="snackbar"
-      :timeout="timeout"
-      :color="color"
-      :top="true"
-      class="headline"
-    >
-      {{ text }}
-    </v-snackbar>
   </div>
 </template>
 
@@ -176,10 +167,6 @@ export default {
       page: 1,
       pageCount: 0,
       itemsPerPage: 8,
-      snackbar: false,
-      color: "",
-      text: "",
-      timeout: -1,
       dados: {},
       dialogs: {},
       cancelar: { title: "o agendamento da consulta", text: "consulta" },
@@ -227,11 +214,13 @@ export default {
   },
   methods: {
     registar(value) {
-      (this.snackbar = value.snackbar),
-        (this.color = value.color),
-        (this.text = value.text),
-        (this.timeout = value.timeout),
-        this.atualiza();
+      this.$snackbar.showMessage({
+        show: true,
+        color: value.color,
+        text: value.text,
+        timeout: value.timeout,
+      });
+      this.atualiza();
     },
     atualiza: async function () {
       this.consultas = [];

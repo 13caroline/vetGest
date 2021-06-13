@@ -99,15 +99,6 @@
         </v-card>
       </v-dialog>
     </v-container>
-    <v-snackbar
-      v-model="snackbar"
-      :timeout="timeout"
-      :color="color"
-      :top="true"
-      class="headline"
-    >
-      {{ text }}
-    </v-snackbar>
   </div>
 </template>
 
@@ -120,10 +111,6 @@ import moment from "moment";
 
 export default {
   data: () => ({
-    timeout: -1,
-    snackbar: false,
-    color: "",
-    text: "",
     dados: {},
     dialogs: {},
     cancelar: {
@@ -188,10 +175,12 @@ export default {
       return moment(data).locale("pt").format("DD/MM/YYYY");
     },
     registar(value) {
-      this.snackbar = value.snackbar;
-      this.color = value.color;
-      this.text = value.text;
-      this.timeout = value.timeout;
+      this.$snackbar.showMessage({
+        show: true,
+        color: value.color,
+        text: value.text,
+        timeout: value.timeout,
+      });
       this.atualiza();
     },
     atualiza: async function () {

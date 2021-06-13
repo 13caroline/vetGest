@@ -114,15 +114,6 @@
         </v-card>
       </v-dialog>
     </v-container>
-    <v-snackbar
-      v-model="snackbar"
-      :timeout="timeout"
-      :color="color"
-      :top="true"
-      class="headline"
-    >
-      {{ text }}
-    </v-snackbar>
   </div>
 </template>
 
@@ -138,11 +129,7 @@ export default {
       text: "consulta",
       title: "o agendamento da consulta",
     },
-    snackbar: false,
-    color: "",
     done: false,
-    timeout: -1,
-    text: "",
     page: 1,
     pageCount: 0,
     itemsPerPage: 8,
@@ -221,10 +208,12 @@ export default {
       }
     },
     registar(value) {
-      this.snackbar = value.snackbar;
-      this.color = value.color;
-      this.text = value.text;
-      this.timeout = value.timeout;
+      this.$snackbar.showMessage({
+        show: true,
+        color: value.color,
+        text: value.text,
+        timeout: value.timeout,
+      });
       this.atualiza();
     },
     estadopedido(estado) {
