@@ -459,7 +459,13 @@ public class VeterinarioController {
     @PostMapping("/medico/internamentos")
     public ResponseEntity<?> getInternamentos(@RequestBody Veterinario email){
         Veterinario veterinario = veterinarioService.getVetByEmail(email.getEmail());
-        List<Internamento> internamentos = internamentoService.getAllInternamentosByVetId(veterinario.getId());
+        List<Internamento> _internamentos = internamentoService.getAllInternamentosByVetId(veterinario.getId());
+        List <Internamento> internamentos = new ArrayList<>();
+        _internamentos.forEach(internamento -> {
+            if(internamento.getEstado().equals("Internado")){
+                internamentos.add(internamento);
+            }
+        });
 
         return ResponseEntity.accepted().body(internamentos);
     }
