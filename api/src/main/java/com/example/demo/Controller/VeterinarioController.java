@@ -252,8 +252,11 @@ public class VeterinarioController {
             proximaImunizacao.setTratamento(imunizacao.getTratamento());
             proximaImunizacao.setAnimal(imunizacao.getAnimal());
             proximaImunizacao.setVeterinario(imunizacao.getVeterinario());
+            imunizacao.setProxImunizacao(null);
+            imunizacaoService.saveImunizacao(imunizacao);
             imunizacaoService.saveImunizacao(proximaImunizacao);
             imunizacao.setProxima_imunizacao(proximaImunizacao);
+            imunizacaoService.saveImunizacao(imunizacao);
         }
         imunizacaoService.saveImunizacao(imunizacao);
         return ResponseEntity.accepted().body("Imunização agendada!");
