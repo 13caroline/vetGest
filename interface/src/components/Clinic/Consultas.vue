@@ -107,7 +107,7 @@
               offset-x
               max-width="500px"
             >
-              <v-card color="grey lighten-4" max-width="500px" flat>
+              <v-card color="grey lighten-4" flat>
                 <v-card-text>
                   <v-row>
                     <v-col class="pb-0" align="right" cols="5">

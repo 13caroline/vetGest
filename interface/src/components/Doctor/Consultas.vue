@@ -73,8 +73,9 @@
               :close-on-content-click="false"
               :activator="selectedElement"
               offset-x
+              max-width="500px"
             >
-              <v-card color="grey lighten-4" min-width="350px" flat>
+              <v-card color="grey lighten-4" flat>
                 <v-toolbar :color="selectedEvent.color" dark>
                   <v-btn @click="deleteEvent(selectedEvent.id)" icon>
                     <v-icon>mdi-delete</v-icon>
@@ -128,7 +129,7 @@
 </template>
 
 <script>
-import MarcarConsultaLivre from "@/components/Dialogs/MarcarConsultaLivre.vue"
+import MarcarConsultaLivre from "@/components/Dialogs/MarcarConsultaLivre.vue";
 export default {
   data: () => ({
     focus: new Date().toISOString().substr(0, 10),
@@ -177,7 +178,7 @@ export default {
     this.$refs.calendar.checkChange();
   },
   components: {
-    MarcarConsultaLivre
+    MarcarConsultaLivre,
   },
   methods: {
     //get events
@@ -256,6 +257,5 @@ export default {
       return Math.floor((b - a + 1) * Math.random()) + a;
     },
   },
-
 };
 </script>

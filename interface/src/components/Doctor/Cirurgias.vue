@@ -9,7 +9,7 @@
               Agendamento de Cirurgias
             </h3>
             <v-row justify="end">
-               <v-col cols="auto">
+              <v-col cols="auto">
                 <MarcarCirurgiaLivre></MarcarCirurgiaLivre>
               </v-col>
             </v-row>
@@ -73,8 +73,9 @@
               :close-on-content-click="false"
               :activator="selectedElement"
               offset-x
+              max-width="500px"
             >
-              <v-card color="grey lighten-4" min-width="350px" flat>
+              <v-card color="grey lighten-4" flat>
                 <v-toolbar :color="selectedEvent.color" dark>
                   <v-btn @click="deleteEvent(selectedEvent.id)" icon>
                     <v-icon>mdi-delete</v-icon>
@@ -128,7 +129,7 @@
 </template>
 
 <script>
-import MarcarCirurgiaLivre from "@/components/Dialogs/MarcarCirurgiaLivre.vue"
+import MarcarCirurgiaLivre from "@/components/Dialogs/MarcarCirurgiaLivre.vue";
 
 export default {
   data: () => ({
@@ -141,7 +142,7 @@ export default {
       week: "Semana",
       day: "Dia",
     },
-    
+
     name: null,
     details: null,
     start: null,
@@ -178,8 +179,8 @@ export default {
     //this.getEvents();
     this.$refs.calendar.checkChange();
   },
-  components:{
-    MarcarCirurgiaLivre
+  components: {
+    MarcarCirurgiaLivre,
   },
   methods: {
     //get events
