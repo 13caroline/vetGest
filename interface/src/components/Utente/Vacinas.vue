@@ -36,6 +36,9 @@
             hide-default-footer
             no-data-text="Não existem vacinas ou desparasitações registadas."
             no-results-text="Não foram encontrados resultados."
+            :page.sync="page"
+            :items-per-page="itemsPerPage"
+            @page-count="pageCount = $event"
           >
             <template v-slot:[`item.estado`]="{ item }">
               <v-chip :color="estadopedido(item.estado)" small>
@@ -73,6 +76,16 @@
               </div>
             </template>
           </v-data-table>
+          <div class="text-center pt-2">
+            <v-pagination
+              v-model="page"
+              :length="pageCount"
+              circle
+              :total-visible="4"
+              color="#2596be"
+              class="custom"
+            ></v-pagination>
+          </div>
         </v-col>
       </v-row>
     </v-card>
@@ -90,6 +103,10 @@ export default {
   props: ["animal"],
   data: () => ({
     dataPrev: {},
+
+    page: 1,
+    pageCount: 0,
+    itemsPerPage: 8,
     snackbar: false,
     color: "",
     done: false,
@@ -190,3 +207,25 @@ export default {
   },
 };
 </script>
+
+<style>
+.custom {
+  width: auto;
+  margin-left: auto;
+}
+
+.custom .v-pagination__navigation {
+  height: 26px !important;
+  width: 26px !important;
+}
+
+.custom .v-pagination__navigation .v-icon {
+  font-size: 16px !important;
+}
+
+.custom .v-pagination__item {
+  height: 26px !important;
+  min-width: 26px !important;
+  font-size: 0.85rem !important;
+}
+</style>
