@@ -172,7 +172,7 @@
                 <v-btn color="#BDBDBD" small dark @click="dialog = true">
                   Cancelar
                 </v-btn>
-                <v-btn color="#2596be" small dark @click="registaConsulta()">
+                <v-btn color="#2596be" class="ml-2" small dark @click="registaConsulta()">
                   Confirmar
                 </v-btn>
               </v-col>
@@ -218,7 +218,6 @@
 </template>
 
 <script>
-//import moment from 'moment';
 import axios from "axios";
 import store from "@/store.js";
 export default {
@@ -232,8 +231,6 @@ export default {
     hora: "10:00",
     animais: [],
     medicos: [],
-    /*animais: ["Rubi", "Puscas", "Nikita", "Rudi"], */
-    // medico: ["Sem Preferência", "Drº José Vieira", "Drª Joana Ferreira"],
     motivo: "",
     animal: "",
     medicoVet: "",
@@ -291,8 +288,20 @@ export default {
           }
         );
         this.$router.push("/cliente/consultas");
+        this.$snackbar.showMessage({
+              show: true,
+              color: "success",
+              text: "Pedido de consulta registado com sucesso",
+              timeout: 4000,
+            });
       } catch (e) {
         console.log("erro: +" + e);
+        this.$snackbar.showMessage({
+              show: true,
+              color: "warning",
+              text: "Ocorreu um erro no registo, por favor tente mais tarde!",
+              timeout: 4000,
+            });
       }
     },
     allowedStep: (m) => m % 15 === 0,

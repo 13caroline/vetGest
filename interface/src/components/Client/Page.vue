@@ -16,9 +16,8 @@
                 dark
                 to="/cliente/registar/animal"
               >
-              Registar Animal
+                Registar Animal
                 <v-icon small class="ml-2">far fa-plus-square</v-icon>
-                
               </v-btn>
             </v-col>
           </v-row>
@@ -91,9 +90,8 @@
                 dark
                 to="/cliente/consultas/agendar"
               >
-              Agendar Consulta
+                Agendar Consulta
                 <v-icon small class="ml-2">far fa-calendar-alt</v-icon>
-                
               </v-btn>
             </v-col>
           </v-row>
@@ -107,6 +105,8 @@
             :page.sync="page"
             :items-per-page="itemsPerPage"
             @page-count="pageCount = $event"
+            no-data-text="Não existem intervenções agendadas."
+            no-results-text="Não foram encontrados resultados."
           >
             <template v-slot:[`item.estado`]="{ item }">
               <v-chip :color="estadopedido(item.estado)" small>
@@ -114,10 +114,22 @@
               </v-chip>
             </template>
 
+            <template v-slot:[`item.tipo`]="{ item }">
+              <v-chip :color="servico(item.tipo)" small>
+                {{ item.tipo }}
+              </v-chip>
+            </template>
+
             <template v-slot:[`item.detalhes`]="{ item }">
               <CancelarConsulta
-                v-if="item.estado == 'Agendada' || item.estado == 'Pendente'"
+                v-if="(item.estado == 'Agendada' || item.estado == 'Pendente') && item.tipo =='Consulta'"
                 :dialogs="cancelar"
+                :dados="item"
+                @clicked="registar"
+              ></CancelarConsulta>
+              <CancelarConsulta
+                v-if="(item.estado == 'Agendada') && item.tipo =='Cirurgia'"
+                :dialogs="cancelarC"
                 :dados="item"
                 @clicked="registar"
               ></CancelarConsulta>
@@ -154,15 +166,6 @@
         </v-sheet>
       </v-carousel-item>
     </v-carousel>
-    <v-snackbar
-      v-model="snackbar"
-      :timeout="timeout"
-      :color="color"
-      :top="true"
-      class="headline"
-    >
-      {{ text }}
-    </v-snackbar>
   </div>
 </template>
 
@@ -176,36 +179,34 @@ export default {
       page: 1,
       pageCount: 0,
       itemsPerPage: 8,
-      snackbar: false,
-      color: "",
-      text: "",
-      timeout: -1,
       dados: {},
       dialogs: {},
       cancelar: { title: "o agendamento da consulta", text: "consulta" },
+      cancelarC: { title: "o agendamento da cirurgia", text: "cirurgia" },
       animals: [],
       headers: [
         {
-          text: "Nome",
+          text: "NOME",
           align: "start",
           sortable: true,
           value: "utente",
         },
         {
-          text: "Médico Veterinário",
+          text: "MÉDICO VETERINÁRIO",
           value: "veterinario_nome",
           sortable: true,
           align: "start",
         },
         {
-          text: "Data de Agendamento",
+          text: "DATA DE AGENDAMENTO",
           value: "marcacao",
           sortable: true,
           align: "start",
         },
-        { text: "Estado", value: "estado", sortable: true, align: "center" },
+        { text: "SERVIÇO", value: "tipo", sortable: true, align: "center" },
+        { text: "ESTADO", value: "estado", sortable: true, align: "center" },
         {
-          text: "Ações",
+          text: "AÇÕES",
           value: "detalhes",
           sortable: false,
           align: "center",
@@ -227,11 +228,13 @@ export default {
   },
   methods: {
     registar(value) {
-      (this.snackbar = value.snackbar),
-        (this.color = value.color),
-        (this.text = value.text),
-        (this.timeout = value.timeout),
-        this.atualiza();
+      this.$snackbar.showMessage({
+        show: true,
+        color: value.color,
+        text: value.text,
+        timeout: value.timeout,
+      });
+      this.atualiza();
     },
     atualiza: async function () {
       this.consultas = [];
@@ -257,6 +260,7 @@ export default {
           },
         }
       );
+
       for (var i = 0; i < response2.data.length; i++) {
         this.consultas.push({
           idConsulta: response2.data[i].id,
@@ -267,6 +271,7 @@ export default {
           descricao: response2.data[i].descricao,
           motivo: response2.data[i].motivo,
           animal: response2.data[i].animal,
+          tipo: response2.data[i].tipo
         });
       }
       this.animals = response.data.cliente.animais;
@@ -277,6 +282,10 @@ export default {
     },
     toAnimal(id) {
       this.$router.push("/cliente/animal/" + id);
+    },
+    servico(item) {
+      if (item == "Consulta") return "#B2DFDB";
+      else return "#FFCCBC";
     },
   },
   computed: {
@@ -319,6 +328,7 @@ export default {
         descricao: response2.data[i].descricao,
         motivo: response2.data[i].motivo,
         animal: response2.data[i].animal,
+        tipo: response2.data[i].tipo
       });
     }
     this.animals = response.data.cliente.animais;

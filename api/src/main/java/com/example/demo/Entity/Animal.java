@@ -90,4 +90,9 @@ public class Animal {
     )
     private String observacoes;
 
+    @Column(
+            name = "path"
+    )
+    private String path;
+
 }

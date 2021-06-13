@@ -13,6 +13,8 @@
             :items="items"
             class="elevation-1"
             hide-default-footer
+            no-data-text="Não existem imunizações registadas."
+            no-results-text="Não foram encontrados resultados."
           >
             <template v-slot:[`item.estado`]="{ item }">
               <v-chip :color="estadopedido(item.estado)" small>
@@ -153,15 +155,6 @@
         </v-card>
       </v-dialog>
     </v-container>
-    <v-snackbar
-      v-model="snackbar"
-      :timeout="timeout"
-      :color="color"
-      :top="true"
-      class="headline"
-    >
-      {{ text }}
-    </v-snackbar>
   </div>
 </template>
 
@@ -173,13 +166,9 @@ export default {
     dialogCancel: false,
     dataPrevista: "",
     dataToma: null,
-    tratamento: "", 
+    tratamento: "",
     date: new Date().toISOString().substr(0, 10),
-    snackbar: false,
-    color: "",
     done: false,
-    timeout: -1,
-    text: "",
     headers: [
       {
         text: "Data Prevista",

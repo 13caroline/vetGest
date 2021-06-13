@@ -142,15 +142,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-snackbar
-      v-model="snackbar"
-      :timeout="timeout"
-      :color="color"
-      :top="true"
-      class="headline"
-    >
-      {{ text }}
-    </v-snackbar>
   </div>
 </template>
 
@@ -205,10 +196,6 @@ export default {
         },
       ],
       dialog: false,
-      snackbar: false,
-      color: "",
-      text: "",
-      timeout: -1,
       dados: {},
       nome: "",
       raca: "",
@@ -238,16 +225,20 @@ export default {
             headers: { Authorization: "Bearer " + store.getters.token },
           }
         );
-        (this.text = "Consulta confirmada com sucesso"),
-          (this.color = "success"),
-          (this.snackbar = "true"),
-          (this.timeout = 4000);
         this.atualiza();
+        this.$snackbar.showMessage({
+          show: true,
+          color: "success",
+          text: "Consulta confirmada com sucesso",
+          timeout: 4000,
+        });
       } catch (e) {
-        (this.text = "Ocorreu um erro, por favor tente mais tarde!"),
-          (this.color = "warning"),
-          (this.snackbar = "true"),
-          (this.timeout = 4000);
+        this.$snackbar.showMessage({
+          show: true,
+          color: "warning",
+          text: "Ocorreu um erro, por favor tente mais tarde!",
+          timeout: 4000,
+        });
       }
     },
     rejeitar: async function (item) {
@@ -262,16 +253,20 @@ export default {
             headers: { Authorization: "Bearer " + store.getters.token },
           }
         );
-        (this.text = "Consulta cancelada com sucesso"),
-          (this.color = "success"),
-          (this.snackbar = "true"),
-          (this.timeout = 4000);
         this.atualiza();
+        this.$snackbar.showMessage({
+          show: true,
+          color: "success",
+          text: "Consulta cancelada com sucesso",
+          timeout: 4000,
+        });
       } catch (e) {
-        (this.text = "Ocorreu um erro, por favor tente mais tarde!"),
-          (this.color = "warning"),
-          (this.snackbar = "true"),
-          (this.timeout = 4000);
+        this.$snackbar.showMessage({
+          show: true,
+          color: "warning",
+          text: "Ocorreu um erro, por favor tente mais tarde!",
+          timeout: 4000,
+        });
       }
     },
     atualiza: async function () {
@@ -294,7 +289,6 @@ export default {
       this.nome = item.animal.nome;
       this.raca = item.animal.raca;
       this.veterinario = item.veterinario.nome;
-      console.log(this.dados);
       this.dialog = true;
     },
   },

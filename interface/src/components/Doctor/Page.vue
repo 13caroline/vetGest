@@ -497,7 +497,12 @@ export default {
           this.internamento = false;
         }
       } catch (e) {
-        console.log(e);
+        this.$snackbar.showMessage({
+          show: true,
+          color: "error",
+          text: "Ocorreu um erro. Por favor tente mais tarde!",
+          timeout: 4000,
+        });
       }
     },
     updateStatus: async function (status) {
@@ -519,7 +524,12 @@ export default {
           this.created();
         }
       } catch (e) {
-        console.log(e);
+        this.$snackbar.showMessage({
+          show: true,
+          color: "error",
+          text: "Ocorreu um erro. Por favor tente mais tarde!",
+          timeout: 4000,
+        });
       }
     },
   },
@@ -537,7 +547,12 @@ export default {
       );
       if (typeof response.data == "object") this.agendamentos = response.data;
     } catch (e) {
-      console.log(e);
+      this.$snackbar.showMessage({
+        show: true,
+        color: "error",
+        text: "Ocorreu um erro. Por favor tente mais tarde!",
+        timeout: 4000,
+      });
     }
   },
 };

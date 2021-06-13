@@ -98,7 +98,7 @@
             :items-per-page="itemsPerPage"
             @page-count="pageCount = $event"
             no-data-text="Não existem intervenções agendadas."
-          no-results-text="Não foram encontrados resultados."
+            no-results-text="Não foram encontrados resultados."
           >
             <template v-slot:[`item.utente`]="{ item }">
               <v-tooltip top>
@@ -169,15 +169,6 @@
           </div>
         </v-col>
       </v-row>
-      <v-snackbar
-        v-model="snackbar"
-        :timeout="timeout"
-        :color="color"
-        :top="true"
-        class="headline"
-      >
-        {{ text }}
-      </v-snackbar>
     </v-container>
   </div>
 </template>
@@ -252,10 +243,6 @@ export default {
         },
       ],
       agendamento: [],
-      snackbar: false,
-      color: "",
-      text: "",
-      timeout: -1,
     };
   },
   components: {
@@ -279,10 +266,12 @@ export default {
       return moment(data).locale("pt").format("DD/MM/YYYY HH:mm");
     },
     registar(value) {
-      this.snackbar = value.snackbar;
-      this.color = value.color;
-      this.text = value.text;
-      this.timeout = value.timeout;
+      this.$snackbar.showMessage({
+        show: true,
+        color: value.color,
+        text: value.text,
+        timeout: value.timeout,
+      });
       this.atualiza();
     },
     atualiza: async function () {
@@ -326,7 +315,9 @@ export default {
   },
   computed: {
     filteredData() {
-      return this.agendamento.filter((item) => item.estado === "Agendada" || item.estado === "A decorrer");
+      return this.agendamento.filter(
+        (item) => item.estado === "Agendada" || item.estado === "A decorrer"
+      );
     },
   },
 };

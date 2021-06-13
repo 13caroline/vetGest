@@ -218,15 +218,6 @@
         </v-col>
       </v-row>
     </v-container>
-    <v-snackbar
-      v-model="snackbar"
-      :timeout="timeout"
-      :color="color"
-      :top="true"
-      class="headline"
-    >
-      {{ text }}
-    </v-snackbar>
   </div>
 </template>
 
@@ -261,10 +252,6 @@ export default {
     selectedElement: null,
     selectedOpen: false,
     events: [],
-    snackbar: false,
-    color: "",
-    text: "",
-    timeout: -1,
   }),
   mounted() {
     //this.getEvents();
@@ -377,10 +364,12 @@ export default {
     },
     registar(value) {
       this.atualiza();
-      this.snackbar = value.snackbar;
-      this.color = value.color;
-      this.text = value.text;
-      this.timeout = value.timeout;
+      this.$snackbar.showMessage({
+        show: true,
+        color: value.color,
+        text: value.text,
+        timeout: 4000,
+      });
     },
     format(data) {
       return moment(data).locale("pt").format("DD/MM/YYYY HH:mm");
@@ -401,23 +390,27 @@ export default {
         }
         this.selectedOpen = false;
         this.atualiza();
-        if(estado == 'A decorrer'){
-          this.text = "Utente admitido com sucesso.",
-          this.color = "success" 
+        let text = "";
+        if (estado == "A decorrer") {
+          text = "Utente admitido com sucesso.";
+        } else {
+          text = "Consulta cancelada com sucesso.";
         }
-        else{
-          this.text = "Consulta cancelada com sucesso.",
-          this.color = "success" 
-        }
-          this.snackbar = "true",
-          this.timeout = 4000;
+
+        this.$snackbar.showMessage({
+          show: true,
+          color: "success",
+          text: text,
+          timeout: 4000,
+        });
       } catch (e) {
         this.selectedOpen = false;
-        this.text = "Ocorreu um erro, por favor tente mais tarde!",
-        this.color = "warning",
-        this.snackbar = "true",
-        this.timeout = 4000;
-        console.log(e);
+        this.$snackbar.showMessage({
+          show: true,
+          color: "warning",
+          text: "Ocorreu um erro, por favor tente mais tarde!",
+          timeout: 4000,
+        });
       }
     },
     atualiza: async function () {

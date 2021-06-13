@@ -158,15 +158,6 @@
         </v-col>
       </v-row>
     </v-container>
-    <v-snackbar
-      v-model="snackbar"
-      :timeout="timeout"
-      :color="color"
-      :top="true"
-      class="headline"
-    >
-      {{ text }}
-    </v-snackbar>
   </div>
 </template>
 
@@ -187,10 +178,6 @@ export default {
     concelho: "",
     contacto: "",
     nif: "",
-    snackbar: false,
-    text: "",
-    timeout: -1,
-    color: "",
     emailRules: [
       (value) => !!value || "Insira um endereço eletrónico.",
       (value) => {
@@ -254,24 +241,39 @@ export default {
           );
           this.text = "Utilizador criado com sucesso.";
           this.color = "success";
-          this.snackbar = true;
+
+          this.$snackbar.showMessage({
+            show: true,
+            color: "warning",
+            text: "Ocorreu um erro, por favor tente mais tarde!",
+            timeout: 4000,
+          });
+
           this.$router.push("/clinica/clientes");
         } catch (error) {
           if (error.response.data == "Email já se encontra registado") {
-            this.text = "Este email já se encontra registado!";
-            this.color = "warning";
-            this.snackbar = true;
+            this.$snackbar.showMessage({
+              show: true,
+              color: "warning",
+              text: "Este email já se encontra registado!",
+              timeout: 4000,
+            });
           } else {
-            this.text =
-              "Ocorreu um erro no registo, por favor tente mais tarde!";
-            this.color = "warning";
-            this.snackbar = true;
+            this.$snackbar.showMessage({
+              show: true,
+              color: "warning",
+              text: "Ocorreu um erro no registo, por favor tente mais tarde!",
+              timeout: 4000,
+            });
           }
         }
       } else {
-        this.text = "Por favor preencha todos os campos.";
-        this.color = "error";
-        this.snackbar = true;
+        this.$snackbar.showMessage({
+          show: true,
+          color: "error",
+          text: "Por favor preencha todos os campos.",
+          timeout: 4000,
+        });
         this.done = false;
       }
     },

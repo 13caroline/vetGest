@@ -18,11 +18,10 @@
                 dark
                 to="/cliente/consultas/agendar"
               >
-              Agendar Consulta
+                Agendar Consulta
                 <v-icon small class="calendar ml-2"
                   >far fa-calendar-check</v-icon
                 >
-                
               </v-btn>
             </v-col>
           </v-row>
@@ -35,6 +34,8 @@
             :page.sync="page"
             :items-per-page="itemsPerPage"
             @page-count="pageCount = $event"
+            no-data-text="Não existe histórico de consultas."
+            no-results-text="Não foram encontrados resultados."
           >
             <template v-slot:[`item.estado`]="{ item }">
               <v-chip :color="estadopedido(item.estado)" small>
@@ -45,7 +46,7 @@
             <template v-slot:[`item.detalhes`]="{ item }">
               <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
-                   <v-icon
+                  <v-icon
                     v-if="item.estado == 'Concluída'"
                     @click="dialog = true"
                     small
@@ -56,7 +57,9 @@
                     mdi-plus-circle
                   </v-icon>
                   <v-icon
-                    v-if="item.estado == 'Cancelada' || item.estado == 'A decorrer'"
+                    v-if="
+                      item.estado == 'Cancelada' || item.estado == 'A decorrer'
+                    "
                     small
                     disabled
                     v-on="on"
@@ -111,15 +114,6 @@
         </v-card>
       </v-dialog>
     </v-container>
-    <v-snackbar
-      v-model="snackbar"
-      :timeout="timeout"
-      :color="color"
-      :top="true"
-      class="headline"
-    >
-      {{ text }}
-    </v-snackbar>
   </div>
 </template>
 
@@ -135,11 +129,7 @@ export default {
       text: "consulta",
       title: "o agendamento da consulta",
     },
-    snackbar: false,
-    color: "",
     done: false,
-    timeout: -1,
-    text: "",
     page: 1,
     pageCount: 0,
     itemsPerPage: 8,
@@ -218,10 +208,12 @@ export default {
       }
     },
     registar(value) {
-      this.snackbar = value.snackbar;
-      this.color = value.color;
-      this.text = value.text;
-      this.timeout = value.timeout;
+      this.$snackbar.showMessage({
+        show: true,
+        color: value.color,
+        text: value.text,
+        timeout: value.timeout,
+      });
       this.atualiza();
     },
     estadopedido(estado) {

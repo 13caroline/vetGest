@@ -30,7 +30,6 @@
             @change="medicoAgenda"
           ></v-select>
 
-
           <v-sheet>
             <v-toolbar flat>
               <v-btn outlined class="mr-4" color="#2596be" @click="setToday">
@@ -187,22 +186,13 @@
         </v-col>
       </v-row>
     </v-container>
-    <v-snackbar
-      v-model="snackbar"
-      :timeout="timeout"
-      :color="color"
-      :top="true"
-      class="headline"
-    >
-      {{ text }}
-    </v-snackbar>
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import store from "@/store.js";
-import moment from "moment"
+import moment from "moment";
 import MarcarCirurgiaLivre from "@/components/Dialogs/MarcarCirurgiaLivre.vue";
 export default {
   data: () => ({
@@ -249,10 +239,6 @@ export default {
     vet: null,
     desc: null,
     search: "",
-    snackbar: false,
-    color: "",
-    text: "",
-    timeout: -1,
   }),
   mounted() {
     //this.getEvents();
@@ -262,31 +248,43 @@ export default {
     MarcarCirurgiaLivre,
   },
   methods: {
-    medicoAgenda: async function(value){
+    medicoAgenda: async function (value) {
       this.events = [];
-      let response2 = await axios.post("http://localhost:7777/clinica/intervencoes/medico", {
-        tipo: "Cirurgia",
-        veterinario: value,
-      },
-      {
-        headers: { Authorization: "Bearer " + store.getters.token },
-      });
+      let response2 = await axios.post(
+        "http://localhost:7777/clinica/intervencoes/medico",
+        {
+          tipo: "Cirurgia",
+          veterinario: value,
+        },
+        {
+          headers: { Authorization: "Bearer " + store.getters.token },
+        }
+      );
 
-      for (var i = 0; i < response2.data.length; i++){
-        if(response2.data[i].estado != "Cancelada"){
-          var marcacao = moment(response2.data[i].data + " " + response2.data[i].hora, "YYYY-MM-DD HH:mm", true).locale("pt").format("YYYY-MM-DD HH:mm");
-          var final = moment(marcacao).add(15, 'minutes').locale("pt").format("YYYY-MM-DD HH:mm")
+      for (var i = 0; i < response2.data.length; i++) {
+        if (response2.data[i].estado != "Cancelada") {
+          var marcacao = moment(
+            response2.data[i].data + " " + response2.data[i].hora,
+            "YYYY-MM-DD HH:mm",
+            true
+          )
+            .locale("pt")
+            .format("YYYY-MM-DD HH:mm");
+          var final = moment(marcacao)
+            .add(15, "minutes")
+            .locale("pt")
+            .format("YYYY-MM-DD HH:mm");
           this.events.push({
             name: response2.data[i].tipo,
             start: marcacao,
-            end: final, 
+            end: final,
             details: response2.data[i].motivo,
             state: response2.data[i].estado,
             vet: response2.data[i].veterinario.nome,
             desc: response2.data[i].descricao,
             utente: response2.data[i].animal.nome,
             raca: response2.data[i].animal.raca,
-          })
+          });
         }
       }
     },
@@ -300,7 +298,7 @@ export default {
         this.details = "";
         this.start == "";
         this.end = "";
-        this.state= "";
+        this.state = "";
       } else {
         //show error
       }
@@ -353,10 +351,12 @@ export default {
     },
     registar(value) {
       this.atualiza();
-      this.snackbar = value.snackbar;
-      this.color = value.color;
-      this.text = value.text;
-      this.timeout = value.timeout;
+      this.$snackbar.showMessage({
+        show: true,
+        color: value.color,
+        text: value.text,
+        timeout: value.timeout,
+      });
     },
     format(data) {
       return moment(data).locale("pt").format("DD/MM/YYYY HH:mm");
@@ -377,23 +377,27 @@ export default {
         }
         this.selectedOpen = false;
         this.atualiza();
-        if(estado == 'A decorrer'){
-          this.text = "Utente admitido com sucesso.",
-          this.color = "success" 
+        let text = "";
+        if (estado == "A decorrer") {
+          text = "Utente admitido com sucesso.";
+        } else {
+          text = "Cirurgia cancelada com sucesso.";
         }
-        else{
-          this.text = "Cirurgia cancelada com sucesso.",
-          this.color = "success" 
-        }
-          this.snackbar = "true",
-          this.timeout = 4000;
+
+        this.$snackbar.showMessage({
+          show: true,
+          color: "success",
+          text: text,
+          timeout: 4000,
+        });
       } catch (e) {
         this.selectedOpen = false;
-        this.text = "Ocorreu um erro, por favor tente mais tarde!",
-        this.color = "warning",
-        this.snackbar = "true",
-        this.timeout = 4000;
-        console.log(e);
+        this.$snackbar.showMessage({
+          show: true,
+          color: "warning",
+          text: "Ocorreu um erro, por favor tente mais tarde!",
+          timeout: 4000,
+        });
       }
     },
     atualiza: async function () {
@@ -438,14 +442,13 @@ export default {
       } catch (e) {
         console.log(e);
       }
-      }
+    },
   },
   computed: {
     filteredData() {
       let motivo = this.motivos;
       return this.desc.filter((item) => item.tipo === motivo);
     },
-    
   },
   created: async function () {
     try {
@@ -453,31 +456,45 @@ export default {
         headers: { Authorization: "Bearer " + store.getters.token },
       });
       for (var i = 0; i < response.data.length; i++)
-        this.medico.push({nome: response.data[i].nome, id: response.data[i].id});
-      let response2 = await axios.post("http://localhost:7777/clinica/intervencoes", {
-        tipo: "Cirurgia"
-      },
-      {
-        headers: { Authorization: "Bearer " + store.getters.token },
-      });
-      for (i = 0; i < response2.data.length; i++){
-        if(response2.data[i].estado != "Cancelada"){
-          var marcacao = moment(response2.data[i].data + " " + response2.data[i].hora, "YYYY-MM-DD HH:mm", true).locale("pt").format("YYYY-MM-DD HH:mm");
-          var final = moment(marcacao).add(15, 'minutes').locale("pt").format("YYYY-MM-DD HH:mm")
+        this.medico.push({
+          nome: response.data[i].nome,
+          id: response.data[i].id,
+        });
+      let response2 = await axios.post(
+        "http://localhost:7777/clinica/intervencoes",
+        {
+          tipo: "Cirurgia",
+        },
+        {
+          headers: { Authorization: "Bearer " + store.getters.token },
+        }
+      );
+      for (i = 0; i < response2.data.length; i++) {
+        if (response2.data[i].estado != "Cancelada") {
+          var marcacao = moment(
+            response2.data[i].data + " " + response2.data[i].hora,
+            "YYYY-MM-DD HH:mm",
+            true
+          )
+            .locale("pt")
+            .format("YYYY-MM-DD HH:mm");
+          var final = moment(marcacao)
+            .add(15, "minutes")
+            .locale("pt")
+            .format("YYYY-MM-DD HH:mm");
           this.events.push({
             name: response2.data[i].tipo,
             start: marcacao,
-            end: final, 
+            end: final,
             details: response2.data[i].motivo,
             state: response2.data[i].estado,
             vet: response2.data[i].veterinario.nome,
             desc: response2.data[i].descricao,
             utente: response2.data[i].animal.nome,
             raca: response2.data[i].animal.raca,
-          })
+          });
         }
       }
-
     } catch (e) {
       console.log(e);
     }

@@ -32,6 +32,9 @@
             :page.sync="page"
             :items-per-page="itemsPerPage"
             @page-count="pageCount = $event"
+            
+            no-data-text="Não existe histórico de consultas."
+          no-results-text="Não foram encontrados resultados."
           >
             <template v-slot:[`item.estado`]="{ item }">
               <v-chip :color="estadopedido(item.estado)" small>
@@ -278,7 +281,6 @@ export default {
   props: ["animal"],
   data: () => ({
     dialogNova: false,
-    snackbar: false,
     color: "",
     done: false,
     page: 1,
@@ -403,7 +405,7 @@ export default {
     },
     cancelarConsulta: async function () {
       try {
-        var resposta = await axios.post(
+        await axios.post(
           "http://localhost:7777/cliente/animal/cancelar/" + this.id,
           {
             estado: "Cancelada",
@@ -414,17 +416,22 @@ export default {
             },
           }
         );
-        console.log(JSON.stringify(resposta.data));
         this.cancelar = false;
-        this.text = "Desparasitação confirmada com sucesso.";
-        this.color = "success";
-        this.snackbar = true;
+        this.$snackbar.showMessage({
+        show: true,
+        color: "success",
+        text: "Desparasitação confirmada com sucesso.",
+        timeout: 4000,
+      });
       } catch (e) {
         console.log("erro: " + e);
         this.cancelar = false;
-        this.text = "Ocorreu um erro, por favor tente mais tarde!";
-        this.color = "warning";
-        this.snackbar = true;
+        this.$snackbar.showMessage({
+          show: true,
+          color: "warning",
+          text: "Ocorreu um erro, por favor tente mais tarde!",
+          timeout: 4000,
+        });
       }
     },
     registaConsulta: async function () {
@@ -453,15 +460,29 @@ export default {
           }
         );
         this.$router.push("/cliente/consultas");
+        this.$snackbar.showMessage({
+              show: true,
+              color: "success",
+              text: "Pedido de consulta enviado com sucesso",
+              timeout: 4000,
+            });
       } catch (e) {
         console.log("erro: +" + e);
+        this.$snackbar.showMessage({
+              show: true,
+              color: "warning",
+              text: "Ocorreu um erro no registo, por favor tente mais tarde!",
+              timeout: 4000,
+            });
       }
     },
     registar(value) {
-      this.snackbar = value.snackbar;
-      this.color = value.color;
-      this.text = value.text;
-      this.timeout = value.timeout;
+      this.$snackbar.showMessage({
+        show: true,
+        color: value.color,
+        text: value.text,
+        timeout: 4000,
+      });
       this.atualiza();
     },
     atualiza: async function () {

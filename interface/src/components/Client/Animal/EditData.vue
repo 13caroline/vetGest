@@ -270,15 +270,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-snackbar
-      v-model="snackbar"
-      :timeout="timeout"
-      :color="color"
-      :top="true"
-      class="headline"
-    >
-      {{ text }}
-    </v-snackbar>
   </div>
 </template>
 
@@ -325,11 +316,7 @@ export default {
     ],
     itemscauda: ["Comprida", "Curta", "Amputada"],
     valid: true,
-    snackbar: false,
-    color: "",
     done: false,
-    timeout: -1,
-    text: "",
     nomeRules: [
         (value) => {
           const pattern = /^([a-zA-Z]+)$/;
