@@ -52,4 +52,9 @@ public class Veterinario extends Utilizador implements Serializable {
     )
     private String iban;
 
+    @Column(
+            name = "path"
+    )
+    private String path;
+
 }
