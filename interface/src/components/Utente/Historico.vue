@@ -8,7 +8,11 @@
             Histórico Clínico
           </h3>
         </v-col>
-        <v-col cols="auto" class="ml-auto pl-0" v-if="this.$store.state.tipo == 'Veterinario'">
+        <v-col
+          cols="auto"
+          class="ml-auto pl-0"
+          v-if="this.$store.state.tipo == 'Veterinario'"
+        >
           <EditaHistorico :dados="animal" @clicked="close()"></EditaHistorico>
         </v-col>
         <v-col cols="auto" class="pl-0">
@@ -100,7 +104,6 @@
                   <p class="font-weight-bold">Antecedentes familiares</p>
                 </div>
                 <div>
-                  
                   <p class="infos" v-if="historico.antecedentes == ''">
                     Sem antecedentes familiares.
                   </p>
@@ -121,7 +124,9 @@
                   <p class="infos" v-if="historico.historia_ginecologica == ''">
                     Sem história ginecológica.
                   </p>
-                  <p class="infos" v-else>{{ historico.historia_ginecologica }}</p>
+                  <p class="infos" v-else>
+                    {{ historico.historia_ginecologica }}
+                  </p>
                 </div>
               </v-list-item-content>
             </v-list-item>
@@ -129,16 +134,6 @@
         </v-col>
       </v-row>
     </v-card>
-
-    <v-snackbar
-      v-model="snackbar"
-      :timeout="timeout"
-      :color="color"
-      :top="true"
-      class="headline"
-    >
-      {{ text }}
-    </v-snackbar>
   </div>
 </template>
 
@@ -151,11 +146,7 @@ import RegistaHistorico from "@/components/Dialogs/RegistaHistorico.vue";
 export default {
   props: ["animal"],
   data: () => ({
-    snackbar: false,
-    color: "",
     done: false,
-    timeout: -1,
-    text: "",
     historico: {},
   }),
   methods: {
@@ -163,25 +154,27 @@ export default {
       return moment(data).locale("pt").format("DD/MM/YYYY");
     },
     close(value) {
-      this.snackbar = value.snackbar;
-      this.color = value.color;
-      this.text = value.text;
-      this.timeout = value.timeout;
+      this.$snackbar.showMessage({
+        show: true,
+        color: value.color,
+        text: value.text,
+        timeout: value.timeout,
+      });
       this.atualiza();
     },
-    atualiza: async function(){
-      this.historico = {}
+    atualiza: async function () {
+      this.historico = {};
       let response = await axios.post(
-      "http://localhost:7777/clinica/animal/historico",
-      {
-        animal: this.animal.id,
-      },
-      {
-        headers: { Authorization: "Bearer " + store.getters.token },
-      }
-    );
-    this.historico = response.data;
-    }
+        "http://localhost:7777/clinica/animal/historico",
+        {
+          animal: this.animal.id,
+        },
+        {
+          headers: { Authorization: "Bearer " + store.getters.token },
+        }
+      );
+      this.historico = response.data;
+    },
   },
   components: {
     EditaHistorico,

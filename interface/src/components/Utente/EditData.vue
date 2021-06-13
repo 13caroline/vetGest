@@ -223,23 +223,13 @@
         </v-form>
       </v-card-text>
     </v-container>
-
-    <v-snackbar
-      v-model="snackbar"
-      :timeout="timeout"
-      :color="color"
-      :top="true"
-      class="headline"
-    >
-      {{ text }}
-    </v-snackbar>
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import Cancelar from "@/components/Dialogs/Cancel.vue";
-import store from "@/store.js"
+import store from "@/store.js";
 
 export default {
   props: ["id", "animal"],
@@ -272,11 +262,7 @@ export default {
     ],
     itemscauda: ["Comprida", "Curta", "Amputada"],
     valid: true,
-    snackbar: false,
-    color: "",
     done: false,
-    timeout: -1,
-    text: "",
     nomeRules: [
       (value) => {
         const pattern = /^([a-zA-Z]+)$/;
@@ -310,39 +296,51 @@ export default {
           : "http://localhost:7777/medico/utente/editar";
       if (this.$refs.form.validate()) {
         try {
-          await axios.post(route, {
-            id: this.id,
-            "animal": {
-              raca: this.dados.raca,
-              dataNascimento: this.dados.dataNascimento,
-              nome: this.dados.nome,
-              sexo: this.dados.sexo,
-              especie: this.dados.especie,
-              altura: this.dados.altura,
-              cor: this.cor.toString(),
-              pelagem: this.pelagem.toString(),
-              cauda: this.dados.cauda,
-              observacoes: this.dados.observacoes,
-              castracao: this.dados.castracao,
-              chip: this.dados.chip,
-            }
-          },
-           { headers: { Authorization: "Bearer " + store.getters.token } });
+          await axios.post(
+            route,
+            {
+              id: this.id,
+              animal: {
+                raca: this.dados.raca,
+                dataNascimento: this.dados.dataNascimento,
+                nome: this.dados.nome,
+                sexo: this.dados.sexo,
+                especie: this.dados.especie,
+                altura: this.dados.altura,
+                cor: this.cor.toString(),
+                pelagem: this.pelagem.toString(),
+                cauda: this.dados.cauda,
+                observacoes: this.dados.observacoes,
+                castracao: this.dados.castracao,
+                chip: this.dados.chip,
+              },
+            },
+            { headers: { Authorization: "Bearer " + store.getters.token } }
+          );
           this.$router.push("/clinica/utente/" + this.id);
-          this.text = "Dados editados com sucesso.";
-          this.color = "success";
-          this.snackbar = true;
+
+          this.$snackbar.showMessage({
+            show: true,
+            color: "success",
+            text: "Dados editados com sucesso.",
+            timeout: 4000,
+          });
         } catch (e) {
-          console.log("erro: " + e);
-          this.text = "Ocorreu um erro no registo, por favor tente mais tarde!";
-          this.color = "warning";
-          this.snackbar = true;
+          this.$snackbar.showMessage({
+            show: true,
+            color: "warning",
+            text: "Ocorreu um erro no registo, por favor tente mais tarde!",
+            timeout: 4000,
+          });
         }
       } else {
-        this.text = "Por favor preencha todos os campos.";
-        this.color = "error";
-        this.snackbar = true;
         this.done = false;
+        this.$snackbar.showMessage({
+          show: true,
+          color: "error",
+          text: "Por favor preencha todos os campos.",
+          timeout: 4000,
+        });
       }
     },
   },
@@ -351,10 +349,13 @@ export default {
       this.$store.state.tipo == "Clinica"
         ? "http://localhost:7777/clinica/utente"
         : "http://localhost:7777/medico/utente";
-    let response = await axios.post(route, {
-      id: this.id,
-    },
-     { headers: { Authorization: "Bearer " + store.getters.token } });
+    let response = await axios.post(
+      route,
+      {
+        id: this.id,
+      },
+      { headers: { Authorization: "Bearer " + store.getters.token } }
+    );
     this.dados = response.data;
     this.cor = response.data.cor.split(",");
     this.pelagem = response.data.pelagem.split(",");

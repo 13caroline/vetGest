@@ -262,15 +262,6 @@
           </v-form>
         </v-col>
       </v-row>
-      <v-snackbar
-        v-model="snackbar"
-        :timeout="timeout"
-        :color="color"
-        :top="true"
-        class="headline"
-      >
-        {{ text }}
-      </v-snackbar>
     </v-container>
 
     <v-dialog v-model="dialogDono" width="100%" max-width="700">
@@ -321,11 +312,7 @@ export default {
     date: new Date().toISOString().substr(0, 10),
     menu2: false,
     valid: true,
-    snackbar: false,
     color: "",
-    done: false,
-    timeout: -1,
-    text: "",
     itemscor: [
       "Amarelo",
       "Azul",
@@ -437,20 +424,29 @@ export default {
             },
             { headers: { Authorization: "Bearer " + store.getters.token } }
           );
-          this.text = "Utente registado com sucesso.";
-          this.color = "success";
-          this.snackbar = true;
+
+          this.$snackbar.showMessage({
+            show: true,
+            color: "success",
+            text: "Utente registado com sucesso.",
+            timeout: 4000,
+          });
           this.$router.push("/clinica/utentes");
         } catch (e) {
-          console.log("erro: " + e);
-          this.text = "Ocorreu um erro no registo, por favor tente mais tarde!";
-          this.color = "warning";
-          this.snackbar = true;
+          this.$snackbar.showMessage({
+            show: true,
+            color: "warning",
+            text: "Ocorreu um erro no registo, por favor tente mais tarde!",
+            timeout: 4000,
+          });
         }
       } else {
-        this.text = "Por favor preencha todos os campos.";
-        this.color = "error";
-        this.snackbar = true;
+        this.$snackbar.showMessage({
+          show: true,
+          color: "error",
+          text: "Por favor preencha todos os campos.",
+          timeout: 4000,
+        });
         this.done = false;
       }
     },

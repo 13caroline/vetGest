@@ -38,15 +38,6 @@
         <Login></Login>
       </v-tab-item>
     </v-tabs>
-    <v-snackbar
-      v-model="snackbar"
-      :timeout="timeout"
-      :color="color"
-      :top="true"
-      class="headline"
-    >
-      {{ text }}
-    </v-snackbar>
     <Footer></Footer>
   </div>
 </template>
@@ -62,10 +53,6 @@ export default {
     return {
       tab: null,
       items: ["Sobre", "Registar", "Iniciar Sessão"],
-      snackbar: false, 
-      timeout: -1, 
-      color: "", 
-      text: "", 
     };
   },
   components: {
@@ -78,13 +65,15 @@ export default {
     cancel() {
       this.tab = 0;
     },
-    register(value){
-      this.text = value.text; 
-      this.color = value.color; 
-      this.timeout = value.timeout; 
-      this.snackbar = value.snackbar; 
+    register(value) {
+      this.$snackbar.showMessage({
+        show: true,
+        color: value.color,
+        text: value.text,
+        timeout: value.timeout,
+      });
       this.tab = 0;
-    }
+    },
   },
 };
 </script>

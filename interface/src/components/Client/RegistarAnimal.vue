@@ -113,7 +113,7 @@
                         v-model="date"
                         @input="menu2 = false"
                         locale="pt PT"
-                        :max='new Date().toISOString().substr(0, 10)'
+                        :max="new Date().toISOString().substr(0, 10)"
                       ></v-date-picker>
                     </v-menu>
                   </div>
@@ -122,7 +122,7 @@
                 <v-col>
                   <div>
                     <p class="ma-0">Sexo *</p>
-                    <v-radio-group  class="ma-0" v-model="sexo">
+                    <v-radio-group class="ma-0" v-model="sexo">
                       <v-radio value="Macho" color="#2596be">
                         <template v-slot:label>
                           <div class="body-2">Macho</div>
@@ -271,15 +271,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-snackbar
-      v-model="snackbar"
-      :timeout="timeout"
-      :color="color"
-      :top="true"
-      class="headline"
-    >
-      {{ text }}
-    </v-snackbar>
   </div>
 </template>
 
@@ -316,10 +307,7 @@ export default {
     ],
     itemsraca: ["podengo"],
     itemscauda: ["Comprida", "Curta", "Amputada"],
-    itemsespecie: [
-      "Canídeo",
-      "Felídeo",
-    ],
+    itemsespecie: ["Canídeo", "Felídeo"],
     nome: "",
     chip: "",
     especie: "",
@@ -329,21 +317,17 @@ export default {
     cor: "",
     raca: "",
     pelagem: "",
-    castracao:false, 
+    castracao: false,
     cauda: "",
     observacoes: "",
     valid: true,
-    snackbar: false,
-    color: "",
     done: false,
-    timeout: -1,
-    text: "",
   }),
   methods: {
     registaAnimal: async function () {
       if (this.$refs.form.validate()) {
         try {
-           await axios.post(
+          await axios.post(
             "http://localhost:7777/cliente/animal/registar",
             {
               cliente: {
@@ -371,19 +355,27 @@ export default {
             }
           );
           this.$router.push("/cliente/inicio");
-          this.text = "Animal registado com sucesso.";
-          this.color = "success";
-          this.snackbar = true;
+          this.$snackbar.showMessage({
+            show: true,
+            color: "success",
+            text: "Animal registado com sucesso.",
+            timeout: 4000,
+          });
         } catch (e) {
-          console.log("erro: " + e);
-          this.text = "Ocorreu um erro no registo, por favor tente mais tarde!";
-          this.color = "warning";
-          this.snackbar = true;
+          this.$snackbar.showMessage({
+            show: true,
+            color: "warning",
+            text: "Ocorreu um erro no registo, por favor tente mais tarde!",
+            timeout: 4000,
+          });
         }
       } else {
-        this.text = "Por favor preencha todos os campos.";
-        this.color = "error";
-        this.snackbar = true;
+        this.$snackbar.showMessage({
+          show: true,
+          color: "error",
+          text: "Por favor preencha todos os campos.",
+          timeout: 4000,
+        });
         this.done = false;
       }
     },

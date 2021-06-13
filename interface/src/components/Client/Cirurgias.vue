@@ -47,7 +47,9 @@
                   </v-icon>
                   <v-icon
                     class="mx-1"
-                    v-if="item.estado == 'Cancelada' || item.estado == 'A decorrer'"
+                    v-if="
+                      item.estado == 'Cancelada' || item.estado == 'A decorrer'
+                    "
                     @click="detalhes = true"
                     small
                     v-on="on"
@@ -59,9 +61,7 @@
                 </template>
                 <span class="caption">Ver detalhes</span>
               </v-tooltip>
-              <div
-                v-if="item.estado == 'Agendada'"
-              >
+              <div v-if="item.estado == 'Agendada'">
                 <CancelarComDados
                   :dialogs="cancelar"
                   :dados="item"
@@ -97,15 +97,6 @@
         </v-card>
       </v-dialog>
     </v-container>
-    <v-snackbar
-      v-model="snackbar"
-      :timeout="timeout"
-      :color="color"
-      :top="true"
-      class="headline"
-    >
-      {{ text }}
-    </v-snackbar>
   </div>
 </template>
 
@@ -118,15 +109,11 @@ import moment from "moment";
 
 export default {
   data: () => ({
-    timeout: -1,
-    snackbar: false,
-    color: "",
-    text: "", 
     dados: {},
     dialogs: {},
     cancelar: {
       title: "o agendamento da cirurgia",
-      text: "cirurgia"
+      text: "cirurgia",
     },
     page: 1,
     pageCount: 0,
@@ -186,40 +173,42 @@ export default {
       return moment(data).locale("pt").format("DD/MM/YYYY");
     },
     registar(value) {
-      this.snackbar = value.snackbar;
-      this.color = value.color;
-      this.text = value.text;
-      this.timeout = value.timeout;
+      this.$snackbar.showMessage({
+        show: true,
+        color: value.color,
+        text: value.text,
+        timeout: value.timeout,
+      });
       this.atualiza();
     },
     atualiza: async function () {
-    try {
-      var response = await axios.post(
-        "http://localhost:7777/cliente/cirurgias",
-        {
-          cliente: this.$store.state.email,
-        },
-        {
-          headers: {
-            Authorization: "Bearer " + store.getters.token.toString(),
+      try {
+        var response = await axios.post(
+          "http://localhost:7777/cliente/cirurgias",
+          {
+            cliente: this.$store.state.email,
           },
-        }
-      );
-    } catch (e) {
-      console.log("erro: +" + e);
-    }
-    for (var i = 0; i < response.data.length; i++) {
-      this.cirurgias.push({
-        idConsulta: response.data[i].id,
+          {
+            headers: {
+              Authorization: "Bearer " + store.getters.token.toString(),
+            },
+          }
+        );
+      } catch (e) {
+        console.log("erro: +" + e);
+      }
+      for (var i = 0; i < response.data.length; i++) {
+        this.cirurgias.push({
+          idConsulta: response.data[i].id,
           animal: response.data[i].animal,
           marcacao: response.data[i].data + " " + response.data[i].hora,
           utente: response.data[i].animal.nome,
           veterinario_nome: response.data[i].veterinario.nome,
           descricao: response.data[i].descricao,
           estado: response.data[i].estado,
-      });
-    }
-  },
+        });
+      }
+    },
   },
   created: async function () {
     try {
@@ -240,12 +229,12 @@ export default {
     for (var i = 0; i < response.data.length; i++) {
       this.cirurgias.push({
         idConsulta: response.data[i].id,
-          animal: response.data[i].animal,
-          marcacao: response.data[i].data + " " + response.data[i].hora,
-          utente: response.data[i].animal.nome,
-          veterinario_nome: response.data[i].veterinario.nome,
-          descricao: response.data[i].descricao,
-          estado: response.data[i].estado,
+        animal: response.data[i].animal,
+        marcacao: response.data[i].data + " " + response.data[i].hora,
+        utente: response.data[i].animal.nome,
+        veterinario_nome: response.data[i].veterinario.nome,
+        descricao: response.data[i].descricao,
+        estado: response.data[i].estado,
       });
     }
   },

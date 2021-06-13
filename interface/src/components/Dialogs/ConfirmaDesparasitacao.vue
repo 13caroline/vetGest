@@ -118,18 +118,20 @@ export default {
             },
           }
         );
-        this.$emit("clicked", {
-          text: "Desparasitação confirmada com sucesso.",
+        this.$snackbar.showMessage({
+          show: true,
           color: "success",
-          snackbar: "true",
+          text: "Desparasitação confirmada com sucesso.",
           timeout: 4000,
         });
         this.dialog = false;
       } catch (e) {
-        this.dialog = false;
-        this.text = "Ocorreu um erro, por favor tente mais tarde!";
-        this.color = "warning";
-        this.snackbar = true;
+        this.$snackbar.showMessage({
+          show: true,
+          color: "error",
+          text: "Ocorreu um erro. Por favor tente mais tarde!",
+          timeout: 4000,
+        });
       }
     },
   },

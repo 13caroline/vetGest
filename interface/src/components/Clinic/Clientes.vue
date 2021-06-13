@@ -190,15 +190,6 @@
         </v-card>
       </v-dialog>
     </v-container>
-    <v-snackbar
-        v-model="snackbar"
-        :timeout="timeout"
-        :color="color"
-        :top="true"
-        class="headline"
-      >
-        {{ text }}
-      </v-snackbar>
   </div>
 </template>
 
@@ -254,10 +245,6 @@ export default {
       concelho: "",
       nif: "",
       utentes: "",
-      snackbar: false, 
-      text: "", 
-      timeout: -1, 
-      color: "", 
     };
   },
   methods: {

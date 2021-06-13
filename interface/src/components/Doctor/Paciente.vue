@@ -68,7 +68,7 @@ export default {
     },
     more(item) {
       console.log(item.data);
-    }
+    },
   },
   components: {
     PacienteVacinas,
@@ -87,7 +87,12 @@ export default {
       );
       this.dados = response.data;
     } catch (e) {
-      console.log(e);
+      this.$snackbar.showMessage({
+        show: true,
+        color: "error",
+        text: "Ocorreu um erro. Por favor tente mais tarde!",
+        timeout: 4000,
+      });
     }
   },
 };

@@ -95,15 +95,6 @@
         </v-col>
       </v-row>
     </v-card>
-    <v-snackbar
-      v-model="snackbar"
-      :timeout="timeout"
-      :color="color"
-      :top="true"
-      class="headline"
-    >
-      {{ text }}
-    </v-snackbar>
   </div>
 </template>
 
@@ -122,11 +113,7 @@ export default {
     page: 1,
     pageCount: 0,
     itemsPerPage: 8,
-    snackbar: false,
-    color: "",
     done: false,
-    timeout: -1,
-    text: "",
     headers: [
       {
         text: "Data Prevista",
@@ -199,11 +186,7 @@ export default {
       if (data) return moment(data).locale("pt").format("DD/MM/YYYY");
     },
 
-    imunizacao_adicionada(value) {
-      this.snackbar = value.snackbar;
-      this.color = value.color;
-      this.text = value.text;
-      this.timeout = value.timeout;
+    imunizacao_adicionada() {
       this.loadData();
     },
 

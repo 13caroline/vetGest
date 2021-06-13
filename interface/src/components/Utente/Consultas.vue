@@ -99,16 +99,6 @@
         </v-card>
       </v-dialog>
     </v-card>
-
-    <v-snackbar
-      v-model="snackbar"
-      :timeout="timeout"
-      :color="color"
-      :top="true"
-      class="headline"
-    >
-      {{ text }}
-    </v-snackbar>
   </div>
 </template>
 
@@ -186,10 +176,12 @@ export default {
       return "#9ae5ff";
     },
     registar(value) {
-      this.snackbar = value.snackbar;
-      this.color = value.color;
-      this.text = value.text;
-      this.timeout = value.timeout;
+      this.$snackbar.showMessage({
+        show: true,
+        color: value.color,
+        text: value.text,
+        timeout: 4000,
+      });
       this.atualiza();
     },
     format(data) {

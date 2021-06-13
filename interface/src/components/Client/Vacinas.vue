@@ -153,15 +153,6 @@
         </v-card>
       </v-dialog>
     </v-container>
-    <v-snackbar
-      v-model="snackbar"
-      :timeout="timeout"
-      :color="color"
-      :top="true"
-      class="headline"
-    >
-      {{ text }}
-    </v-snackbar>
   </div>
 </template>
 
@@ -175,11 +166,7 @@ export default {
     dataToma: null,
     tratamento: "", 
     date: new Date().toISOString().substr(0, 10),
-    snackbar: false,
-    color: "",
     done: false,
-    timeout: -1,
-    text: "",
     headers: [
       {
         text: "Data Prevista",

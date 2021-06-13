@@ -123,16 +123,6 @@
         </v-col>
       </v-row>
     </v-card>
-
-    <v-snackbar
-      v-model="snackbar"
-      :timeout="timeout"
-      :color="color"
-      :top="true"
-      class="headline"
-    >
-      {{ text }}
-    </v-snackbar>
   </div>
 </template>
 
@@ -143,11 +133,7 @@ import store from "@/store.js";
 export default {
   props: ["animal"],
   data: () => ({
-    snackbar: false,
-    color: "",
     done: false,
-    timeout: -1,
-    text: "",
     historico: {},
   }),
   methods: {
