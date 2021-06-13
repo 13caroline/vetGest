@@ -171,7 +171,7 @@
                         color="#28a428"
                         v-bind="attrs"
                         v-on="{ on }"
-                        @click="selectedOpen = false"
+                        @click="confirmar('Agendada')"
                       >
                         clipboard-check
                       </v-icon>

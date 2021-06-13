@@ -91,14 +91,6 @@
         <v-card>
           <v-card-title class="mb-6 grey--text">
             Identificação pessoal
-            <v-tooltip right>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn icon small class="ml-2">
-                  <v-icon v-bind="attrs" v-on="on" small>fas fa-pen</v-icon>
-                </v-btn>
-              </template>
-              <span class="caption">Editar dados</span>
-            </v-tooltip>
 
             <v-spacer></v-spacer>
             <v-btn icon small @click="dialog = false">
