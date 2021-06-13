@@ -124,9 +124,6 @@ public class ClienteController {
             return ResponseEntity.badRequest().body("Erro a obter animal!");
         }
         List<Intervencao> intervencoes = intervencaoService.getIntervencoesAnimal(id_animal);
-        if(intervencoes==null){
-            return ResponseEntity.badRequest().body("Erro a obter animal!");
-        }
         AnimalIntervencoes animalIntervencoes = new AnimalIntervencoes();
         animalIntervencoes.setAnimal(animal);
         animalIntervencoes.setIntervencoes(intervencoes);

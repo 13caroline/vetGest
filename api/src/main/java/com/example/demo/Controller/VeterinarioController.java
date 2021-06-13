@@ -105,9 +105,6 @@ public class VeterinarioController {
     @GetMapping("/medico/utentes")
     public ResponseEntity<?> getUtentes(){
         List<Cliente> clientes = clienteService.getClientes();
-        if(clientes.size()==0){
-            return ResponseEntity.badRequest().body("Não Existem Clientes Registados!");
-        }
 
         JSONObject animais = new JSONObject();
         clientes.forEach(cliente -> {
@@ -171,9 +168,7 @@ public class VeterinarioController {
             return ResponseEntity.badRequest().body("Erro a obter veterinário!");
         }
         List<Intervencao> intervencoes = intervencaoService.getIntervencoesVeterinario(veterinario.getId());
-        if(intervencoes.size()==0){
-            return ResponseEntity.badRequest().body("Veterinário não tem consultas marcadas!");
-        }
+
         List<Intervencao> consultas = new ArrayList<>();
         intervencoes.forEach(intervencao -> {
             if(intervencao.getTipo().equals("Consulta")){
@@ -192,9 +187,7 @@ public class VeterinarioController {
             return ResponseEntity.badRequest().body("Erro a obter veterinário!");
         }
         List<Intervencao> intervencoes = intervencaoService.getIntervencoesVeterinario(veterinario.getId());
-        if(intervencoes.size()==0){
-            return ResponseEntity.badRequest().body("Veterinário não tem cirurgias marcadas!");
-        }
+
         List<Intervencao> consultas = new ArrayList<>();
         intervencoes.forEach(intervencao -> {
             if(intervencao.getTipo().equals("Cirurgia")){
@@ -298,10 +291,7 @@ public class VeterinarioController {
     @PostMapping("/medico/utente/vacinas")
     public ResponseEntity<?> getVacinas(@RequestBody Animal id){
         List<Imunizacao> imunizacoes = imunizacaoService.getImunizacoes(id.getId());
-        if(imunizacoes.size()==0)
-        {
-            return ResponseEntity.badRequest().body("Não tem vacinas agendadas!");
-        }
+
         List<Imunizacao> vacinas = new ArrayList<>();
         imunizacoes.forEach(imunizacao -> {
             if(imunizacao.getTipo().equals("Vacina"))
@@ -316,10 +306,7 @@ public class VeterinarioController {
     @PostMapping("/medico/utente/desparasitacoes")
     public ResponseEntity<?> getDesparasitacoes(@RequestBody Animal id){
         List<Imunizacao> imunizacoes = imunizacaoService.getImunizacoes(id.getId());
-        if(imunizacoes.size()==0)
-        {
-            return ResponseEntity.badRequest().body("Não tem desparasitações agendadas!");
-        }
+
         List<Imunizacao> desparasitacoes = new ArrayList<>();
         imunizacoes.forEach(imunizacao -> {
             if(imunizacao.getTipo().equals("Desparasitação"))
@@ -473,9 +460,7 @@ public class VeterinarioController {
     public ResponseEntity<?> getInternamentos(@RequestBody Veterinario email){
         Veterinario veterinario = veterinarioService.getVetByEmail(email.getEmail());
         List<Internamento> internamentos = internamentoService.getAllInternamentosByVetId(veterinario.getId());
-        if(internamentos.size()==0){
-            return ResponseEntity.badRequest().body("Não tem internamentos efetuados!");
-        }
+
         return ResponseEntity.accepted().body(internamentos);
     }
 
