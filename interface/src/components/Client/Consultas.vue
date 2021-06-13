@@ -49,6 +49,7 @@
                     v-if="item.estado == 'Concluída'"
                     @click="dialog = true"
                     small
+                    color="#52b9dd"
                     v-on="on"
                     v-bind="attrs"
                   >

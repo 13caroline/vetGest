@@ -37,6 +37,7 @@
                     small
                     v-on="on"
                     v-bind="attrs"
+                    color="#52b9dd"
                   >
                     mdi-plus-circle
                   </v-icon>
@@ -284,7 +285,6 @@
 </template>
 
 <script>
-// import axios from 'axios'
 import CancelarComDados from "@/components/Dialogs/CancelarComDados.vue"
 import exemplo from "@/components/Client/exemploCirurgia.vue";
 import axios from "axios";
@@ -416,26 +416,6 @@ export default {
     more(item) {
       console.log(item.data);
     },
-    /* cancelar: async function () {
-      
-		 try {
-          var resposta = await axios.post("http://localhost:7777/cliente/cancelarCirurgia", {
-            estado: "Cancelada"
-          });
-          console.log(JSON.stringify(resposta.data));
-          this.cancelar = false;
-          this.text = "Desparasitação confirmada com sucesso.";
-          this.color = "success";
-          this.snackbar = true;
-        } catch (e) {
-          console.log("erro: " + e);
-          this.cancelar = false;
-          this.text = "Ocorreu um erro, por favor tente mais tarde!";
-          this.color = "warning";
-          this.snackbar = true;
-        }
-		
-    },*/
   },
   created: async function () {
     try {
