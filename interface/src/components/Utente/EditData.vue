@@ -317,7 +317,9 @@ export default {
             },
             { headers: { Authorization: "Bearer " + store.getters.token } }
           );
-          this.$router.push("/clinica/utente/" + this.id);
+          if (this.$store.state.tipo == "Clínica")
+            this.$router.push("/clinica/utente/" + this.id);
+          else this.$router.push("/medico/utente/" + this.id);
 
           this.$snackbar.showMessage({
             show: true,

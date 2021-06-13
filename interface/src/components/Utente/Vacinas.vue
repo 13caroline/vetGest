@@ -75,7 +75,7 @@
                 "
               >
                 <ConfirmaDespar
-                  :dataPrev="item.dataPrev"
+                  :dataPrev="item.data"
                   :id="item.id"
                   @clicked="imunizacao_adicionada"
                 ></ConfirmaDespar>
@@ -109,7 +109,6 @@ export default {
   props: ["animal"],
   data: () => ({
     dataPrev: {},
-
     page: 1,
     pageCount: 0,
     itemsPerPage: 8,
@@ -187,10 +186,17 @@ export default {
     },
 
     imunizacao_adicionada() {
+      this.$snackbar.showMessage({
+            show: true,
+            color: "success",
+            text: "Imunização adicionada com sucesso.",
+            timeout: 4000,
+          });
       this.loadData();
     },
 
     loadData: async function () {
+      this.items = []
       let route =
         this.$store.state.tipo == "Veterinario"
           ? "http://localhost:7777/medico/imunizacao"

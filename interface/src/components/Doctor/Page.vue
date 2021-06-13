@@ -495,6 +495,13 @@ export default {
 
         if (res) {
           this.internamento = false;
+          this.$snackbar.showMessage({
+            show: true,
+            color: "success",
+            text: "Utente admitido em internamento.",
+            timeout: 4000,
+          });
+          this.atualiza();
         }
       } catch (e) {
         this.$snackbar.showMessage({
