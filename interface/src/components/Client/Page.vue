@@ -16,9 +16,8 @@
                 dark
                 to="/cliente/registar/animal"
               >
-              Registar Animal
+                Registar Animal
                 <v-icon small class="ml-2">far fa-plus-square</v-icon>
-                
               </v-btn>
             </v-col>
           </v-row>
@@ -91,9 +90,8 @@
                 dark
                 to="/cliente/consultas/agendar"
               >
-              Agendar Consulta
+                Agendar Consulta
                 <v-icon small class="ml-2">far fa-calendar-alt</v-icon>
-                
               </v-btn>
             </v-col>
           </v-row>
@@ -107,6 +105,8 @@
             :page.sync="page"
             :items-per-page="itemsPerPage"
             @page-count="pageCount = $event"
+            no-data-text="Não existem intervenções agendadas."
+            no-results-text="Não foram encontrados resultados."
           >
             <template v-slot:[`item.estado`]="{ item }">
               <v-chip :color="estadopedido(item.estado)" small>

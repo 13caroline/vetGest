@@ -13,6 +13,8 @@
             :items="items"
             class="elevation-1"
             hide-default-footer
+            no-data-text="Não existem imunizações registadas."
+            no-results-text="Não foram encontrados resultados."
           >
             <template v-slot:[`item.estado`]="{ item }">
               <v-chip :color="estadopedido(item.estado)" small>
@@ -173,7 +175,7 @@ export default {
     dialogCancel: false,
     dataPrevista: "",
     dataToma: null,
-    tratamento: "", 
+    tratamento: "",
     date: new Date().toISOString().substr(0, 10),
     snackbar: false,
     color: "",

@@ -25,6 +25,8 @@
             :items="items"
             class="elevation-1"
             hide-default-footer
+            no-data-text="Não existem vacinas ou desparasitações registadas."
+            no-results-text="Não foram encontrados resultados."
           >
             <template v-slot:[`item.dataToma`]="{ item }">
               {{ format(item.dataToma) }}
@@ -409,22 +411,22 @@ export default {
       console.log("erro: +" + e);
     }
 
-      for (var i = 0; i < response.data.length; i++) {
-        if (!response.data[i].veterinario) this.nomeMedico = "Sem Referência";
-        else this.nomeMedico = response.data[i].veterinario.nome;
-        this.items.push({
-          dataPrevista: moment(response.data[i].data, "YYYY-MM-DD", true)
-            .locale("pt")
-            .format("DD/MM/YYYY"),
-          tipo: response.data[i].tipo,
-          tratamento: response.data[i].tratamento,
-          medico: this.nomeMedico,
-          estado: response.data[i].estado,
-          id: response.data[i].id,
-          dataToma: response.data[i].data_toma,
-        });
-      }
-      this.idAnimal = this.animal.id;
+    for (var i = 0; i < response.data.length; i++) {
+      if (!response.data[i].veterinario) this.nomeMedico = "Sem Referência";
+      else this.nomeMedico = response.data[i].veterinario.nome;
+      this.items.push({
+        dataPrevista: moment(response.data[i].data, "YYYY-MM-DD", true)
+          .locale("pt")
+          .format("DD/MM/YYYY"),
+        tipo: response.data[i].tipo,
+        tratamento: response.data[i].tratamento,
+        medico: this.nomeMedico,
+        estado: response.data[i].estado,
+        id: response.data[i].id,
+        dataToma: response.data[i].data_toma,
+      });
+    }
+    this.idAnimal = this.animal.id;
   },
   components: {
     NovaDesparasitacao,
