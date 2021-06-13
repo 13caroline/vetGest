@@ -81,9 +81,7 @@ public class ClinicaController {
     @GetMapping("/clinica/consultas")
     public ResponseEntity<?> getConsultas(){
         List<Intervencao> intervencoes = intervencaoService.getAllConsultas();
-        if(intervencoes.size()==0){
-            return ResponseEntity.badRequest().body("Não Existem Intervenções Agendadas!");
-        }
+
         JSONObject intervencoesObject = new JSONObject();
         intervencoes.forEach(intervencao -> {
             Cliente cliente = clienteService.findClienteByAnimais(intervencao.getAnimal());
@@ -138,9 +136,7 @@ public class ClinicaController {
     @GetMapping("/clinica/clientes")
     public ResponseEntity<?> getClientes(){
         List<Cliente> clientes = clienteService.getClientes();
-        if(clientes.size()==0){
-            return ResponseEntity.badRequest().body("Não Existem Clientes Registados!");
-        }
+
         return  ResponseEntity.accepted().body(clientes);
     }
 
@@ -148,9 +144,7 @@ public class ClinicaController {
     @GetMapping("/clinica/utentes")
     public ResponseEntity<?> getUtentes(){
         List<Cliente> clientes = clienteService.getClientes();
-        if(clientes.size()==0){
-            return ResponseEntity.badRequest().body("Não Existem Clientes Registados!");
-        }
+
         JSONObject animais = new JSONObject();
         clientes.forEach(cliente -> {
             cliente.getAnimais().forEach(animal -> {
@@ -225,9 +219,7 @@ public class ClinicaController {
             return ResponseEntity.badRequest().body("Utente não encontrado!");
         }
         List<Imunizacao> imunizacoes = imunizacaoService.getImunizacoes(a.getId());
-        if(imunizacoes.size()==0){
-            return ResponseEntity.badRequest().body("Não foi possível obter imunizações!");
-        }
+
         return  ResponseEntity.accepted().body(imunizacoes);
     }
 
@@ -241,9 +233,6 @@ public class ClinicaController {
             return ResponseEntity.badRequest().body("Utente não encontrado!");
         }
         List<Intervencao> intervencoes = intervencaoService.getIntervencoesAnimal(a.getId());
-        if(intervencoes.size()==0){
-            return ResponseEntity.badRequest().body("Não foi possível obter intervencões!");
-        }
         return  ResponseEntity.accepted().body(intervencoes);
     }
 
@@ -326,9 +315,7 @@ public class ClinicaController {
     @GetMapping("/clinica/medicos")
     public ResponseEntity<?> getMedicos(){
         List<Veterinario> veterinarios = veterinarioService.getAllVeterinarios();
-        if(veterinarios.size()==0){
-            return ResponseEntity.badRequest().body("Não Existem Veterinários");
-        }
+
         return  ResponseEntity.accepted().body(veterinarios);
     }
 

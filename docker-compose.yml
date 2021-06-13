@@ -54,10 +54,15 @@ services:
         environment:
             MYSQL_DATABASE: vetgest
             MYSQL_ROOT_PASSWORD: pass
+        volumes:
+            - './populacao.sql:/scripts/populacao.sql'
+            #- "./populacao.sql:/docker-entrypoint-initdb.d/"
         ports:
             - 3308:3306
         networks:
             - network_backend
+        cap_add:
+            - SYS_NICE  # CAP_SYS_NICE
 
     backend1:
         build: 
@@ -91,7 +96,7 @@ services:
             WAIT_HOSTS: mysql:3306
             SPRING_DATASOURCE_URL: jdbc:mysql://vetgest_db:3306/vetgest?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Europe/Lisbon
             SPRING_DATASOURCE_USERNAME: root
-            SPRING_DATASOURCE_PASSWORD: pass
+            SPRING_DATASOURCE_PASSWORD: pass 
         ports:
             - 9092:9090
         networks:
