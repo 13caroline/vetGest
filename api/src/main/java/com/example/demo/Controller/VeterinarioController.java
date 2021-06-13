@@ -220,6 +220,22 @@ public class VeterinarioController {
         animal.put("cliente_id",c.getId());
         return  ResponseEntity.accepted().body(animal.toString());
     }
+    
+    @CrossOrigin
+    @PostMapping("/medico/imunizacao")
+    public ResponseEntity<?> getImunizacao(@RequestBody String body) throws JSONException, JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+        Animal a = animalService.getAnimalById(node.get("id").asInt());
+        if(a==null){
+            return ResponseEntity.badRequest().body("Utente não encontrado!");
+        }
+        List<Imunizacao> imunizacoes = imunizacaoService.getImunizacoes(a.getId());
+        if(imunizacoes.size()==0){
+            return ResponseEntity.badRequest().body("Não foi possível obter imunizações!");
+        }
+        return  ResponseEntity.accepted().body(imunizacoes);
+    }
 
     @CrossOrigin
     @PostMapping("/medico/animal/adiciona/imunizacao")
@@ -471,52 +487,45 @@ public class VeterinarioController {
     public ResponseEntity<?> getInternamento(@RequestBody String body) throws JsonProcessingException, JSONException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);
-        int id_animal = node.get("animal").asInt();
+        int id_animal = node.get("id").asInt();
         Animal animal = animalService.getAnimalById(id_animal);
-        String vet_email = node.get("email").asText();
-        Veterinario vet = veterinarioService.getVetByEmail(vet_email);
-        int id = node.get("internamentoId").asInt();
-        Internamento internamento = internamentoService.findById(id);
 
-        if(animal==null || vet == null || internamento ==null){
-            return ResponseEntity.badRequest().body("Alguma das Entidades nao existe!");
-        }
+        if(animal==null)
+            return ResponseEntity.badRequest().body("Animal nao exite");
 
-        if(internamento.getVeterinario().getEmail().equals(vet_email) && internamento.getAnimal().getId() == id_animal) {
+        Internamento internamento = internamentoService.findByAnimalIdAndEstado(id_animal,"Internado");
+        List<NotaInternamento> notaInternamentos = internamentoService.findAllByInternamento(internamento);
 
-            List<NotaInternamento> notaInternamentos = internamentoService.findAllByInternamento(internamento);
-            JSONObject response = new JSONObject();
-            JSONObject animal1 = new JSONObject();
-            animal1.put("id",animal.getId());
-            animal1.put("nome",animal.getNome());
-            animal1.put("raca",animal.getRaca());
-            animal1.put("dataNascimento",animal.getDataNascimento());
-            animal1.put("sexo",animal.getSexo());
-            animal1.put("especie",animal.getEspecie());
-            animal1.put("cor",animal.getCor());
-            animal1.put("cauda",animal.getCauda());
-            animal1.put("pelagem",animal.getPelagem());
-            animal1.put("altura",animal.getAltura());
-            animal1.put("chip",animal.getChip());
-            animal1.put("castracao",animal.isCastracao());
-            animal1.put("observacoes",animal.getObservacoes());
-            response.put("animal",animal1);
-            notaInternamentos.forEach(notaInternamento -> {
-                try {
-                    JSONObject nota = new JSONObject();
-                    nota.put("descricao", notaInternamento.getDescricao());
-                    nota.put("data", notaInternamento.getData());
-                    response.accumulate("notas",nota);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            });
+        System.out.println(notaInternamentos);
 
-            return ResponseEntity.accepted().body(response.toString());
-        }
+        JSONObject response = new JSONObject();
+        JSONObject animal1 = new JSONObject();
+        animal1.put("id",animal.getId());
+        animal1.put("nome",animal.getNome());
+        animal1.put("raca",animal.getRaca());
+        animal1.put("dataNascimento",animal.getDataNascimento());
+        animal1.put("sexo",animal.getSexo());
+        animal1.put("especie",animal.getEspecie());
+        animal1.put("cor",animal.getCor());
+        animal1.put("cauda",animal.getCauda());
+        animal1.put("pelagem",animal.getPelagem());
+        animal1.put("altura",animal.getAltura());
+        animal1.put("chip",animal.getChip());
+        animal1.put("castracao",animal.isCastracao());
+        animal1.put("observacoes",animal.getObservacoes());
 
-        return ResponseEntity.badRequest().body("Erro entre entidades e internamento");
-
+        response.put("animal",animal1);
+        notaInternamentos.forEach(notaInternamento -> {
+            try {
+                JSONObject nota = new JSONObject();
+                nota.put("descricao", notaInternamento.getDescricao());
+                nota.put("data", notaInternamento.getData());
+                response.accumulate("notas",nota);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
+        return ResponseEntity.accepted().body(response.toString());
     }
 
     @CrossOrigin
@@ -528,8 +537,7 @@ public class VeterinarioController {
         Animal animal = animalService.getAnimalById(id_animal);
         String vet_email = node.get("email").asText();
         Veterinario vet = veterinarioService.getVetByEmail(vet_email);
-        int id = node.get("internamentoId").asInt();
-        Internamento internamento = internamentoService.findById(id);
+        Internamento internamento = internamentoService.findByAnimalIdAndEstado(id_animal,"Internado");
 
         if(animal==null || vet == null || internamento == null){
             return ResponseEntity.badRequest().body("Alguma das Entidades nao existe!");
