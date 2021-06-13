@@ -259,7 +259,7 @@ public class ClinicaController {
     public ResponseEntity<?> getIntervencoesPendentes(){
         List<Intervencao> intervencoes = intervencaoService.findAllByTipoAndEstado("Consulta","Pendente");
 
-        return  ResponseEntity.badRequest().body(intervencoes);
+        return  ResponseEntity.accepted().body(intervencoes);
     }
 
 

@@ -3,16 +3,26 @@
     <v-container>
       <v-data-table
         :headers="headers"
-        :items="consultas"
+        :items="pedidos"
         class="elevation-1"
         hide-default-footer
         no-data-text="Não existem pedidos de consulta."
         no-results-text="Não foram encontrados resultados."
       >
-        <template v-slot:[`item.estado`]="{ item }">
-          <v-chip :color="estadopedido(item.estado)" small>
-            {{ item.estado }}
-          </v-chip>
+        <template v-slot:[`item.animal`]="{ item }">
+          <span class="ml-1">{{ item.animal.nome }}</span>
+        </template>
+
+        <template v-slot:[`item.veterinario`]="{ item }">
+          <span class="ml-1">{{ item.veterinario.nome }}</span>
+        </template>
+
+        <template v-slot:[`item.marcacao`]="{ item }">
+          {{ format(item.marcacao) }}
+        </template>
+
+        <template v-slot:[`item.data_pedido`]="{ item }">
+          {{ format2(item.data_pedido) }}
         </template>
 
         <template v-slot:[`item.detalhes`]="{ item }">
@@ -20,31 +30,31 @@
             <template v-slot:activator="{ on, attrs }">
               <v-icon
                 class="mx-1"
-                v-if="item.estado == 'Concluída'"
-                @click="dialog = true"
+                @click="confirmar(item)"
                 small
                 v-on="on"
+                color="#66BB6A"
                 v-bind="attrs"
               >
-                fas fa-info-circle
+                mdi-calendar-check
               </v-icon>
             </template>
-            <span class="caption">Ver detalhes</span>
+            <span class="caption">Confirmar consulta</span>
           </v-tooltip>
           <v-tooltip top>
             <template v-slot:activator="{ on, attrs }">
               <v-icon
                 class="mx-1"
-                v-if="item.estado == 'Agendada' || item.estado == 'Pendente'"
-                v-bind="attrs"
-                v-on="on"
+                @click="openDialog(item)"
                 small
-                @click="cancelar = true"
+                color="#E57373"
+                v-on="on"
+                v-bind="attrs"
               >
-                fas fa-calendar-times
+                mdi-calendar-remove
               </v-icon>
             </template>
-            <span class="caption">Cancelar agendamento</span>
+            <span class="caption">Rejeitar consulta</span>
           </v-tooltip>
         </template>
       </v-data-table>
@@ -59,6 +69,88 @@
         ></v-pagination>
       </div>
     </v-container>
+
+    <v-dialog v-model="dialog" persistent width="100%" max-width="460">
+      <v-card>
+        <v-card-title class="cancel"> Cancelar consulta </v-card-title>
+        <v-card-text>
+          <v-row class="mt-2">
+            <v-col class="pb-0" align="right" cols="5">
+              <span class="text-uppercase">Nome do Animal</span>
+            </v-col>
+            <v-col class="pl-0 pb-0" cols="7">
+              <span class="black--text">
+                <strong>{{ nome }}</strong>
+                ({{ raca }})
+              </span>
+            </v-col>
+
+            <v-col class="pb-0" align="right" cols="5">
+              <span class="text-uppercase">Motivo da consulta</span>
+            </v-col>
+            <v-col class="pl-0 pb-0" cols="7">
+              <span class="black--text">
+                <strong>{{ dados.descricao }}</strong>
+              </span>
+              <br />
+              <span>{{ dados.motivo }}</span>
+            </v-col>
+
+            <v-col class="pb-0" align="right" cols="5">
+              <span class="text-uppercase">Data</span>
+            </v-col>
+            <v-col class="pl-0 pb-0" cols="7">
+              <span class="black--text">
+                <strong>{{ format(dados.marcacao) }}</strong>
+              </span>
+            </v-col>
+
+            <v-col class="pb-0" align="right" cols="5">
+              <span class="text-uppercase">Médico</span>
+            </v-col>
+            <v-col class="pl-0 pb-0" cols="7">
+              <span class="black--text">
+                <strong>Dr.º {{ veterinario }}</strong>
+              </span>
+            </v-col>
+          </v-row>
+
+          <p class="mt-12">Tem a certeza que pretende cancelar a consulta?</p>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            depressed
+            large
+            width="50%"
+            dark
+            color="#BDBDBD"
+            @click="dialog = false"
+          >
+            Não
+          </v-btn>
+          <v-btn
+            depressed
+            large
+            dark
+            color="#2596be"
+            width="50%"
+            @click="rejeitar(dados.id)"
+          >
+            Sim
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="timeout"
+      :color="color"
+      :top="true"
+      class="headline"
+    >
+      {{ text }}
+    </v-snackbar>
   </div>
 </template>
 
@@ -73,19 +165,25 @@ export default {
       page: 1,
       pageCount: 0,
       itemsPerPage: 8,
-      
+      pedidos: [],
       headers: [
         {
           text: "UTENTE",
           align: "start",
           sortable: true,
-          value: "utente",
+          value: "animal",
         },
         {
           text: "MÉDICO",
           align: "start",
           sortable: true,
           value: "veterinario",
+        },
+        {
+          text: "DATA PEDIDO",
+          value: "data_pedido",
+          sortable: true,
+          align: "start",
         },
         {
           text: "DATA",
@@ -95,19 +193,7 @@ export default {
         },
         {
           text: "MOTIVO",
-          value: "motivo",
-          sortable: true,
-          align: "start",
-        },
-        {
-          text: "SERVIÇO",
-          value: "tipo",
-          sortable: true,
-          align: "start",
-        },
-        {
-          text: "ESTADO",
-          value: "estado",
+          value: "descricao",
           sortable: true,
           align: "start",
         },
@@ -118,69 +204,112 @@ export default {
           align: "start",
         },
       ],
-      agendamento: [],
+      dialog: false,
       snackbar: false,
       color: "",
       text: "",
       timeout: -1,
+      dados: {},
+      nome: "",
+      raca: "",
+      veterinario: "",
     };
   },
   methods: {
     format(data) {
-      return moment(data).locale("pt").format("DD/MM/YYYY HH:mm");
+      return moment(data, "YYYY-MM-DD HH:mm", true)
+        .locale("pt")
+        .format("DD/MM/YYYY HH:mm");
     },
-    registar(value) {
-      this.snackbar = value.snackbar;
-      this.color = value.color;
-      this.text = value.text;
-      this.timeout = value.timeout;
-      this.atualiza();
+    format2(data) {
+      return moment(data, "YYYY-MM-DDTHH:mm", true)
+        .locale("pt")
+        .format("DD/MM/YYYY HH:mm");
+    },
+    confirmar: async function (item) {
+      try {
+        await axios.post(
+          "http://localhost:7777/clinica/intervencao/alterar",
+          {
+            id: item.id,
+            estado: "Agendada",
+          },
+          {
+            headers: { Authorization: "Bearer " + store.getters.token },
+          }
+        );
+        (this.text = "Consulta confirmada com sucesso"),
+          (this.color = "success"),
+          (this.snackbar = "true"),
+          (this.timeout = 4000);
+        this.atualiza();
+      } catch (e) {
+        (this.text = "Ocorreu um erro, por favor tente mais tarde!"),
+          (this.color = "warning"),
+          (this.snackbar = "true"),
+          (this.timeout = 4000);
+      }
+    },
+    rejeitar: async function (item) {
+      try {
+        await axios.post(
+          "http://localhost:7777/clinica/intervencao/alterar",
+          {
+            id: item,
+            estado: "Cancelada",
+          },
+          {
+            headers: { Authorization: "Bearer " + store.getters.token },
+          }
+        );
+        (this.text = "Consulta cancelada com sucesso"),
+          (this.color = "success"),
+          (this.snackbar = "true"),
+          (this.timeout = 4000);
+        this.atualiza();
+      } catch (e) {
+        (this.text = "Ocorreu um erro, por favor tente mais tarde!"),
+          (this.color = "warning"),
+          (this.snackbar = "true"),
+          (this.timeout = 4000);
+      }
     },
     atualiza: async function () {
-      this.agendamento = [];
+      this.pedidos = [];
       let response = await axios.get(
-        "http://localhost:7777/clinica/consultas",
+        "http://localhost:7777/clinica/intervencoes/pedidos",
         {
           headers: { Authorization: "Bearer " + store.getters.token },
         }
       );
 
-      for (var i = 0; i < response.data.intervencoes.length; i++) {
-        var element = response.data.intervencoes[i];
-        element.utente = response.data.intervencoes[i].animal.nome;
-        element.veterinario = response.data.intervencoes[i].veterinario_nome;
-        element.especie = response.data.intervencoes[i].animal.especie;
-        element.marcacao =
-          response.data.intervencoes[i].data +
-          " " +
-          response.data.intervencoes[i].hora;
-        this.agendamento.push(element);
+      for (var i = 0; i < response.data.length; i++) {
+        var element = response.data[i];
+        element.marcacao = response.data[i].data + " " + response.data[i].hora;
+        this.pedidos.push(element);
       }
+    },
+    openDialog(item) {
+      this.dados = item;
+      this.nome = item.animal.nome;
+      this.raca = item.animal.raca;
+      this.veterinario = item.veterinario.nome;
+      console.log(this.dados);
+      this.dialog = true;
     },
   },
   created: async function () {
-    let response = await axios.get("http://localhost:7777/clinica/consultas", {
-      headers: { Authorization: "Bearer " + store.getters.token },
-    });
-
-    for (var i = 0; i < response.data.intervencoes.length; i++) {
-      var element = response.data.intervencoes[i];
-      element.utente = response.data.intervencoes[i].animal.nome;
-      element.veterinario = response.data.intervencoes[i].veterinario_nome;
-      element.especie = response.data.intervencoes[i].animal.especie;
-      element.marcacao =
-        response.data.intervencoes[i].data +
-        " " +
-        response.data.intervencoes[i].hora;
-      this.agendamento.push(element);
+    let response = await axios.get(
+      "http://localhost:7777/clinica/intervencoes/pedidos",
+      {
+        headers: { Authorization: "Bearer " + store.getters.token },
+      }
+    );
+    for (var i = 0; i < response.data.length; i++) {
+      var element = response.data[i];
+      element.marcacao = response.data[i].data + " " + response.data[i].hora;
+      this.pedidos.push(element);
     }
-  },
-  computed: {
-    filteredData() {
-      return this.agendamento.filter(
-        (item) => item.estado === "Agendada" || item.estado === "A decorrer"
-      );
-    },
   },
 };
 </script>

@@ -24,6 +24,9 @@
             class="elevation-1"
             hide-default-footer
             no-data-text="Não existe histórico de consultas."
+            :page.sync="page"
+            :items-per-page="itemsPerPage"
+            @page-count="pageCount = $event"
           >
             <template v-slot:[`item.marcacao`]="{ item }">
               {{ format(item.marcacao) }}
@@ -63,6 +66,16 @@
               </div>
             </template>
           </v-data-table>
+          <div class="text-center pt-2">
+            <v-pagination
+              v-model="page"
+              :length="pageCount"
+              circle
+              :total-visible="4"
+              color="#2596be"
+              class="custom"
+            ></v-pagination>
+          </div>
         </v-col>
       </v-row>
 
@@ -110,6 +123,10 @@ export default {
   props: ["animal"],
   data: () => ({
     dialog: false,
+
+    page: 1,
+    pageCount: 0,
+    itemsPerPage: 8,
     dialogs: {},
     dados: {},
     cancela: {},
@@ -235,5 +252,27 @@ export default {
 <style scoped>
 .calendar {
   font-size: 16px;
+}
+</style>
+
+<style>
+.custom {
+  width: auto;
+  margin-left: auto;
+}
+
+.custom .v-pagination__navigation {
+  height: 26px !important;
+  width: 26px !important;
+}
+
+.custom .v-pagination__navigation .v-icon {
+  font-size: 16px !important;
+}
+
+.custom .v-pagination__item {
+  height: 26px !important;
+  min-width: 26px !important;
+  font-size: 0.85rem !important;
 }
 </style>

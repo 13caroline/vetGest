@@ -61,7 +61,7 @@
               </v-timeline>
             </v-card-text>
             <v-card-text v-if="!notas">
-              <em>sem notas</em>
+              <em>Não existem notas de internamento</em>
             </v-card-text>
           </v-card>
         </v-col>
