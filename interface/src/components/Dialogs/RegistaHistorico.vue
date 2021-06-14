@@ -180,7 +180,7 @@ export default {
       let route =
         this.$store.state.tipo == "Clinica"
           ? "http://localhost:7777/clinica/animal/historico/inserir"
-          : "http://localhost:7777/medico/agendar/intervencao";
+          : "http://localhost:7777/medico/animal/historico/inserir";
       await axios
         .post(
           route,

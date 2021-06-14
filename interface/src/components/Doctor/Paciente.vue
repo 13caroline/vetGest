@@ -30,6 +30,10 @@
         <v-tab-item>
           <Cirurgia :animal="dados"></Cirurgia>
         </v-tab-item>
+
+        <v-tab-item>
+          <Historico :animal="dados"></Historico>
+        </v-tab-item>
       </v-tabs-items>
     </v-container>
   </div>
@@ -39,6 +43,7 @@
 import PacienteVacinas from "@/components/Utente/Vacinas.vue";
 import Consultas from "@/components/Utente/Consultas.vue";
 import Cirurgia from "@/components/Utente/Cirurgias.vue";
+import Historico from "@/components/Utente/Historico.vue";
 import Dados from "@/components/Utente/Dados.vue";
 import axios from "axios";
 import store from "@/store.js";
@@ -75,6 +80,8 @@ export default {
     Consultas,
     Cirurgia,
     Dados,
+
+    Historico,
   },
   created: async function () {
     try {
