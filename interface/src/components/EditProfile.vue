@@ -202,7 +202,7 @@ export default {
           ? "http://localhost:7777/clinica"
           : "http://localhost:7777/medico/intervencao";
     let response = await axios.post(
-      "http://localhost:7777/clinica",
+      route,
       {
         email: this.$store.state.email,
       },

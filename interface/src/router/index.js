@@ -238,7 +238,12 @@ const routes = [
     name: 'Médico Internamento Alta',
     component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/Alta.vue')
   },
- 
+  // Preferências Médico Editar
+  {
+    path: '/medico/preferencias/editar',
+    name: 'Preferências Médico Editar',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Doctor/EditProfile.vue')
+  },
 
 
 
