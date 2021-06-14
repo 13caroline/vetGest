@@ -32,9 +32,8 @@
             :page.sync="page"
             :items-per-page="itemsPerPage"
             @page-count="pageCount = $event"
-            
             no-data-text="Não existe histórico de consultas."
-          no-results-text="Não foram encontrados resultados."
+            no-results-text="Não foram encontrados resultados."
           >
             <template v-slot:[`item.estado`]="{ item }">
               <v-chip :color="estadopedido(item.estado)" small>
@@ -56,7 +55,9 @@
                     mdi-plus-circle
                   </v-icon>
                   <v-icon
-                    v-if="item.estado == 'Cancelada' || item.estado == 'A decorrer'"
+                    v-if="
+                      item.estado == 'Cancelada' || item.estado == 'A decorrer'
+                    "
                     small
                     disabled
                     v-on="on"
@@ -101,14 +102,14 @@
             </v-btn>
           </v-card-title>
           <v-card-text class="black--text">
-            <p>{{format(nota.data)}} {{nota.hora}}</p>
+            <p>{{ format(nota.data) }} {{ nota.hora }}</p>
             <span v-if="!nota.observacoes" class="font-italic">
-             Sem notas médicas.
+              Sem notas médicas.
             </span>
             <span class="font-italic">
-              {{nota.observacoes}}
+              {{ nota.observacoes }}
             </span>
-            <p>{{nota.veterinario_nome}}</p>
+            <p>{{ nota.veterinario_nome }}</p>
           </v-card-text>
         </v-card>
       </v-dialog>
@@ -256,11 +257,7 @@
                   <Cancelar :dialogs="cancelarC" @clicked="confirma"></Cancelar>
                 </v-col>
                 <v-col cols="auto">
-                  <v-btn
-                    color="#2596be"
-                    small
-                    dark
-                    @click="registaConsulta()"
+                  <v-btn color="#2596be" small dark @click="registaConsulta()"
                     >Registar</v-btn
                   >
                 </v-col>
@@ -276,10 +273,10 @@
 
 <script>
 import CancelarComDados from "@/components/Dialogs/CancelarComDados.vue";
-import Cancelar from "@/components/Dialogs/Cancel.vue"
+import Cancelar from "@/components/Dialogs/Cancel.vue";
 import axios from "axios";
 import store from "@/store.js";
-import moment from "moment"
+import moment from "moment";
 export default {
   props: ["animal"],
   data: () => ({
@@ -397,10 +394,10 @@ export default {
   }),
   components: {
     CancelarComDados,
-    Cancelar
+    Cancelar,
   },
   methods: {
-    notas(item){
+    notas(item) {
       this.dialog = true;
       this.nota = item;
     },
@@ -426,11 +423,11 @@ export default {
         );
         this.cancelar = false;
         this.$snackbar.showMessage({
-        show: true,
-        color: "success",
-        text: "Desparasitação confirmada com sucesso.",
-        timeout: 4000,
-      });
+          show: true,
+          color: "success",
+          text: "Desparasitação confirmada com sucesso.",
+          timeout: 4000,
+        });
       } catch (e) {
         console.log("erro: " + e);
         this.cancelar = false;
@@ -469,19 +466,19 @@ export default {
         );
         this.$router.push("/cliente/consultas");
         this.$snackbar.showMessage({
-              show: true,
-              color: "success",
-              text: "Pedido de consulta enviado com sucesso",
-              timeout: 4000,
-            });
+          show: true,
+          color: "success",
+          text: "Pedido de consulta enviado com sucesso",
+          timeout: 4000,
+        });
       } catch (e) {
         console.log("erro: +" + e);
         this.$snackbar.showMessage({
-              show: true,
-              color: "warning",
-              text: "Ocorreu um erro no registo, por favor tente mais tarde!",
-              timeout: 4000,
-            });
+          show: true,
+          color: "warning",
+          text: "Ocorreu um erro no registo, por favor tente mais tarde!",
+          timeout: 4000,
+        });
       }
     },
     registar(value) {
@@ -536,7 +533,7 @@ export default {
         });
       }
     },
-    confirma(){
+    confirma() {
       this.dialogNova = false;
     },
     format(data) {
