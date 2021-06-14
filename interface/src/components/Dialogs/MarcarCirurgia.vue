@@ -201,6 +201,14 @@ export default {
     date: new Date().toISOString().substr(0, 10),
     menu2: false,
     hora: "10:00",
+    motivo: [
+      "Cirurgia de tecidos moles",
+      "Cirurgia de ortopedia",
+      "Cirurgia de neurologia",
+      "Cirurgia de medicina dentária",
+      "Cirurgia de oftalmologia",
+      "Cirurgia de ginecologia e de obstetrícia"
+    ],
     desc: [
       { text: "Esterilização ou castração", tipo: "Cirurgia de tecidos moles" },
       {

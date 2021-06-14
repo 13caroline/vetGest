@@ -46,7 +46,7 @@
                     v-if="
                       item.estado == 'Concluída' || item.estado == 'Cancelada'
                     "
-                    @click="detalhes = true"
+                    @click="notas(item)"
                     small
                     v-on="on"
                     v-bind="attrs"
@@ -87,7 +87,17 @@
             </v-btn>
           </v-card-title>
           <v-card-text class="black--text">
-            <exemplo></exemplo>
+            <div v-for="(nota,index) in note" :key="index">
+                <p>{{format2(nota.cirurgia.data)}} {{nota.cirurgia.hora}}</p>
+                <span v-if="!nota.cirurgia.observacoes" class="font-italic">
+                Sem notas médicas.
+                </span>
+            <span class="font-italic">
+              {{nota.cirurgia.observacoes}}
+            </span>
+            <p>{{nota.veterinario.nome}}</p>
+            <v-divider></v-divider>
+            </div>
           </v-card-text>
         </v-card>
       </v-dialog>
@@ -99,7 +109,6 @@
 import axios from "axios";
 import moment from "moment";
 import store from "@/store.js";
-import exemplo from "@/components/Client/exemploCirurgia.vue";
 import MarcarCirurgia from "@/components/Dialogs/MarcarCirurgia.vue";
 import CancelarComDados from "@/components/Dialogs/CancelarComDados.vue";
 
@@ -108,7 +117,6 @@ export default {
   data: () => ({
     dialog: false,
     detalhes: false,
-
     page: 1,
     pageCount: 0,
     itemsPerPage: 8,
@@ -152,9 +160,9 @@ export default {
     ],
     cirurgias: [],
     done: false,
+    note: []
   }),
   components: {
-    exemplo,
     MarcarCirurgia,
     CancelarComDados,
   },
@@ -162,9 +170,8 @@ export default {
     estadopedido(estado) {
       if (estado == "Agendada") return "#C5E1A5";
       else if (estado == "Cancelada") return "#EF9A9A";
-      else if (estado == "Pendente") return "#fccea2";
-      else if (estado == "A decorrer") return "#FFECB3";
-      return "#9ae5ff";
+      else if (estado == "Concluída") return "#9AE5FF";
+      else return "#FFECB3";
     },
     close() {
       this.dialog = false;
@@ -180,6 +187,23 @@ export default {
     },
     format(data) {
       return moment(data).locale("pt").format("DD/MM/YYYY HH:mm");
+    },
+    format2(data) {
+      return moment(data).locale("pt").format("DD/MM/YYYY");
+    },
+    notas: async function(item){
+      let response = await axios.post("http://localhost:7777/clinica/cirurgia/notas",
+      {
+        id: item.id
+      },
+      {
+        headers: { Authorization: "Bearer " + store.getters.token },
+      }
+      );
+      this.note = Array.isArray(response.data)
+        ? response.data : [response.data];
+
+      this.detalhes = true;
     },
     atualiza: async function () {
       this.cirurgias = [];

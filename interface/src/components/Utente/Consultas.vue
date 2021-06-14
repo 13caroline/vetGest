@@ -173,9 +173,9 @@ export default {
     estadopedido(estado) {
       if (estado == "Agendada") return "#C5E1A5";
       else if (estado == "Cancelada") return "#EF9A9A";
-      else if (estado == "Pendente") return "#fccea2";
-      else if (estado == "A decorrer") return "#FFECB3";
-      return "#9ae5ff";
+      else if (estado == "Pendente") return "#FCCEA2";
+      else if (estado == "Concluída") return "#9AE5FF";
+      else return "#FFECB3";
     },
     registar(value) {
       this.$snackbar.showMessage({
