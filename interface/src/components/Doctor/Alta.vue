@@ -36,8 +36,8 @@
       </v-row>
 
       <v-row class="w-100">
-        <v-col>
-          <v-card class="h-100 custom">
+        <v-col class="py-0">
+          <v-card class="h-100 custom-heigth">
             <v-card-text
               class="py-0"
               v-for="(nota, index) in notas"
@@ -62,7 +62,7 @@
           </v-card>
         </v-col>
 
-        <v-col cols="12" md="6">
+        <v-col class="py-0" cols="12" md="6">
           <v-card class="h-100">
             <v-card-text class="pb-0">
               <div>
@@ -277,8 +277,8 @@ export default {
   text-align: left;
 }
 
-.custom {
-  max-height: calc(100vh - (132px + 123px));
+.custom-heigth {
+  height: 715px;
   overflow-y: auto;
 }
 </style>

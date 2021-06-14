@@ -40,8 +40,8 @@
       </v-row>
 
       <v-row class="w-100">
-        <v-col>
-          <v-card class="h-100 custom">
+        <v-col class="py-0">
+          <v-card class="h-100 custom-heigth">
             <v-card-text
               class="py-0"
               v-for="(nota, index) in notas"
@@ -66,7 +66,12 @@
           </v-card>
         </v-col>
 
-        <v-col cols="12" md="6" v-if="this.$store.state.tipo == 'Veterinario'">
+        <v-col
+          class="py-0"
+          cols="12"
+          md="6"
+          v-if="this.$store.state.tipo == 'Veterinario'"
+        >
           <v-card class="h-100">
             <v-card-text class="pb-0">
               <v-textarea
@@ -171,8 +176,8 @@ export default {
   text-align: left;
 }
 
-.custom {
-  max-height: calc(100vh - (132px + 177px));
+.custom-heigth {
+  height: 660px;
   overflow-y: auto;
 }
 </style>
