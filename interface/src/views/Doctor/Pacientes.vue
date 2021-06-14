@@ -33,8 +33,8 @@
         <template v-slot:[`item.detalhes`]="{ item }">
           <v-tooltip right>
             <template v-slot:activator="{ on, attrs }">
-              <v-icon v-bind="attrs" v-on="on" small @click="more(item)">
-                fas fa-plus-circle
+              <v-icon v-bind="attrs" v-on="on" color="#52b9dd" small @click="more(item)">
+                mdi-plus-circle
               </v-icon>
             </template>
             <span class="caption">Mais detalhes</span>
@@ -105,7 +105,7 @@ export default {
           text: "MAIS DETALHES",
           value: "detalhes",
           sortable: false,
-          align: "start",
+          align: "center",
         },
       ],
 

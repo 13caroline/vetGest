@@ -50,6 +50,7 @@
                     small
                     v-on="on"
                     v-bind="attrs"
+                     color="#52b9dd"
                   >
                     mdi-plus-circle
                   </v-icon>

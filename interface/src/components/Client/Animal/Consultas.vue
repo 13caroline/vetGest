@@ -97,7 +97,7 @@
           <v-card-title class="headline mb-6">
             Notas Médicas
             <v-spacer></v-spacer>
-            <v-btn icon small @click="dialog = false">
+            <v-btn icon small @click="closeDialog()">
               <v-icon>fas fa-times</v-icon>
             </v-btn>
           </v-card-title>
@@ -408,6 +408,9 @@ export default {
       else if (estado == "Pendente") return "#FCCEA2";
       else if (estado == "Concluída") return "#9AE5FF";
       else return "#FFECB3";
+    },
+    closeDialog(){
+      this.dialog = false;
     },
     cancelarConsulta: async function () {
       try {

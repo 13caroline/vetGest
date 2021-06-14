@@ -49,8 +49,9 @@
                     small
                     v-on="on"
                     v-bind="attrs"
+                     color="#52b9dd"
                   >
-                    fas fa-info-circle
+                    mdi-plus-circle
                   </v-icon>
                 </template>
                 <span class="caption">Ver detalhes</span>

@@ -35,7 +35,7 @@
                   <v-icon
                     class="mx-1"
                     v-if="item.estado == 'Concluída'"
-                    @click="detalhes = true"
+                    @click="notas(item)"
                     small
                     v-on="on"
                     v-bind="attrs"
@@ -85,12 +85,22 @@
           <v-card-title class="headline mb-6">
             Notas Médicas
             <v-spacer></v-spacer>
-            <v-btn icon small @click="dialog = false">
+            <v-btn icon small @click="closeDialog()">
               <v-icon>fas fa-times</v-icon>
             </v-btn>
           </v-card-title>
           <v-card-text class="black--text">
-            <exemplo></exemplo>
+             <div v-for="(nota,index) in note" :key="index">
+                <p>{{format2(nota.cirurgia.data)}} {{nota.cirurgia.hora}}</p>
+                <span v-if="!nota.cirurgia.observacoes" class="font-italic">
+                Sem notas médicas.
+                </span>
+            <span class="font-italic">
+              {{nota.cirurgia.observacoes}}
+            </span>
+            <p>{{nota.veterinario.nome}}</p>
+            <v-divider></v-divider>
+            </div>
           </v-card-text>
         </v-card>
       </v-dialog>
@@ -288,8 +298,8 @@
 
 <script>
 import CancelarComDados from "@/components/Dialogs/CancelarComDados.vue";
-import exemplo from "@/components/Client/exemploCirurgia.vue";
 import axios from "axios";
+import moment from "moment"
 import store from "@/store.js";
 export default {
   data: () => ({
@@ -396,9 +406,9 @@ export default {
     medico: "",
     utente: "",
     horaMarcacao: null,
+    note: []
   }),
   components: {
-    exemplo,
     CancelarComDados,
   },
   methods: {
@@ -450,6 +460,26 @@ export default {
     },
     more(item) {
       console.log(item.data);
+    },
+    format2(data) {
+      return moment(data).locale("pt").format("DD/MM/YYYY");
+    },
+    closeDialog(){
+      this.dialog = false;
+    },
+    notas: async function(item){
+      let response = await axios.post("http://localhost:7777/cliente/cirurgia/notas",
+      {
+        id: item.idConsulta
+      },
+      {
+        headers: { Authorization: "Bearer " + store.getters.token },
+      }
+      );
+      this.note = Array.isArray(response.data)
+        ? response.data : [response.data];
+
+      this.detalhes = true;
     },
   },
   created: async function () {

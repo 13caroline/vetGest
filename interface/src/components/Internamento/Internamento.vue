@@ -17,6 +17,7 @@
             :page.sync="page"
             :items-per-page="itemsPerPage"
             @page-count="pageCount = $event"
+            no-data-text="Não existem utentes em internamento."
           >
             <template v-slot:[`item.utente`]="{ item }">
               <v-tooltip top>

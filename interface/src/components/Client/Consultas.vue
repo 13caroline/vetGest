@@ -48,10 +48,10 @@
                 <template v-slot:activator="{ on, attrs }">
                   <v-icon
                     v-if="item.estado == 'Concluída'"
-                    @click="dialog = true"
                     small
                     color="#52b9dd"
                     v-on="on"
+                    @click="notas(item)"
                     v-bind="attrs"
                   >
                     mdi-plus-circle
@@ -99,17 +99,19 @@
           <v-card-title class="headline mb-6">
             Notas Médicas
             <v-spacer></v-spacer>
-            <v-btn icon small @click="dialog = false">
+            <v-btn icon small @click="closeDialog()">
               <v-icon>fas fa-times</v-icon>
             </v-btn>
           </v-card-title>
           <v-card-text class="black--text">
-            <p>05/04/2021 15:45</p>
-            <span class="font-italic">
-              Realizada desparasitação com Bravacto ampola transdérmica sem
-              complicações imediatas.
+            <p>{{ format2(nota.data) }} {{ nota.hora }}</p>
+            <span v-if="!nota.observacoes" class="font-italic">
+              Sem notas médicas.
             </span>
-            <p>Dr.º José Vieira</p>
+            <span class="font-italic">
+              {{ nota.observacoes }}
+            </span>
+            <p>{{ nota.veterinario_nome }}</p>
           </v-card-text>
         </v-card>
       </v-dialog>
@@ -120,6 +122,7 @@
 <script>
 import CancelarComDados from "@/components/Dialogs/CancelarComDados.vue";
 import axios from "axios";
+import moment from "moment"
 import store from "@/store.js";
 export default {
   data: () => ({
@@ -173,6 +176,7 @@ export default {
     ],
     consultas: [],
     dialog: false,
+    nota: {},
   }),
   components: {
     CancelarComDados,
@@ -207,6 +211,13 @@ export default {
         });
       }
     },
+    closeDialog(){
+      this.dialog = false;
+    },
+    notas(item) {
+      this.dialog = true;
+      this.nota = item;
+    },
     registar(value) {
       this.$snackbar.showMessage({
         show: true,
@@ -222,6 +233,9 @@ export default {
       else if (estado == "Pendente") return "#FCCEA2";
       else if (estado == "Concluída") return "#9AE5FF";
       else return "#FFECB3";
+    },
+    format2(data) {
+      return moment(data).locale("pt").format("DD/MM/YYYY");
     },
   },
   created: async function () {
