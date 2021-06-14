@@ -45,7 +45,7 @@
                     v-if="
                       item.estado == 'Concluída' || item.estado == 'Cancelada'
                     "
-                    @click="dialog = true"
+                    @click="notas(item)"
                     small
                     v-on="on"
                     v-bind="attrs"
@@ -89,12 +89,14 @@
             </v-btn>
           </v-card-title>
           <v-card-text class="black--text">
-            <p>05/04/2021 15:45</p>
-            <span class="font-italic">
-              Realizada desparasitação com Bravacto ampola transdérmica sem
-              complicações imediatas.
+            <p>{{format(nota.data)}} {{nota.hora}}</p>
+            <span v-if="!nota.observacoes" class="font-italic">
+             Sem notas médicas.
             </span>
-            <p>Dr.º José Vieira</p>
+            <span class="font-italic">
+              {{nota.observacoes}}
+            </span>
+            <p>{{nota.veterinario_nome}}</p>
           </v-card-text>
         </v-card>
       </v-dialog>
@@ -113,7 +115,6 @@ export default {
   props: ["animal"],
   data: () => ({
     dialog: false,
-
     page: 1,
     pageCount: 0,
     itemsPerPage: 8,
@@ -158,12 +159,17 @@ export default {
       },
     ],
     consultas: [],
+    nota: {},
   }),
   components: {
     CancelarComDados,
     MarcarConsulta,
   },
   methods: {
+    notas(item){
+      this.dialog = true;
+      this.nota = item;
+    },
     estadopedido(estado) {
       if (estado == "Agendada") return "#C5E1A5";
       else if (estado == "Cancelada") return "#EF9A9A";
@@ -181,7 +187,7 @@ export default {
       this.atualiza();
     },
     format(data) {
-      return moment(data).locale("pt").format("DD/MM/YYYY HH:mm");
+      return moment(data).locale("pt").format("DD/MM/YYYY");
     },
     atualiza: async function () {
       this.consultas = [];

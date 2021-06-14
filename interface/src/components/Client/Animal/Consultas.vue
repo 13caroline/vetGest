@@ -47,7 +47,7 @@
                 <template v-slot:activator="{ on, attrs }">
                   <v-icon
                     v-if="item.estado == 'Concluída'"
-                    @click="dialog = true"
+                    @click="notas(item)"
                     small
                     v-on="on"
                     v-bind="attrs"
@@ -101,12 +101,14 @@
             </v-btn>
           </v-card-title>
           <v-card-text class="black--text">
-            <p>05/04/2021 15:45</p>
-            <span class="font-italic">
-              Realizada desparasitação com Bravacto ampola transdérmica sem
-              complicações imediatas.
+            <p>{{format(nota.data)}} {{nota.hora}}</p>
+            <span v-if="!nota.observacoes" class="font-italic">
+             Sem notas médicas.
             </span>
-            <p>Dr.º José Vieira</p>
+            <span class="font-italic">
+              {{nota.observacoes}}
+            </span>
+            <p>{{nota.veterinario_nome}}</p>
           </v-card-text>
         </v-card>
       </v-dialog>
@@ -277,6 +279,7 @@ import CancelarComDados from "@/components/Dialogs/CancelarComDados.vue";
 import Cancelar from "@/components/Dialogs/Cancel.vue"
 import axios from "axios";
 import store from "@/store.js";
+import moment from "moment"
 export default {
   props: ["animal"],
   data: () => ({
@@ -380,6 +383,7 @@ export default {
     ],
     consultas: [],
     dialog: false,
+    nota: {},
     cancelar: {
       text: "consulta",
       title: "o agendamento da consulta",
@@ -396,6 +400,10 @@ export default {
     Cancelar
   },
   methods: {
+    notas(item){
+      this.dialog = true;
+      this.nota = item;
+    },
     allowedStep: (m) => m % 15 === 0,
     estadopedido(estado) {
       if (estado == "Agendada") return "#C5E1A5";
@@ -530,7 +538,10 @@ export default {
     },
     confirma(){
       this.dialogNova = false;
-    }
+    },
+    format(data) {
+      return moment(data).locale("pt").format("DD/MM/YYYY");
+    },
   },
 
   created: async function () {

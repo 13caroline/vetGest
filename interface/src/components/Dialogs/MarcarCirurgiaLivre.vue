@@ -208,7 +208,7 @@
           :headers="headers"
           :items="items"
           :search="search"
-          no-data-text="Não existem clientes registados."
+          no-data-text="Não existem utentes registados."
           no-results-text="Não foram encontrados resultados."
         ></v-data-table>
       </v-card>
@@ -299,7 +299,7 @@ export default {
       },
       {
         text: "Cliente",
-        value: "cliente",
+        value: "cliente_nome",
         sortable: true,
         align: "center",
       },

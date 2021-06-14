@@ -40,8 +40,8 @@
       </v-row>
 
       <v-row class="w-100">
-        <v-col>
-          <v-card class="h-100 custom">
+        <v-col class="py-0">
+          <v-card class="h-100 custom-heigth">
             <v-card-text
               class="py-0"
               v-for="(nota, index) in notas"
@@ -60,13 +60,18 @@
                 </v-timeline-item>
               </v-timeline>
             </v-card-text>
-            <v-card-text v-if="!notas">
+            <v-card-text v-if="notas.length == 0">
               <em>Não existem notas de internamento</em>
             </v-card-text>
           </v-card>
         </v-col>
 
-        <v-col cols="12" md="6" v-if="this.$store.state.tipo == 'Veterinario'">
+        <v-col
+          class="py-0"
+          cols="12"
+          md="6"
+          v-if="this.$store.state.tipo == 'Veterinario'"
+        >
           <v-card class="h-100">
             <v-card-text class="pb-0">
               <v-textarea
@@ -115,9 +120,10 @@ export default {
       return moment(data).locale("pt").toNow(true); // 4 years
     },
     format(data) {
-      return moment(data).locale("pt").format("DD/MM/YYYY");
+      return moment(data).locale("pt").format("DD/MM/YYYY HH:mm");
     },
     loadData: async function () {
+      this.notas = [];
       let route =
         this.$store.state.tipo == "Clinica"
           ? "http://localhost:7777/clinica/internamento/detalhes"
@@ -132,9 +138,11 @@ export default {
         }
       );
       this.animal = response.data.animal;
-      this.notas = Array.isArray(response.data.notas)
-        ? response.data.notas
-        : [response.data.notas];
+      if (response.data.notas) {
+        this.notas = Array.isArray(response.data.notas)
+          ? response.data.notas
+          : [response.data.notas];
+      }
     },
     adicionarNota: async function () {
       let response = await axios.post(
@@ -168,8 +176,8 @@ export default {
   text-align: left;
 }
 
-.custom {
-  max-height: calc(100vh - (132px + 177px));
+.custom-heigth {
+  height: 660px;
   overflow-y: auto;
 }
 </style>

@@ -528,12 +528,22 @@ export default {
         if (res) {
           this.cancelar = false;
           this.concluir = false;
+          if (status == "Cancelada"){
+            this.$snackbar.showMessage({
+            show: true,
+            color: "success",
+            text: "Intervenção cancelada com sucesso.",
+            timeout: 4000,
+          });
+          }
+          else{
           this.$snackbar.showMessage({
             show: true,
             color: "success",
             text: "Intervenção terminada com sucesso.",
             timeout: 4000,
           });
+          }
           this.atualiza();
         }
       } catch (e) {

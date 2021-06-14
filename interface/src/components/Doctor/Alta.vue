@@ -36,8 +36,8 @@
       </v-row>
 
       <v-row class="w-100">
-        <v-col>
-          <v-card class="h-100 custom">
+        <v-col class="py-0">
+          <v-card class="h-100 custom-heigth">
             <v-card-text
               class="py-0"
               v-for="(nota, index) in notas"
@@ -56,13 +56,13 @@
                 </v-timeline-item>
               </v-timeline>
             </v-card-text>
-            <v-card-text v-if="!notas">
-              <em>sem notas</em>
+            <v-card-text v-if="notas.length== 0">
+              <em>Não existem notas de internamento</em>
             </v-card-text>
           </v-card>
         </v-col>
 
-        <v-col cols="12" md="6">
+        <v-col class="py-0" cols="12" md="6">
           <v-card class="h-100">
             <v-card-text class="pb-0">
               <div>
@@ -203,7 +203,7 @@ export default {
       return moment(data).locale("pt").toNow(true);
     },
     format(data) {
-      return moment(data).locale("pt").format("DD/MM/YYYY");
+      return moment(data).locale("pt").format("DD/MM/YYYY HH:mm");
     },
     darAlta: async function () {
       try {
@@ -227,6 +227,12 @@ export default {
         );
         if (response) {
           this.$router.push("/medico/internamento");
+           this.$snackbar.showMessage({
+          show: true,
+          color: "success",
+          text: "Nota de alta registada com sucesso.",
+          timeout: 4000,
+        });
         }
       } catch (e) {
         this.$snackbar.showMessage({
@@ -271,8 +277,8 @@ export default {
   text-align: left;
 }
 
-.custom {
-  max-height: calc(100vh - (132px + 123px));
+.custom-heigth {
+  height: 715px;
   overflow-y: auto;
 }
 </style>
