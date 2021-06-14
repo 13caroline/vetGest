@@ -36,6 +36,16 @@ public class VeterinarioController {
     private InternamentoService internamentoService;
 
     @CrossOrigin
+    @PostMapping("/medico")
+    public ResponseEntity<?> getMedico(@RequestBody Veterinario email){
+        Veterinario veterinario = veterinarioService.getVetByEmail(email.getEmail());
+        if(veterinario==null){
+            return ResponseEntity.badRequest().body("Veterinário não encontrado!");
+        }
+        return  ResponseEntity.accepted().body(veterinario);
+    }
+
+    @CrossOrigin
     @PostMapping( "/medico/intervencoes")
     public ResponseEntity<?> getIntervencoes(@RequestBody Veterinario email){
         Veterinario veterinario = veterinarioService.getVetByEmail(email.getEmail());
