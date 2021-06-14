@@ -626,5 +626,27 @@ public class VeterinarioController {
         return ResponseEntity.accepted().body(response.toString());
     }
 
+    @CrossOrigin
+    @PostMapping("/medico/preferencias")
+    public ResponseEntity<?> editarPreferencias(@RequestBody Veterinario vet){
+        Veterinario veterinario = veterinarioService.getVetByEmail(vet.getEmail());
+        if(veterinario==null){
+            return ResponseEntity.badRequest().body("Veterinário não existe!");
+        }
+        veterinario.setNome(vet.getNome());
+        veterinario.setMorada(vet.getMorada());
+        veterinario.setConcelho(vet.getConcelho());
+        veterinario.setFreguesia(vet.getFreguesia());
+        veterinario.setContacto(vet.getContacto());
+        veterinario.setPath(vet.getPath());
+        if(!(vet.getPassword().equals(veterinario.getPassword()))) {
+            veterinario.setPassword(vet.getPassword());
+            veterinarioService.saveVeterinario(veterinario);
+        }else
+            veterinarioService.saveVeterinario(veterinario);
+
+        return  ResponseEntity.accepted().body("Dados alterados com sucesso!");
+    }
+
 }
 
