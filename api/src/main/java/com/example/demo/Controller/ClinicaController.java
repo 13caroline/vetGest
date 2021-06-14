@@ -389,8 +389,10 @@ public class ClinicaController<RandomStringUtils, RandomStringGenerator> {
         intervencao.setVeterinario(vet);
         intervencao.setEstado("Agendada");
         intervencao.setData_pedido(LocalDateTime.now().toString().substring(0,16));
-        //System.out.println("\n\nAQUI:"+intervencao);
         intervencaoService.saveIntervencao(intervencao);
+        //SimpleMailMessage msg = mailSender.sendEmailConsulta(mail,tipo,nome,intervencao.getHora(),intervencao.getData());
+        //JavaMailSender js = mailSender.getJavaMailSender();
+        //js.send(msg);
         return ResponseEntity.accepted().body("Intervençao agendada!");
     }
 
@@ -410,17 +412,31 @@ public class ClinicaController<RandomStringUtils, RandomStringGenerator> {
         String tipo = intervencao.getTipo();
         String mail = clienteService.findClienteByAnimais(intervencao.getAnimal()).getEmail();
         String nome = intervencao.getAnimal().getNome();
+        int vetId = intervencao.getVeterinario().getId();
 
-        if(estado.equals("Cancelada")) {
-            SimpleMailMessage msg = mailSender.sendEmailCancelada(mail,tipo,nome,intervencao.getHora(),intervencao.getData());
-            JavaMailSender js = mailSender.getJavaMailSender();
-            js.send(msg);
-        }
-        else {
-            SimpleMailMessage msg = mailSender.sendEmailConsulta(mail,tipo,nome,intervencao.getHora(),intervencao.getData());
-            JavaMailSender js = mailSender.getJavaMailSender();
-            js.send(msg);
-        }
+        if(estado.equals("Agendada")){
+            List<Intervencao> intervencoes = intervencaoService.findAllByVeterinarioIdAndEstadoOrEstado(vetId,"Agendada","A decorrer");
+            List<Intervencao> temp = new ArrayList<>();
+            intervencoes.forEach(intervencao1 -> {
+                if (intervencao1.getData().equals(intervencao.getData()) && intervencao1.getHora().equals(intervencao.getHora())) {
+                    temp.add(intervencao1);
+                }
+            });
+
+            if(!temp.isEmpty()){
+                return ResponseEntity.badRequest().body("Erro no agendamento de Consulta! Horario Indisponivel!");
+            }
+
+            //SimpleMailMessage msg = mailSender.sendEmailConsulta(mail,tipo,nome,intervencao.getHora(),intervencao.getData());
+            //JavaMailSender js = mailSender.getJavaMailSender();
+            //js.send(msg);
+            }
+
+        //if(estado.equals("Cancelada")) {
+        //    SimpleMailMessage msg = mailSender.sendEmailCancelada(mail,tipo,nome,intervencao.getHora(),intervencao.getData());
+        //    JavaMailSender js = mailSender.getJavaMailSender();
+        //    js.send(msg);
+        //}
 
         intervencao.setEstado(estado);
         intervencaoService.saveIntervencao(intervencao);
