@@ -150,22 +150,6 @@
         </v-col>
       </v-row>
     </v-container>
-    <v-carousel
-      class="mt-auto"
-      cycle
-      height="100"
-      hide-delimiter-background
-      :show-arrows="false"
-      delimiter-icon="mdi-minus"
-    >
-      <v-carousel-item v-for="(slide, i) in slides" :key="i">
-        <v-sheet :color="colors[i]" height="100%" style="margin-top: 12px">
-          <v-row class="fill-height" align="center" justify="center">
-            <v-col cols="auto" class="display-3">{{ slide }} Slide</v-col>
-          </v-row>
-        </v-sheet>
-      </v-carousel-item>
-    </v-carousel>
   </div>
 </template>
 
@@ -213,14 +197,6 @@ export default {
         },
       ],
       consultas: [],
-      colors: [
-        "indigo",
-        "warning",
-        "pink darken-2",
-        "red lighten-1",
-        "deep-purple accent-4",
-      ],
-      slides: ["First", "Second", "Third", "Fourth", "Fifth"],
     };
   },
   components: {
