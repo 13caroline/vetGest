@@ -28,7 +28,7 @@
                           placeholder="*****"
                           outlined
                           dense
-                          v-model="utilizador.password"
+                          v-model="password"
                         ></v-text-field>
                       </v-col>
                     </div>
@@ -51,12 +51,17 @@
                         outlined
                         dense
                         v-model="utilizador.nome"
+                        
+                        color="#2596be"
+                        :rules="textRules"
                       ></v-text-field>
                     </div>
                     <div>
                       <v-text-field
                         outlined
                         dense
+                        
+                        color="#2596be"
                         v-model="utilizador.morada"
                       ></v-text-field>
                     </div>
@@ -64,10 +69,16 @@
                       <v-text-field
                         outlined
                         dense
+                        
+                        color="#2596be"
+                        :rules="textRules"
                         v-model="utilizador.freguesia"
                       ></v-text-field>
                       <v-text-field
                         outlined
+                        
+                        color="#2596be"
+                        :rules="textRules"
                         dense
                         v-model="utilizador.concelho"
                       ></v-text-field>
@@ -90,6 +101,10 @@
                         outlined
                         dense
                         v-model="utilizador.contacto"
+                        
+                        color="#2596be"
+                        :rules="numberRules"
+                        maxlength="9"
                       ></v-text-field>
                     </div>
                     <div>
@@ -108,13 +123,13 @@
           </v-row>
         </v-form>
       </v-card>
-      <v-row align="end" justify="end">
-        <v-col cols="auto">
-          <!-- <Cancelar :dialogs="cancelar" @clicked="close()"></Cancelar> -->
+      <v-row align="end" justify="end" class="w-100">
+        <v-col cols="auto" class="ml-auto">
+          <Cancelar :dialogs="cancelar" @clicked="close()"></Cancelar>
         </v-col>
         <v-col cols="auto">
           <v-btn color="#2596be" small dark @click="editarDados()"
-            >Registar</v-btn
+            >Confirmar</v-btn
           >
         </v-col>
       </v-row>
@@ -126,10 +141,34 @@
 import moment from "moment";
 import axios from "axios";
 import store from "@/store.js";
+import Cancelar from "@/components/Dialogs/Cancel.vue";
 export default {
   props: ["animal"],
   data: () => ({
     utilizador: {},
+    password:"",
+    textRules: [
+      (v) => {
+        const pattern = /^[a-zA-Z\sÀ-ÿ]+$/;
+        return (
+          pattern.test(v) ||
+          "Campo inválido. Insira apenas caracteres do alfabeto."
+        );
+      },
+    ],
+    numberRules: [
+      (v) => {
+        const pattern = /^[0-9]{9}$/;
+        return (
+          pattern.test(v) || "Campo inválido. Insira 9 dígitos."
+        );
+      },
+    ],
+    dialogs: {},
+    cancelar: {
+      text: "a edição de dados",
+      title: "edição de dados",
+    },
   }),
   methods: {
     format(data) {
@@ -139,6 +178,7 @@ export default {
     editarDados: async function () {
       if (this.$refs.form.validate()) {
         try {
+          if (this.password == "") this.password = this.utilizador.password;
           await axios.post(
             "http://localhost:7777/cliente/preferencias",
             {
@@ -182,6 +222,9 @@ export default {
         });
       }
     },
+    close() {
+       this.$router.push("/cliente/preferencias");
+    },
   },
 
   created: async function () {
@@ -199,6 +242,9 @@ export default {
 
     this.utilizador = response.data;
   },
+  components: {
+    Cancelar
+  }
 };
 </script>
 
