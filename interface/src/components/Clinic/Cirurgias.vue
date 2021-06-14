@@ -211,26 +211,7 @@ export default {
     selectedEvent: {},
     selectedElement: null,
     selectedOpen: false,
-    events: [
-      {
-        name: "Consulta",
-        start: "2021-05-21 15:00",
-        end: "2021-05-21 15:20",
-        details: "Consulta de Rotina Rubi",
-      },
-      {
-        name: "Consulta",
-        start: "2021-05-05 11:00",
-        end: "2021-05-05 11:30",
-        details: "Consulta de Rotina Rubi",
-      },
-      {
-        name: "Cirurgia",
-        start: "2021-05-21 10:00",
-        end: "2021-05-21 16:20",
-        details: "Cirurgia de Rotina Rubi",
-      },
-    ],
+    events: [],
     medico: [],
     name: null,
     details: null,
