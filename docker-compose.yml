@@ -54,9 +54,6 @@ services:
         environment:
             MYSQL_DATABASE: vetgest
             MYSQL_ROOT_PASSWORD: pass
-        volumes:
-            - './populacao.sql:/scripts/populacao.sql'
-            #- "./populacao.sql:/docker-entrypoint-initdb.d/"
         ports:
             - 3308:3306
         networks:
