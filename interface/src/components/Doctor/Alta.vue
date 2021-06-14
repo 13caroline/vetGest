@@ -56,8 +56,8 @@
                 </v-timeline-item>
               </v-timeline>
             </v-card-text>
-            <v-card-text v-if="!notas">
-              <em>sem notas</em>
+            <v-card-text v-if="notas.length== 0">
+              <em>Não existem notas de internamento</em>
             </v-card-text>
           </v-card>
         </v-col>
@@ -203,7 +203,7 @@ export default {
       return moment(data).locale("pt").toNow(true);
     },
     format(data) {
-      return moment(data).locale("pt").format("DD/MM/YYYY");
+      return moment(data).locale("pt").format("DD/MM/YYYY HH:mm");
     },
     darAlta: async function () {
       try {
@@ -227,6 +227,12 @@ export default {
         );
         if (response) {
           this.$router.push("/medico/internamento");
+           this.$snackbar.showMessage({
+          show: true,
+          color: "success",
+          text: "Nota de alta registada com sucesso.",
+          timeout: 4000,
+        });
         }
       } catch (e) {
         this.$snackbar.showMessage({

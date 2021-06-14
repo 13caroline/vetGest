@@ -60,7 +60,7 @@
                 </v-timeline-item>
               </v-timeline>
             </v-card-text>
-            <v-card-text v-if="!notas">
+            <v-card-text v-if="notas.length == 0">
               <em>Não existem notas de internamento</em>
             </v-card-text>
           </v-card>
@@ -115,9 +115,10 @@ export default {
       return moment(data).locale("pt").toNow(true); // 4 years
     },
     format(data) {
-      return moment(data).locale("pt").format("DD/MM/YYYY");
+      return moment(data).locale("pt").format("DD/MM/YYYY HH:mm");
     },
     loadData: async function () {
+      this.notas = [];
       let route =
         this.$store.state.tipo == "Clinica"
           ? "http://localhost:7777/clinica/internamento/detalhes"
@@ -132,9 +133,11 @@ export default {
         }
       );
       this.animal = response.data.animal;
-      this.notas = Array.isArray(response.data.notas)
-        ? response.data.notas
-        : [response.data.notas];
+      if (response.data.notas) {
+        this.notas = Array.isArray(response.data.notas)
+          ? response.data.notas
+          : [response.data.notas];
+      }
     },
     adicionarNota: async function () {
       let response = await axios.post(

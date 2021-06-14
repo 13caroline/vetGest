@@ -132,7 +132,7 @@
                         v-on="{ on }"
                         @click="confirmar('Concluída')"
                       >
-                        mdi-check-circle
+                        mdi-calendar-check
                       </v-icon>
                     </template>
                     <span class="caption">Concluir consulta</span>
@@ -300,7 +300,8 @@ export default {
         let text = "";
         if (estado == "Concluída") {
           text = "Consulta terminada com sucesso.";
-        } else {
+        }
+        else {
           text = "Consulta cancelada com sucesso.";
         }
 

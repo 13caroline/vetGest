@@ -138,11 +138,24 @@
                     <span class="caption">Admitir utente</span>
                   </v-tooltip>
 
+                  <v-tooltip top v-if="selectedEvent.state == 'A decorrer'">
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-icon
+                        color="#66BB6A"
+                        v-bind="attrs"
+                        v-on="{ on }"
+                        @click="confirmar('Concluída')"
+                      >
+                        mdi-calendar-check
+                      </v-icon>
+                    </template>
+                    <span class="caption">Concluir cirurgia</span>
+                  </v-tooltip>
+
                   <v-tooltip
                     top
                     v-if="
-                      selectedEvent.state == 'Agendada' ||
-                      selectedEvent.state == 'Pendente'
+                      selectedEvent.state == 'Agendada'
                     "
                   >
                     <template v-slot:activator="{ on, attrs }">
@@ -298,7 +311,10 @@ observacoes: "",
         let text = "";
         if (estado == "A decorrer") {
           text = "Utente admitido com sucesso.";
-        } else {
+        } else if (estado == "Concluída") {
+          text = "Cirurgia terminada com sucesso.";
+        }
+        else{
           text = "Cirurgia cancelada com sucesso.";
         }
 

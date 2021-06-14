@@ -105,12 +105,6 @@ export default {
         icon: "fas fa-procedures",
         route: "/medico/internamento",
       },
-      
-       {
-        title: "Conselhos Úteis",
-        icon: "fas fa-comment-medical",
-        route: "/medico/conselhos",
-      },
     ],
   }),
   methods: {
