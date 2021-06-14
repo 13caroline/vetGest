@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.tomcat.util.http.parser.Authorization;
 import org.hibernate.dialect.SybaseAnywhereDialect;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +36,8 @@ public class ClienteController {
     private ImunizacaoService imunizacaoService;
     @Autowired
     private VeterinarioService veterinarioService;
+    @Autowired
+    private InternamentoService internamentoService;
     @Autowired
     private  JwtUtil jwtUtil;
 
@@ -543,6 +547,40 @@ public class ClienteController {
             clienteService.updateCliente(cliente);
 
         return  ResponseEntity.accepted().body("Dados alterados com sucesso!");
+    }
+
+    @CrossOrigin
+    @PostMapping("/cliente/cirurgia/notas")
+    public ResponseEntity<?> getNotasCirurgia(@RequestBody String body) throws JSONException, JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+        int id_cirurgia = node.get("id").asInt();
+        Intervencao cirurgia = intervencaoService.getIntervencao(id_cirurgia);
+        JSONObject response = new JSONObject();
+        JSONObject vet = new JSONObject();
+        vet.put("id",cirurgia.getVeterinario().getId());
+        vet.put("nome",cirurgia.getVeterinario().getNome());
+        response.put("veterinario",vet);
+        Internamento internamento = internamentoService.findByAnimalIdAndEstado(cirurgia.getAnimal().getId(),"Internado");
+        System.out.println("\n\nAQUI: "+internamento);
+        List<NotaInternamento> notaInternamentos = internamentoService.findAllByInternamento(internamento);
+        JSONObject nota = new JSONObject();
+        notaInternamentos.forEach(notaInternamento -> {
+            try {
+
+                nota.put("descricao", notaInternamento.getDescricao());
+                nota.put("data", notaInternamento.getData());
+                response.accumulate("notas",nota);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
+        JSONObject inter = new JSONObject();
+        inter.put("data",cirurgia.getData());
+        inter.put("hora",cirurgia.getHora());
+        inter.put("observacoes",cirurgia.getObservacoes());
+        response.put("cirurgia",inter);
+        return ResponseEntity.accepted().body(response.toString());
     }
 
 }

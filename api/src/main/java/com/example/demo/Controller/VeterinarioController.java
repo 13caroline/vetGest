@@ -591,5 +591,40 @@ public class VeterinarioController {
         System.out.println(alta);
         return ResponseEntity.accepted().body("Alta com Sucesso");
     }
+
+    @CrossOrigin
+    @PostMapping("/medico/cirurgia/notas")
+    public ResponseEntity<?> getNotasCirurgia(@RequestBody String body) throws JSONException, JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(body);
+        int id_cirurgia = node.get("id").asInt();
+        Intervencao cirurgia = intervencaoService.getIntervencao(id_cirurgia);
+        JSONObject response = new JSONObject();
+        JSONObject vet = new JSONObject();
+        vet.put("id",cirurgia.getVeterinario().getId());
+        vet.put("nome",cirurgia.getVeterinario().getNome());
+        response.put("veterinario",vet);
+        Internamento internamento = internamentoService.findByAnimalIdAndEstado(cirurgia.getAnimal().getId(),"Internado");
+        System.out.println("\n\nAQUI: "+internamento);
+        List<NotaInternamento> notaInternamentos = internamentoService.findAllByInternamento(internamento);
+        JSONObject nota = new JSONObject();
+        notaInternamentos.forEach(notaInternamento -> {
+            try {
+
+                nota.put("descricao", notaInternamento.getDescricao());
+                nota.put("data", notaInternamento.getData());
+                response.accumulate("notas",nota);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
+        JSONObject inter = new JSONObject();
+        inter.put("data",cirurgia.getData());
+        inter.put("hora",cirurgia.getHora());
+        inter.put("observacoes",cirurgia.getObservacoes());
+        response.put("cirurgia",inter);
+        return ResponseEntity.accepted().body(response.toString());
+    }
+
 }
 
