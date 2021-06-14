@@ -197,6 +197,10 @@ export default {
   },
 
   created: async function () {
+    let route =
+        store.state.tipo == "Clinica"
+          ? "http://localhost:7777/clinica"
+          : "http://localhost:7777/medico/intervencao";
     let response = await axios.post(
       "http://localhost:7777/clinica",
       {
