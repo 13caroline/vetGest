@@ -20,7 +20,7 @@
                 v-on="on"
                 fab
                 dark
-                to="/clinica/preferencias/editar"
+                @click="preferencias()"
               >
                 <v-icon small>fas fa-pen</v-icon>
               </v-btn>
@@ -135,7 +135,7 @@
                   </div>
                   <div>
                     <v-row>
-                      <v-col>
+                      <v-col v-if="this.$store.state.tipo == 'Clinica'">
                         <p class="infos">Número de identificação fiscal</p>
                       </v-col>
                       <v-col>
@@ -176,10 +176,19 @@ export default {
     format(data) {
       return moment(data).locale("pt").format("DD/MM/YYYY");
     },
+    preferencias(){
+        store.state.tipo == "Clinica"
+          ? this.$router.push("/clinica/preferencias/editar")
+          : this.$router.push("/medico/preferencias/editar")
+    }
   },
   created: async function () {
+    let route =
+        store.state.tipo == "Clinica"
+          ? "http://localhost:7777/clinica"
+          : "http://localhost:7777/medico";
     let response = await axios.post(
-      "http://localhost:7777/clinica",
+      route,
       {
         email: this.$store.state.email,
       },

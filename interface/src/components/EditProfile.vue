@@ -27,6 +27,7 @@
                         placeholder="*****"
                         outlined
                         dense
+                        color="#2596be"
                         v-model="password"
                       ></v-text-field>
                     </v-col>
@@ -44,10 +45,22 @@
                 <v-list-item>
                   <v-list-item-content>
                     <v-col>
+                      <p class="ma-0">Nome</p>
+                      <v-text-field
+                        outlined
+                        color="#2596be"
+                        dense
+                        :rules="textRules"
+                        v-model="utilizador.nome"
+                      ></v-text-field>
+                    </v-col>
+
+                    <v-col>
                       <p class="ma-0">Morada</p>
                       <v-text-field
                         outlined
                         dense
+                        color="#2596be"
                         v-model="utilizador.morada"
                       ></v-text-field>
                     </v-col>
@@ -57,6 +70,8 @@
                       <v-text-field
                         outlined
                         dense
+                        color="#2596be"
+                        :rules="textRules"
                         v-model="utilizador.freguesia"
                       ></v-text-field>
                     </v-col>
@@ -65,6 +80,8 @@
                       <p class="ma-0">Concelho</p>
                       <v-text-field
                         outlined
+                        color="#2596be"
+                        :rules="textRules"
                         dense
                         v-model="utilizador.concelho"
                       ></v-text-field>
@@ -86,6 +103,9 @@
                       <p class="ma-0">Contacto telefónico</p>
                       <v-text-field
                         outlined
+                        color="#2596be"
+                        :rules="numberRules"
+                        maxlength="9"
                         dense
                         v-model="utilizador.contacto"
                       ></v-text-field>
@@ -98,6 +118,7 @@
                         dense
                         v-model="utilizador.nif"
                         disabled
+                        color="#2596be"
                       ></v-text-field>
                     </v-col>
                   </v-list-item-content>
@@ -135,6 +156,21 @@ export default {
       text: "a edição de dados",
       title: "edição de dados",
     },
+    textRules: [
+      (v) => {
+        const pattern = /^[a-zA-Z\sÀ-ÿ]+$/;
+        return (
+          pattern.test(v) ||
+          "Campo inválido. Insira apenas caracteres do alfabeto."
+        );
+      },
+    ],
+    numberRules: [
+      (v) => {
+        const pattern = /^[0-9]{9}$/;
+        return pattern.test(v) || "Campo inválido. Insira 9 dígitos.";
+      },
+    ],
   }),
   components: {
     Cancelar,
@@ -145,11 +181,15 @@ export default {
     },
 
     editarDados: async function () {
+      let route =
+        store.state.tipo == "Clinica"
+          ? "http://localhost:7777/clinica/editar"
+          : "http://localhost:7777/medico/preferencias";
       if (this.$refs.form.validate()) {
         try {
           if (this.password == "") this.password = this.utilizador.password;
           await axios.post(
-            "http://localhost:7777/clinica/editar",
+            route,
             {
               email: store.state.email,
               nome: this.utilizador.nome,
@@ -165,7 +205,9 @@ export default {
               },
             }
           );
-          this.$router.push("/clinica/preferencias/");
+          store.state.tipo == "Clinica"
+            ? this.$router.push("/clinica/preferencias/")
+            : this.$router.push("/medico/preferencias/");
           this.$snackbar.showMessage({
             show: true,
             color: "success",
@@ -192,15 +234,17 @@ export default {
       }
     },
     close() {
-      this.$router.push("/clinica/preferencias");
+      store.state.tipo == "Clinica"
+        ? this.$router.push("/clinica/preferencias")
+        : this.$router.push("/medico/preferencias");
     },
   },
 
   created: async function () {
     let route =
-        store.state.tipo == "Clinica"
-          ? "http://localhost:7777/clinica"
-          : "http://localhost:7777/medico/intervencao";
+      store.state.tipo == "Clinica"
+        ? "http://localhost:7777/clinica"
+        : "http://localhost:7777/medico";
     let response = await axios.post(
       route,
       {

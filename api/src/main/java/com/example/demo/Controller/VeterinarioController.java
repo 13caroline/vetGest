@@ -389,7 +389,7 @@ public class VeterinarioController {
     }
 
     @CrossOrigin
-    @PostMapping("/meedico/animal/historico")
+    @PostMapping("/medico/animal/historico")
     public ResponseEntity<?> getHistorico(@RequestBody String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);

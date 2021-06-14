@@ -125,7 +125,7 @@ export default {
       this.$router.push("/medico/inicio");
     },
     preferences: function () {
-      this.$router.push("/medico/preferencias/editar");
+      this.$router.push("/medico/preferencias");
     },
     home: function () {
       this.$router.push("/menu");

@@ -13,9 +13,9 @@
           class="ml-auto pl-0"
           v-if="this.$store.state.tipo == 'Veterinario'"
         >
-          <EditaHistorico :dados="animal" @clicked="close()"></EditaHistorico>
+          <EditaHistorico :dados="animal" @clicked="close"></EditaHistorico>
         </v-col>
-        <v-col cols="auto" class="pl-0">
+        <v-col cols="auto" class="pl-0" v-if="!historico">
           <RegistaHistorico :dados="animal" @clicked="close"></RegistaHistorico>
         </v-col>
       </v-row>
@@ -154,18 +154,22 @@ export default {
       return moment(data).locale("pt").format("DD/MM/YYYY");
     },
     close(value) {
+      this.atualiza();
       this.$snackbar.showMessage({
         show: true,
         color: value.color,
         text: value.text,
         timeout: value.timeout,
       });
-      this.atualiza();
     },
     atualiza: async function () {
       this.historico = {};
+      let route =
+        store.state.tipo == "Clinica"
+          ? "http://localhost:7777/clinica/animal/historico"
+          : "http://localhost:7777/medico/animal/historico";
       let response = await axios.post(
-        "http://localhost:7777/clinica/animal/historico",
+        route,
         {
           animal: this.animal.id,
         },
@@ -181,8 +185,12 @@ export default {
     RegistaHistorico,
   },
   created: async function () {
+    let route =
+      store.state.tipo == "Clinica"
+        ? "http://localhost:7777/clinica/animal/historico"
+        : "http://localhost:7777/medico/animal/historico";
     let response = await axios.post(
-      "http://localhost:7777/clinica/animal/historico",
+      route,
       {
         animal: this.animal.id,
       },

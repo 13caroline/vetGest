@@ -32,7 +32,7 @@
           <v-row class="ma-2">
             <v-col class="py-0" cols="5">
               <p class="ma-0">Transfusões</p>
-              <v-radio-group row class="ma-0" v-model="transfusoes">
+              <v-radio-group row class="ma-0" v-model="historico.transfusoes">
                 <v-radio :value="true" color="#2596be">
                   <template v-slot:label>
                     <div class="body-2">Sim</div>
@@ -50,7 +50,7 @@
             <v-col class="py-0">
               <p class="ma-0">Tem alergias?</p>
 
-              <v-radio-group row class="ma-0" v-model="alergias">
+              <v-radio-group row class="ma-0" v-model="historico.alergias">
                 <v-radio :value="true" color="#2596be">
                   <template v-slot:label>
                     <div class="body-2">Sim</div>
@@ -72,8 +72,8 @@
                 outlined
                 color="#2596be"
                 dense
-                v-model="tipo_alergias"
-                :disabled="!alergias"
+                v-model="historico.tipo_alergias"
+                :disabled="!historico.alergias"
               ></v-text-field>
             </v-col>
           </div>
@@ -85,7 +85,7 @@
                 outlined
                 dense
                 color="#2596be"
-                v-model="medicacao"
+                v-model="historico.medicacao"
                 no-resize
               >
               </v-textarea>
@@ -99,7 +99,7 @@
                 outlined
                 dense
                 color="#2596be"
-                v-model="ginecologica"
+                v-model="historico.historia_ginecologica"
                 no-resize
               >
               </v-textarea>
@@ -113,7 +113,7 @@
                 outlined
                 dense
                 color="#2596be"
-                v-model="antecedentes"
+                v-model="historico.antecedentes"
                 no-resize
               >
               </v-textarea>
@@ -128,7 +128,7 @@
                 outlined
                 dense
                 color="#2596be"
-                v-model="historia"
+                v-model="historico.historia_medica"
                 no-resize
               >
               </v-textarea>
@@ -165,13 +165,7 @@ export default {
       text: "a edição do histórico clínico",
     },
     dialog: false,
-    alergias: false,
-    tipo_alergias: "",
-    medicacao: "",
-    antecedentes: "",
-    ginecologica: "",
-    transfusoes: false,
-    historia: "",
+    historico: {}
   }),
   methods: {
     close() {
@@ -185,13 +179,13 @@ export default {
           {
             animal: this.dados.id,
             historico: {
-              alergias: this.alergias,
-              transfusoes: this.transfusoes,
-              tipo_alergias: this.tipo_alergias,
-              historia_medica: this.historia,
-              historia_ginecologica: this.ginecologica,
-              antecedentes: this.antecedentes,
-              medicacao: this.medicacao,
+              alergias: this.historico.alergias,
+              transfusoes: this.historico.transfusoes,
+              tipo_alergias: this.historico.tipo_alergias,
+              historia_medica: this.historico.historia_medica,
+              historia_ginecologica: this.historico.historia_ginecologica,
+              antecedentes: this.historico.antecedentes,
+              medicacao: this.historico.medicacao,
             },
           },
           { headers: { Authorization: "Bearer " + store.getters.token } }
@@ -225,15 +219,16 @@ export default {
   },
   created: async function(){
     let response = await axios.post(
-      "http://localhost:7777/clinica/animal/historico",
+      "http://localhost:7777/medico/animal/historico",
       {
-        animal: this.animal.id,
+        animal: this.dados.id,
       },
       {
         headers: { Authorization: "Bearer " + store.getters.token },
       }
     );
     this.historico = response.data;
+    console.log(this.historico)
   },
   components: {
     Cancelar,
