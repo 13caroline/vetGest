@@ -225,6 +225,7 @@ export default {
             headers: { Authorization: "Bearer " + store.getters.token },
           }
         );
+        this.dialog = false;
         this.atualiza();
         this.$snackbar.showMessage({
           show: true,
@@ -232,13 +233,26 @@ export default {
           text: "Consulta confirmada com sucesso",
           timeout: 4000,
         });
-      } catch (e) {
-        this.$snackbar.showMessage({
+      } catch (error) {
+        if (
+          error.response.data ==
+          "Erro no agendamento de Consulta! Horario Indisponivel!"
+        ) {
+          this.$snackbar.showMessage({
           show: true,
           color: "warning",
-          text: "Ocorreu um erro, por favor tente mais tarde!",
+          text: "Não é possível agendar uma cirurgia para o horário selecionado.",
           timeout: 4000,
         });
+          
+        } else {
+          this.$snackbar.showMessage({
+          show: true,
+          color: "warning",
+          text: "Ocorreu um erro no agendamento, por favor tente mais tarde!",
+          timeout: 4000,
+        });
+        }
       }
     },
     rejeitar: async function (item) {
@@ -253,6 +267,7 @@ export default {
             headers: { Authorization: "Bearer " + store.getters.token },
           }
         );
+        this.dialog = false;
         this.atualiza();
         this.$snackbar.showMessage({
           show: true,
