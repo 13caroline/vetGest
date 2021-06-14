@@ -76,7 +76,7 @@
               :event-color="getEventColor"
               :type="type"
               locale="pt"
-              first-time="08:00"
+              first-time="10:00"
               interval-count="12"
               @click:event="showEvent"
               @click:more="viewDay"

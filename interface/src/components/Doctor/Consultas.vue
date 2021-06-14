@@ -10,7 +10,7 @@
             </h3>
             <v-row justify="end">
               <v-col cols="auto">
-                <MarcarConsultaLivre></MarcarConsultaLivre>
+                <MarcarConsultaLivre @clicked="registar"></MarcarConsultaLivre>
               </v-col>
             </v-row>
           </v-row>
@@ -61,7 +61,7 @@
               :event-color="getEventColor"
               :type="type"
               locale="pt"
-              first-time="08:00"
+              first-time="10:00"
               interval-count="12"
               @click:event="showEvent"
               @click:more="viewDay"
@@ -76,48 +76,86 @@
               max-width="500px"
             >
               <v-card color="grey lighten-4" flat>
-                <v-toolbar :color="selectedEvent.color" dark>
-                  <v-btn @click="deleteEvent(selectedEvent.id)" icon>
-                    <v-icon>mdi-delete</v-icon>
-                  </v-btn>
-                  <v-toolbar-title
-                    v-html="selectedEvent.name"
-                  ></v-toolbar-title>
-                  <v-spacer></v-spacer>
-                </v-toolbar>
                 <v-card-text>
-                  <form v-if="currentlyEditing !== selectedEvent.id">
-                    {{ selectedEvent.details }}
-                  </form>
-                  <form v-else>
-                    <textarea
-                      v-model="selectedEvent.details"
-                      type="text"
-                      style="width: 100%"
-                      :min-height="100"
-                      placeholder="add note"
-                    ></textarea>
-                  </form>
-                </v-card-text>
-                <v-card-actions>
-                  <v-btn text color="secondary" @click="selectedOpen = false">
-                    Fechar
-                  </v-btn>
+                  <v-row>
+                    <v-col class="pb-0" align="right" cols="5">
+                      <span class="text-uppercase">Nome do Animal</span>
+                    </v-col>
+                    <v-col class="pl-0 pb-0" cols="7">
+                      <span class="black--text">
+                        <strong>{{ selectedEvent.utente }}</strong>
+                        ({{ selectedEvent.raca }})
+                      </span>
+                    </v-col>
 
-                  <v-btn
-                    text
-                    v-if="currentlyEditing !== selectedEvent.id"
-                    @click.prevent="editEvent(selectedEvent)"
+                    <v-col class="pb-0" align="right" cols="5">
+                      <span class="text-uppercase">Motivo da consulta</span>
+                    </v-col>
+                    <v-col class="pl-0 pb-0" cols="7">
+                      <span class="black--text">
+                        <strong>{{ selectedEvent.details }}</strong>
+                      </span>
+                      <br />
+                      <span>{{ selectedEvent.desc }}</span>
+                    </v-col>
+
+                    <v-col class="pb-0" align="right" cols="5">
+                      <span class="text-uppercase">Data</span>
+                    </v-col>
+                    <v-col class="pl-0 pb-0" cols="7">
+                      <span class="black--text">
+                        <strong
+                          >{{ format(selectedEvent.start) }} -
+                          {{ format(selectedEvent.end) }}</strong
+                        >
+                      </span>
+                    </v-col>
+
+                    <v-col class="pb-0" align="right" cols="5">
+                      <span class="text-uppercase">estado</span>
+                    </v-col>
+                    <v-col class="pl-0 pb-0" cols="7">
+                      <v-chip :color="colors" small>
+                        {{ selectedEvent.state }}
+                      </v-chip>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-tooltip top v-if="selectedEvent.state == 'A decorrer'">
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-icon
+                        color="#66BB6A"
+                        v-bind="attrs"
+                        v-on="{ on }"
+                        @click="confirmar('Concluída')"
+                      >
+                        mdi-check-circle
+                      </v-icon>
+                    </template>
+                    <span class="caption">Concluir consulta</span>
+                  </v-tooltip>
+                  <v-tooltip
+                    top
+                    v-if="
+                      selectedEvent.state == 'Agendada' ||
+                      selectedEvent.state == 'Pendente'
+                    "
                   >
-                    Editar
-                  </v-btn>
-                  <v-btn
-                    text
-                    v-else
-                    @click.prevent="updateEvent(selectedEvent)"
-                  >
-                    Guardar
-                  </v-btn>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-icon
+                        color="#E57373"
+                        v-bind="attrs"
+                        v-on="{ on }"
+                        @click="confirmar('Cancelada')"
+                      >
+                        mdi-calendar-remove
+                      </v-icon>
+                    </template>
+                    <span class="caption">Cancelar agendamento</span>
+                  </v-tooltip>
                 </v-card-actions>
               </v-card>
             </v-menu>
@@ -129,6 +167,9 @@
 </template>
 
 <script>
+import axios from "axios";
+import store from "@/store.js";
+import moment from "moment";
 import MarcarConsultaLivre from "@/components/Dialogs/MarcarConsultaLivre.vue";
 export default {
   data: () => ({
@@ -145,33 +186,15 @@ export default {
     details: null,
     start: null,
     end: null,
+    state: null,
+    colors: null,
+    desc: null,
     currentlyEditing: null,
     selectedEvent: {},
     selectedElement: null,
     selectedOpen: false,
-    events: [
-      {
-        name: "Consulta",
-        start: "2021-05-21 15:00",
-        end: "2021-05-21 15:20",
-        details: "Consulta de Rotina Rubi",
-      },
-      {
-        name: "Consulta",
-        start: "2021-05-05 11:00",
-        end: "2021-05-05 11:30",
-        details: "Consulta de Rotina Rubi",
-      },
-      {
-        name: "Cirurgia",
-        start: "2021-05-21 10:00",
-        end: "2021-05-21 16:20",
-        details: "Cirurgia de Rotina Rubi",
-      },
-    ],
-    medico: ["Drº José Vieira", "Drª Joana Ferreira"],
-    search: "",
-    colors: ["orange"],
+    observacoes: "",
+    events: [],
   }),
   mounted() {
     //this.getEvents();
@@ -184,17 +207,7 @@ export default {
     //get events
     getEvents() {},
     // atualizar evento
-    updateEvents(ev) {
-      console.log(ev);
-      this.selectedOpen = false;
-      this.currentlyEditing = null;
-    },
-    // apagar evento
-    deleteEvent(ev) {
-      console.log(ev);
-      this.selectedOpen = false;
-      this.getEvents();
-    },
+
     // adicionar evento
     addEvent() {
       if (this.name && this.start && this.end && this.details) {
@@ -203,21 +216,20 @@ export default {
         this.details = "";
         this.start == "";
         this.end = "";
+        this.state = "";
+        this.desc = "";
       } else {
         //show error
       }
-    },
-    handleClick(row) {
-      this.nomeSelected = row.nome;
-      this.dialogUtente = false;
     },
     viewDay({ date }) {
       this.focus = date;
       this.type = "day";
     },
     getEventColor(event) {
-      if (event.name.includes("Consulta")) return "#00d4ff";
-      else return "#ffc44d";
+      if (event.state.includes("Agendada")) return "#ACD47F";
+      if (event.state.includes("A decorrer")) return "#FFDF80";
+      if (event.state.includes("Pendente")) return "#FAB471";
     },
     setToday() {
       this.focus = this.today;
@@ -234,6 +246,7 @@ export default {
     showEvent({ nativeEvent, event }) {
       const open = () => {
         this.selectedEvent = event;
+        this.colors = this.getEventColor(event);
         this.selectedElement = nativeEvent.target;
         requestAnimationFrame(() =>
           requestAnimationFrame(() => (this.selectedOpen = true))
@@ -256,6 +269,142 @@ export default {
     rnd(a, b) {
       return Math.floor((b - a + 1) * Math.random()) + a;
     },
+    registar(value) {
+      this.atualiza();
+      this.$snackbar.showMessage({
+        show: true,
+        color: value.color,
+        text: value.text,
+        timeout: 4000,
+      });
+    },
+    format(data) {
+      return moment(data).locale("pt").format("DD/MM/YYYY HH:mm");
+    },
+    confirmar: async function (estado) {
+      try {
+          await axios.post(
+            "http://localhost:7777/medico/intervencao/alterar",
+            {
+              id: this.selectedEvent.id,
+              estado: estado,
+              observacoes: this.observacoes
+            },
+            {
+              headers: { Authorization: "Bearer " + store.getters.token },
+            }
+          );
+        
+        this.selectedOpen = false;
+        this.atualiza();
+        let text = "";
+        if (estado == "Concluída") {
+          text = "Consulta terminada com sucesso.";
+        } else {
+          text = "Consulta cancelada com sucesso.";
+        }
+
+        this.$snackbar.showMessage({
+          show: true,
+          color: "success",
+          text: text,
+          timeout: 4000,
+        });
+      } catch (e) {
+        this.selectedOpen = false;
+        this.$snackbar.showMessage({
+          show: true,
+          color: "warning",
+          text: "Ocorreu um erro, por favor tente mais tarde!",
+          timeout: 4000,
+        });
+      }
+    },
+    atualiza: async function () {
+      this.events = [];
+      try {
+        let response2 = await axios.post(
+          "http://localhost:7777/medico/consultas",
+          {
+            email: this.$store.state.email,
+          },
+          {
+            headers: { Authorization: "Bearer " + store.getters.token },
+          }
+        );
+        for (var i = 0; i < response2.data.length; i++) {
+          if (response2.data[i].estado != "Cancelada") {
+            var marcacao = moment(
+              response2.data[i].data + " " + response2.data[i].hora,
+              "YYYY-MM-DD HH:mm",
+              true
+            )
+              .locale("pt")
+              .format("YYYY-MM-DD HH:mm");
+            var final = moment(marcacao)
+              .add(15, "minutes")
+              .locale("pt")
+              .format("YYYY-MM-DD HH:mm");
+            this.events.push({
+              id: response2.data[i].id,
+              name: response2.data[i].tipo,
+              start: marcacao,
+              end: final,
+              details: response2.data[i].motivo,
+              state: response2.data[i].estado,
+              vet: response2.data[i].veterinario.nome,
+              desc: response2.data[i].descricao,
+              utente: response2.data[i].animal.nome,
+              raca: response2.data[i].animal.raca,
+            });
+          }
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
+  },
+  created: async function () {
+    try {
+      let response2 = await axios.post(
+        "http://localhost:7777/medico/consultas",
+        {
+          email: this.$store.state.email,
+        },
+        {
+          headers: { Authorization: "Bearer " + store.getters.token },
+        }
+      );
+      for (var i = 0; i < response2.data.length; i++) {
+        if (response2.data[i].estado != "Cancelada") {
+          var marcacao = moment(
+            response2.data[i].data + " " + response2.data[i].hora,
+            "YYYY-MM-DD HH:mm",
+            true
+          )
+            .locale("pt")
+            .format("YYYY-MM-DD HH:mm");
+          var final = moment(marcacao)
+            .add(15, "minutes")
+            .locale("pt")
+            .format("YYYY-MM-DD HH:mm");
+          this.events.push({
+            id: response2.data[i].id,
+            name: response2.data[i].tipo,
+            start: marcacao,
+            end: final,
+            details: response2.data[i].motivo,
+            state: response2.data[i].estado,
+            vet: response2.data[i].veterinario.nome,
+            desc: response2.data[i].descricao,
+            utente: response2.data[i].animal.nome,
+            raca: response2.data[i].animal.raca,
+          });
+        }
+      }
+    } catch (e) {
+      console.log(e);
+    }
   },
 };
 </script>
