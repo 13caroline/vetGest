@@ -304,6 +304,7 @@ import axios from "axios";
 import moment from "moment"
 import store from "@/store.js";
 export default {
+  props:["animal"],
   data: () => ({
     cancelDialog: false,
     dialog: false,
@@ -427,9 +428,10 @@ export default {
       this.cirurgias = [];
       try {
         var response = await axios.post(
-          "http://localhost:7777/cliente/cirurgias",
+          "http://localhost:7777/cliente/animal/cirurgias",
           {
             cliente: this.$store.state.email,
+            animal: this.animal.id,
           },
           {
             headers: {
@@ -489,10 +491,11 @@ export default {
   created: async function () {
     try {
       var response = await axios.post(
-        "http://localhost:7777/cliente/cirurgias",
-        {
-          cliente: this.$store.state.email,
-        },
+        "http://localhost:7777/cliente/animal/cirurgias",
+          {
+            cliente: this.$store.state.email,
+            animal: this.animal.id,
+          },
         {
           headers: {
             Authorization: "Bearer " + store.getters.token.toString(),

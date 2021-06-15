@@ -28,7 +28,7 @@
         </v-tab-item>
 
         <v-tab-item>
-          <Cirurgia></Cirurgia>
+          <Cirurgia :animal="animal"></Cirurgia>
         </v-tab-item>
 
         <v-tab-item>
