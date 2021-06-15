@@ -100,25 +100,13 @@
 
           <v-col cols="auto" v-if="this.$store.state.tipo == 'Veterinario'">
             <div class="foto h-100 mt-5" >
-              <v-img
+              <img
                 :src="imagem"
                 aspect-ratio="1"
                 class="grey lighten-2 mx-2 rounded"
                 cover
               >
-                <template v-slot:placeholder>
-                  <v-row
-                    class="fill-height ma-0"
-                    align="center"
-                    justify="center"
-                  >
-                    <v-progress-circular
-                      indeterminate
-                      color="grey lighten-5"
-                    ></v-progress-circular>
-                  </v-row>
-                </template>
-              </v-img>
+                
             </div>
           </v-col>
         </v-row>
@@ -333,7 +321,8 @@ export default {
       }
     );
     this.utilizador = response.data;
-     this.imagem = 'data:image/jpeg;base64,' + btoa(response.data.image);
+    console.log(response.data.image)
+     this.imagem = 'data:image/jpeg;charset=utf-8;base64,' +response.data.image;
     console.log(this.imagem)
   },
 };
