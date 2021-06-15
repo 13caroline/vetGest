@@ -101,14 +101,18 @@
             <v-row align="center">
               <v-col cols="auto">
                 <v-img
-                  max-height="100"
-                  max-width="100"
+                  class="round"
+                  aspect-ratio="1"
+                  width="100"
                   :src="this.image"
+                  cover
                 >
                 </v-img>
               </v-col>
               <v-col>
-                <span class="font-weight-bold headline indication text-uppercase">
+                <span
+                  class="font-weight-bold headline indication text-uppercase"
+                >
                   {{ this.nome }}
                 </span>
               </v-col>
@@ -194,7 +198,7 @@ export default {
     email: "",
     contacto: "",
     iban: "",
-    image: "", 
+    image: "",
     medicos: [],
   }),
   methods: {
@@ -214,12 +218,12 @@ export default {
       let response = await axios.get("http://localhost:7777/clinica/medicos", {
         headers: { Authorization: "Bearer " + store.getters.token },
       });
-      this.medicos = response.data.map(an => {
+      this.medicos = response.data.map((an) => {
         an.image = an.image
-      ? "data:image/jpeg;charset=utf-8;base64," + an.image
-      : require("@/assets/image_placeholder.png");
-        return an
-      })
+          ? "data:image/jpeg;charset=utf-8;base64," + an.image
+          : require("@/assets/image_placeholder.png");
+        return an;
+      });
     } catch (e) {
       console.log(e);
     }
@@ -254,5 +258,8 @@ export default {
 
 .hover-div.hover {
   opacity: 0.7;
+}
+.round {
+  border-radius: 100%;
 }
 </style>
