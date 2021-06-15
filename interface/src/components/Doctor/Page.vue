@@ -154,7 +154,7 @@
               v-model="page"
               :length="pageCount"
               circle
-              :total-visible="4"
+              :total-visible="7"
               color="#2596be"
               class="custom"
             ></v-pagination>
@@ -164,7 +164,7 @@
 
       <v-dialog v-model="concluir" persistent width="100%" max-width="460">
         <v-card>
-          <v-card-title class="cancel">Terminar consulta</v-card-title>
+          <v-card-title class="cancel">Concluir {{details_item.tipo}}</v-card-title>
           <v-card-text>
             <v-row class="mt-2">
               <v-col class="pb-0" align="right" cols="5">
@@ -243,7 +243,7 @@
               width="50%"
               @click="updateStatus('Concluída')"
             >
-              Admitir
+              Confirmar
             </v-btn>
           </v-card-actions>
         </v-card>

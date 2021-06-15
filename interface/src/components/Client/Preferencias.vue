@@ -3,47 +3,29 @@
     <v-container>
       <v-card flat color="#fafafa">
         <v-row>
-            <v-col cols="auto" class="ml-auto">
-          <v-btn class="body-2" small color="#2596be" dark to="/cliente/prefencias/editar">
-            Editar dados
-            <v-icon small class="ml-4">fas fa-pen</v-icon>
-          </v-btn>
-          </v-col>
-        </v-row>
-        
-          <h3 class="pa-3">Dados de Acesso</h3>
-          <v-divider></v-divider>
-        
-
-        <v-row class="w-100" align="start">
-          <v-col>
-            <v-card class="h-100 mt-5" outlined>
-              <v-list-item>
-                <v-list-item-content>
-                  <div>
-                    <v-row>
-                      <v-col>
-                        <p class="infos">E-mail</p>
-                      </v-col>
-                      <v-col>
-                        <p class="respos">{{ utilizador.email }}</p>
-                      </v-col>
-                    </v-row>
-                  </div>
-                  <div>
-                    <v-row>
-                      <v-col>
-                        <p class="infos">Palavra-passe</p>
-                      </v-col>
-                      <v-col>
-                        <p class="respos">*****</p>
-                      </v-col>
-                    </v-row>
-                  </div>
-                  <div></div>
-                </v-list-item-content>
-              </v-list-item>
-            </v-card>
+          <v-col cols="auto" class="ml-auto">
+            <v-btn
+              class="body-2 mx-2"
+              small
+              color="#2596be"
+              v-bind="attrs"
+              v-on="on"
+              dark
+              @click="addFoto()"
+            >
+              Adicionar fotografia
+              <v-icon small class="ml-2">fas fa-camera</v-icon>
+            </v-btn>
+            <v-btn
+              class="body-2"
+              small
+              color="#2596be"
+              dark
+              to="/cliente/prefencias/editar"
+            >
+              Editar dados
+              <v-icon small class="ml-2">fas fa-pen</v-icon>
+            </v-btn>
           </v-col>
         </v-row>
 
@@ -96,6 +78,64 @@
               </v-list-item>
             </v-card>
           </v-col>
+          <v-col cols="auto">
+            <div class="foto h-100 mt-5">
+              <v-img
+                src="@/assets/animais/Rubi.jpg"
+                aspect-ratio="1"
+                class="grey lighten-2 mx-2 rounded"
+                cover
+              >
+                <template v-slot:placeholder>
+                  <v-row
+                    class="fill-height ma-0"
+                    align="center"
+                    justify="center"
+                  >
+                    <v-progress-circular
+                      indeterminate
+                      color="grey lighten-5"
+                    ></v-progress-circular>
+                  </v-row>
+                </template>
+              </v-img>
+            </div>
+          </v-col>
+        </v-row>
+
+        <h3 class="pa-3">Dados de Acesso</h3>
+        <v-divider></v-divider>
+
+        <v-row class="w-100" align="start">
+          <v-col>
+            <v-card class="h-100 mt-5" outlined>
+              <v-list-item>
+                <v-list-item-content>
+                  <div>
+                    <v-row>
+                      <v-col>
+                        <p class="infos">E-mail</p>
+                      </v-col>
+                      <v-col>
+                        <p class="respos">{{ utilizador.email }}</p>
+                      </v-col>
+                    </v-row>
+                  </div>
+                  <div>
+                    <v-row>
+                      <v-col>
+                        <p class="infos">Palavra-passe</p>
+                      </v-col>
+                      <v-col>
+                        <p class="respos">*****</p>
+                      </v-col>
+                    </v-row>
+                  </div>
+                  <div></div>
+                </v-list-item-content>
+              </v-list-item>
+            </v-card>
+          </v-col>
         </v-row>
 
         <h3 class="pa-3">Dados de Contacto</h3>
@@ -132,6 +172,55 @@
           </v-col>
         </v-row>
       </v-card>
+      <v-dialog v-model="dialog" persistent width="100%" max-width="460">
+        <v-card>
+          <v-card-title>Adicionar fotografia</v-card-title>
+          <v-card-text>
+            <v-row justify="center" align="center">
+              <div class="foto">
+                <v-img
+                  :src="url"
+                  aspect-ratio="1"
+                  class="grey lighten-2 ma-2 rounded"
+                  cover
+                >
+                  <template v-slot:placeholder>
+                    <v-row
+                      class="fill-height ma-0"
+                      align="center"
+                      justify="center"
+                    >
+                    </v-row>
+                  </template>
+                </v-img>
+              </div>
+            </v-row>
+            <v-row>
+              <input
+                type="file"
+                id="file"
+                ref="file"
+                v-on:change="handleFileUpload()"
+              />
+            </v-row>
+            <v-row align="end" justify="end">
+              <v-col cols="auto">
+                <v-btn
+                  color="#BDBDBD"
+                  class="mx-2"
+                  small
+                  dark
+                  @click="dialog = false"
+                  >Cancelar</v-btn
+                >
+                <v-btn color="#2596be" small dark @click="submitFile()"
+                  >Registar</v-btn
+                >
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
     </v-container>
   </div>
 </template>
@@ -144,10 +233,48 @@ export default {
   props: ["animal"],
   data: () => ({
     utilizador: {},
+    dialog: false,
+    url: null,
+    file: "",
   }),
   methods: {
     format(data) {
       return moment(data).locale("pt").format("DD/MM/YYYY");
+    },
+    handleFileUpload() {
+      this.file = this.$refs.file.files[0];
+      this.url = URL.createObjectURL(this.file);
+    },
+    addFoto() {
+      this.dialog = true;
+    },
+    submitFile() {
+      console.log(this.file);
+      let formData = new FormData();
+
+      formData.append("imageFile", this.file);
+      formData.append("userid", this.utilizador.id);
+      try {
+        axios.post("http://localhost:7777/medico/adicionaFoto", formData, {
+          headers: {
+            Authorization: "Bearer " + store.getters.token.toString(),
+          },
+        });
+        this.$snackbar.showMessage({
+          show: true,
+          color: "success",
+          text: "Fotografia adicionada com sucesso",
+          timeout: 4000,
+        });
+        this.dialog = false;
+      } catch (e) {
+        this.$snackbar.showMessage({
+          show: true,
+          color: "success",
+          text: "Ocorreu um erro, por favor tente mais tarde!",
+          timeout: 4000,
+        });
+      }
     },
   },
   created: async function () {
@@ -198,5 +325,8 @@ export default {
 
 .row.col.col-6 {
   margin-top: 0;
+}
+.foto {
+  width: 200px;
 }
 </style>

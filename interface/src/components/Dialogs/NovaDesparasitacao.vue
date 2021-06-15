@@ -123,6 +123,7 @@ import moment from "moment";
 export default {
   props: ["dados"], // id animal
   data: () => ({
+    dataProxima:"",
     dialog: false,
     dialogs: {},
     cancelar: {
@@ -154,6 +155,10 @@ export default {
 
         if (this.proxImunizacao == "1 mês") this.timeskip = 1;
         else this.timeskip = 3;
+
+       this.dataProxima= moment(this.dateToma)
+                .add(this.timeskip, "months")
+                .format("YYYY-MM-DD"),
         await axios.post(
           route,
           {
@@ -164,9 +169,7 @@ export default {
               observacoes: this.motivo,
               data: this.dateToma,
 
-              proxImunizacao: moment(this.data)
-                .add(this.timeskip, "months")
-                .format("YYYY-MM-DD"),
+            proxImunizacao:this.dataProxima,
               tratamento: this.tratamento,
             },
             email: this.$store.state.email,
