@@ -5,7 +5,7 @@
         <v-row>
           <v-col cols="auto" class="ml-auto">
             <v-btn
-              class="body-2 mx-2"
+              class="body-2 mr-2"
               small
               color="#2596be"
               dark
@@ -29,7 +29,7 @@
 
         <h3 class="pa-3">Dados Pessoais</h3>
         <v-divider></v-divider>
-        <v-row class="w-100" align="start">
+        <v-row class="w-100 ma-0" align="start">
           <v-col cols="12" sm>
             <v-card class="h-100 mt-5" outlined>
               <v-list-item>
@@ -212,7 +212,7 @@
                   >Cancelar</v-btn
                 >
                 <v-btn color="#2596be" small dark @click="submitFile()"
-                  >Registar</v-btn
+                  >Guardar</v-btn
                 >
               </v-col>
             </v-row>

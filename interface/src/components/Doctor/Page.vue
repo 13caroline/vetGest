@@ -124,6 +124,7 @@
                     v-bind="attrs"
                     v-on="on"
                     small
+                    :disabled="item.internado"
                     @click="abrirInternamento(item)"
                     >fas fa-procedures</v-icon
                   >
@@ -164,7 +165,9 @@
 
       <v-dialog v-model="concluir" persistent width="100%" max-width="460">
         <v-card>
-          <v-card-title class="cancel">Concluir {{details_item.tipo}}</v-card-title>
+          <v-card-title class="cancel"
+            >Concluir {{ details_item.tipo }}</v-card-title
+          >
           <v-card-text>
             <v-row class="mt-2">
               <v-col class="pb-0" align="right" cols="5">
@@ -590,20 +593,21 @@ export default {
           headers: { Authorization: "Bearer " + store.getters.token },
         }
       );
-      console.log(response.data)
       if (typeof response.data == "object") {
-        for (var i = 0; i < response.data.length; i++) {
+        response.data.intervencoes.forEach((intervencao) => {
           this.agendamentos.push({
-            id: response.data[i].id,
-            utente: response.data[i].animal.nome,
-            marcacao: response.data[i].data + " " + response.data[i].hora,
-            estado: response.data[i].estado,
-            descricao: response.data[i].descricao,
-            motivo: response.data[i].motivo,
-            animal: response.data[i].animal,
-            tipo: response.data[i].tipo,
+            id: intervencao.Intervencao.id,
+            utente: intervencao.Animal.nome,
+            marcacao:
+              intervencao.Intervencao.data + " " + intervencao.Intervencao.hora,
+            estado: intervencao.Intervencao.estado,
+            descricao: intervencao.Intervencao.descricao,
+            motivo: intervencao.Intervencao.motivo,
+            animal: intervencao.Animal,
+            tipo: intervencao.Intervencao.tipo,
+            internado: intervencao.internado === "Internado",
           });
-        }
+        });
       }
     } catch (e) {
       this.$snackbar.showMessage({

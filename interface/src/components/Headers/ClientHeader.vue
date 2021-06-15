@@ -109,7 +109,7 @@
                 Cirurgias
               </v-list-item-title>
             </v-list-item>
-            <v-list-item to="/books">
+            <v-list-item to="/cliente/clinica">
               <v-list-item-title class="caption">
                 <v-icon x-small class="mt-n1 mr-1"
                   >fas fa-clinic-medical</v-icon
@@ -117,14 +117,14 @@
                 Clínica
               </v-list-item-title>
             </v-list-item>
-            <v-list-item to="/cliente/conselhos">
+            <!-- <v-list-item to="/cliente/conselhos">
               <v-list-item-title class="caption">
                 <v-icon x-small class="mt-n1 mr-1"
                   >fas fa-comment-medical</v-icon
                 >
                 Conselhos Úteis
               </v-list-item-title>
-            </v-list-item>
+            </v-list-item> -->
             <v-list-item @click="preferences()">
               <v-list-item-title class="caption">
                 <v-icon x-small class="mt-n1 mr-1">fas fa-user-cog</v-icon>
