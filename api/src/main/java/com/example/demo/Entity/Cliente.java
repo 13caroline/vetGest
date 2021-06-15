@@ -51,6 +51,10 @@ public class Cliente extends Utilizador implements Serializable{
     )
     private long nif;
 
+    @Lob
+    @Column(name = "image")
+    private byte[] image;
+
     @OneToMany
     private List<Animal> animais;
 

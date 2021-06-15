@@ -34,7 +34,9 @@ public class ClienteService {
     public Cliente updateCliente(Cliente cliente){
         return repository.save(cliente);
     }
-
+    public Cliente findById(int id){
+        return repository.findById(id);
+    };
     public  Cliente findClienteByAnimais(Animal animals){
         return repository.findClienteByAnimais(animals);
     }

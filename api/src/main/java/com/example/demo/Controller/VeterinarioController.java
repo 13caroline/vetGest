@@ -661,7 +661,7 @@ public class VeterinarioController {
         System.out.println("Original Image Byte Size - " + file.getBytes().length);
         Veterinario vet = veterinarioService.getVetById(userid);
         vet.setImage(file.getBytes());
-        veterinarioService.saveVeterinario(vet);
+        veterinarioService.updateVet(vet);
         return ResponseEntity.accepted().body("Imagem alterada com sucesso!");
     }
 }
