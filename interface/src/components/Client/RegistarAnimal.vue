@@ -23,13 +23,14 @@
                       flat
                       outlined
                       dense
+                      :rules="nameRules"
                       v-model="nome"
                     ></v-text-field>
                   </div>
                 </v-col>
                 <v-col cols="3">
                   <div>
-                    <p class="ma-0">Número de Chip *</p>
+                    <p class="ma-0">Número de Chip </p>
                     <v-text-field
                       color="#2596be"
                       flat
@@ -49,6 +50,7 @@
                       color="#2596be"
                       label="Por favor selecione"
                       :items="itemsespecie"
+                      :rules="nullRule"
                       v-model="especie"
                     >
                     </v-select>
@@ -69,6 +71,7 @@
                       v-model="raca"
                       v-if="especie == 'Canídeo'"
                       :items="racasCao"
+                      :rules="nullRule"
                     >
                     </v-select>
                     <v-select
@@ -80,6 +83,7 @@
                       v-model="raca"
                       v-else
                       :items="racasGato"
+                      :rules="nullRule"
                     >
                     </v-select>
                   </div>
@@ -94,6 +98,7 @@
                       color="#2596be"
                       suffix="cm"
                       v-model="altura"
+                      :rules="alturaRules"
                     >
                     </v-text-field>
                   </div>
@@ -119,6 +124,7 @@
                           outlined
                           v-bind="attrs"
                           v-on="on"
+                          :rules="nullRule"
                         ></v-text-field>
                       </template>
                       <v-date-picker
@@ -134,7 +140,7 @@
                 <v-col>
                   <div>
                     <p class="ma-0">Sexo *</p>
-                    <v-radio-group class="ma-0" v-model="sexo">
+                    <v-radio-group class="ma-0" v-model="sexo" :rules="nullRule">
                       <v-radio value="Macho" color="#2596be">
                         <template v-slot:label>
                           <div class="body-2">Macho</div>
@@ -152,7 +158,7 @@
                 <v-col>
                   <div>
                     <p class="ma-0">Castração *</p>
-                    <v-radio-group class="ma-0" v-model="castracao">
+                    <v-radio-group class="ma-0" v-model="castracao" :rules="nullRule">
                       <v-radio :value="true" color="#2596be">
                         <template v-slot:label>
                           <div class="body-2">Sim</div>
@@ -181,6 +187,7 @@
                       multiple
                       :items="itemscor"
                       v-model="cor"
+                      :rules="nullRule"
                     ></v-select>
                   </div>
                 </v-col>
@@ -196,6 +203,7 @@
                       multiple
                       :items="itemspelagem"
                       v-model="pelagem"
+                      :rules="nullRule"
                     ></v-select>
                   </div>
                 </v-col>
@@ -209,6 +217,7 @@
                       label="Por favor selecione"
                       dense
                       :items="itemscauda"
+                      :rules="nullRule"
                       v-model="cauda"
                     ></v-select>
                   </div>
@@ -510,6 +519,23 @@ export default {
     observacoes: "",
     valid: true,
     done: false,
+    nameRules: [
+      (v) => !!v || "Insira o nome completo.",
+      (v) => {
+        const pattern = /^[a-zA-Z\sÀ-ÿ]+$/;
+        return (
+          pattern.test(v) ||
+          "Nome inválido. Insira apenas caracteres do alfabeto."
+        );
+      },
+    ],
+    nullRule: [(v) => !!v || "Este campo não pode estar vazio."],
+    alturaRules: [
+      (v) => {
+        const pattern = /^[0-9]+$/;
+        return pattern.test(v) || "Altura inválida. Insira apenas dígitos.";
+      },
+    ],
   }),
   methods: {
     registaAnimal: async function () {
