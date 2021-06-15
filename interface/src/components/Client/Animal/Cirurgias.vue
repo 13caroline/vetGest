@@ -20,6 +20,8 @@
             :page.sync="page"
             :items-per-page="itemsPerPage"
             @page-count="pageCount = $event"
+            :sort-by.sync="sortBy"
+      :sort-desc.sync="sortDesc"
             no-data-text="Não existe histórico de cirurgias."
             no-results-text="Não foram encontrados resultados."
           >
@@ -312,6 +314,8 @@ export default {
     },
     dialogs: {},
     dados: {},
+    sortBy: "marcacao",
+    sortDesc: true,
     page: 1,
     pageCount: 0,
     itemsPerPage: 8,

@@ -17,6 +17,9 @@
             :page.sync="page"
             :items-per-page="itemsPerPage"
             @page-count="pageCount = $event"
+            no-data-text="Não existem utentes em internamento."
+            :sort-by.sync="sortBy"
+            :sort-desc.sync="sortDesc"
           >
             <template v-slot:[`item.animal`]="{ item }">
               <v-tooltip top>
@@ -86,6 +89,8 @@ export default {
       page: 1,
       pageCount: 0,
       itemsPerPage: 10,
+      sortBy: "data",
+      sortDesc: true,
       search: "",
       headers: [
         {
@@ -138,12 +143,10 @@ export default {
     },
     formats(data){
         return moment(
-            data,
-            "YYYY-MM-DD HH:mm",
-            true
+            data
           )
             .locale("pt")
-            .format("DD/MM/YYYY HH:mm");
+            .format("DD/MM/YYYY");
     }
   },
   created: async function() {

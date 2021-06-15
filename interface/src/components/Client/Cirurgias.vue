@@ -20,6 +20,8 @@
             :page.sync="page"
             :items-per-page="itemsPerPage"
             @page-count="pageCount = $event"
+            :sort-by.sync="sortBy"
+            :sort-desc.sync="sortDesc"
             no-data-text="Não existe histórico de cirurgias."
             no-results-text="Não foram encontrados resultados."
           >
@@ -94,16 +96,16 @@
             </v-btn>
           </v-card-title>
           <v-card-text class="black--text">
-             <div v-for="(nota,index) in note" :key="index">
-                <p>{{format2(nota.cirurgia.data)}} {{nota.cirurgia.hora}}</p>
-                <span v-if="!nota.cirurgia.observacoes" class="font-italic">
+            <div v-for="(nota, index) in note" :key="index">
+              <p>{{ format2(nota.cirurgia.data) }} {{ nota.cirurgia.hora }}</p>
+              <span v-if="!nota.cirurgia.observacoes" class="font-italic">
                 Sem notas médicas.
-                </span>
-            <span class="font-italic">
-              {{nota.cirurgia.observacoes}}
-            </span>
-            <p>{{nota.veterinario.nome}}</p>
-            <v-divider></v-divider>
+              </span>
+              <span class="font-italic">
+                {{ nota.cirurgia.observacoes }}
+              </span>
+              <p>{{ nota.veterinario.nome }}</p>
+              <v-divider></v-divider>
             </div>
           </v-card-text>
         </v-card>
@@ -126,6 +128,8 @@ export default {
       title: "o agendamento da cirurgia",
       text: "cirurgia",
     },
+    sortBy: "marcacao",
+    sortDesc: true,
     page: 1,
     pageCount: 0,
     itemsPerPage: 8,
@@ -169,7 +173,7 @@ export default {
       },
     ],
     cirurgias: [],
-    note: []
+    note: [],
   }),
   components: {
     CancelarComDados,
@@ -196,20 +200,22 @@ export default {
     format2(data) {
       return moment(data).locale("pt").format("DD/MM/YYYY");
     },
-    closeDialog(){
+    closeDialog() {
       this.dialog = false;
     },
-    notas: async function(item){
-      let response = await axios.post("http://localhost:7777/cliente/cirurgia/notas",
-      {
-        id: item.idConsulta
-      },
-      {
-        headers: { Authorization: "Bearer " + store.getters.token },
-      }
+    notas: async function (item) {
+      let response = await axios.post(
+        "http://localhost:7777/cliente/cirurgia/notas",
+        {
+          id: item.idConsulta,
+        },
+        {
+          headers: { Authorization: "Bearer " + store.getters.token },
+        }
       );
       this.note = Array.isArray(response.data)
-        ? response.data : [response.data];
+        ? response.data
+        : [response.data];
 
       this.detalhes = true;
     },

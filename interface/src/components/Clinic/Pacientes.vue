@@ -50,11 +50,19 @@
         :page.sync="page"
         :items-per-page="itemsPerPage"
         @page-count="pageCount = $event"
+        :sort-by.sync="sortBy"
+        :sort-desc.sync="sortDesc"
       >
         <template v-slot:[`item.detalhes`]="{ item }">
           <v-tooltip right>
             <template v-slot:activator="{ on, attrs }">
-              <v-icon v-bind="attrs" v-on="on"  color="#52b9dd" small @click="more(item)">
+              <v-icon
+                v-bind="attrs"
+                v-on="on"
+                color="#52b9dd"
+                small
+                @click="more(item)"
+              >
                 mdi-plus-circle
               </v-icon>
             </template>
@@ -129,6 +137,8 @@ export default {
           align: "center",
         },
       ],
+      sortBy: "nome",
+      sortDesc: false,
       utentes: [],
     };
   },

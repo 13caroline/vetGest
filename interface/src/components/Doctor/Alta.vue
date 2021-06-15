@@ -28,8 +28,8 @@
               </v-img>
             </v-col>
             <v-col class="details my-auto">
-              <div class="text-uppercase font-weight-bold">Rubi</div>
-              <span class="text-uppercase body-2 text--secondary">8 ANOS</span>
+              <div class="text-uppercase font-weight-bold">{{animal.nome}}</div>
+              <span class="text-uppercase body-2 text--secondary">{{age(animal.dataNascimento)}}</span>
             </v-col>
           </v-row>
         </v-card>

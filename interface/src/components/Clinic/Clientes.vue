@@ -48,6 +48,8 @@
         hide-default-footer
         no-data-text="Não existem clientes registados."
         no-results-text="Não foram encontrados resultados."
+        :sort-by.sync="sortBy"
+        :sort-desc.sync="sortDesc"
         :page.sync="page"
         :items-per-page="itemsPerPage"
         @page-count="pageCount = $event"
@@ -55,7 +57,13 @@
         <template v-slot:[`item.detalhes`]="{ item }">
           <v-tooltip right>
             <template v-slot:activator="{ on, attrs }">
-              <v-icon v-bind="attrs" v-on="on" small  color="#52b9dd" @click="more(item)">
+              <v-icon
+                v-bind="attrs"
+                v-on="on"
+                small
+                color="#52b9dd"
+                @click="more(item)"
+              >
                 mdi-plus-circle
               </v-icon>
             </template>
@@ -78,7 +86,6 @@
         <v-card>
           <v-card-title class="mb-6 grey--text">
             Identificação pessoal
-            
 
             <v-spacer></v-spacer>
             <v-btn icon small @click="dialog = false">
@@ -204,6 +211,8 @@ export default {
       page: 1,
       pageCount: 0,
       itemsPerPage: 8,
+      sortBy: "nome",
+      sortDesc: false,
       search: "",
       headers: [
         {

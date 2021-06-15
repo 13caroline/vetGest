@@ -65,7 +65,6 @@
             </v-card-text>
           </v-card>
         </v-col>
-
         <v-col
           class="py-0"
           cols="12"

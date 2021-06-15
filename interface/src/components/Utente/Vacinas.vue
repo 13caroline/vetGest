@@ -37,6 +37,8 @@
             :items="items"
             class="elevation-1"
             hide-default-footer
+            :sort-by.sync="sortBy"
+      :sort-desc.sync="sortDesc"
             no-data-text="Não existem vacinas ou desparasitações registadas."
             no-results-text="Não foram encontrados resultados."
             :page.sync="page"
@@ -113,51 +115,53 @@ export default {
     pageCount: 0,
     itemsPerPage: 8,
     done: false,
+    sortBy: "data",
+    sortDesc: true,
     headers: [
       {
-        text: "Data Prevista",
+        text: "DATA PREVISTA",
         align: "start",
         sortable: true,
         value: "data",
       },
       {
-        text: "Data de Toma",
+        text: "DATA DE TOMA",
         value: "data_toma",
         sortable: true,
         align: "start",
       },
       {
-        text: "Tipo",
+        text: "TIPO",
         value: "tipo",
         sortable: true,
         align: "start",
       },
       {
-        text: "Vacina contra",
+        text: "VACINA CONTRA",
         value: "vacina",
         sortable: true,
         align: "start",
       },
       {
-        text: "Tratamento Utilizado",
+        text: "TRATAMENTO UTILIZADO",
         value: "tratamento",
         sortable: true,
         align: "start",
       },
       {
-        text: "Médico Veterinário",
+        text: "MÉDICO VETERINÁRIO",
         value: "veterinario",
         sortable: false,
         align: "start",
       },
       {
-        text: "Estado",
+        text: "ESTADO",
         value: "estado",
         sortable: true,
         align: "center",
       },
       {
-        text: "Confirmar Administração",
+        text: "AÇÕES",
         value: "confirmar",
         sortable: false,
         align: "center",
