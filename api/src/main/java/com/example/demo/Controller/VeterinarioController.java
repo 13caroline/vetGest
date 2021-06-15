@@ -565,7 +565,7 @@ public class VeterinarioController {
 
     @CrossOrigin
     @RequestMapping(value="/medico/internamento/detalhes", method = RequestMethod.POST,produces="application/json")
-    public ResponseEntity<?> getInternamento(@RequestBody String body) throws JsonProcessingException, JSONException {
+    public ResponseEntity<?> getInternamento(@RequestBody String body) throws JsonProcessingException, JSONException, UnsupportedEncodingException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);
         int id_animal = node.get("id").asInt();
@@ -580,6 +580,8 @@ public class VeterinarioController {
         System.out.println(notaInternamentos);
         JSONObject response = new JSONObject();
         JSONObject animal1 = new JSONObject();
+        byte[] encodeBase64 = Base64.encode(animal.getImage());
+        String image = new String(encodeBase64, "UTF-8");
         animal1.put("id",animal.getId());
         animal1.put("nome",animal.getNome());
         animal1.put("raca",animal.getRaca());
@@ -593,6 +595,7 @@ public class VeterinarioController {
         animal1.put("chip",animal.getChip());
         animal1.put("castracao",animal.isCastracao());
         animal1.put("observacoes",animal.getObservacoes());
+        animal1.put("image",image);
         response.put("animal",animal1);
         notaInternamentos.forEach(notaInternamento -> {
             try {
