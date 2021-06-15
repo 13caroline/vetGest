@@ -101,7 +101,7 @@
           <v-col cols="auto" v-if="this.$store.state.tipo == 'Veterinario'">
             <div class="foto h-100 mt-5" >
               <v-img
-                src="@/assets/animais/Rubi.jpg"
+                :src="imagem"
                 aspect-ratio="1"
                 class="grey lighten-2 mx-2 rounded"
                 cover
@@ -265,6 +265,7 @@ export default {
     dialog: false,
     url: null,
     file: "",
+    imagem: "",
   }),
   methods: {
     format(data) {
@@ -332,7 +333,8 @@ export default {
       }
     );
     this.utilizador = response.data;
-    console.log(this.utilizador)
+     this.imagem = 'data:image/jpeg;base64,' + btoa(response.data.image);
+    console.log(this.imagem)
   },
 };
 </script>
