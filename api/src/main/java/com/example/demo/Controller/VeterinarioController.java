@@ -650,7 +650,7 @@ public class VeterinarioController {
             veterinario.setPassword(vet.getPassword());
             veterinarioService.saveVeterinario(veterinario);
         }else
-            veterinarioService.saveVeterinario(veterinario);
+            veterinarioService.updateVet(veterinario);
 
         return  ResponseEntity.accepted().body("Dados alterados com sucesso!");
     }
