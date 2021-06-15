@@ -320,9 +320,9 @@ public class ClinicaController<RandomStringUtils, RandomStringGenerator> {
         cliente.setPassword(pass);
         clienteService.saveCliente(cliente);
 
-        SimpleMailMessage msg = mailSender.sendEmailregister(cliente.getEmail(),pass,cliente.getNome());
-        JavaMailSender js = mailSender.getJavaMailSender();
-        js.send(msg);
+        //SimpleMailMessage msg = mailSender.sendEmailregister(cliente.getEmail(),pass,cliente.getNome());
+        //JavaMailSender js = mailSender.getJavaMailSender();
+        //js.send(msg);
 
         return  ResponseEntity.accepted().body("Cliente Registado com sucesso");
     }
