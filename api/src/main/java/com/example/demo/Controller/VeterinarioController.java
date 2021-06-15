@@ -321,6 +321,7 @@ public class VeterinarioController {
             }
         });
         return ResponseEntity.accepted().body(vacinas);
+        return ResponseEntity.accepted().body(vacinas);
     }
 
     @CrossOrigin
