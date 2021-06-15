@@ -96,9 +96,11 @@
             <v-row align="center">
               <v-col cols="auto">
                 <v-img
-                  max-height="100"
-                  max-width="100"
-                  src="@/assets/medico.png"
+                  class="round"
+                  aspect-ratio="1"
+                  width="100"
+                  :src="this.image"
+                  cover
                 >
                 </v-img>
               </v-col>
@@ -254,6 +256,7 @@ export default {
       concelho: "",
       nif: "",
       utentes: "",
+      image: "",
     };
   },
   methods: {
@@ -265,6 +268,7 @@ export default {
       this.concelho = item.concelho;
       this.nif = item.nif;
       this.utentes = item.animais;
+      this.image = item.image;
       this.dialog = true;
     },
     toUtente(value) {
@@ -276,7 +280,12 @@ export default {
       let response = await axios.get("http://localhost:7777/clinica/clientes", {
         headers: { Authorization: "Bearer " + store.getters.token },
       });
-      this.clientes = response.data;
+      this.clientes = response.data.map((an) => {
+        an.image = an.image
+          ? "data:image/jpeg;charset=utf-8;base64," + an.image
+          : require("@/assets/image_placeholder.png");
+        return an;
+      });
     } catch (e) {
       console.log(e);
     }
@@ -316,5 +325,8 @@ export default {
   height: 26px !important;
   min-width: 26px !important;
   font-size: 0.85rem !important;
+}
+.round {
+  border-radius: 100%;
 }
 </style>

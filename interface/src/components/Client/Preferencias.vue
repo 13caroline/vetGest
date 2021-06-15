@@ -8,8 +8,6 @@
               class="body-2 mx-2"
               small
               color="#2596be"
-              v-bind="attrs"
-              v-on="on"
               dark
               @click="addFoto()"
             >
@@ -32,7 +30,7 @@
         <h3 class="pa-3">Dados Pessoais</h3>
         <v-divider></v-divider>
         <v-row class="w-100" align="start">
-          <v-col>
+          <v-col cols="12" sm>
             <v-card class="h-100 mt-5" outlined>
               <v-list-item>
                 <v-list-item-content>
@@ -78,10 +76,10 @@
               </v-list-item>
             </v-card>
           </v-col>
-          <v-col cols="auto">
+          <v-col cols="auto" order="first" order-sm="last">
             <div class="foto h-100 mt-5">
               <v-img
-                src="@/assets/animais/Rubi.jpg"
+                :src="imagem"
                 aspect-ratio="1"
                 class="grey lighten-2 mx-2 rounded"
                 cover
@@ -236,6 +234,7 @@ export default {
     dialog: false,
     url: null,
     file: "",
+    imagem: "",
   }),
   methods: {
     format(data) {
@@ -249,13 +248,12 @@ export default {
       this.dialog = true;
     },
     submitFile() {
-      console.log(this.file);
       let formData = new FormData();
 
       formData.append("imageFile", this.file);
       formData.append("userid", this.utilizador.id);
       try {
-        axios.post("http://localhost:7777/medico/adicionaFoto", formData, {
+        axios.post("http://localhost:7777/cliente/adicionaFotoperfil", formData, {
           headers: {
             Authorization: "Bearer " + store.getters.token.toString(),
           },
@@ -266,6 +264,7 @@ export default {
           text: "Fotografia adicionada com sucesso",
           timeout: 4000,
         });
+        this.imagem = this.url;
         this.dialog = false;
       } catch (e) {
         this.$snackbar.showMessage({
@@ -289,8 +288,11 @@ export default {
         },
       }
     );
-    console.log(response);
     this.utilizador = response.data;
+    this.imagem = response.data.image
+      ? "data:image/jpeg;charset=utf-8;base64," + response.data.image
+      : require("@/assets/image_placeholder.png");
+    this.url = this.imagem;
   },
 };
 </script>
@@ -327,6 +329,6 @@ export default {
   margin-top: 0;
 }
 .foto {
-  width: 200px;
+  width: 170px;
 }
 </style>

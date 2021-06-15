@@ -34,7 +34,7 @@
               {{ format(item.dataToma) }}
             </template>
             <template v-slot:[`item.estado`]="{ item }">
-              <v-chip v-if="passouTempo(item.dataPrevista) && item.estado=='Atualizada'" color="#EF9A9A" small>
+              <v-chip v-if="!passouTempo(item.dataPrevista) && item.estado=='Atualizada'" color="#EF9A9A" small>
                 Atrasada
               </v-chip>
               <v-chip v-else :color="estadopedido(item.estado)" small>
@@ -287,6 +287,7 @@ export default {
   }),
   methods: {
     passouTempo: function(pedido){
+      console.log(pedido)
       return moment(pedido).isAfter();  
     }, 
     registar(value) {

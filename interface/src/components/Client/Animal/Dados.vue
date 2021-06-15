@@ -118,7 +118,7 @@
       <v-col cols="auto">
         <div class="foto">
           <v-img
-            src="@/assets/animais/Rubi.jpg"
+            :src="animal.image"
             aspect-ratio="1"
             class="grey lighten-2 mx-2 rounded"
             cover
@@ -192,6 +192,8 @@
         </v-card>
       </v-col>
     </v-row>
+
+    
   </div>
 </template>
 
@@ -200,12 +202,13 @@ import moment from "moment";
 
 export default {
   props: ["animal"],
-  data: () => ({}),
+  data: () => ({
+  }),
   methods: {
     format(data) {
       return moment(data).locale("pt").format("DD/MM/YYYY");
     },
-
+    
     editar() {
       this.$router.push("/cliente/animal/editar/" + this.animal.id);
     },

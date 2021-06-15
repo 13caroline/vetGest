@@ -590,6 +590,7 @@ export default {
           headers: { Authorization: "Bearer " + store.getters.token },
         }
       );
+      console.log(response.data)
       if (typeof response.data == "object") {
         for (var i = 0; i < response.data.length; i++) {
           this.agendamentos.push({

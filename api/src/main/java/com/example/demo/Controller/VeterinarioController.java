@@ -11,10 +11,12 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
+import org.springframework.security.crypto.codec.Base64;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -48,16 +50,81 @@ public class VeterinarioController {
     }
 
     @CrossOrigin
-    @PostMapping( "/medico/intervencoes")
+    @RequestMapping(value="/medico/intervencoes", method = RequestMethod.POST,produces="application/json")
+    //@PostMapping( "/medico/intervencoes")
     public ResponseEntity<?> getIntervencoes(@RequestBody Veterinario email){
         Veterinario veterinario = veterinarioService.getVetByEmail(email.getEmail());
         if(veterinario==null){
             return ResponseEntity.badRequest().body("Veterinário não encontrado!");
         }
-        List<Intervencao> intervencoes = intervencaoService.findAllByVeterinarioIdAndEstadoOrEstado(veterinario.getId(),"Agendada", "A decorrer");
-        return  ResponseEntity.accepted().body(intervencoes);
+        List<Intervencao> intervencoes = intervencaoService.getIntervencoesVeterinario(veterinario.getId());
+        JSONObject intervencoesObject = new JSONObject();
+        intervencoes.forEach(intervencao -> {
+            if(intervencao.getEstado().equals("A decorrer") || intervencao.getEstado().equals("Agendada")){
+                JSONObject intervencoesObject1 = new JSONObject();
+                JSONObject v = new JSONObject();
+                JSONObject a = new JSONObject();
+                JSONObject i = new JSONObject();
+                try {
+                    a.put("id",intervencao.getAnimal().getId());
+                    a.put("nome",intervencao.getAnimal().getNome());
+                    a.put("raca",intervencao.getAnimal().getRaca());
+                    a.put("dataNascimento",intervencao.getAnimal().getDataNascimento());
+                    a.put("sexo",intervencao.getAnimal().getSexo());
+                    a.put("especie",intervencao.getAnimal().getEspecie());
+                    a.put("cor",intervencao.getAnimal().getCor());
+                    a.put("cauda",intervencao.getAnimal().getCauda());
+                    a.put("pelagem",intervencao.getAnimal().getPelagem());
+                    a.put("altura",intervencao.getAnimal().getAltura());
+                    a.put("chip",intervencao.getAnimal().getChip());
+                    a.put("castracao",intervencao.getAnimal().isCastracao());
+                    a.put("observacoes",intervencao.getAnimal().getObservacoes());
+                    //IMAGEM
+                    i.put("id",intervencao.getId());
+                    i.put("data",intervencao.getData());
+                    i.put("observacoes",intervencao.getObservacoes());
+                    i.put("hora",intervencao.getHora());
+                    i.put("descricao",intervencao.getDescricao());
+                    i.put("estado",intervencao.getEstado());
+                    i.put("motivo",intervencao.getMotivo());
+                    i.put("tipo",intervencao.getTipo());
+                    i.put("data_pedido",intervencao.getData_pedido());
+
+                    v.put("nome",intervencao.getVeterinario().getNome());
+                    v.put("morada",intervencao.getVeterinario().getMorada());
+                    v.put("freguesia",intervencao.getVeterinario().getFreguesia());
+                    v.put("concelho",intervencao.getVeterinario().getConcelho());
+                    v.put("contacto",intervencao.getVeterinario().getContacto());
+                    v.put("iban",intervencao.getVeterinario().getIban());
+
+                    intervencoesObject1.put("Intervencao", i);
+                    intervencoesObject1.put("Animal", a);
+                    intervencoesObject1.put("Veterinario", v);
+                    intervencoesObject1.put("internado", check(intervencao.getId()));
+                    intervencoesObject.accumulate("intervencoes", intervencoesObject1);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+        System.out.println(intervencoesObject);
+        return  ResponseEntity.accepted().body(intervencoesObject.toString());
     }
-    
+
+
+    public String check(int id) {
+        String result = null;
+        List<Internamento> internamentos = internamentoService.findAllByIntervencaoIdAndEstado(id,"Internado");
+
+        if (internamentos.isEmpty())
+            result = "Com Alta";
+        else
+            result = "Internado";
+        return result;
+    }
+
+
     @CrossOrigin
     @PostMapping("/medico/intervencao")
     public ResponseEntity<?> getIntervencao(@RequestBody String body) throws JSONException, JsonProcessingException {
@@ -94,9 +161,16 @@ public class VeterinarioController {
         String data = intervencao.getData();
         String hora = intervencao.getHora();
 
-        List<Intervencao> intervencoes = intervencaoService.findAllByVeterinarioIdAndEstadoOrEstado(veterinario.getId(),"Agendada","A decorrer");
+        List<Intervencao> intervencoes = intervencaoService.getIntervencoesVeterinario(veterinario.getId());
+        List<Intervencao> intervencoes1 = new ArrayList<>();
+        intervencoes.forEach(intervencao2 -> {
+            if(intervencao2.getEstado().equals("A decorrer") || intervencao2.getEstado().equals("Agendada")){
+                intervencoes1.add(intervencao2);
+            }
+        });
+
         List<Intervencao> temp = new ArrayList<>();
-        intervencoes.forEach(intervencao1 -> {
+        intervencoes1.forEach(intervencao1 -> {
             if (intervencao1.getData().equals(data) && intervencao1.getHora().equals(hora)) {
                 temp.add(intervencao1);
             }
@@ -122,6 +196,7 @@ public class VeterinarioController {
         JSONObject animais = new JSONObject();
         clientes.forEach(cliente -> {
             cliente.getAnimais().forEach(animal -> {
+
                 try {
                     JSONObject utente= new JSONObject();
                     JSONObject a= new JSONObject();
@@ -138,7 +213,6 @@ public class VeterinarioController {
                     a.put("chip",animal.getChip());
                     a.put("castracao",animal.isCastracao());
                     a.put("observacoes",animal.getObservacoes());
-                    a.put("image",animal.getImage());
                     a.put("cliente_nome",cliente.getNome());
                     a.put("cliente_email",cliente.getEmail());
                     utente.put("animal",a);
@@ -213,7 +287,7 @@ public class VeterinarioController {
 
     @CrossOrigin
     @PostMapping("/medico/utente")
-        public ResponseEntity<?> getUtente(@RequestBody String body) throws JSONException, JsonProcessingException {
+        public ResponseEntity<?> getUtente(@RequestBody String body) throws JSONException, JsonProcessingException, UnsupportedEncodingException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);
         Animal a = animalService.getAnimalById(node.get("id").asInt());
@@ -225,6 +299,8 @@ public class VeterinarioController {
             return ResponseEntity.badRequest().body("Cliente não encontrado!");
         }
         JSONObject animal = new JSONObject();
+        byte[] encodeBase64 = Base64.encode(a.getImage());
+        String image = new String(encodeBase64, "UTF-8");
         animal.put("id",a.getId());
         animal.put("nome",a.getNome());
         animal.put("raca",a.getRaca());
@@ -650,7 +726,7 @@ public class VeterinarioController {
             veterinario.setPassword(vet.getPassword());
             veterinarioService.saveVeterinario(veterinario);
         }else
-            veterinarioService.saveVeterinario(veterinario);
+            veterinarioService.updateVet(veterinario);
 
         return  ResponseEntity.accepted().body("Dados alterados com sucesso!");
     }
@@ -661,7 +737,7 @@ public class VeterinarioController {
         System.out.println("Original Image Byte Size - " + file.getBytes().length);
         Veterinario vet = veterinarioService.getVetById(userid);
         vet.setImage(file.getBytes());
-        veterinarioService.saveVeterinario(vet);
+        veterinarioService.updateVet(vet);
         return ResponseEntity.accepted().body("Imagem alterada com sucesso!");
     }
 }

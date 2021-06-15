@@ -92,7 +92,12 @@ export default {
         },
         { headers: { Authorization: "Bearer " + store.getters.token } }
       );
-      this.dados = response.data;
+      if (response) {
+        this.dados = response.data;
+        this.dados.image = this.dados.image
+          ? "data:image/jpeg;charset=utf-8;base64," + this.dados.image
+          : require("@/assets/image_placeholder.png");
+      }
     } catch (e) {
       this.$snackbar.showMessage({
         show: true,

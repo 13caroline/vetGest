@@ -9,7 +9,7 @@
           </h3>
         </v-col>
         <div class="w-100 d-sm-none"></div>
-        <v-col cols="auto" class="ml-auto pl-0" >
+        <v-col cols="auto" class="ml-auto pl-0">
           <v-tooltip top v-if="this.$store.state.tipo == 'Veterinario'">
             <template v-slot:activator="{ on, attrs }">
               <v-btn
@@ -50,8 +50,8 @@
       <v-card flat color="#fafafa">
         <h3 class="pa-3">Dados Pessoais</h3>
         <v-divider></v-divider>
-        <v-row class="w-100" align="start">
-          <v-col>
+        <v-row class="w-100 ma-0" align="start">
+          <v-col cols="12" sm>
             <v-card class="h-100 mt-5" outlined>
               <v-list-item>
                 <v-list-item-content>
@@ -98,15 +98,28 @@
             </v-card>
           </v-col>
 
-          <v-col cols="auto" v-if="this.$store.state.tipo == 'Veterinario'">
-            <div class="foto h-100 mt-5" >
-              <img
+          <v-col
+            cols="auto"
+            order="first"
+            order-sm="last"
+            v-if="this.$store.state.tipo == 'Veterinario'"
+          >
+            <div class="foto h-100 mt-5">
+              <v-img
                 :src="imagem"
                 aspect-ratio="1"
                 class="grey lighten-2 mx-2 rounded"
                 cover
               >
-                
+                <template v-slot:placeholder>
+                  <v-row
+                    class="fill-height ma-0"
+                    align="center"
+                    justify="center"
+                  >
+                  </v-row>
+                </template>
+              </v-img>
             </div>
           </v-col>
         </v-row>
@@ -231,7 +244,7 @@
                   >Cancelar</v-btn
                 >
                 <v-btn color="#2596be" small dark @click="submitFile()"
-                  >Registar</v-btn
+                  >Guardar</v-btn
                 >
               </v-col>
             </v-row>
@@ -272,35 +285,31 @@ export default {
       this.dialog = true;
     },
     submitFile() {
-      console.log(this.file)
       let formData = new FormData();
 
       formData.append("imageFile", this.file);
-      formData.append("userid", this.utilizador.id)
+      formData.append("userid", this.utilizador.id);
       try {
-        axios.post(
-          "http://localhost:7777/medico/adicionaFoto",
-          formData,
-          {
-            headers: {
-              Authorization: "Bearer " + store.getters.token.toString(),
-            },
-          }
-        );
+        axios.post("http://localhost:7777/medico/adicionaFoto", formData, {
+          headers: {
+            Authorization: "Bearer " + store.getters.token.toString(),
+          },
+        });
         this.$snackbar.showMessage({
-            show: true,
-            color: "success",
-            text: "Fotografia adicionada com sucesso",
-            timeout: 4000,
-          });
-          this.dialog = false;
+          show: true,
+          color: "success",
+          text: "Fotografia adicionada com sucesso",
+          timeout: 4000,
+        });
+        this.imagem = this.url;
+        this.dialog = false;
       } catch (e) {
         this.$snackbar.showMessage({
-            show: true,
-            color: "success",
-            text: "Ocorreu um erro, por favor tente mais tarde!",
-            timeout: 4000,
-          });
+          show: true,
+          color: "success",
+          text: "Ocorreu um erro, por favor tente mais tarde!",
+          timeout: 4000,
+        });
       }
     },
   },
@@ -321,9 +330,10 @@ export default {
       }
     );
     this.utilizador = response.data;
-    console.log(response.data.image)
-     this.imagem = 'data:image/jpeg;charset=utf-8;base64,' +response.data.image;
-    console.log(this.imagem)
+    this.imagem = response.data.image
+      ? "data:image/jpeg;charset=utf-8;base64," + response.data.image
+      : require("@/assets/image_placeholder.png");
+    this.url = this.imagem;
   },
 };
 </script>
@@ -346,6 +356,6 @@ export default {
 }
 
 .foto {
-  width: 200px;
+  width: 170px;
 }
 </style>

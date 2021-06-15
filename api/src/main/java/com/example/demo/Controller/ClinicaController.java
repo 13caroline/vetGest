@@ -13,9 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.codec.Base64;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.security.SecureRandom;
+import java.sql.Blob;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -186,7 +190,7 @@ public class ClinicaController<RandomStringUtils, RandomStringGenerator> {
 
     @CrossOrigin
     @PostMapping("/clinica/utente")
-    public ResponseEntity<?> getUtente(@RequestBody String body) throws JSONException, JsonProcessingException {
+    public ResponseEntity<?> getUtente(@RequestBody String body) throws JSONException, JsonProcessingException, UnsupportedEncodingException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);
         Animal a = animalService.getAnimalById(node.get("id").asInt());
@@ -198,6 +202,9 @@ public class ClinicaController<RandomStringUtils, RandomStringGenerator> {
             return ResponseEntity.badRequest().body("Cliente não encontrado!");
         }
         JSONObject animal = new JSONObject();
+
+        byte[] encodeBase64 = Base64.encode(a.getImage());
+        String image = new String(encodeBase64, "UTF-8");
         animal.put("id",a.getId());
         animal.put("nome",a.getNome());
         animal.put("raca",a.getRaca());
@@ -211,7 +218,7 @@ public class ClinicaController<RandomStringUtils, RandomStringGenerator> {
         animal.put("chip",a.getChip());
         animal.put("castracao",a.isCastracao());
         animal.put("observacoes",a.getObservacoes());
-        animal.put("image",a.getImage());
+        animal.put("image",image);
         animal.put("cliente_nome",c.getNome());
         animal.put("cliente_email",c.getEmail());
         animal.put("cliente_id",c.getId());
@@ -373,13 +380,24 @@ public class ClinicaController<RandomStringUtils, RandomStringGenerator> {
         String data = intervencao.getData();
         String hora = intervencao.getHora();
 
-        List<Intervencao> intervencoes = intervencaoService.findAllByVeterinarioIdAndEstadoOrEstado(vetId,"Agendada","A decorrer");
+        List<Intervencao> intervencoes = intervencaoService.getIntervencoesVeterinario(vet.getId());
+        List<Intervencao> intervencoes1 = new ArrayList<>();
+        intervencoes.forEach(intervencao2 -> {
+            if(intervencao2.getEstado().equals("A decorrer") || intervencao2.getEstado().equals("Agendada")){
+                intervencoes1.add(intervencao2);
+            }
+        });
+        System.out.println(intervencoes1);
+
+
         List<Intervencao> temp = new ArrayList<>();
-        intervencoes.forEach(intervencao1 -> {
+        intervencoes1.forEach(intervencao1 -> {
             if (intervencao1.getData().equals(data) && intervencao1.getHora().equals(hora)) {
                 temp.add(intervencao1);
             }
         });
+
+        System.out.println(temp);
 
         if(!temp.isEmpty()){
             return ResponseEntity.badRequest().body("Erro no agendamento de Consulta! Horario Indisponivel!");
@@ -415,13 +433,22 @@ public class ClinicaController<RandomStringUtils, RandomStringGenerator> {
         int vetId = intervencao.getVeterinario().getId();
 
         if(estado.equals("Agendada")){
-            List<Intervencao> intervencoes = intervencaoService.findAllByVeterinarioIdAndEstadoOrEstado(vetId,"Agendada","A decorrer");
+            List<Intervencao> intervencoes = intervencaoService.getIntervencoesVeterinario(vetId);
+            List<Intervencao> intervencoes1 = new ArrayList<>();
+            intervencoes.forEach(intervencao2 -> {
+                if(intervencao2.getEstado().equals("A decorrer") || intervencao2.getEstado().equals("Agendada")){
+                    intervencoes1.add(intervencao2);
+                }
+            });
+
             List<Intervencao> temp = new ArrayList<>();
-            intervencoes.forEach(intervencao1 -> {
+            intervencoes1.forEach(intervencao1 -> {
                 if (intervencao1.getData().equals(intervencao.getData()) && intervencao1.getHora().equals(intervencao.getHora())) {
                     temp.add(intervencao1);
                 }
             });
+            System.out.println(intervencoes1);
+            System.out.println(temp);
 
             if(!temp.isEmpty()){
                 return ResponseEntity.badRequest().body("Erro no agendamento de Consulta! Horario Indisponivel!");

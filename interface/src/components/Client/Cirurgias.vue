@@ -40,38 +40,26 @@
                 <template v-slot:activator="{ on, attrs }">
                   <v-icon
                     class="mx-1"
-                    v-if="item.estado == 'Concluída'"
                     @click="notas(item)"
                     small
                     color="#52b9dd"
                     v-on="on"
                     v-bind="attrs"
-                  >
-                    mdi-plus-circle
-                  </v-icon>
-                  <v-icon
-                    class="mx-1"
-                    v-if="
+                    :disabled="
                       item.estado == 'Cancelada' || item.estado == 'A decorrer'
                     "
-                    @click="detalhes = true"
-                    small
-                    v-on="on"
-                    v-bind="attrs"
-                    disabled
                   >
                     mdi-plus-circle
                   </v-icon>
                 </template>
                 <span class="caption">Ver detalhes</span>
               </v-tooltip>
-              <div v-if="item.estado == 'Agendada'">
-                <CancelarComDados
-                  :dialogs="cancelar"
-                  :dados="item"
-                  @clicked="registar"
-                ></CancelarComDados>
-              </div>
+              <CancelarComDados
+                :dialogs="cancelar"
+                :dados="item"
+                @clicked="registar"
+                v-if="item.estado == 'Agendada'"
+              ></CancelarComDados>
             </template>
           </v-data-table>
           <div class="text-center pt-2">
@@ -86,12 +74,12 @@
           </div>
         </v-col>
       </v-row>
-      <v-dialog v-model="detalhes" width="100%" max-width="700">
+      <v-dialog v-model="detalhesDialog" width="100%" max-width="700">
         <v-card>
           <v-card-title class="headline mb-6">
             Notas Médicas
             <v-spacer></v-spacer>
-            <v-btn icon small @click="closeDialog()">
+            <v-btn icon small @click="detalhesDialog = false">
               <v-icon>fas fa-times</v-icon>
             </v-btn>
           </v-card-title>
@@ -133,7 +121,7 @@ export default {
     page: 1,
     pageCount: 0,
     itemsPerPage: 8,
-    detalhes: false,
+    detalhesDialog: false,
     headers: [
       {
         text: "DATA DE AGENDAMENTO",
@@ -200,9 +188,6 @@ export default {
     format2(data) {
       return moment(data).locale("pt").format("DD/MM/YYYY");
     },
-    closeDialog() {
-      this.dialog = false;
-    },
     notas: async function (item) {
       let response = await axios.post(
         "http://localhost:7777/cliente/cirurgia/notas",
@@ -217,9 +202,10 @@ export default {
         ? response.data
         : [response.data];
 
-      this.detalhes = true;
+      this.detalhesDialog = true;
     },
     atualiza: async function () {
+      this.cirurgias = [];
       try {
         var response = await axios.post(
           "http://localhost:7777/cliente/cirurgias",

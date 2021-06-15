@@ -1,10 +1,10 @@
 <template>
   <div>
     <v-container class="fill-height">
-      <v-row class="w-100">
-        <v-card flat height="100" width="190" outlined class="ma-4">
+      <v-row class="row my-4 mx-0">
+        <v-col cols="auto" class="custom-card">
           <v-row>
-            <v-col>
+            <v-col cols="auto">
               <v-img
                 src="@/assets/animais/Rubi.jpg"
                 aspect-ratio="1"
@@ -32,7 +32,7 @@
               <span class="text-uppercase body-2 text--secondary">{{age(animal.dataNascimento)}}</span>
             </v-col>
           </v-row>
-        </v-card>
+        </v-col>
       </v-row>
 
       <v-row class="w-100">
@@ -280,5 +280,10 @@ export default {
 .custom-heigth {
   height: 715px;
   overflow-y: auto;
+}
+.custom-card {
+  background: white;
+  border: thin solid rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
 }
 </style>

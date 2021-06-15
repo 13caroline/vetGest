@@ -21,4 +21,6 @@ public interface InternamentoRepository extends JpaRepository<Internamento,Integ
     List<Internamento> findAllByVeterinarioEmailAndIdAndAnimalId(String vet_email, int internamento_id ,int animal_id);
 
     Internamento findByAnimalIdAndEstado(int id_animal, String estado);
+
+    List<Internamento> findAllByIntervencaoIdAndEstado(int intervencao, String estado);
 }

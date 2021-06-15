@@ -3,7 +3,7 @@
     <v-container>
       <v-row justify="space-around" class="mt-2">
         <v-col>
-          <span class="subtitle-1 head">{{animal.nome}}</span>
+          <span class="subtitle-1 head">{{ animal.nome }}</span>
         </v-col>
       </v-row>
       <v-divider></v-divider>
@@ -16,7 +16,7 @@
 
       <v-tabs-items v-model="tab">
         <v-tab-item>
-          <Dados :animal="animal"></Dados>
+          <Dados :animal="animal" @clicked="atualiza"></Dados>
         </v-tab-item>
 
         <v-tab-item>
@@ -40,19 +40,18 @@
 </template>
 
 <script>
-import PacienteVacinas from "@/components/Client/Animal/Vacinas.vue"
-import Consultas from "@/components/Client/Animal/Consultas.vue"
-import Cirurgia from "@/components/Client/Animal/Cirurgias.vue"
-import Dados from "@/components/Client/Animal/Dados.vue"
-import Historico from "@/components/Client/Animal/Historico.vue"
-import axios from "axios"
-import store from "@/store.js"
-
+import PacienteVacinas from "@/components/Client/Animal/Vacinas.vue";
+import Consultas from "@/components/Client/Animal/Consultas.vue";
+import Cirurgia from "@/components/Client/Animal/Cirurgias.vue";
+import Dados from "@/components/Client/Animal/Dados.vue";
+import Historico from "@/components/Client/Animal/Historico.vue";
+import axios from "axios";
+import store from "@/store.js";
 
 export default {
-  props:["id"],
+  props: ["id"],
   data: () => ({
-    tab: null,    
+    tab: null,
     items: [
       { tab: "Informações gerais" },
       { tab: "Vacinas e Desparasitações" },
@@ -60,34 +59,65 @@ export default {
       { tab: "Cirurgias" },
       { tab: "Histórico Clínico" },
     ],
-    animal:{}
+    animal: {},
   }),
   methods: {
     estadopedido(estado) {
       if (estado == "Agendada") return "#C5E1A5";
       else return "#FFE082";
     },
+    atualiza: async function () {
+      this.animal= {}
+      let response = await axios.post(
+        "http://localhost:7777/cliente/animal/" + this.id,
+        {
+          email: this.$store.state.email,
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + store.getters.token.toString(),
+          },
+        }
+      );
+      if (response) {
+        this.animal = response.data.animal;
+        this.animal.image = this.animal.image
+          ? "data:image/jpeg;charset=utf-8;base64," + this.animal.image
+          : require("@/assets/image_placeholder.png");
+      }
+      this.$snackbar.showMessage({
+          show: true,
+          color: "success",
+          text: "Fotografia adicionada com sucesso",
+          timeout: 4000,
+        });
+    },
   },
-  components:{
-    PacienteVacinas, 
+  components: {
+    PacienteVacinas,
     Consultas,
     Cirurgia,
     Dados,
-    Historico
+    Historico,
   },
-  created: async function() {
-    
-    let response = await axios.post("http://localhost:7777/cliente/animal/"+this.id, {
-      email: this.$store.state.email,
-    },
-     {
-      headers: {
-            "Authorization": 'Bearer ' +store.getters.token.toString()
-       }   
-       
-       });
-    this.animal=response.data.animal;
-
+  created: async function () {
+    let response = await axios.post(
+      "http://localhost:7777/cliente/animal/" + this.id,
+      {
+        email: this.$store.state.email,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + store.getters.token.toString(),
+        },
+      }
+    );
+    if (response) {
+      this.animal = response.data.animal;
+      this.animal.image = this.animal.image
+        ? "data:image/jpeg;charset=utf-8;base64," + this.animal.image
+        : require("@/assets/image_placeholder.png");
+    }
   },
 };
 </script>

@@ -87,7 +87,7 @@
           <v-card-title class="headline mb-6">
             Notas Médicas
             <v-spacer></v-spacer>
-            <v-btn icon small @click="closeDialog()">
+            <v-btn icon small @click="detalhes = false">
               <v-icon>fas fa-times</v-icon>
             </v-btn>
           </v-card-title>
@@ -469,9 +469,6 @@ export default {
     },
     format2(data) {
       return moment(data).locale("pt").format("DD/MM/YYYY");
-    },
-    closeDialog(){
-      this.dialog = false;
     },
     notas: async function(item){
       let response = await axios.post("http://localhost:7777/cliente/cirurgia/notas",
