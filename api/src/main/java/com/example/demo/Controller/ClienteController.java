@@ -593,4 +593,14 @@ public class ClienteController {
         animalService.saveAnimal(animal);
         return ResponseEntity.accepted().body("Imagem alterada com sucesso!");
     }
+
+    @CrossOrigin
+    @PostMapping("/cliente/adicionaFotoperfil")
+    public ResponseEntity<?> addFotoperfil(@RequestParam("imageFile") MultipartFile file,@RequestParam("userid") int userid) throws IOException {
+        System.out.println("Original Image Byte Size - " + file.getBytes().length);
+        Cliente cliente = clienteService.findById(userid);
+        cliente.setImage(file.getBytes());
+        clienteService.updateCliente(cliente);
+        return ResponseEntity.accepted().body("Imagem alterada com sucesso!");
+    }
 }

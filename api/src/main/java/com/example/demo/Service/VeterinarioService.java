@@ -1,5 +1,6 @@
 package com.example.demo.Service;
 
+import com.example.demo.Entity.Cliente;
 import com.example.demo.Entity.Nota;
 import com.example.demo.Entity.Veterinario;
 import com.example.demo.Repository.NotaRepository;
@@ -23,6 +24,9 @@ public class VeterinarioService {
 
     public Veterinario saveVeterinario(Veterinario vet){
         vet.setPassword(passwordEncoder.encode(vet.getPassword()));
+        return repositoryVet.save(vet);
+    }
+    public Veterinario updateVet(Veterinario vet){
         return repositoryVet.save(vet);
     }
 

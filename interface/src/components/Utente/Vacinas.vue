@@ -190,13 +190,14 @@ export default {
     },
 
     imunizacao_adicionada() {
+      this.loadData();
       this.$snackbar.showMessage({
             show: true,
             color: "success",
             text: "Imunização adicionada com sucesso.",
             timeout: 4000,
           });
-      this.loadData();
+
     },
 
     loadData: async function () {
