@@ -50,23 +50,81 @@ public class VeterinarioController {
     }
 
     @CrossOrigin
-    @PostMapping( "/medico/intervencoes")
+    @RequestMapping(value="/medico/intervencoes", method = RequestMethod.POST,produces="application/json")
+    //@PostMapping( "/medico/intervencoes")
     public ResponseEntity<?> getIntervencoes(@RequestBody Veterinario email){
         Veterinario veterinario = veterinarioService.getVetByEmail(email.getEmail());
         if(veterinario==null){
             return ResponseEntity.badRequest().body("Veterinário não encontrado!");
         }
         List<Intervencao> intervencoes = intervencaoService.getIntervencoesVeterinario(veterinario.getId());
-        List<Intervencao> intervencoes1 = new ArrayList<>();
+        JSONObject intervencoesObject = new JSONObject();
         intervencoes.forEach(intervencao -> {
             if(intervencao.getEstado().equals("A decorrer") || intervencao.getEstado().equals("Agendada")){
-                intervencoes1.add(intervencao);
+                JSONObject intervencoesObject1 = new JSONObject();
+                JSONObject v = new JSONObject();
+                JSONObject a = new JSONObject();
+                JSONObject i = new JSONObject();
+                try {
+                    a.put("id",intervencao.getAnimal().getId());
+                    a.put("nome",intervencao.getAnimal().getNome());
+                    a.put("raca",intervencao.getAnimal().getRaca());
+                    a.put("dataNascimento",intervencao.getAnimal().getDataNascimento());
+                    a.put("sexo",intervencao.getAnimal().getSexo());
+                    a.put("especie",intervencao.getAnimal().getEspecie());
+                    a.put("cor",intervencao.getAnimal().getCor());
+                    a.put("cauda",intervencao.getAnimal().getCauda());
+                    a.put("pelagem",intervencao.getAnimal().getPelagem());
+                    a.put("altura",intervencao.getAnimal().getAltura());
+                    a.put("chip",intervencao.getAnimal().getChip());
+                    a.put("castracao",intervencao.getAnimal().isCastracao());
+                    a.put("observacoes",intervencao.getAnimal().getObservacoes());
+                    //IMAGEM
+                    i.put("id",intervencao.getId());
+                    i.put("data",intervencao.getData());
+                    i.put("observacoes",intervencao.getObservacoes());
+                    i.put("hora",intervencao.getHora());
+                    i.put("descricao",intervencao.getDescricao());
+                    i.put("estado",intervencao.getEstado());
+                    i.put("motivo",intervencao.getMotivo());
+                    i.put("tipo",intervencao.getTipo());
+                    i.put("data_pedido",intervencao.getData_pedido());
+
+                    v.put("nome",intervencao.getVeterinario().getNome());
+                    v.put("morada",intervencao.getVeterinario().getMorada());
+                    v.put("freguesia",intervencao.getVeterinario().getFreguesia());
+                    v.put("concelho",intervencao.getVeterinario().getConcelho());
+                    v.put("contacto",intervencao.getVeterinario().getContacto());
+                    v.put("iban",intervencao.getVeterinario().getIban());
+
+                    intervencoesObject1.put("Intervencao", i);
+                    intervencoesObject1.put("Animal", a);
+                    intervencoesObject1.put("Veterinario", v);
+                    intervencoesObject1.put("internado", check(intervencao.getId()));
+                    intervencoesObject.accumulate("intervencoes", intervencoesObject1);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
             }
         });
-        System.out.println(intervencoes1);
-        return  ResponseEntity.accepted().body(intervencoes1);
+        System.out.println(intervencoesObject);
+        return  ResponseEntity.accepted().body(intervencoesObject.toString());
     }
-    
+
+
+    public String check(int id) {
+        String result = null;
+        List<Internamento> internamentos = internamentoService.findAllByIntervencaoIdAndEstado(id,"Internado");
+
+        if (internamentos.isEmpty())
+            result = "Com Alta";
+        else
+            result = "Internado";
+        return result;
+    }
+
+
     @CrossOrigin
     @PostMapping("/medico/intervencao")
     public ResponseEntity<?> getIntervencao(@RequestBody String body) throws JSONException, JsonProcessingException {

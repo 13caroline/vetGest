@@ -62,6 +62,10 @@ public class InternamentoService {
         return repository.findByAnimalIdAndEstado(id_animal, estado);
     };
 
+    public List<Internamento> findAllByIntervencaoIdAndEstado(int intervencao, String estado){
+        return repository.findAllByIntervencaoIdAndEstado(intervencao, estado);
+    }
+
     public Alta saveAlta(Alta alta){
         return repositoryAlta.save(alta);
     }
