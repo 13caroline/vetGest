@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import java.io.Serializable;
 
 @EqualsAndHashCode(callSuper = true)
@@ -52,9 +53,8 @@ public class Veterinario extends Utilizador implements Serializable {
     )
     private String iban;
 
-    @Column(
-            name = "path"
-    )
-    private String path;
+    @Lob
+    @Column(name = "image")
+    private byte[] image;
 
 }

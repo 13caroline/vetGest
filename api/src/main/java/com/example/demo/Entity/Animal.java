@@ -90,9 +90,8 @@ public class Animal {
     )
     private String observacoes;
 
-    @Column(
-            name = "path"
-    )
-    private String path;
+    @Lob
+    @Column(name = "image")
+    private byte[] image;
 
 }
