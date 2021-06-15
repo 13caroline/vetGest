@@ -500,7 +500,6 @@ public class VeterinarioController {
         List<NotaInternamento> notaInternamentos = internamentoService.findAllByInternamento(internamento);
 
         System.out.println(notaInternamentos);
-
         JSONObject response = new JSONObject();
         JSONObject animal1 = new JSONObject();
         animal1.put("id",animal.getId());
@@ -516,7 +515,6 @@ public class VeterinarioController {
         animal1.put("chip",animal.getChip());
         animal1.put("castracao",animal.isCastracao());
         animal1.put("observacoes",animal.getObservacoes());
-
         response.put("animal",animal1);
         notaInternamentos.forEach(notaInternamento -> {
             try {
@@ -661,6 +659,7 @@ public class VeterinarioController {
         System.out.println("Original Image Byte Size - " + file.getBytes().length);
         Veterinario vet = veterinarioService.getVetById(userid);
         vet.setImage(file.getBytes());
+        veterinarioService.saveVeterinario(vet);
         return ResponseEntity.accepted().body("Imagem alterada com sucesso!");
     }
 }
