@@ -140,6 +140,19 @@ export default {
             }
           );
         }
+        if (store.state.tipo == "Veterinario") {
+          await axios.post(
+            "http://localhost:7777/medico/intervencao/alterar",
+            {
+              id: this.dados.id,
+              estado: "Cancelada",
+              observacoes:""
+            },
+            {
+              headers: { Authorization: "Bearer " + store.getters.token },
+            }
+          );
+        }
         this.dialog = false;
         if (this.dialogs.text == "consulta")
           this.$emit("clicked", {
