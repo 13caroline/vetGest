@@ -128,7 +128,7 @@
       <v-col cols="auto">
         <div class="foto">
           <v-img
-            :src="imagem"
+            :src="animal.image"
             aspect-ratio="1"
             class="grey lighten-2 mx-2 rounded"
             cover
@@ -311,13 +311,6 @@ export default {
       this.$router.push("/cliente/animal/editar/" + this.animal.id);
     },
   },
-  created() {
-    console.log(this.animal.image)
-     this.imagem = this.animal.image
-      ? "data:image/jpeg;charset=utf-8;base64," + this.animal.image
-      : require("@/assets/image_placeholder.png");
-    this.url = this.imagem;
-  }
 };
 </script>
 

@@ -35,7 +35,7 @@
       <v-col cols="12" md="auto">
         <div class="foto mx-auto">
           <v-img
-            src="@/assets/animais/Rubi.jpg"
+            :src="animal.image"
             aspect-ratio="1"
             class="grey lighten-2 mx-2 rounded"
             cover
@@ -215,7 +215,8 @@
 import moment from "moment";
 export default {
   props: ["animal"],
-  data: () => ({}),
+  data: () => ({
+  }),
   methods: {
     format(data) {
       return moment(data).locale("pt").format("DD/MM/YYYY");

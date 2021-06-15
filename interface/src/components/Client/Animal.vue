@@ -86,7 +86,11 @@ export default {
         },
       }
     );
+    if (response){
     this.animal = response.data.animal;
+    this.animal.image = this.animal.image
+      ? "data:image/jpeg;charset=utf-8;base64," + this.animal.image
+      : require("@/assets/image_placeholder.png");}
   },
 };
 </script>

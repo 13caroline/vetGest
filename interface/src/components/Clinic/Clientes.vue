@@ -98,7 +98,7 @@
                 <v-img
                   max-height="100"
                   max-width="100"
-                  src="@/assets/medico.png"
+                  :src="this.image"
                 >
                 </v-img>
               </v-col>
@@ -254,6 +254,7 @@ export default {
       concelho: "",
       nif: "",
       utentes: "",
+      image: "", 
     };
   },
   methods: {
@@ -265,6 +266,7 @@ export default {
       this.concelho = item.concelho;
       this.nif = item.nif;
       this.utentes = item.animais;
+      this.image = item.image;
       this.dialog = true;
     },
     toUtente(value) {
@@ -276,7 +278,12 @@ export default {
       let response = await axios.get("http://localhost:7777/clinica/clientes", {
         headers: { Authorization: "Bearer " + store.getters.token },
       });
-      this.clientes = response.data;
+      this.clientes = response.data.map(an => {
+        an.image = an.image
+      ? "data:image/jpeg;charset=utf-8;base64," + an.image
+      : require("@/assets/image_placeholder.png");
+        return an
+      })
     } catch (e) {
       console.log(e);
     }

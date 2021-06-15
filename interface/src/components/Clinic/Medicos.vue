@@ -41,7 +41,7 @@
           <div>
             <v-hover v-slot:default="{ hover }">
               <v-img
-                src="@/assets/sobre.png"
+                :src="n.image"
                 aspect-ratio="1"
                 @click="openInfo(n)"
                 style="border-radius: 100%"
@@ -103,7 +103,7 @@
                 <v-img
                   max-height="100"
                   max-width="100"
-                  src="@/assets/exemplo.png"
+                  :src="this.image"
                 >
                 </v-img>
               </v-col>
@@ -194,6 +194,7 @@ export default {
     email: "",
     contacto: "",
     iban: "",
+    image: "", 
     medicos: [],
   }),
   methods: {
@@ -204,7 +205,7 @@ export default {
       this.email = n.email;
       this.contacto = n.contacto;
       this.iban = n.iban;
-
+      this.image = n.image;
       this.dialog = true;
     },
   },
@@ -213,7 +214,12 @@ export default {
       let response = await axios.get("http://localhost:7777/clinica/medicos", {
         headers: { Authorization: "Bearer " + store.getters.token },
       });
-      this.medicos = response.data;
+      this.medicos = response.data.map(an => {
+        an.image = an.image
+      ? "data:image/jpeg;charset=utf-8;base64," + an.image
+      : require("@/assets/image_placeholder.png");
+        return an
+      })
     } catch (e) {
       console.log(e);
     }

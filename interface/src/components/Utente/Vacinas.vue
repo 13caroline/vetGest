@@ -46,7 +46,10 @@
             @page-count="pageCount = $event"
           >
             <template v-slot:[`item.estado`]="{ item }">
-              <v-chip :color="estadopedido(item.estado)" small>
+              <v-chip v-if="!passouTempo(item.data) && item.estado=='Atualizada'" color="#EF9A9A" small>
+                Atrasada
+              </v-chip>
+              <v-chip v-else :color="estadopedido(item.estado)" small>
                 {{ item.estado }}
               </v-chip>
             </template>
@@ -175,6 +178,10 @@ export default {
     NovaDesparasitacao,
   },
   methods: {
+    passouTempo: function(pedido){
+      console.log(pedido)
+      return moment(pedido).isAfter();  
+    }, 
     close() {
       // if medico
       this.$router.push("/medico/utente");
