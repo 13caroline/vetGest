@@ -118,12 +118,12 @@ export default {
             },
           }
         );
-        this.$snackbar.showMessage({
-          show: true,
-          color: "success",
-          text: "Desparasitação confirmada com sucesso.",
-          timeout: 4000,
-        });
+        this.$emit("clicked", {
+            text: "Desparasitação confirmada com sucesso.",
+            color: "success",
+            snackbar: "true",
+            timeout: 4000,
+          });
         this.dialog = false;
       } catch (e) {
         this.$snackbar.showMessage({
