@@ -34,7 +34,10 @@
               {{ format(item.dataToma) }}
             </template>
             <template v-slot:[`item.estado`]="{ item }">
-              <v-chip :color="estadopedido(item.estado)" small>
+              <v-chip v-if="passouTempo(item.dataPrevista) && item.estado=='Atualizada'" color="#EF9A9A" small>
+                Atrasada
+              </v-chip>
+              <v-chip v-else :color="estadopedido(item.estado)" small>
                 {{ item.estado }}
               </v-chip>
             </template>
@@ -283,6 +286,9 @@ export default {
     items: [],
   }),
   methods: {
+    passouTempo: function(pedido){
+      return moment(pedido).isAfter();  
+    }, 
     registar(value) {
       this.$snackbar.showMessage({
         show: true,
@@ -346,17 +352,17 @@ export default {
     },
     confirma: async function () {
       try {
-        if (this.dateProx == "1 mês") this.timeskip = 1;
+        if (this.dateProx == "1 mês")this.timeskip = 1;   
         else this.timeskip = 3;
+        let dataProxima = this.dataToma == "" ? moment(this.dataPrevista).add(this.timeskip, "months").format("YYYY-MM-DD")
+        : moment(this.dataToma).add(this.timeskip, "months").format("YYYY-MM-DD")
         await axios.post(
           "http://localhost:7777/cliente/animal/confirma/imunizacao",
           {
             id: this.id,
             data: this.dataToma,
             tratamento: this.tratamento,
-            dataProx: moment(this.dataToma)
-              .add(this.timeskip, "months")
-              .format("YYYY-MM-DD"),
+            dataProx: dataProxima
           },
           {
             headers: {
