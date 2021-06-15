@@ -16,7 +16,7 @@
 
       <v-tabs-items v-model="tab">
         <v-tab-item>
-          <Dados :animal="animal"></Dados>
+          <Dados :animal="animal" @clicked="atualiza"></Dados>
         </v-tab-item>
 
         <v-tab-item>
@@ -66,6 +66,32 @@ export default {
       if (estado == "Agendada") return "#C5E1A5";
       else return "#FFE082";
     },
+    atualiza: async function () {
+      this.animal= {}
+      let response = await axios.post(
+        "http://localhost:7777/cliente/animal/" + this.id,
+        {
+          email: this.$store.state.email,
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + store.getters.token.toString(),
+          },
+        }
+      );
+      if (response) {
+        this.animal = response.data.animal;
+        this.animal.image = this.animal.image
+          ? "data:image/jpeg;charset=utf-8;base64," + this.animal.image
+          : require("@/assets/image_placeholder.png");
+      }
+      this.$snackbar.showMessage({
+          show: true,
+          color: "success",
+          text: "Fotografia adicionada com sucesso",
+          timeout: 4000,
+        });
+    },
   },
   components: {
     PacienteVacinas,
@@ -86,11 +112,12 @@ export default {
         },
       }
     );
-    if (response){
-    this.animal = response.data.animal;
-    this.animal.image = this.animal.image
-      ? "data:image/jpeg;charset=utf-8;base64," + this.animal.image
-      : require("@/assets/image_placeholder.png");}
+    if (response) {
+      this.animal = response.data.animal;
+      this.animal.image = this.animal.image
+        ? "data:image/jpeg;charset=utf-8;base64," + this.animal.image
+        : require("@/assets/image_placeholder.png");
+    }
   },
 };
 </script>

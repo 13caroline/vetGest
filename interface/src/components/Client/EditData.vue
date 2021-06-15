@@ -2,18 +2,20 @@
   <div>
     <v-container>
       <v-card-title class="font-weight-bold text-uppercase">
-        <v-icon small class="mr-2">fas fa-paw</v-icon>
-        Editar dados de {{ animal.nome }}
+        <h3 class="font-weight-regular text-uppercase mr-2">
+          <v-icon small>fas fa-paw</v-icon>
+          Editar dados de {{ animal.nome }}
+        </h3>
       </v-card-title>
       <v-card-text>
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-row>
             <v-col cols="auto" md="3" class="ml-4">
-              <v-card width="200" class="mx-auto" flat color="transparent">
+              <v-card width="200"  flat color="transparent">
                 <v-img
-                  src="@/assets/animais/Rubi.jpg"
+                  :src="imagem"
                   aspect-ratio="1"
-                  class="grey lighten-2 ml-n3"
+                  class="grey lighten-2"
                   cover
                 >
                   <template v-slot:placeholder>
@@ -31,9 +33,16 @@
                 </v-img>
               </v-card>
               <v-row>
-                <v-btn class="mt-5 body-2" small color="#2596be" dark
-                  >Alterar Fotografia</v-btn
+                <v-btn
+                  class="body-2 mx-2 mt-4"
+                  small
+                  color="#2596be"
+                  dark
+                  @click="addFoto()"
                 >
+                  Alterar Fotografia
+                  <v-icon small class="ml-4">fas fa-camera</v-icon>
+                </v-btn>
               </v-row>
             </v-col>
 
@@ -263,18 +272,72 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="dialog2" persistent width="100%" max-width="460">
+        <v-card>
+          <v-card-title>Adicionar fotografia</v-card-title>
+          <v-card-text>
+            <v-row justify="center" align="center">
+              <div class="foto">
+                <v-img
+                  :src="url"
+                  aspect-ratio="1"
+                  class="grey lighten-2 ma-2 rounded"
+                  cover
+                >
+                  <template v-slot:placeholder>
+                    <v-row
+                      class="fill-height ma-0"
+                      align="center"
+                      justify="center"
+                    >
+                    </v-row>
+                  </template>
+                </v-img>
+              </div>
+            </v-row>
+            <v-row>
+              <input
+                type="file"
+                id="file"
+                ref="file"
+                v-on:change="handleFileUpload()"
+              />
+            </v-row>
+            <v-row align="end" justify="end">
+              <v-col cols="auto">
+                <v-btn
+                  color="#BDBDBD"
+                  class="mx-2"
+                  small
+                  dark
+                  @click="dialog = false"
+                  >Cancelar</v-btn
+                >
+                <v-btn color="#2596be" small dark @click="submitFile()"
+                  >Registar</v-btn
+                >
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import store from "@/store.js";
+
 export default {
   props: ["id"],
   data: () => ({
     cor: [],
     pelagem: [],
-
+url: null,
+    file: "",
+    imagem: "",
+    dialog2: false,
     dialog: false,
     animal: {},
     itemscor: [
@@ -316,6 +379,42 @@ export default {
     ],
   }),
   methods: {
+    handleFileUpload() {
+      this.file = this.$refs.file.files[0];
+      this.url = URL.createObjectURL(this.file);
+    },
+    addFoto() {
+      this.dialog2 = true;
+    },
+    submitFile() {
+      let formData = new FormData();
+
+      formData.append("imageFile", this.file);
+      formData.append("userid", this.animal.id);
+      try {
+        axios.post("http://localhost:7777/cliente/adicionaFoto", formData, {
+          headers: {
+            Authorization: "Bearer " + store.getters.token.toString(),
+          },
+        });
+        this.imagem = this.url;
+        this.dialog = false;
+        this.$emit("clicked", {
+            text: "Fotografia adicionada com sucesso",
+            color: "success",
+            snackbar: "true",
+            timeout: 4000,
+          });
+          this.dialog2=false;
+      } catch (e) {
+        this.$snackbar.showMessage({
+          show: true,
+          color: "success",
+          text: "Ocorreu um erro, por favor tente mais tarde!",
+          timeout: 4000,
+        });
+      }
+    },
     editarDados: async function () {
       if (this.$refs.form.validate()) {
         try {
@@ -393,6 +492,15 @@ export default {
     this.pelagem = response.data.animal.pelagem.split(",");
     if (this.animal.observacoes.length == 0)
       this.animal.observacoes = "Sem observações";
+    this.imagem = response.data.animal.image
+        ? "data:image/jpeg;charset=utf-8;base64," + response.data.animal.image
+        : require("@/assets/image_placeholder.png");
   },
 };
 </script>
+
+<style>
+.foto {
+  width: 200px;
+}
+</style>

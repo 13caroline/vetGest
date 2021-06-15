@@ -13,16 +13,6 @@
           small
           color="#2596be"
           dark
-          @click="addFoto()"
-        >
-          Adicionar Fotografia
-          <v-icon small class="ml-4">fas fa-camera</v-icon>
-        </v-btn>
-        <v-btn
-          class="body-2 ma-2"
-          small
-          color="#2596be"
-          dark
           @click="editar()"
         >
           Editar Dados
@@ -203,110 +193,22 @@
       </v-col>
     </v-row>
 
-    <v-dialog v-model="dialog" persistent width="100%" max-width="460">
-        <v-card>
-          <v-card-title>Adicionar fotografia</v-card-title>
-          <v-card-text>
-            <v-row justify="center" align="center">
-              <div class="foto">
-                <v-img
-                  :src="url"
-                  aspect-ratio="1"
-                  class="grey lighten-2 ma-2 rounded"
-                  cover
-                >
-                  <template v-slot:placeholder>
-                    <v-row
-                      class="fill-height ma-0"
-                      align="center"
-                      justify="center"
-                    >
-                    </v-row>
-                  </template>
-                </v-img>
-              </div>
-            </v-row>
-            <v-row>
-              <input
-                type="file"
-                id="file"
-                ref="file"
-                v-on:change="handleFileUpload()"
-              />
-            </v-row>
-            <v-row align="end" justify="end">
-              <v-col cols="auto">
-                <v-btn
-                  color="#BDBDBD"
-                  class="mx-2"
-                  small
-                  dark
-                  @click="dialog = false"
-                  >Cancelar</v-btn
-                >
-                <v-btn color="#2596be" small dark @click="submitFile()"
-                  >Registar</v-btn
-                >
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-card>
-      </v-dialog>
+    
   </div>
 </template>
 
 <script>
 import moment from "moment";
-import axios from "axios";
-import store from "@/store.js"
 
 export default {
   props: ["animal"],
   data: () => ({
-    url: null,
-    file: "",
-    imagem: "",
-    dialog: false,
   }),
   methods: {
     format(data) {
       return moment(data).locale("pt").format("DD/MM/YYYY");
     },
-    handleFileUpload() {
-      this.file = this.$refs.file.files[0];
-      this.url = URL.createObjectURL(this.file);
-    },
-    addFoto() {
-      this.dialog = true;
-    },
-    submitFile() {
-      let formData = new FormData();
-
-      formData.append("imageFile", this.file);
-      formData.append("userid", this.animal.id);
-      try {
-        axios.post("http://localhost:7777/cliente/adicionaFoto", formData, {
-          headers: {
-            Authorization: "Bearer " + store.getters.token.toString(),
-          },
-        });
-        this.$snackbar.showMessage({
-          show: true,
-          color: "success",
-          text: "Fotografia adicionada com sucesso",
-          timeout: 4000,
-        });
-        this.imagem = this.url;
-        this.dialog = false;
-      } catch (e) {
-        this.$snackbar.showMessage({
-          show: true,
-          color: "success",
-          text: "Ocorreu um erro, por favor tente mais tarde!",
-          timeout: 4000,
-        });
-      }
-    },
+    
     editar() {
       this.$router.push("/cliente/animal/editar/" + this.animal.id);
     },
