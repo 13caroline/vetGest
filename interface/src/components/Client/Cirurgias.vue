@@ -45,20 +45,21 @@
                     color="#52b9dd"
                     v-on="on"
                     v-bind="attrs"
-                    :disabled="item.estado == 'Cancelada' || item.estado == 'A decorrer'"
+                    :disabled="
+                      item.estado == 'Cancelada' || item.estado == 'A decorrer'
+                    "
                   >
                     mdi-plus-circle
                   </v-icon>
                 </template>
                 <span class="caption">Ver detalhes</span>
               </v-tooltip>
-              <div v-if="item.estado == 'Agendada'">
-                <CancelarComDados
-                  :dialogs="cancelar"
-                  :dados="item"
-                  @clicked="registar"
-                ></CancelarComDados>
-              </div>
+              <CancelarComDados
+                :dialogs="cancelar"
+                :dados="item"
+                @clicked="registar"
+                v-if="item.estado == 'Agendada'"
+              ></CancelarComDados>
             </template>
           </v-data-table>
           <div class="text-center pt-2">
@@ -204,6 +205,7 @@ export default {
       this.detalhesDialog = true;
     },
     atualiza: async function () {
+      this.cirurgias = [];
       try {
         var response = await axios.post(
           "http://localhost:7777/cliente/cirurgias",

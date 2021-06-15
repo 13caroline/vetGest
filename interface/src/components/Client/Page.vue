@@ -36,23 +36,6 @@
                     src="@/assets/animais/Rubi.jpg"
                     class="w-100 grey lighten-2 rounded"
                   />
-                  <!-- <v-item v-slot:default="{ toggle }">
-										<v-img
-											src="@/assets/animais/Rubi.jpg"
-											aspect-ratio="1"
-											class="grey lighten-2 rounded"
-											@click="toggle"
-										>
-											<template v-slot:placeholder>
-												<v-row align="center" justify="center">
-													<v-progress-circular
-														indeterminate
-														color="grey lighten-5"
-													></v-progress-circular>
-												</v-row>
-											</template>
-										</v-img>
-									</v-item> -->
                   <v-tooltip top>
                     <template v-slot:activator="{ on, attrs }">
                       <v-btn
@@ -104,7 +87,7 @@
             v-if="consultas.length"
             :page.sync="page"
             :sort-by.sync="sortBy"
-      :sort-desc.sync="sortDesc"
+            :sort-desc.sync="sortDesc"
             :items-per-page="itemsPerPage"
             @page-count="pageCount = $event"
             no-data-text="Não existem intervenções agendadas."
@@ -128,13 +111,16 @@
 
             <template v-slot:[`item.detalhes`]="{ item }">
               <CancelarConsulta
-                v-if="(item.estado == 'Agendada' || item.estado == 'Pendente') && item.tipo =='Consulta'"
+                v-if="
+                  (item.estado == 'Agendada' || item.estado == 'Pendente') &&
+                  item.tipo == 'Consulta'
+                "
                 :dialogs="cancelar"
                 :dados="item"
                 @clicked="registar"
               ></CancelarConsulta>
               <CancelarConsulta
-                v-if="(item.estado == 'Agendada') && item.tipo =='Cirurgia'"
+                v-if="item.estado == 'Agendada' && item.tipo == 'Cirurgia'"
                 :dialogs="cancelarC"
                 :dados="item"
                 @clicked="registar"
@@ -161,7 +147,7 @@
 
 <script>
 import axios from "axios";
-import moment from "moment"
+import moment from "moment";
 import store from "@/store.js";
 import CancelarConsulta from "@/components/Dialogs/CancelarComDados.vue";
 export default {
@@ -169,8 +155,8 @@ export default {
     return {
       page: 1,
       pageCount: 0,
-      sortBy: 'marcacao',
-        sortDesc: false,
+      sortBy: "marcacao",
+      sortDesc: false,
       itemsPerPage: 8,
       dados: {},
       dialogs: {},
@@ -245,20 +231,24 @@ export default {
           },
         }
       );
+      console.log();
 
-      for (var i = 0; i < response2.data.length; i++) {
-        this.consultas.push({
-          idConsulta: response2.data[i].id,
-          utente: response2.data[i].animal.nome,
-          veterinario_nome: response2.data[i].veterinario.nome,
-          marcacao: response2.data[i].data + " " + response2.data[i].hora,
-          estado: response2.data[i].estado,
-          descricao: response2.data[i].descricao,
-          motivo: response2.data[i].motivo,
-          animal: response2.data[i].animal,
-          tipo: response2.data[i].tipo
-        });
+      if (typeof response2.data == "object") {
+        for (var i = 0; i < response2.data.length; i++) {
+          this.consultas.push({
+            idConsulta: response2.data[i].id,
+            utente: response2.data[i].animal.nome,
+            veterinario_nome: response2.data[i].veterinario.nome,
+            marcacao: response2.data[i].data + " " + response2.data[i].hora,
+            estado: response2.data[i].estado,
+            descricao: response2.data[i].descricao,
+            motivo: response2.data[i].motivo,
+            animal: response2.data[i].animal,
+            tipo: response2.data[i].tipo,
+          });
+        }
       }
+      console.log(response.data.cliente);
       this.animals = response.data.cliente.animais;
     },
     estadopedido(estado) {
@@ -283,43 +273,8 @@ export default {
       );
     },
   },
-  created: async function () {
-    let response = await axios.post(
-      "http://localhost:7777/cliente",
-      {
-        email: this.$store.state.email,
-      },
-      {
-        headers: {
-          Authorization: "Bearer " + store.getters.token.toString(),
-        },
-      }
-    );
-    let response2 = await axios.post(
-      "http://localhost:7777/cliente/intervencoes",
-      {
-        cliente: this.$store.state.email,
-      },
-      {
-        headers: {
-          Authorization: "Bearer " + store.getters.token.toString(),
-        },
-      }
-    );
-    for (var i = 0; i < response2.data.length; i++) {
-      this.consultas.push({
-        idConsulta: response2.data[i].id,
-        utente: response2.data[i].animal.nome,
-        veterinario_nome: response2.data[i].veterinario.nome,
-        marcacao: response2.data[i].data + " " + response2.data[i].hora,
-        estado: response2.data[i].estado,
-        descricao: response2.data[i].descricao,
-        motivo: response2.data[i].motivo,
-        animal: response2.data[i].animal,
-        tipo: response2.data[i].tipo
-      });
-    }
-    this.animals = response.data.cliente.animais;
+  created() {
+    this.atualiza();
   },
 };
 </script>
