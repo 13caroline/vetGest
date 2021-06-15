@@ -314,7 +314,7 @@ public class VeterinarioController {
         animal.put("chip",a.getChip());
         animal.put("castracao",a.isCastracao());
         animal.put("observacoes",a.getObservacoes());
-        animal.put("image",a.getImage());
+        animal.put("image",image);
         animal.put("cliente_nome",c.getNome());
         animal.put("cliente_email",c.getEmail());
         animal.put("cliente_id",c.getId());

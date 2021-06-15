@@ -205,6 +205,7 @@ public class ClinicaController<RandomStringUtils, RandomStringGenerator> {
 
         byte[] encodeBase64 = Base64.encode(a.getImage());
         String image = new String(encodeBase64, "UTF-8");
+        System.out.println("\n\nAQUI: "+ image);
         animal.put("id",a.getId());
         animal.put("nome",a.getNome());
         animal.put("raca",a.getRaca());
