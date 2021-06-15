@@ -54,6 +54,7 @@ public class Intervencao {
     )
     private String tipo;
 
+    @Lob
     @Column(
             name = "observacoes"
     )
