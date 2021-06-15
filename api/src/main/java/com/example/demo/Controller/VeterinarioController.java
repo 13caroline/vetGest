@@ -11,10 +11,12 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
+import org.springframework.security.crypto.codec.Base64;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -136,7 +138,10 @@ public class VeterinarioController {
         JSONObject animais = new JSONObject();
         clientes.forEach(cliente -> {
             cliente.getAnimais().forEach(animal -> {
+
                 try {
+                    byte[] encodeBase64 = Base64.encode(animal.getImage());
+                    String image = new String(encodeBase64, "UTF-8");
                     JSONObject utente= new JSONObject();
                     JSONObject a= new JSONObject();
                     a.put("id",animal.getId());
@@ -152,12 +157,12 @@ public class VeterinarioController {
                     a.put("chip",animal.getChip());
                     a.put("castracao",animal.isCastracao());
                     a.put("observacoes",animal.getObservacoes());
-                    a.put("image",animal.getImage());
+                    a.put("image",image);
                     a.put("cliente_nome",cliente.getNome());
                     a.put("cliente_email",cliente.getEmail());
                     utente.put("animal",a);
                     animais.accumulate("utentes",utente);
-                } catch (JSONException e) {
+                } catch (JSONException | UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
             });

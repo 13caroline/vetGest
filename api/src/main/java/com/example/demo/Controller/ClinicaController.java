@@ -13,9 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.codec.Base64;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.security.SecureRandom;
+import java.sql.Blob;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -186,7 +190,7 @@ public class ClinicaController<RandomStringUtils, RandomStringGenerator> {
 
     @CrossOrigin
     @PostMapping("/clinica/utente")
-    public ResponseEntity<?> getUtente(@RequestBody String body) throws JSONException, JsonProcessingException {
+    public ResponseEntity<?> getUtente(@RequestBody String body) throws JSONException, JsonProcessingException, UnsupportedEncodingException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);
         Animal a = animalService.getAnimalById(node.get("id").asInt());
@@ -198,6 +202,9 @@ public class ClinicaController<RandomStringUtils, RandomStringGenerator> {
             return ResponseEntity.badRequest().body("Cliente não encontrado!");
         }
         JSONObject animal = new JSONObject();
+
+        byte[] encodeBase64 = Base64.encode(a.getImage());
+        String image = new String(encodeBase64, "UTF-8");
         animal.put("id",a.getId());
         animal.put("nome",a.getNome());
         animal.put("raca",a.getRaca());
@@ -211,7 +218,7 @@ public class ClinicaController<RandomStringUtils, RandomStringGenerator> {
         animal.put("chip",a.getChip());
         animal.put("castracao",a.isCastracao());
         animal.put("observacoes",a.getObservacoes());
-        animal.put("image",a.getImage());
+        animal.put("image",image);
         animal.put("cliente_nome",c.getNome());
         animal.put("cliente_email",c.getEmail());
         animal.put("cliente_id",c.getId());
