@@ -380,6 +380,8 @@ public class ClinicaController<RandomStringUtils, RandomStringGenerator> {
                 intervencoes1.add(intervencao2);
             }
         });
+        System.out.println(intervencoes1);
+
 
         List<Intervencao> temp = new ArrayList<>();
         intervencoes1.forEach(intervencao1 -> {
@@ -388,6 +390,7 @@ public class ClinicaController<RandomStringUtils, RandomStringGenerator> {
             }
         });
 
+        System.out.println(temp);
 
         if(!temp.isEmpty()){
             return ResponseEntity.badRequest().body("Erro no agendamento de Consulta! Horario Indisponivel!");
@@ -432,11 +435,13 @@ public class ClinicaController<RandomStringUtils, RandomStringGenerator> {
             });
 
             List<Intervencao> temp = new ArrayList<>();
-            intervencoes.forEach(intervencao1 -> {
+            intervencoes1.forEach(intervencao1 -> {
                 if (intervencao1.getData().equals(intervencao.getData()) && intervencao1.getHora().equals(intervencao.getHora())) {
                     temp.add(intervencao1);
                 }
             });
+            System.out.println(intervencoes1);
+            System.out.println(temp);
 
             if(!temp.isEmpty()){
                 return ResponseEntity.badRequest().body("Erro no agendamento de Consulta! Horario Indisponivel!");
