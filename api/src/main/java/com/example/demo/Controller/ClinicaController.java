@@ -373,13 +373,21 @@ public class ClinicaController<RandomStringUtils, RandomStringGenerator> {
         String data = intervencao.getData();
         String hora = intervencao.getHora();
 
-        List<Intervencao> intervencoes = intervencaoService.findAllByVeterinarioIdAndEstadoOrEstado(vetId,"Agendada","A decorrer");
+        List<Intervencao> intervencoes = intervencaoService.getIntervencoesVeterinario(vet.getId());
+        List<Intervencao> intervencoes1 = new ArrayList<>();
+        intervencoes.forEach(intervencao2 -> {
+            if(intervencao2.getEstado().equals("A decorrer") || intervencao2.getEstado().equals("Agendada")){
+                intervencoes1.add(intervencao2);
+            }
+        });
+
         List<Intervencao> temp = new ArrayList<>();
-        intervencoes.forEach(intervencao1 -> {
+        intervencoes1.forEach(intervencao1 -> {
             if (intervencao1.getData().equals(data) && intervencao1.getHora().equals(hora)) {
                 temp.add(intervencao1);
             }
         });
+
 
         if(!temp.isEmpty()){
             return ResponseEntity.badRequest().body("Erro no agendamento de Consulta! Horario Indisponivel!");
@@ -415,7 +423,14 @@ public class ClinicaController<RandomStringUtils, RandomStringGenerator> {
         int vetId = intervencao.getVeterinario().getId();
 
         if(estado.equals("Agendada")){
-            List<Intervencao> intervencoes = intervencaoService.findAllByVeterinarioIdAndEstadoOrEstado(vetId,"Agendada","A decorrer");
+            List<Intervencao> intervencoes = intervencaoService.getIntervencoesVeterinario(vetId);
+            List<Intervencao> intervencoes1 = new ArrayList<>();
+            intervencoes.forEach(intervencao2 -> {
+                if(intervencao2.getEstado().equals("A decorrer") || intervencao2.getEstado().equals("Agendada")){
+                    intervencoes1.add(intervencao2);
+                }
+            });
+
             List<Intervencao> temp = new ArrayList<>();
             intervencoes.forEach(intervencao1 -> {
                 if (intervencao1.getData().equals(intervencao.getData()) && intervencao1.getHora().equals(intervencao.getHora())) {
