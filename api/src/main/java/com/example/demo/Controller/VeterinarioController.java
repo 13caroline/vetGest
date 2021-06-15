@@ -54,8 +54,15 @@ public class VeterinarioController {
         if(veterinario==null){
             return ResponseEntity.badRequest().body("Veterinário não encontrado!");
         }
-        List<Intervencao> intervencoes = intervencaoService.findAllByVeterinarioIdAndEstadoOrEstado(veterinario.getId(),"Agendada", "A decorrer");
-        return  ResponseEntity.accepted().body(intervencoes);
+        List<Intervencao> intervencoes = intervencaoService.getIntervencoesVeterinario(veterinario.getId());
+        List<Intervencao> intervencoes1 = new ArrayList<>();
+        intervencoes.forEach(intervencao -> {
+            if(intervencao.getEstado().equals("A decorrer") || intervencao.getEstado().equals("Agendada")){
+                intervencoes1.add(intervencao);
+            }
+        });
+        System.out.println(intervencoes1);
+        return  ResponseEntity.accepted().body(intervencoes1);
     }
     
     @CrossOrigin
@@ -94,9 +101,16 @@ public class VeterinarioController {
         String data = intervencao.getData();
         String hora = intervencao.getHora();
 
-        List<Intervencao> intervencoes = intervencaoService.findAllByVeterinarioIdAndEstadoOrEstado(veterinario.getId(),"Agendada","A decorrer");
+        List<Intervencao> intervencoes = intervencaoService.getIntervencoesVeterinario(veterinario.getId());
+        List<Intervencao> intervencoes1 = new ArrayList<>();
+        intervencoes.forEach(intervencao2 -> {
+            if(intervencao2.getEstado().equals("A decorrer") || intervencao2.getEstado().equals("Agendada")){
+                intervencoes1.add(intervencao2);
+            }
+        });
+
         List<Intervencao> temp = new ArrayList<>();
-        intervencoes.forEach(intervencao1 -> {
+        intervencoes1.forEach(intervencao1 -> {
             if (intervencao1.getData().equals(data) && intervencao1.getHora().equals(hora)) {
                 temp.add(intervencao1);
             }
