@@ -103,6 +103,8 @@
             hide-default-footer
             v-if="consultas.length"
             :page.sync="page"
+            :sort-by.sync="sortBy"
+      :sort-desc.sync="sortDesc"
             :items-per-page="itemsPerPage"
             @page-count="pageCount = $event"
             no-data-text="Não existem intervenções agendadas."
@@ -118,6 +120,10 @@
               <v-chip :color="servico(item.tipo)" small>
                 {{ item.tipo }}
               </v-chip>
+            </template>
+
+            <template v-slot:[`item.marcacao`]="{ item }">
+              <span class="ml-1">{{ format(item.marcacao) }}</span>
             </template>
 
             <template v-slot:[`item.detalhes`]="{ item }">
@@ -155,6 +161,7 @@
 
 <script>
 import axios from "axios";
+import moment from "moment"
 import store from "@/store.js";
 import CancelarConsulta from "@/components/Dialogs/CancelarComDados.vue";
 export default {
@@ -162,6 +169,8 @@ export default {
     return {
       page: 1,
       pageCount: 0,
+      sortBy: 'marcacao',
+        sortDesc: false,
       itemsPerPage: 8,
       dados: {},
       dialogs: {},
@@ -262,6 +271,9 @@ export default {
     servico(item) {
       if (item == "Consulta") return "#B2DFDB";
       else return "#FFCCBC";
+    },
+    format(data) {
+      return moment(data).locale("pt").format("DD/MM/YYYY HH:mm");
     },
   },
   computed: {

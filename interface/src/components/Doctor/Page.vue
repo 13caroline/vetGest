@@ -58,6 +58,8 @@
             :page.sync="page"
             :items-per-page="itemsPerPage"
             @page-count="pageCount = $event"
+            :sort-by.sync="sortBy"
+            :sort-desc.sync="sortDesc"
           >
             <template v-slot:[`item.utente`]="{ item }">
               <v-tooltip top>
@@ -90,8 +92,8 @@
               </v-chip>
             </template>
 
-            <template v-slot:[`item.data`]="{ item }">
-              {{ item.data + " " + item.hora }}
+            <template v-slot:[`item.marcacao`]="{ item }">
+              {{ format(item.marcacao) }}
             </template>
             <template v-slot:[`item.detalhes`]="{ item }">
               <v-tooltip top>
@@ -191,9 +193,7 @@
               </v-col>
               <v-col class="pl-0 pb-0" cols="7">
                 <span class="black--text">
-                  <strong>{{
-                    details_item.data + " " + details_item.hora
-                  }}</strong>
+                  <strong>{{ format(details_item.marcacao) }}</strong>
                 </span>
               </v-col>
             </v-row>
@@ -280,9 +280,7 @@
               </v-col>
               <v-col class="pl-0 pb-0" cols="7">
                 <span class="black--text">
-                  <strong>{{
-                    details_item.data + " " + details_item.hora
-                  }}</strong>
+                  <strong>{{}}</strong>
                 </span>
               </v-col>
             </v-row>
@@ -391,6 +389,7 @@
 
 
 <script>
+import moment from "moment";
 import axios from "axios";
 import store from "@/store.js";
 import Cancelar from "@/components/Dialogs/Cancel.vue";
@@ -409,6 +408,8 @@ export default {
       motivo: "",
       nota: "",
       localizacao: "",
+      sortBy: "marcacao",
+      sortDesc: true,
       headers: [
         {
           text: "UTENTE",
@@ -418,7 +419,7 @@ export default {
         },
         {
           text: "DATA",
-          value: "data",
+          value: "marcacao",
           sortable: true,
           align: "start",
         },
@@ -474,6 +475,9 @@ export default {
     utente(item) {
       this.$router.push("/medico/utente/" + item.animal.id);
     },
+    format(data) {
+      return moment(data).locale("pt").format("DD/MM/YYYY HH:mm");
+    },
     admitirInternamento: async function () {
       try {
         let res = await axios.post(
@@ -528,21 +532,20 @@ export default {
         if (res) {
           this.cancelar = false;
           this.concluir = false;
-          if (status == "Cancelada"){
+          if (status == "Cancelada") {
             this.$snackbar.showMessage({
-            show: true,
-            color: "success",
-            text: "Intervenção cancelada com sucesso.",
-            timeout: 4000,
-          });
-          }
-          else{
-          this.$snackbar.showMessage({
-            show: true,
-            color: "success",
-            text: "Intervenção terminada com sucesso.",
-            timeout: 4000,
-          });
+              show: true,
+              color: "success",
+              text: "Intervenção cancelada com sucesso.",
+              timeout: 4000,
+            });
+          } else {
+            this.$snackbar.showMessage({
+              show: true,
+              color: "success",
+              text: "Intervenção terminada com sucesso.",
+              timeout: 4000,
+            });
           }
           this.atualiza();
         }
@@ -587,7 +590,20 @@ export default {
           headers: { Authorization: "Bearer " + store.getters.token },
         }
       );
-      if (typeof response.data == "object") this.agendamentos = response.data;
+      if (typeof response.data == "object") {
+        for (var i = 0; i < response.data.length; i++) {
+          this.agendamentos.push({
+            id: response.data[i].id,
+            utente: response.data[i].animal.nome,
+            marcacao: response.data[i].data + " " + response.data[i].hora,
+            estado: response.data[i].estado,
+            descricao: response.data[i].descricao,
+            motivo: response.data[i].motivo,
+            animal: response.data[i].animal,
+            tipo: response.data[i].tipo,
+          });
+        }
+      }
     } catch (e) {
       this.$snackbar.showMessage({
         show: true,

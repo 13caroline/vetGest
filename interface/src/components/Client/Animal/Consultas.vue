@@ -32,6 +32,8 @@
             :page.sync="page"
             :items-per-page="itemsPerPage"
             @page-count="pageCount = $event"
+            :sort-by.sync="sortBy"
+            :sort-desc.sync="sortDesc"
             no-data-text="Não existe histórico de consultas."
             no-results-text="Não foram encontrados resultados."
           >
@@ -282,6 +284,8 @@ export default {
   data: () => ({
     dialogNova: false,
     color: "",
+    sortBy: "marcacao",
+    sortDesc: true,
     done: false,
     page: 1,
     pageCount: 0,
@@ -348,31 +352,31 @@ export default {
     text: "",
     headers: [
       {
-        text: "Data de Agendamento",
+        text: "DATA DE AGENDAMENTO",
         align: "start",
         sortable: true,
         value: "marcacao",
       },
       {
-        text: "Médico Veterinário",
+        text: "MÉDICO VETERINÁRIO",
         value: "veterinario_nome",
         sortable: true,
         align: "start",
       },
       {
-        text: "Motivo",
+        text: "MOTIVO",
         value: "descricao",
         sortable: true,
         align: "start",
       },
       {
-        text: "Estado",
+        text: "ESTADO",
         value: "estado",
         sortable: true,
         align: "center",
       },
       {
-        text: "Mais detalhes",
+        text: "AÇÕES",
         value: "detalhes",
         sortable: false,
         align: "center",
@@ -409,7 +413,7 @@ export default {
       else if (estado == "Concluída") return "#9AE5FF";
       else return "#FFECB3";
     },
-    closeDialog(){
+    closeDialog() {
       this.dialog = false;
     },
     cancelarConsulta: async function () {

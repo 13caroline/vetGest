@@ -23,6 +23,8 @@
             @page-count="pageCount = $event"
             :headers="headers"
             :items="items"
+            :sort-by.sync="sortBy"
+            :sort-desc.sync="sortDesc"
             class="elevation-1"
             hide-default-footer
             no-data-text="Não existem vacinas ou desparasitações registadas."
@@ -222,6 +224,8 @@ export default {
     enabled: false,
     idAnimal: {},
     dialog: false,
+    sortBy: "dataPrevista",
+    sortDesc: true,
     dialogCancel: false,
     dataPrevista: "",
     menu2: false,
@@ -234,43 +238,43 @@ export default {
     done: false,
     headers: [
       {
-        text: "Data Prevista",
+        text: "DATA PREVISTA",
         align: "start",
         sortable: true,
         value: "dataPrevista",
       },
       {
-        text: "Data de Toma",
+        text: "DATA DE TOMA",
         value: "dataToma",
         sortable: true,
         align: "start",
       },
       {
-        text: "Tipo",
+        text: "TIPO",
         value: "tipo",
         sortable: true,
         align: "start",
       },
       {
-        text: "Tratamento Utilizado",
+        text: "TRATAMENTO UTILIZADO",
         value: "tratamento",
         sortable: true,
         align: "start",
       },
       {
-        text: "Médico Veterinário",
+        text: "MÉDICO VETERINÁRIO",
         value: "medico",
         sortable: false,
         align: "center",
       },
       {
-        text: "Estado",
+        text: "ESTADO",
         value: "estado",
         sortable: true,
         align: "center",
       },
       {
-        text: "Confirmar Administração",
+        text: "AÇÕES",
         value: "confirmar",
         sortable: false,
         align: "center",

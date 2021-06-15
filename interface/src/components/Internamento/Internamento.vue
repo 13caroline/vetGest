@@ -18,6 +18,8 @@
             :items-per-page="itemsPerPage"
             @page-count="pageCount = $event"
             no-data-text="Não existem utentes em internamento."
+            :sort-by.sync="sortBy"
+            :sort-desc.sync="sortDesc"
           >
             <template v-slot:[`item.utente`]="{ item }">
               <v-tooltip top>
@@ -101,6 +103,8 @@ export default {
       pageCount: 0,
       itemsPerPage: 10,
       search: "",
+      sortBy: "data",
+      sortDesc: true,
       headers: [
         {
           text: "LOCALIZAÇÃO",
@@ -173,7 +177,6 @@ export default {
           headers: { Authorization: "Bearer " + store.getters.token },
         }
       );
-
       this.agendamentos = response.data;
     } catch (e) {
       console.log(e);

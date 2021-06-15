@@ -94,6 +94,8 @@
             :items="filteredData"
             class="elevation-1"
             hide-default-footer
+            :sort-by.sync="sortBy"
+            :sort-desc.sync="sortDesc"
             :page.sync="page"
             :items-per-page="itemsPerPage"
             @page-count="pageCount = $event"
@@ -194,6 +196,8 @@ export default {
         title: "o agendamento da cirurgia",
         text: "cirurgia",
       },
+      sortBy: "marcacao",
+      sortDesc: true,
       page: 1,
       pageCount: 0,
       itemsPerPage: 8,

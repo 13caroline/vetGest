@@ -23,6 +23,8 @@
             :items="filteredData"
             class="elevation-1"
             hide-default-footer
+            :sort-by.sync="sortBy"
+            :sort-desc.sync="sortDesc"
             no-data-text="Não existe histórico de consultas."
             :page.sync="page"
             :items-per-page="itemsPerPage"
@@ -49,7 +51,7 @@
                     small
                     v-on="on"
                     v-bind="attrs"
-                     color="#52b9dd"
+                    color="#52b9dd"
                   >
                     mdi-plus-circle
                   </v-icon>
@@ -90,14 +92,14 @@
             </v-btn>
           </v-card-title>
           <v-card-text class="black--text">
-            <p>{{format(nota.data)}} {{nota.hora}}</p>
+            <p>{{ format(nota.data) }} {{ nota.hora }}</p>
             <span v-if="!nota.observacoes" class="font-italic">
-             Sem notas médicas.
+              Sem notas médicas.
             </span>
             <span class="font-italic">
-              {{nota.observacoes}}
+              {{ nota.observacoes }}
             </span>
-            <p>{{nota.veterinario_nome}}</p>
+            <p>{{ nota.veterinario_nome }}</p>
           </v-card-text>
         </v-card>
       </v-dialog>
@@ -122,6 +124,8 @@ export default {
     dialogs: {},
     dados: {},
     cancela: {},
+    sortBy: "marcacao",
+    sortDesc: true,
     cancelar: {
       title: "o agendamento da consulta",
       text: "consulta",
@@ -129,31 +133,31 @@ export default {
     done: false,
     headers: [
       {
-        text: "Data de Agendamento",
+        text: "DATA DE AGENDAMENTO",
         align: "start",
         sortable: true,
         value: "marcacao",
       },
       {
-        text: "Médico Veterinário",
+        text: "MÉDICO VETERINÁRIO",
         value: "veterinario_nome",
         sortable: true,
         align: "start",
       },
       {
-        text: "Motivo",
+        text: "MOTIVO",
         value: "descricao",
         sortable: true,
         align: "start",
       },
       {
-        text: "Estado",
+        text: "ESTADO",
         value: "estado",
         sortable: true,
         align: "center",
       },
       {
-        text: "Mais detalhes",
+        text: "AÇÕES",
         value: "detalhes",
         sortable: false,
         align: "center",
@@ -167,7 +171,7 @@ export default {
     MarcarConsulta,
   },
   methods: {
-    notas(item){
+    notas(item) {
       this.dialog = true;
       this.nota = item;
     },

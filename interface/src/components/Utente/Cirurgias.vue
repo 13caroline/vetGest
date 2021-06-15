@@ -28,6 +28,8 @@
             :page.sync="page"
             :items-per-page="itemsPerPage"
             @page-count="pageCount = $event"
+            :sort-by.sync="sortBy"
+            :sort-desc.sync="sortDesc"
           >
             <template v-slot:[`item.marcacao`]="{ item }">
               {{ format(item.marcacao) }}
@@ -50,7 +52,7 @@
                     small
                     v-on="on"
                     v-bind="attrs"
-                     color="#52b9dd"
+                    color="#52b9dd"
                   >
                     mdi-plus-circle
                   </v-icon>
@@ -88,16 +90,16 @@
             </v-btn>
           </v-card-title>
           <v-card-text class="black--text">
-            <div v-for="(nota,index) in note" :key="index">
-                <p>{{format2(nota.cirurgia.data)}} {{nota.cirurgia.hora}}</p>
-                <span v-if="!nota.cirurgia.observacoes" class="font-italic">
+            <div v-for="(nota, index) in note" :key="index">
+              <p>{{ format2(nota.cirurgia.data) }} {{ nota.cirurgia.hora }}</p>
+              <span v-if="!nota.cirurgia.observacoes" class="font-italic">
                 Sem notas médicas.
-                </span>
-            <span class="font-italic">
-              {{nota.cirurgia.observacoes}}
-            </span>
-            <p>{{nota.veterinario.nome}}</p>
-            <v-divider></v-divider>
+              </span>
+              <span class="font-italic">
+                {{ nota.cirurgia.observacoes }}
+              </span>
+              <p>{{ nota.veterinario.nome }}</p>
+              <v-divider></v-divider>
             </div>
           </v-card-text>
         </v-card>
@@ -123,6 +125,8 @@ export default {
     itemsPerPage: 8,
     dialogs: {},
     dados: {},
+    sortBy: "marcacao",
+    sortDesc: true,
     cancelar: {
       title: "o agendamento da cirurgia",
       text: "cirurgia",
@@ -161,7 +165,7 @@ export default {
     ],
     cirurgias: [],
     done: false,
-    note: []
+    note: [],
   }),
   components: {
     MarcarCirurgia,
@@ -192,17 +196,19 @@ export default {
     format2(data) {
       return moment(data).locale("pt").format("DD/MM/YYYY");
     },
-    notas: async function(item){
-      let response = await axios.post("http://localhost:7777/clinica/cirurgia/notas",
-      {
-        id: item.id
-      },
-      {
-        headers: { Authorization: "Bearer " + store.getters.token },
-      }
+    notas: async function (item) {
+      let response = await axios.post(
+        "http://localhost:7777/clinica/cirurgia/notas",
+        {
+          id: item.id,
+        },
+        {
+          headers: { Authorization: "Bearer " + store.getters.token },
+        }
       );
       this.note = Array.isArray(response.data)
-        ? response.data : [response.data];
+        ? response.data
+        : [response.data];
 
       this.detalhes = true;
     },

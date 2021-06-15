@@ -29,6 +29,8 @@
           <v-data-table
             :headers="headers"
             :items="consultas"
+            :sort-by.sync="sortBy"
+            :sort-desc.sync="sortDesc"
             class="elevation-1"
             hide-default-footer
             :page.sync="page"
@@ -122,12 +124,14 @@
 <script>
 import CancelarComDados from "@/components/Dialogs/CancelarComDados.vue";
 import axios from "axios";
-import moment from "moment"
+import moment from "moment";
 import store from "@/store.js";
 export default {
   data: () => ({
     dados: {},
     dialogs: {},
+    sortBy: "marcacao",
+    sortDesc: true,
     cancelar: {
       text: "consulta",
       title: "o agendamento da consulta",
@@ -138,37 +142,37 @@ export default {
     itemsPerPage: 8,
     headers: [
       {
-        text: "Data de Agendamento",
+        text: "DATA DE AGENDAMENTO",
         align: "start",
         sortable: true,
         value: "marcacao",
       },
       {
-        text: "Animal",
+        text: "ANIMAL",
         align: "start",
         sortable: true,
         value: "utente",
       },
       {
-        text: "Médico Veterinário",
+        text: "MÉDICO VETERINÁRIO",
         value: "veterinario_nome",
         sortable: true,
         align: "start",
       },
       {
-        text: "Motivo",
+        text: "MOTIVO",
         value: "descricao",
         sortable: true,
         align: "start",
       },
       {
-        text: "Estado",
+        text: "ESTADO",
         value: "estado",
         sortable: true,
         align: "center",
       },
       {
-        text: "Mais detalhes",
+        text: "AÇÕES",
         value: "detalhes",
         sortable: false,
         align: "center",
@@ -211,7 +215,7 @@ export default {
         });
       }
     },
-    closeDialog(){
+    closeDialog() {
       this.dialog = false;
     },
     notas(item) {
