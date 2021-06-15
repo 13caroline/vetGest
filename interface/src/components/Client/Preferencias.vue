@@ -8,8 +8,6 @@
               class="body-2 mx-2"
               small
               color="#2596be"
-              v-bind="attrs"
-              v-on="on"
               dark
               @click="addFoto()"
             >
@@ -255,7 +253,7 @@ export default {
       formData.append("imageFile", this.file);
       formData.append("userid", this.utilizador.id);
       try {
-        axios.post("http://localhost:7777/medico/adicionaFoto", formData, {
+        axios.post("http://localhost:7777/cliente/adicionaFotoperfil", formData, {
           headers: {
             Authorization: "Bearer " + store.getters.token.toString(),
           },

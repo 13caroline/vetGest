@@ -33,7 +33,7 @@
               >
                 <div class="animal">
                   <img
-                    src="@/assets/animais/Rubi.jpg"
+                    :src="a.image"
                     class="w-100 grey lighten-2 rounded"
                   />
                   <!-- <v-item v-slot:default="{ toggle }">
@@ -316,10 +316,13 @@ export default {
         descricao: response2.data[i].descricao,
         motivo: response2.data[i].motivo,
         animal: response2.data[i].animal,
-        tipo: response2.data[i].tipo
+        tipo: response2.data[i].tipo,
       });
     }
-    this.animals = response.data.cliente.animais;
+    this.animals = response.data.cliente.animais.map(an => {
+      an.image = an.image ? "data:image/jpeg;charset=utf-8;base64," + an.image : require("@/assets/image_placeholder.png")
+      return an;    
+    });
   },
 };
 </script>
