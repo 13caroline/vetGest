@@ -140,8 +140,6 @@ public class VeterinarioController {
             cliente.getAnimais().forEach(animal -> {
 
                 try {
-                    byte[] encodeBase64 = Base64.encode(animal.getImage());
-                    String image = new String(encodeBase64, "UTF-8");
                     JSONObject utente= new JSONObject();
                     JSONObject a= new JSONObject();
                     a.put("id",animal.getId());
@@ -157,12 +155,11 @@ public class VeterinarioController {
                     a.put("chip",animal.getChip());
                     a.put("castracao",animal.isCastracao());
                     a.put("observacoes",animal.getObservacoes());
-                    a.put("image",image);
                     a.put("cliente_nome",cliente.getNome());
                     a.put("cliente_email",cliente.getEmail());
                     utente.put("animal",a);
                     animais.accumulate("utentes",utente);
-                } catch (JSONException | UnsupportedEncodingException e) {
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             });
@@ -232,7 +229,7 @@ public class VeterinarioController {
 
     @CrossOrigin
     @PostMapping("/medico/utente")
-        public ResponseEntity<?> getUtente(@RequestBody String body) throws JSONException, JsonProcessingException {
+        public ResponseEntity<?> getUtente(@RequestBody String body) throws JSONException, JsonProcessingException, UnsupportedEncodingException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(body);
         Animal a = animalService.getAnimalById(node.get("id").asInt());
@@ -244,6 +241,8 @@ public class VeterinarioController {
             return ResponseEntity.badRequest().body("Cliente não encontrado!");
         }
         JSONObject animal = new JSONObject();
+        byte[] encodeBase64 = Base64.encode(a.getImage());
+        String image = new String(encodeBase64, "UTF-8");
         animal.put("id",a.getId());
         animal.put("nome",a.getNome());
         animal.put("raca",a.getRaca());
