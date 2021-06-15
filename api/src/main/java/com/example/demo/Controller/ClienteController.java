@@ -16,7 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -582,4 +584,13 @@ public class ClienteController {
         return ResponseEntity.accepted().body(response.toString());
     }
 
+    @CrossOrigin
+    @PostMapping("/cliente/adicionaFoto")
+    public ResponseEntity<?> addFoto(@RequestParam("imageFile") MultipartFile file, @RequestParam("userid") int animalid) throws IOException {
+        System.out.println("Original Image Byte Size - " + file.getBytes().length);
+        Animal animal = animalService.getAnimalById(animalid);
+        animal.setImage(file.getBytes());
+        animalService.saveAnimal(animal);
+        return ResponseEntity.accepted().body("Imagem alterada com sucesso!");
+    }
 }

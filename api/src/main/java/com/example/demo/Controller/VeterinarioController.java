@@ -138,6 +138,7 @@ public class VeterinarioController {
                     a.put("chip",animal.getChip());
                     a.put("castracao",animal.isCastracao());
                     a.put("observacoes",animal.getObservacoes());
+                    a.put("image",animal.getImage());
                     a.put("cliente_nome",cliente.getNome());
                     a.put("cliente_email",cliente.getEmail());
                     utente.put("animal",a);
@@ -237,6 +238,7 @@ public class VeterinarioController {
         animal.put("chip",a.getChip());
         animal.put("castracao",a.isCastracao());
         animal.put("observacoes",a.getObservacoes());
+        animal.put("image",a.getImage());
         animal.put("cliente_nome",c.getNome());
         animal.put("cliente_email",c.getEmail());
         animal.put("cliente_id",c.getId());
