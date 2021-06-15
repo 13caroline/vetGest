@@ -166,7 +166,6 @@ public class ClienteController {
         animal.setChip(animalNew.getChip());
         animal.setCastracao(animalNew.isCastracao());
         animal.setObservacoes(animalNew.getObservacoes());
-        animal.setPath(animalNew.getPath());
         animalService.updateAnimal(animal);
         cliente.setAnimal(animal);
 

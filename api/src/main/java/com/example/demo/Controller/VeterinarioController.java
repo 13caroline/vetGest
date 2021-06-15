@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -136,7 +138,6 @@ public class VeterinarioController {
                     a.put("chip",animal.getChip());
                     a.put("castracao",animal.isCastracao());
                     a.put("observacoes",animal.getObservacoes());
-                    a.put("path",animal.getPath());
                     a.put("cliente_nome",cliente.getNome());
                     a.put("cliente_email",cliente.getEmail());
                     utente.put("animal",a);
@@ -236,7 +237,6 @@ public class VeterinarioController {
         animal.put("chip",a.getChip());
         animal.put("castracao",a.isCastracao());
         animal.put("observacoes",a.getObservacoes());
-        animal.put("path",a.getPath());
         animal.put("cliente_nome",c.getNome());
         animal.put("cliente_email",c.getEmail());
         animal.put("cliente_id",c.getId());
@@ -382,7 +382,6 @@ public class VeterinarioController {
         animal.setChip(animalNew.getChip());
         animal.setCastracao(animalNew.isCastracao());
         animal.setObservacoes(animalNew.getObservacoes());
-        animal.setPath(animalNew.getPath());
         animalService.updateAnimal(animal);
 
         return ResponseEntity.accepted().body("Animal editado com sucesso");
@@ -517,7 +516,6 @@ public class VeterinarioController {
         animal1.put("chip",animal.getChip());
         animal1.put("castracao",animal.isCastracao());
         animal1.put("observacoes",animal.getObservacoes());
-        animal1.put("path",animal.getPath());
 
         response.put("animal",animal1);
         notaInternamentos.forEach(notaInternamento -> {
@@ -648,7 +646,6 @@ public class VeterinarioController {
         veterinario.setConcelho(vet.getConcelho());
         veterinario.setFreguesia(vet.getFreguesia());
         veterinario.setContacto(vet.getContacto());
-        veterinario.setPath(vet.getPath());
         if(!(vet.getPassword().equals(veterinario.getPassword()))) {
             veterinario.setPassword(vet.getPassword());
             veterinarioService.saveVeterinario(veterinario);
@@ -658,5 +655,13 @@ public class VeterinarioController {
         return  ResponseEntity.accepted().body("Dados alterados com sucesso!");
     }
 
+    @CrossOrigin
+    @PostMapping("/medico/adicionaFoto")
+    public ResponseEntity<?> addFoto(@RequestParam("imageFile") MultipartFile file,@RequestParam("userid") int userid) throws IOException {
+        System.out.println("Original Image Byte Size - " + file.getBytes().length);
+        Veterinario vet = veterinarioService.getVetById(userid);
+        vet.setImage(file.getBytes());
+        return ResponseEntity.accepted().body("Imagem alterada com sucesso!");
+    }
 }
 

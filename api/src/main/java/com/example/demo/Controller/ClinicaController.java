@@ -171,7 +171,6 @@ public class ClinicaController<RandomStringUtils, RandomStringGenerator> {
                     a.put("chip",animal.getChip());
                     a.put("castracao",animal.isCastracao());
                     a.put("observacoes",animal.getObservacoes());
-                    a.put("path",animal.getPath());
                     a.put("cliente_nome",cliente.getNome());
                     a.put("cliente_email",cliente.getEmail());
                     utente.put("animal",a);
@@ -211,7 +210,6 @@ public class ClinicaController<RandomStringUtils, RandomStringGenerator> {
         animal.put("chip",a.getChip());
         animal.put("castracao",a.isCastracao());
         animal.put("observacoes",a.getObservacoes());
-        animal.put("path",a.getPath());
         animal.put("cliente_nome",c.getNome());
         animal.put("cliente_email",c.getEmail());
         animal.put("cliente_id",c.getId());
@@ -472,7 +470,6 @@ public class ClinicaController<RandomStringUtils, RandomStringGenerator> {
         animal.setChip(animalNew.getChip());
         animal.setCastracao(animalNew.isCastracao());
         animal.setObservacoes(animalNew.getObservacoes());
-        animal.setPath(animalNew.getPath());
         animalService.updateAnimal(animal);
 
         return ResponseEntity.accepted().body("Animal editado com sucesso");
@@ -551,7 +548,6 @@ public class ClinicaController<RandomStringUtils, RandomStringGenerator> {
         animal1.put("chip",animal.getChip());
         animal1.put("castracao",animal.isCastracao());
         animal1.put("observacoes",animal.getObservacoes());
-        animal1.put("path",animal.getPath());
         response.put("animal",animal1);
         notaInternamentos.forEach(notaInternamento -> {
             try {
