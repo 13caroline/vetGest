@@ -89,7 +89,7 @@
               v-model="page"
               :length="pageCount"
               circle
-              :total-visible="4"
+              :total-visible="7"
               color="#2596be"
               class="custom"
             ></v-pagination>
