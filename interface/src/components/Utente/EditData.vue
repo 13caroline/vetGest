@@ -11,7 +11,7 @@
             <v-col cols="auto" md="3" class="ml-4">
               <v-card width="200" class="mx-auto" flat color="transparent">
                 <v-img
-                  src="@/assets/animais/Rubi.jpg"
+                  :src="dados.image"
                   aspect-ratio="1"
                   class="grey lighten-2 ml-n3"
                   cover
@@ -358,11 +358,15 @@ export default {
       },
       { headers: { Authorization: "Bearer " + store.getters.token } }
     );
+    console.log(response.data)
     this.dados = response.data;
     this.cor = response.data.cor.split(",");
     this.pelagem = response.data.pelagem.split(",");
     if (this.dados.observacoes.length == 0)
       this.dados.observacoes = "Sem observações";
+    this.dados.image = this.dados.image
+          ? "data:image/jpeg;charset=utf-8;base64," + this.dados.image
+          : require("@/assets/image_placeholder.png");
   },
 };
 </script>

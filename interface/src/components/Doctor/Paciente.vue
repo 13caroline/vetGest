@@ -92,6 +92,7 @@ export default {
         },
         { headers: { Authorization: "Bearer " + store.getters.token } }
       );
+      console.log(this.dados)
       if (response) {
         this.dados = response.data;
         this.dados.image = this.dados.image
