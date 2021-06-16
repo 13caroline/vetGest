@@ -311,7 +311,7 @@
                   class="mx-2"
                   small
                   dark
-                  @click="dialog = false"
+                  @click="dialog2 = false"
                   >Cancelar</v-btn
                 >
                 <v-btn color="#2596be" small dark @click="submitFile()"
@@ -427,7 +427,7 @@ url: null,
               animal: {
                 nome: this.animal.nome,
                 raca: this.animal.raca,
-                dataNascimento: this.animal.raca,
+                dataNascimento: this.animal.dataNascimento,
                 sexo: this.animal.sexo,
                 especie: this.animal.especie,
                 altura: this.animal.altura,

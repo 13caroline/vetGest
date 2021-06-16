@@ -140,7 +140,7 @@
                 <v-col>
                   <div>
                     <p class="ma-0">Sexo *</p>
-                    <v-radio-group class="ma-0" v-model="sexo" :rules="nullRule">
+                    <v-radio-group class="ma-0" v-model="sexo">
                       <v-radio value="Macho" color="#2596be">
                         <template v-slot:label>
                           <div class="body-2">Macho</div>
@@ -158,7 +158,7 @@
                 <v-col>
                   <div>
                     <p class="ma-0">Castração *</p>
-                    <v-radio-group class="ma-0" v-model="castracao" :rules="nullRule">
+                    <v-radio-group class="ma-0" v-model="castracao">
                       <v-radio :value="true" color="#2596be">
                         <template v-slot:label>
                           <div class="body-2">Sim</div>
