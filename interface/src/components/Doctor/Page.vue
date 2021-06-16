@@ -562,6 +562,7 @@ export default {
       }
     },
     atualiza: async function () {
+      this.agendamentos = [];
       try {
         let response = await axios.post(
           "http://localhost:7777/medico/intervencoes",
@@ -570,7 +571,24 @@ export default {
             headers: { Authorization: "Bearer " + store.getters.token },
           }
         );
-        if (typeof response.data == "object") this.agendamentos = response.data;
+        if (typeof response.data == "object") {
+          response.data.intervencoes.forEach((intervencao) => {
+            this.agendamentos.push({
+              id: intervencao.Intervencao.id,
+              utente: intervencao.Animal.nome,
+              marcacao:
+                intervencao.Intervencao.data +
+                " " +
+                intervencao.Intervencao.hora,
+              estado: intervencao.Intervencao.estado,
+              descricao: intervencao.Intervencao.descricao,
+              motivo: intervencao.Intervencao.motivo,
+              animal: intervencao.Animal,
+              tipo: intervencao.Intervencao.tipo,
+              internado: intervencao.internado === "Internado",
+            });
+          });
+        }
       } catch (e) {
         this.$snackbar.showMessage({
           show: true,
@@ -585,38 +603,7 @@ export default {
     Cancelar,
   },
   created: async function () {
-    try {
-      let response = await axios.post(
-        "http://localhost:7777/medico/intervencoes",
-        { email: this.$store.state.email },
-        {
-          headers: { Authorization: "Bearer " + store.getters.token },
-        }
-      );
-      if (typeof response.data == "object") {
-        response.data.intervencoes.forEach((intervencao) => {
-          this.agendamentos.push({
-            id: intervencao.Intervencao.id,
-            utente: intervencao.Animal.nome,
-            marcacao:
-              intervencao.Intervencao.data + " " + intervencao.Intervencao.hora,
-            estado: intervencao.Intervencao.estado,
-            descricao: intervencao.Intervencao.descricao,
-            motivo: intervencao.Intervencao.motivo,
-            animal: intervencao.Animal,
-            tipo: intervencao.Intervencao.tipo,
-            internado: intervencao.internado === "Internado",
-          });
-        });
-      }
-    } catch (e) {
-      this.$snackbar.showMessage({
-        show: true,
-        color: "error",
-        text: "Ocorreu um erro. Por favor tente mais tarde!",
-        timeout: 4000,
-      });
-    }
+    this.atualiza();
   },
 };
 </script>
