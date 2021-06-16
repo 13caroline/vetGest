@@ -6,7 +6,7 @@
           <v-row>
             <v-col cols="auto">
               <v-img
-                src="@/assets/animais/Rubi.jpg"
+                :src="animal.image"
                 aspect-ratio="1"
                 class="grey lighten-2 ma-2 rounded"
                 cover
@@ -143,6 +143,9 @@ export default {
           ? response.data.notas
           : [response.data.notas];
       }
+      this.animal.image = this.animal.image
+          ? "data:image/jpeg;charset=utf-8;base64," + this.animal.image
+          : require("@/assets/image_placeholder.png");
     },
     adicionarNota: async function () {
       let response = await axios.post(
