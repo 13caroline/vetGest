@@ -745,8 +745,8 @@ VALUES(24,'2021-05-01','Castracao','Concluida','10:00','Cirurgia Normal','Cirurg
 INSERT INTO `vetgest`.`intervencao` (`id`,`data`,`descricao`,`estado`,`hora`,`motivo`,`tipo`,`animal_id`,`veterinario_id`,`data_pedido`,`observacoes`)
 VALUES(25,'2021-06-101','Pata Partida','Concluida','10:00','Cirurgia de Urgencia','Cirurgia',5,4, '2021-06-01','Cirurgia realizada com sucesso');
 
-INSERT INTO `vetgest`.`imunizacao`(`id`,`data`,`estado`,`tipo`,`tratamento`,`animal_id`,`veterinario_id`)
-VALUES(5,'2021-06-18','Atualizada','Desparasitacao','Advantix',1,2);
+INSERT INTO `vetgest`.`imunizacao`(`id`,`data`,`estado`,`prox_imunizacao`,`tipo`,`tratamento`,`animal_id`,`veterinario_id`)
+VALUES(5,'2021-06-18','Atualizada',null,'Desparasitacao','Advantix',1,2);
 INSERT INTO `vetgest`.`imunizacao`(`id`,`data`,`estado`,`prox_imunizacao`,`tipo`,`tratamento`,`animal_id`,`proxima_imunizacao_id`,`veterinario_id`,`data_toma`)
 VALUES(4,'2021-05-16','Administrada','2021-06-18','Desparasitacao','Advantix',1,5,2,'2021-05-16');
 INSERT INTO `vetgest`.`imunizacao`(`id`,`data`,`estado`,`prox_imunizacao`,`tipo`,`tratamento`,`animal_id`,`proxima_imunizacao_id`,`veterinario_id`,`data_toma`)
@@ -756,8 +756,8 @@ VALUES(2,'2021-03-16','Administrada','2021-04-16','Desparasitacao','Advantix',1,
 INSERT INTO `vetgest`.`imunizacao`(`id`,`data`,`estado`,`prox_imunizacao`,`tipo`,`tratamento`,`animal_id`,`proxima_imunizacao_id`,`veterinario_id`,`data_toma`)
 VALUES(1,'2021-02-15','Administrada','2021-03-16','Desparasitacao','Advantix',1,2,2,'2021-02-15');
 
-INSERT INTO `vetgest`.`imunizacao`(`id`,`data`,`estado`,`tipo`,`tratamento`,`animal_id`,`veterinario_id`)
-VALUES(10,'2021-06-20','Atualizada','Desparasitacao','Advantix',2,3);
+INSERT INTO `vetgest`.`imunizacao`(`id`,`data`,`estado`,`prox_imunizacao`,`tipo`,`tratamento`,`animal_id`,`veterinario_id`)
+VALUES(10,'2021-06-20','Atualizada',null,'Desparasitacao','Advantix',2,3);
 INSERT INTO `vetgest`.`imunizacao`(`id`,`data`,`estado`,`prox_imunizacao`,`tipo`,`tratamento`,`animal_id`,`proxima_imunizacao_id`,`veterinario_id`,`data_toma`)
 VALUES(9,'2021-05-20','Administrada','2021-06-20','Desparasitacao','Advantix',2,10,2,'2021-05-20');
 INSERT INTO `vetgest`.`imunizacao`(`id`,`data`,`estado`,`prox_imunizacao`,`tipo`,`tratamento`,`animal_id`,`proxima_imunizacao_id`,`veterinario_id`,`data_toma`)
@@ -767,43 +767,6 @@ VALUES(7,'2021-03-20','Administrada','2021-04-20','Desparasitacao','Advantix',2,
 INSERT INTO `vetgest`.`imunizacao`(`id`,`data`,`estado`,`tipo`,`tratamento`,`vacina`,`animal_id`,`veterinario_id`,`data_toma`)
 VALUES(6,'2021-06-15','Administrada','Vacinacao','Vacina da Raiva','NOBIVAC RABIES',2,3,'2021-06-15');
 
-
-INSERT INTO `vetgest`.`imunizacao`(`id`,`data`,`estado`,`tipo`,`tratamento`,`animal_id`,`veterinario_id`)
-VALUES(15,'2021-06-18','Atualizada','Desparasitacao','Advantix',3,4);
-INSERT INTO `vetgest`.`imunizacao`(`id`,`data`,`estado`,`prox_imunizacao`,`tipo`,`tratamento`,`animal_id`,`proxima_imunizacao_id`,`veterinario_id`,`data_toma`)
-VALUES(14,'2021-05-01','Administrada','2021-06-18','Desparasitacao','Advantix',3,15,4,'2021-05-01');
-INSERT INTO `vetgest`.`imunizacao`(`id`,`data`,`estado`,`prox_imunizacao`,`tipo`,`tratamento`,`animal_id`,`proxima_imunizacao_id`,`veterinario_id`,`data_toma`)
-VALUES(13,'2021-04-01','Administrada','2021-05-01','Desparasitacao','Advantix',3,14,4,'2021-04-01');
-INSERT INTO `vetgest`.`imunizacao`(`id`,`data`,`estado`,`prox_imunizacao`,`tipo`,`tratamento`,`animal_id`,`proxima_imunizacao_id`,`veterinario_id`,`data_toma`)
-VALUES(12,'2021-03-01','Administrada','2021-04-01','Desparasitacao','Advantix',3,13,4,'2021-03-01');
-INSERT INTO `vetgest`.`imunizacao`(`id`,`data`,`estado`,`tipo`,`tratamento`,`vacina`,`animal_id`,`veterinario_id`,`data_toma`)
-VALUES(11,'2021-06-01','Administrada','Vacinacao','Vacina da Raiva','NOBIVAC RABIES',3,4,'2021-06-15');
-
-
-INSERT INTO `vetgest`.`imunizacao`(`id`,`data`,`estado`,`tipo`,`tratamento`,`animal_id`,`veterinario_id`)
-VALUES(20,'2021-06-20','Atualizada','Desparasitacao','Advantix',4,2);
-INSERT INTO `vetgest`.`imunizacao`(`id`,`data`,`estado`,`prox_imunizacao`,`tipo`,`tratamento`,`animal_id`,`proxima_imunizacao_id`,`veterinario_id`,`data_toma`)
-VALUES(19,'2021-05-10','Administrada','2021-06-20','Desparasitacao','Advantix',4,20,2,'2021-05-10');
-INSERT INTO `vetgest`.`imunizacao`(`id`,`data`,`estado`,`prox_imunizacao`,`tipo`,`tratamento`,`animal_id`,`proxima_imunizacao_id`,`veterinario_id`,`data_toma`)
-VALUES(18,'2021-04-10','Administrada','2021-05-10','Desparasitacao','Advantix',4,19,2,'2021-04-10');
-INSERT INTO `vetgest`.`imunizacao`(`id`,`data`,`estado`,`prox_imunizacao`,`tipo`,`tratamento`,`animal_id`,`proxima_imunizacao_id`,`veterinario_id`,`data_toma`)
-VALUES(17,'2021-03-10','Administrada','2021-04-10','Desparasitacao','Advantix',4,18,3,'2021-03-10');
-INSERT INTO `vetgest`.`imunizacao`(`id`,`data`,`estado`,`tipo`,`tratamento`,`vacina`,`animal_id`,`veterinario_id`)
-VALUES(16,'2021-06-16','Atrasada','Vacinacao','Vacina da Raiva','NOBIVAC RABIES',4,3);
-
-
-INSERT INTO `vetgest`.`imunizacao`(`id`,`data`,`estado`,`tipo`,`tratamento`,`animal_id`,`veterinario_id`)
-VALUES(25,'2021-06-18','Atualizada','Desparasitacao','Advantix',5,4);
-INSERT INTO `vetgest`.`imunizacao`(`id`,`data`,`estado`,`prox_imunizacao`,`tipo`,`tratamento`,`animal_id`,`proxima_imunizacao_id`,`veterinario_id`,`data_toma`)
-VALUES(24,'2021-05-16','Administrada','2021-06-18','Desparasitacao','Advantix',5,25,4,'2021-05-16');
-INSERT INTO `vetgest`.`imunizacao`(`id`,`data`,`estado`,`prox_imunizacao`,`tipo`,`tratamento`,`animal_id`,`proxima_imunizacao_id`,`veterinario_id`,`data_toma`)
-VALUES(23,'2021-04-16','Administrada','2021-05-16','Desparasitacao','Advantix',5,24,4,'2021-04-16');
-INSERT INTO `vetgest`.`imunizacao`(`id`,`data`,`estado`,`prox_imunizacao`,`tipo`,`tratamento`,`animal_id`,`proxima_imunizacao_id`,`veterinario_id`,`data_toma`)
-VALUES(22,'2021-03-16','Administrada','2021-04-16','Desparasitacao','Advantix',5,23,2,'2021-03-16');
-INSERT INTO `vetgest`.`imunizacao`(`id`,`data`,`estado`,`tipo`,`tratamento`,`vacina`,`animal_id`,`veterinario_id`,`data_toma`)
-VALUES(21,'2021-06-15','Administrada','Vacinacao','Vacina da Raiva','NOBIVAC RABIES',5,2,'2021-06-15');
-
-
 INSERT INTO `vetgest`.`internamento` (`id`,`data`,`localizacao`,`motivo`,`animal_id`,`veterinario_id`,`estado`,`nota`,`intervencao_id`)
 VALUES(1,'2021-05-14','C12','Fratura da pata dianteira',1,2,'Internado','Cirurgia sob anestesia geral',5);
 
@@ -811,4 +774,4 @@ INSERT INTO `vetgest`.`internamento` (`id`,`data`,`localizacao`,`motivo`,`animal
 VALUES(2,'2021-04-22','C01','Castracao',3,2,'Internado','Cirurgia sob anestesia geral',14);
 
 INSERT INTO `vetgest`.`historico` (`id`,`alergias`,`antecedentes`,`historia_ginecologica`,`historia_medica`,`medicacao`,`tipo_alergias`,`transfusoes`,`animal_id`)
-VALUES(1,'1','','Fratura da pata dianteira. Fratura de canino superior direito. Castracao.','Antibiotico apos cirurgias realizadas.','Acaros',0,1);
+VALUES(1,1,'Fratura da pata dianteira', 'Fratura de canino superior direito', 'Castracao','Antibiotico apos cirurgias realizadas.','Acaros',0,1);
